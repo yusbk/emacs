@@ -2869,7 +2869,8 @@ Selepas pasang versi org-mode 9.1.2, masalah untuk tukar stail
               (todo "TODO"
                     ((org-agenda-max-entries 20)
                      (org-agenda-overriding-header "Andre oppgaver")
-                     (org-agenda-skip-function '(zin/org-agenda-skip-tag "REFILE" nil)) ;skip REFILE
+                     ;; (org-agenda-skip-function '(zin/org-agenda-skip-tag "REFILE" nil)) ;skip REFILE
+                     (org-agenda-skip-function '(zin/org-agenda-skip-tag "PRIVAT" nil)) ;skip REFILE
                      ))
               (tags "REFILE"
                     ((org-agenda-max-entries 10)
