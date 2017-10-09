@@ -5044,6 +5044,23 @@ Untuk coba pakej sebelum dipakai. Install di tmp
     :ensure t
     :commands (try))
 #+END_SRC
+* Music
+Untuk dengar lagu-lagu diambil dari [[https://www.gnu.org/software/emms/index.html][EMMS]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package emms-setup
+    :load-path "~/Dropbox/lisp/emms/lisp/"
+    :bind (:map ybk/map
+                ("d". emms))
+    :config
+    (emms-standard)
+    (emms-default-players)
+
+    ;;Musics folder
+    (setq emms-source-file-default-directory "~/Music/")
+    )
+#+END_SRC
+
 * Just in case
 Beberapa situasi yang pernah dialami dan beberikan masalah
 
