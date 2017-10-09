@@ -5002,6 +5002,27 @@ Guna =RET= untuk newline bila buat kode
     )
 
 #+END_SRC
+* StackExchange
+Stack Exchange mode for Emacs from [[https://github.com/vermiculus/sx.el][GitHub]]
+#+BEGIN_SRC emacs-lisp
+  (use-package sx
+    :ensure t
+    :bind (:map ybk/map
+                ("s" . hydra-sx/body))
+    :init
+    (defhydra hydra-sx (:color blue)
+      "Stack Exchange"
+      ("x" sx-tab-all-questions "questions")
+      ("i" sx-inbox "inbox")
+      ("o" sx-open-link "link")
+      ("u" sx-tab-unanswered-my-tags "unanswered")
+      ("a" sx-ask "ask")
+      ("s" sx-search "search")
+      ("n" sx-tab-newest "newest")
+      ("q" nil "cancel"))
+    )
+#+END_SRC
+
 * Miscellaneous
 Lorem
 #+BEGIN_SRC emacs-lisp
