@@ -2800,7 +2800,9 @@ Selepas pasang versi org-mode 9.1.2, masalah untuk tukar stail
           org-agenda-restore-windows-after-quit t)
     (setq org-agenda-span 'day) ; just show today. I can "vw" to view the week
 
-    (setq org-agenda-entry-types '(:deadline)) ;show deadline but not schedule alt. '(:deadline scheduled)
+    ;; Masalah pakai org-agenda-entry-types dibawah ialah ia
+    ;; mematikan anniversary dates dan weather-metno
+    ;; (setq org-agenda-entry-types '(:deadline)) ;show deadline but not schedule alt. '(:deadline scheduled)
 
     ;; remove tags when display agenda
     (setq org-agenda-remove-tags t)
@@ -4930,7 +4932,7 @@ lihat cuaca tempat lain boleh pakai =M-x weather-metno-forecast-location= atau =
     :ensure t
     :bind (:map ybk/map
                 ("c" . weather-metno-forecast)
-                ("b" . weather-metno-forecast-location))
+                ("b" . weather-metno-update))
     :config
     (setq weather-metno-location-name "Oslo, Norge"
           weather-metno-location-latitude 59
