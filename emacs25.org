@@ -2282,9 +2282,21 @@ Not technically part of org, but I'll stick the calendar config here since I mai
   (use-package calendar
     ;; built-in, :ensure t not necessary
     :config
-    (calendar-set-date-style 'iso)
+    ;; Norwegian-holiday - bør legge mer etterhvert
+    (setq norsk-ferier
+          '((holiday-fixed 5 17 "Nasjonaldag")))
+
+
+    (setq calendar-set-date-style 'european) ; alternativ 'iso
+    (setq calendar-mark-holidays-flag t)
     (setq calendar-week-start-day 1) ; uker begynner på mandag
     (setq calendar-date-display-form calendar-iso-date-display-form)
+
+    ;; Holiday
+    (setq calendar-holidays (append
+                             norsk-ferier
+                             holiday-islamic-holidays
+                             holiday-christian-holidays))
     )
 #+END_SRC
 
