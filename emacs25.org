@@ -5058,6 +5058,9 @@ Untuk dengar lagu-lagu diambil dari [[https://www.gnu.org/software/emms/index.ht
 
     ;;Musics folder
     (setq emms-source-file-default-directory "~/Music/")
+
+    ;;Interactive playlist as default
+    (setq emms-playlist-default-major-mode 'emms-playlist-mode)
     )
 #+END_SRC
 
