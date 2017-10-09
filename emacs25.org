@@ -2852,8 +2852,8 @@ Selepas pasang versi org-mode 9.1.2, masalah untuk tukar stail
     ;; Display format
     (setq org-agenda-prefix-format '((agenda  . "%-12 s%?-2t") ; (agenda . " %s %-12t ")
                                      (timeline . "%-9:T%?-2t% s")
-                                     (todo . " ○ %i %t") ;%i%?-8:T tidak justify TODO
-                                     (tags . " ○ %i %t") ;(tags . "%i %-8:T")
+                                     (todo . " +%i %t") ;%i%?-8:T tidak justify TODO
+                                     (tags . " +%i %t") ;(tags . "%i %-8:T")
                                      (search . "%i %-8:T")))
 
     ;; Custom agenda
