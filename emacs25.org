@@ -1692,6 +1692,46 @@ Warna untuk setiap pasangan parentheses
     (add-hook 'ess-mode-hook #'rainbow-delimiters-mode)
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
+* Origami
+Untuk sembunyikan tekst yang panjang. Rujukan di [[https://github.com/gregsexton/origami.el][GitHub]]
+#+BEGIN_SRC emacs-lisp
+  (use-package origami
+    :ensure t
+    :commands origami-mode
+    :bind (:map ybk/prog-map
+                ("o" . hydra-origami/body))
+    :config
+    (global-origami-mode)
+
+    ;; Hydra tidak berfungsi bila diletakkan di init.
+    ;; origami mode harus aktiv dahulu utk pakai fungsi2
+    (defhydra hydra-origami (:color blue
+                                    :columns 5)
+
+      "Origami for codes"
+      ("o" origami-open-node                  "open")
+      ("c" origami-close-node                 "close")
+      ("n" origami-next-fold                  "next")
+
+      ("p" origami-previous-fold              "previous")
+      ("t" origami-recursively-toggle-node    "toggle")
+      ("a" origami-show-only-node             "only node")
+
+      ("u" origami-undo                       "undo")
+      ("z" origami-redo                       "redo")
+      ("r" origami-reset                      "reset")
+
+      ("q" nil "Keluar" :color red)
+      )
+
+
+    ;; Tetapkan ess-mode pakai sama seperti C
+    ;; utk tetapkan parser sendiri seperti boleh tambah di "origami-parser-alist"
+    ;; (setq origami-parser-alist (sendiri-punya .,(origami-markers-parser "{{" "}}")))
+    ;; (ess-mode . origami-c-style-parser)
+
+    )
+#+END_SRC
 
 * Winner mode
 
@@ -1881,9 +1921,9 @@ Aktivkan =Ivy= dengan =Projectile=.
 
          Find File            Search/Tags          Buffers                Cache
     ------------------------------------------------------------------------------------------
-    _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
-     _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
-     _fd_: file curr dir   _o_: multi-occur     _s-k_: Kill all buffers  _X_: cleanup non-existing
+      _f_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
+      _w_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
+      _j_: file curr dir   _o_: multi-occur       _k_: Kill all buffers  _X_: cleanup non-existing
       _r_: recent file                                               ^^^^_z_: cache current
       _d_: dir
 
@@ -1892,17 +1932,15 @@ Aktivkan =Ivy= dengan =Projectile=.
       ("b"   projectile-switch-to-buffer)
       ("c"   projectile-invalidate-cache)
       ("d"   projectile-find-dir)
-      ("s-f" projectile-find-file)
-      ("ff"  projectile-find-file-dwim)
-      ("fd"  projectile-find-file-in-directory)
+      ("f"   projectile-find-file)
+      ("w"   projectile-find-file-dwim)
+      ("j"   projectile-find-file-in-directory)
       ("g"   ggtags-update-tags)
-      ("s-g" ggtags-update-tags)
       ("i"   projectile-ibuffer)
-      ("K"   projectile-kill-buffers)
-      ("s-k" projectile-kill-buffers)
+      ("k"   projectile-kill-buffers)
       ("m"   projectile-multi-occur)
       ("o"   projectile-multi-occur)
-      ("s-p" projectile-switch-project "switch project")
+      ("s|p" projectile-switch-project "switch project")
       ("p"   projectile-switch-project)
       ("s"   projectile-switch-project)
       ("r"   projectile-recentf)
@@ -3478,7 +3516,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           ("M--" . ess-insert-S-assign)
           ("_"   . self-insert-command)
           :map ybk/prog-map
-          ("o" . ess-describe-object-at-point))
+          ("." . ess-describe-object-at-point))
     :config
     (setq ess-nuke-trailing-whitespace-p t)
 
