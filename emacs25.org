@@ -5075,6 +5075,27 @@ lihat cuaca tempat lain boleh pakai =M-x weather-metno-forecast-location= atau =
     (setq weather-metno-get-image-props '(:ascent center))
     )
 #+END_SRC
+* Google-translate
+Untuk pakai fungsi =Google Translate= di GNU Emacs. Sila lihat sumber di[[https://github.com/atykhonov/google-translate][sini]]. Untuk
+tukar terjemahan boleh pakai =C-n= atau =C-p=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package google-translate
+    :ensure t
+    :bind (("C-c t" . google-translate-smooth-translate)
+           :map ybk/org-map
+           ("g" . google-translate-smooth-translate))
+    :config
+    (use-package google-translate-smooth-ui)
+
+    ;; terjemahan utk dipakai
+    (setq google-translate-translation-directions-alist
+          '(("en" . "ms") ("no" . "ms") ("no" . "en") ("en" . "no")))
+
+    ;; input disabled with source lang is "en" and ybk-blog when lang is "malay" or "norsk"
+    (setq google-translate-preferable-input-methods-alist '((nil . ("en"))
+                                                            (ybk-blog . ("ms""no")))))
+#+END_SRC
 
 * Code cleanup
 Berbagai fungsi untuk bersihkan code
