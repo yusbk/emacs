@@ -5086,15 +5086,16 @@ tukar terjemahan boleh pakai =C-n= atau =C-p=.
            :map ybk/org-map
            ("g" . google-translate-smooth-translate))
     :config
-    (use-package google-translate-smooth-ui)
+    (require 'google-translate-smooth-ui)
 
     ;; terjemahan utk dipakai
     (setq google-translate-translation-directions-alist
           '(("en" . "ms") ("no" . "ms") ("no" . "en") ("en" . "no")))
 
-    ;; input disabled with source lang is "en" and ybk-blog when lang is "malay" or "norsk"
-    (setq google-translate-preferable-input-methods-alist '((nil . ("en"))
-                                                            (ybk-blog . ("ms""no")))))
+    ;; ;; input disabled with source lang is "en" and ybk-blog when lang is "malay" or "norsk"
+    ;; (setq google-translate-preferable-input-methods-alist '((nil . ("en"))
+    ;;                                                         (ybk-blog . ("ms""no"))))
+    )
 #+END_SRC
 
 * Code cleanup
