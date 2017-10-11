@@ -1603,19 +1603,30 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
-    :bind (("C-o" . aya-open-line)
+    :commands (yas-minor-mode) ;autoload 'yasnippet' when 'yas-minor-mode' is called
+    :bind (("C-x y" . aya-open-line) ;masukkan abbrev atau snippet sekiranya ada
            :map ybk/prog-map
            ("y" . company-yasnippet))
 
-    :config
+    :init
     ;;Folder utk yassnippets
     (setq yas-snippet-dirs
           '("~/.emacs.d/snippets"  ;; defaults snippets
             "~/Dropbox/snippets"   ;; personal snippets
             ))
 
-    ;;Enable Yasnippet
-    (yas-global-mode 1)
+
+    (progn
+      (add-hook 'prog-mode-hook #'yas-minor-mode)
+      (add-hook 'org-mode-hook #'yas-minor-mode))
+
+    :config
+    ;; reload when yasnippet is loaded
+    (progn
+      (yas-reload-all))
+
+    ;; ;;Enable Yasnippet
+    ;; (yas-global-mode 1)
 
     ;; Conflict with org-mode solution use of TAB
     (defun yas/org-very-safe-expand ()
@@ -1632,8 +1643,8 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
     ;;https://emacs.stackexchange.com/questions/7908/how-to-make-yasnippet-and-company-work-nicer
     (defun aya-open-line ()
       "Call `open-line', unless there are abbrevs or snippets at point.
-  In that case expand them.  If there's a snippet expansion in progress,
-  move to the next field. Call `open-line' if nothing else applies."
+    In that case expand them.  If there's a snippet expansion in progress,
+    move to the next field. Call `open-line' if nothing else applies."
       (interactive)
       (cond ((expand-abbrev))
             ((yas--snippets-at-point)
@@ -1643,7 +1654,7 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
             (t
              (open-line 1))))
 
-    (global-set-key "\C-o" 'aya-open-line)
+    (global-set-key "\C-x y" 'aya-open-line)
     )
 #+END_SRC
 
