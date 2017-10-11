@@ -1910,7 +1910,8 @@ Aktivkan =Ivy= dengan =Projectile=.
     :defer 1
     :diminish (projectile-mode . " ")
     :bind (:map ybk/prog-map
-                ("p" . hydra-projectile/body))
+                ("p" . counsel-switch-project) ;boleh tukar project walaupun tidak di projectile buffer
+                ("j" . hydra-projectile/body))
     :init
     (setq projectile-cache-file (concat ybk/emacs-cache "projectile.cache"))
     (setq projectile-known-projects-file (concat ybk/emacs-cache "projectile-bookmarks.eld"))
@@ -2002,6 +2003,8 @@ Aktivkan =Ivy= dengan =Projectile=.
     ;;   (magit-status)
     ;;   (call-interactively #'magit-fetch-current))
 
+    ;; Berbeza dengan 'projectile-switch-project' sebab fungsi ini boleh dipakai
+    ;; walaupun tidak di projectile buffer.
     (defun counsel-switch-project ()
       (interactive)
       (ivy-read "Switch to project: "
@@ -2016,6 +2019,8 @@ Aktivkan =Ivy= dengan =Projectile=.
                 :caller 'counsel-switch-project))
     (bind-key* "C-c p p" 'counsel-switch-project)
     )
+
+
 #+END_SRC
 
 * PDF-Tools
