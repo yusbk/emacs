@@ -5086,20 +5086,51 @@ tukar terjemahan boleh pakai =C-n= atau =C-p=.
 #+BEGIN_SRC emacs-lisp
   (use-package google-translate
     :ensure t
-    :bind (("C-c t" . google-translate-smooth-translate)
-           :map ybk/org-map
-           ("g" . google-translate-smooth-translate))
-    :config
-    (require 'google-translate-smooth-ui)
-
+    :bind (:map ybk/org-map
+                ("g" . hydra-google-trans/body))
+    :init
+    ;;Hydra
+    (defhydra hydra-google-trans (:color blue)
+      "Google-translate"
+      ("t" google-translate-smooth-translate "pilih terjemahan")
+      ("p" google-translate-at-point "terjemah BI-BM")
+      ("h" google-translate-query-translate "tulis perkataan")
+      ("q" nil "keluar")))
+#+END_SRC
+** Smooth-UI
+Untuk kombinasi pelbagi bahasa. Tukar bahasa untuk terjemah pakai =C-n= atau =C-p=
+#+BEGIN_SRC emacs-lisp
+  (use-package google-translate-smooth-ui
+    :ensure google-translate
+    :bind ("C-c t t" . google-translate-smooth-translate)
+    :init
     ;; terjemahan utk dipakai
     (setq google-translate-translation-directions-alist
-          '(("en" . "ms") ("no" . "ms") ("no" . "en") ("en" . "no")))
+          '(("en" . "ms")
+            ("no" . "ms")
+            ("ms" . "en")
+            ("no" . "en") ("en" . "no")))
 
     ;; ;; input disabled with source lang is "en" and ybk-blog when lang is "malay" or "norsk"
     ;; (setq google-translate-preferable-input-methods-alist '((nil . ("en"))
     ;;                                                         (ybk-blog . ("ms""no"))))
     )
+
+#+END_SRC
+** Default-UI
+Sekiranya bahasa tidak sedia ditetapkan di 'Smooth UI' boleh pilih dari pilihan pelbagai bahasa.
+#+BEGIN_SRC emacs-lisp
+  (use-package google-traslate-default-ui
+    :ensure google-translate
+    :bind (("C-c t p" . google-translate-at-point)
+           ("C-c t h" . google-translate-query-translate)
+           )
+    :init
+    (setq google-translate-default-target-language "ms")
+    ;; It won't ask for the input language. If I need it to, call the
+    ;; translation command with a C-u prefix:
+    (setq google-translate-default-source-language "en"))
+
 #+END_SRC
 
 * Code cleanup
