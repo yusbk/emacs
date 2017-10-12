@@ -1732,7 +1732,7 @@ Untuk sembunyikan tekst yang panjang. Rujukan di [[https://github.com/gregsexton
       ("z" origami-redo                       "redo")
       ("r" origami-reset                      "reset")
 
-      ("q" nil "Keluar" :color red)
+      ("q" nil "Keluar")
       )
 
 
@@ -5080,8 +5080,10 @@ lihat cuaca tempat lain boleh pakai =M-x weather-metno-forecast-location= atau =
     )
 #+END_SRC
 * Google-translate
-Untuk pakai fungsi =Google Translate= di GNU Emacs. Sila lihat sumber di[[https://github.com/atykhonov/google-translate][sini]]. Untuk
-tukar terjemahan boleh pakai =C-n= atau =C-p=.
+Untuk pakai fungsi =Google Translate= di GNU Emacs. Sila lihat sumber di[[https://github.com/atykhonov/google-translate][sini]]. Sekiranya
+bahasa untuk terjemahan tidak seperti yang sedia ada, boleh cari bahasa dengan
+menggunakan permulaan =C-u= kemudian fungsi biasa =C-c t=. Pemakaian =C-u= akan mematikan
+aturcara yang ditetapkan dan kembali ke asalnya (/default/).
 
 #+BEGIN_SRC emacs-lisp
   (use-package google-translate
@@ -5090,11 +5092,13 @@ tukar terjemahan boleh pakai =C-n= atau =C-p=.
                 ("g" . hydra-google-trans/body))
     :init
     ;;Hydra
-    (defhydra hydra-google-trans (:color blue)
+    (defhydra hydra-google-trans (:color blue
+                                         :columns 5)
       "Google-translate"
       ("t" google-translate-smooth-translate "pilih terjemahan")
       ("p" google-translate-at-point "terjemah BI-BM")
-      ("h" google-translate-query-translate "tulis perkataan")
+      ("o" google-translate-at-point-reverse "terjemah BM-BI")
+      ("h" google-translate-query-translate "perkataan BI-BM")
       ("q" nil "keluar")))
 #+END_SRC
 ** Smooth-UI
@@ -5118,19 +5122,21 @@ Untuk kombinasi pelbagi bahasa. Tukar bahasa untuk terjemah pakai =C-n= atau =C-
 
 #+END_SRC
 ** Default-UI
-Sekiranya bahasa tidak sedia ditetapkan di 'Smooth UI' boleh pilih dari pilihan pelbagai bahasa.
+Sekiranya bahasa tidak sedia ditetapkan di 'Smooth UI' boleh pilih dari pilihan
+pelbagai bahasa. Jika bahasa untuk terjemahan selain dari BI ke BM, boleh matikan
+~source-language~ dan ~target-language~.
 #+BEGIN_SRC emacs-lisp
   (use-package google-traslate-default-ui
     :ensure google-translate
     :bind (("C-c t p" . google-translate-at-point)
+           ("C-c t o" . google-translate-at-point-reverse)
            ("C-c t h" . google-translate-query-translate)
            )
     :init
-    (setq google-translate-default-target-language "ms")
-    ;; It won't ask for the input language. If I need it to, call the
-    ;; translation command with a C-u prefix:
-    (setq google-translate-default-source-language "en"))
-
+    ;;sekiranya ingin menetapkan bahasa
+    (setq google-translate-default-target-language "ms") ;terjemah ke
+    (setq google-translate-default-source-language "en") ;terjemah dari
+    )
 #+END_SRC
 
 * Code cleanup
