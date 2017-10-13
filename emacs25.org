@@ -1910,8 +1910,10 @@ Aktivkan =Ivy= dengan =Projectile=.
     :defer 1
     :diminish (projectile-mode . " ")
     :bind (:map ybk/prog-map
-                ("p" . counsel-switch-project) ;boleh tukar project walaupun tidak di projectile buffer
-                ("j" . hydra-projectile/body))
+                ;; find project
+                ("f" . counsel-switch-project) ;boleh tukar project walaupun tidak di projectile buffer
+                ;; project hydra
+                ("p" . hydra-projectile/body))
     :init
     (setq projectile-cache-file (concat ybk/emacs-cache "projectile.cache"))
     (setq projectile-known-projects-file (concat ybk/emacs-cache "projectile-bookmarks.eld"))
