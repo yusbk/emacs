@@ -5088,17 +5088,19 @@ aturcara yang ditetapkan dan kembali ke asalnya (/default/).
 #+BEGIN_SRC emacs-lisp
   (use-package google-translate
     :ensure t
-    :bind (:map ybk/org-map
-                ("g" . hydra-google-trans/body))
+    :bind (("C-c t" . hydra-google-trans/body)
+           :map ybk/org-map
+           ("g" . hydra-google-trans/body))
     :init
     ;;Hydra
     (defhydra hydra-google-trans (:color blue
-                                         :columns 5)
+                                         :columns 6)
       "Google-translate"
       ("t" google-translate-smooth-translate "pilih terjemahan")
-      ("p" google-translate-at-point "terjemah BI-BM")
-      ("o" google-translate-at-point-reverse "terjemah BM-BI")
-      ("h" google-translate-query-translate "perkataan BI-BM")
+      ("e" google-translate-at-point "terjemah BI-BM")
+      ("m" google-translate-at-point-reverse "terjemah BM-BI")
+      ("p" google-translate-query-translate "perkataan BI-BM")
+      ("o" google-translate-query-translate-reverse "perkataan BM-BI")
       ("q" nil "keluar")))
 #+END_SRC
 ** Smooth-UI
@@ -5106,7 +5108,7 @@ Untuk kombinasi pelbagi bahasa. Tukar bahasa untuk terjemah pakai =C-n= atau =C-
 #+BEGIN_SRC emacs-lisp
   (use-package google-translate-smooth-ui
     :ensure google-translate
-    :bind ("C-c t t" . google-translate-smooth-translate)
+    ;; :bind ("C-c t t" . google-translate-smooth-translate)
     :init
     ;; terjemahan utk dipakai
     (setq google-translate-translation-directions-alist
@@ -5128,10 +5130,10 @@ pelbagai bahasa. Jika bahasa untuk terjemahan selain dari BI ke BM, boleh matika
 #+BEGIN_SRC emacs-lisp
   (use-package google-traslate-default-ui
     :ensure google-translate
-    :bind (("C-c t p" . google-translate-at-point)
-           ("C-c t o" . google-translate-at-point-reverse)
-           ("C-c t h" . google-translate-query-translate)
-           )
+    ;; :bind (("C-c t p" . google-translate-at-point)
+    ;;        ("C-c t o" . google-translate-at-point-reverse)
+    ;;        ("C-c t h" . google-translate-query-translate)
+    ;;        )
     :init
     ;;sekiranya ingin menetapkan bahasa
     (setq google-translate-default-target-language "ms") ;terjemah ke
