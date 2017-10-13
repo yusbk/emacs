@@ -437,10 +437,10 @@ jumpa cara lain.
     :config
     ;; utk tukar tema f10-t
     (setq my-themes '(
-                      sanityinc-tomorrow-bright
                       sanityinc-tomorrow-eighties
+                      ;; sanityinc-tomorrow-bright
+                      sanityinc-tomorrow-night
                       sanityinc-tomorrow-blue
-                      ;;sanityinc-tomorrow-night
                       sanityinc-tomorrow-day
                       ))
 
