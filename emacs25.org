@@ -3007,6 +3007,10 @@ Selepas pasang versi org-mode 9.1.2, masalah untuk tukar stail
                     ((org-agenda-max-entries 5)
                      (org-agenda-overriding-header "Dagens oppgaver")
                      ))
+              (todo "HOLD"
+                    ((org-agenda-max-entries 5)
+                     (org-agenda-overriding-header "Oppgaver på vent")
+                     ))
               (todo "TODO"
                     ((org-agenda-max-entries 20)
                      (org-agenda-overriding-header "Jobb relaterte oppgaver")
