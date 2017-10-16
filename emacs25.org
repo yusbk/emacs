@@ -2989,8 +2989,8 @@ Selepas pasang versi org-mode 9.1.2, masalah untuk tukar stail
             nil))))
 
     ;; Display format
-    (setq org-agenda-prefix-format '((agenda  . "%-12 s%?-2t") ; (agenda . " %s %-12t ")
-                                     (timeline . "%-9:T%?-2t% s")
+    (setq org-agenda-prefix-format '((agenda  . "%-12 s%?-2t") ; (agenda . " %s %-12t ") or "%-12 s%?-2t" if want to show schedule/timeline
+                                     (timeline . "%-9:T%?-2t%") ; "%-9:T%?-2t% s" if want to show deadline/schedule in timeline ie. s
                                      (todo . " +%i %t") ;%i%?-8:T tidak justify TODO
                                      (tags . " +%i %t") ;(tags . "%i %-8:T")
                                      (search . "%i %-8:T")))
@@ -3029,6 +3029,10 @@ Selepas pasang versi org-mode 9.1.2, masalah untuk tukar stail
                      (org-agenda-overriding-header "Private saker")))
               ;; (tags-todo "JOBB")
               ))
+            ("d" "Frister" agenda "Oppgaver med fristdato"
+             ((org-agenda-time-grid nil)
+              (org-deadline-warning-days 356)
+              (org-agenda-entry-types '(:deadline))))
             ("r" "Refile" tags "REFILE"
              ((org-agenda-overriding-header "Usorterte oppgaver")
               (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done)) ;skip if TODO keyword marked DONE
