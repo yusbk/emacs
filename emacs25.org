@@ -1598,20 +1598,32 @@ Tambah fuzzy matching ke Company
     (company-flx-mode +1))
 #+END_SRC
 * Yasnippet
+** Koleksi snippet
+Koleksi rasmi snippet. Kemaskinikan package dengan =M-x package-refresh-contents=
+sekiranya snippets tidak dapat dipasang.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet-snippets
+    :ensure t
+    :pin melpa)
+#+END_SRC
+
+** Aturcara yasnippet
 Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Yasnippet][EmacsWiki]] untuk [[https://github.com/joaotavora/yasnippet][Yasnippet]]. Untuk buat snippets boleh baca di [[https://joaotavora.github.io/yasnippet/snippet-development.html][sini]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
     :commands (yas-minor-mode) ;autoload 'yasnippet' when 'yas-minor-mode' is called
-    :bind (("C-x y" . aya-open-line) ;masukkan abbrev atau snippet sekiranya ada
+    :bind (;; masukkan abbrev atau snippet sekiranya ada
+           ("C-x y" . aya-open-line)
            :map ybk/prog-map
            ("y" . company-yasnippet))
 
     :init
     ;;Folder utk yassnippets
     (setq yas-snippet-dirs
-          '("~/.emacs.d/snippets"  ;; defaults snippets
+          '("~/.emacs.d/yasnippet-snippets-*/snippets"  ;; defaults snippets
             "~/Dropbox/snippets"   ;; personal snippets
             ))
 
@@ -1654,7 +1666,7 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
             (t
              (open-line 1))))
 
-    (global-set-key "\C-x y" 'aya-open-line)
+    (global-set-key (kbd "C-x y") 'aya-open-line)
     )
 #+END_SRC
 
