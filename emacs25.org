@@ -3029,10 +3029,14 @@ Selepas pasang versi org-mode 9.1.2, masalah untuk tukar stail
                      (org-agenda-overriding-header "Private saker")))
               ;; (tags-todo "JOBB")
               ))
-            ("d" "Frister" agenda "Oppgaver med fristdato"
+            ("d" "Deadline" agenda "Oppgaver med fristdato"
              ((org-agenda-time-grid nil)
               (org-deadline-warning-days 356)
               (org-agenda-entry-types '(:deadline))))
+            ("s" "Scheduled" agenda "Planglagte oppgaver"
+             ((org-agenda-time-grid nil)
+              (org-get-scheduled-time t)
+              (org-agenda-entry-types '(:scheduled))))
             ("r" "Refile" tags "REFILE"
              ((org-agenda-overriding-header "Usorterte oppgaver")
               (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done)) ;skip if TODO keyword marked DONE
