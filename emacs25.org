@@ -5274,10 +5274,12 @@ Lorem ipsum
             "culpa qui officia deserunt mollit anim id est laborum."))
 #+END_SRC
 
-** Rmarkdown premeable
+** Rmarkdown chunk
+Ini ialah chunk untuk dipakai bila buat *Kvartalsrapport*
+*** premeable
 Untuk pakai bila buat Rmarkdown
 #+BEGIN_SRC emacs-lisp
-  (defun rappre ()
+  (defun rappremeable ()
     "Insert rapport premeable"
     (interactive)
     (insert "--- \n"
@@ -5288,6 +5290,17 @@ Untuk pakai bila buat Rmarkdown
             "--- \n"
             ))
 #+END_SRC
+*** chunck
+Rmarkdown chunck
+#+BEGIN_SRC emacs-lisp
+  (defun rapchunk ()
+    "Rapport chunck"
+    (interactive)
+    (insert "```{r setup , echo=FALSE, warning=FALSE, include=FALSE, message=FALSE} \n\n"
+
+            "```"))
+#+END_SRC
+
 
 * Coba
 Untuk coba pakej sebelum dipakai. Install di tmp
