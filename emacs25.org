@@ -1636,10 +1636,10 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
             ))
 
     ;; Aktifkan yas-minor-mode bila mode dibawah dibuka
-    (progn
-      (add-hook 'prog-mode-hook #'yas-minor-mode)
-      (add-hook 'org-mode-hook #'yas-minor-mode)
-      (add-hook 'markdown-mode-hook #'yas-minor-mode))
+    (add-hook 'prog-mode-hook #'yas-minor-mode)
+    (add-hook 'org-mode-hook #'yas-minor-mode)
+    (add-hook 'markdown-mode-hook #'yas-minor-mode)
+    (add-hook 'ess-mode-hook #'yas-minor-mode)
 
     :config
     ;; reload when yasnippet is loaded
@@ -3644,6 +3644,7 @@ memakai fungsi ini.
     :ensure t
     :pin melpa
     :config
+    ;; Aktivkan di mode tertentu
     (add-hook 'ess-mode-hook 'r-autoyas-ess-activate)
     (add-hook 'markdown-mode-hook 'r-autoyas-ess-activate)
     ;; Tunjuk mesej untuk debugging
