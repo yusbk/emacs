@@ -1610,6 +1610,12 @@ supaya snippet mode diaktifkan secara automatik.
     :pin melpa)
 #+END_SRC
 
+Untuk ESS-snippet boleh muat turun di [[https://github.com/mattfidler/yasnippet-ess-mode.git][GitHub]].
+
+#+BEGIN_EXAMPLE
+git clone https://github.com/mattfidler/yasnippet-ess-mode.git
+#+END_EXAMPLE
+
 ** Aturcara yasnippet
 Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Yasnippet][EmacsWiki]] untuk [[https://github.com/joaotavora/yasnippet][Yasnippet]]. Untuk buat snippets boleh baca di [[https://joaotavora.github.io/yasnippet/snippet-development.html][sini]].
 
@@ -1617,7 +1623,7 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
   (use-package yasnippet
     :ensure t
     :commands (yas-minor-mode) ;autoload 'yasnippet' when 'yas-minor-mode' is called
-    :mode ("\\.yas" . snippet-mode) ;aktifkan mode bila ada fail dengan .yas
+    :mode ("\\.yasnippet" . snippet-mode) ;aktifkan mode bila ada fail dengan .yasnippet
     :bind (;; masukkan abbrev atau snippet sekiranya ada
            ("C-x y" . aya-open-line)
            :map ybk/prog-map
@@ -3639,6 +3645,7 @@ memakai fungsi ini.
     :pin melpa
     :config
     (add-hook 'ess-mode-hook 'r-autoyas-ess-activate)
+    (add-hook 'markdown-mode-hook 'r-autoyas-ess-activate)
     ;; Tunjuk mesej untuk debugging
     (setq r-autoyas-debug t)
 
@@ -3934,7 +3941,6 @@ process is as follows:
   | Rmd  +-->+Knitr+-->+ md  +-->+Pandoc+->| Pdf   |
   |      |   |     |   |     |   |      |  | html  |
   +------+   +-----+   +--+--+   +------+  \-------+
-
 #+end_src
 
 [[~/Test/ditaa-rmd.png]]
@@ -3974,7 +3980,8 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
         (insert "```\n")
         (previous-line)))
 
-    ;;Masukkan R-chunk cara lain
+    ;; Masukkan R-chunk cara lain
+    ;; https://emacs.stackexchange.com/questions/27405/insert-code-chunk-in-r-markdown-with-yasnippet-and-polymode
     (defun rmd-insert-r-chunk (header)
       "Insert an r-chunk in markdown mode. Necessary due to interactions between polymode and yas snippet"
       (interactive "sHeader: ")
@@ -4010,9 +4017,6 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
            ;; adjust this point to send prior regions
            (if arg (point) (point-max))))))
     )
-
-
-
 #+END_SRC
 
 * Markdown
@@ -4149,8 +4153,7 @@ Cdlatex lets me write latex in org-mode. It's particularly useful for math. [[ht
   (use-package cdlatex
     :ensure t
     :config
-    (progn
-      (add-hook 'org-mode-hook 'org-cdlatex-mode)))
+    (add-hook 'org-mode-hook 'org-cdlatex-mode))
 #+END_SRC
 
 * HTML and Webpage
@@ -5255,7 +5258,8 @@ Stack Exchange mode for Emacs from [[https://github.com/vermiculus/sx.el][GitHub
 #+END_SRC
 
 * Miscellaneous
-Lorem
+** Lorem
+Lorem ipsum
 #+BEGIN_SRC emacs-lisp
   (defun lorem ()
     "Insert a lorem ipsum."
@@ -5268,6 +5272,22 @@ Lorem
             "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
             "culpa qui officia deserunt mollit anim id est laborum."))
 #+END_SRC
+
+** Rmarkdown premeable
+Untuk pakai bila buat Rmarkdown
+#+BEGIN_SRC emacs-lisp
+  (defun rappre ()
+    "Insert rapport premeable"
+    (interactive)
+    (insert "--- \n"
+            "title: \n"
+            " output: \n"
+            " pdf_document: default \n"
+            " date: '`r format(Sys.Date(), \"%d %b %Y\")`' \n"
+            "--- \n"
+            ))
+#+END_SRC
+
 * Coba
 Untuk coba pakej sebelum dipakai. Install di tmp
 #+BEGIN_SRC emacs-lisp
