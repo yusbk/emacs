@@ -1671,7 +1671,6 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
     (global-set-key (kbd "C-x y") 'aya-open-line)
     )
 #+END_SRC
-
 * Parentheses
 ** Smartparens
 Pasangan utk parentheses
@@ -3536,6 +3535,9 @@ Untuk pastikan cara menamakan fail di blogs mengikut cara [[http://jekyllrb.com/
 Shortcut =C-c C-x p= (org-set-property) dan utk padam C-c C-c d (org-delete-property)
 
 * ESS with R
+Aturcara dan ESS snippet
+
+** Aturcara ESS
 Untuk guna R. Kekunci yang berguna antaranya:
 - =C-c C-d=   Pelbagai aturcara lain
 - =C-c C-d e= ESSdescribe-object-at-point
@@ -3625,6 +3627,23 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
                           (ess-skip-blanks-forward 'multiline)
                           (point))))
           (ess-eval-region beg end vis))))
+    )
+#+END_SRC
+** ESS snippet
+Diambil dari [[https://github.com/mattfidler/r-autoyas.el][GitHub]]. Pakai =TAB= untuk buka snippet. =Yasnippet= perlu dipasang untuk
+memakai fungsi ini.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package r-autoyas
+    :ensure t
+    :pin melpa
+    :config
+    (add-hook 'ess-mode-hook 'r-autoyas-ess-activate)
+    ;; Tunjuk mesej untuk debugging
+    (setq r-autoyas-debug t)
+
+    ;; Masukkan personal function
+    (setq r-autorays-expand-package-functions-only nil)
     )
 #+END_SRC
 
