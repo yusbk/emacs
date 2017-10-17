@@ -1600,7 +1600,9 @@ Tambah fuzzy matching ke Company
 * Yasnippet
 ** Koleksi snippet
 Koleksi rasmi snippet. Kemaskinikan package dengan =M-x package-refresh-contents=
-sekiranya snippets tidak dapat dipasang.
+sekiranya snippets tidak dapat dipasang. Snippet persendirian di simpan di
+=Dropbox/snippet=. Bila buat snippet persendirian extention nama fail harus pakai =.yas=
+supaya snippet mode diaktifkan secara automatik.
 
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet-snippets
@@ -1615,27 +1617,27 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
   (use-package yasnippet
     :ensure t
     :commands (yas-minor-mode) ;autoload 'yasnippet' when 'yas-minor-mode' is called
+    :mode ("\\.yas" . snippet-mode) ;aktifkan mode bila ada fail dengan .yas
     :bind (;; masukkan abbrev atau snippet sekiranya ada
            ("C-x y" . aya-open-line)
            :map ybk/prog-map
            ("y" . company-yasnippet))
 
     :init
-    ;;Folder utk yassnippets
+    ;; Folder utk yassnippets
     (setq yas-snippet-dirs
-          '("~/.emacs.d/yasnippet-snippets-*/snippets"  ;; defaults snippets
-            "~/Dropbox/snippets"   ;; personal snippets
+          '("~/Dropbox/snippets"   ;; personal snippets
             ))
 
-
+    ;; Aktifkan yas-minor-mode bila mode dibawah dibuka
     (progn
       (add-hook 'prog-mode-hook #'yas-minor-mode)
-      (add-hook 'org-mode-hook #'yas-minor-mode))
+      (add-hook 'org-mode-hook #'yas-minor-mode)
+      (add-hook 'markdown-mode-hook #'yas-minor-mode))
 
     :config
     ;; reload when yasnippet is loaded
-    (progn
-      (yas-reload-all))
+    (yas-reload-all)
 
     ;; ;;Enable Yasnippet
     ;; (yas-global-mode 1)
