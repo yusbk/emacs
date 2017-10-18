@@ -1753,15 +1753,7 @@ Untuk sembunyikan tekst yang panjang. Rujukan di [[https://github.com/gregsexton
       ("r" origami-reset                      "reset")
 
       ("q" nil "Keluar")
-      )
-
-
-    ;; Tetapkan ess-mode pakai sama seperti C
-    ;; utk tetapkan parser sendiri seperti boleh tambah di "origami-parser-alist"
-    ;; (setq origami-parser-alist (sendiri-punya .,(origami-markers-parser "{{" "}}")))
-    ;; (ess-mode . origami-c-style-parser)
-
-    )
+      ))
 #+END_SRC
 
 * Winner mode
@@ -3939,6 +3931,8 @@ dimatikan sebab crash dengan BM
 #+END_SRC
 
 * Polymode (for knitr)
+Mode ini dipakai untuk membuat dokumen yang menggunakan program R.
+** Aturcara
 Polymode is a (relatively new) way of working with multiple major modes. This is
 especially helpful if we want to use latex or markdown together with R code. The
 process is as follows:
@@ -3967,7 +3961,8 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
     :bind (:map ybk/prog-map
                 ("c" . rmd-insert-r-chunk)
                 ("r" . rmd-eval-chunk)
-                ("t" . rmd-eval-buffer))
+                ("t" . rmd-eval-buffer)
+                )
     :init
     (progn
       (defun Rmd-mode ()
@@ -4023,6 +4018,44 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
           (pm-map-over-spans
            'rmd-eval-chunk (point-min) ;;'
            ;; adjust this point to send prior regions
+           (if arg (point) (point-max))))))
+    )
+#+END_SRC
+** Fold chunck
+Pakai pakej [[https://github.com/magnars/fold-this.el][fold-this]] dan aturcara diambil dari [[https://github.com/brendan-r/dotemacs/blob/b601eb09e227d1a0ec3220a79884a743e4027e5a/init.el#L821-L843][Brendan]].
+
+#+BEGIN_SRC emacs-lisp
+  (use-package fold-this
+    :ensure t
+    :bind (:map ybk/prog-map
+                ("*" . rmd-fold-block)
+                ("+" . rmd-fold-all-blocks)
+                ([?\\] . fold-this-unfold-all))
+    :config
+    ;; Fold chunck
+    ;; https://github.com/brendan-r/dotemacs/blob/b601eb09e227d1a0ec3220a79884a743e4027e5a/init.el#L821-L843
+    (defun rmd-fold-block ()
+      "Fold the contents of the current R block, in an Rmarkdown file (can be undone
+     with fold-this-unfold-at-point)"
+      (interactive)
+      (and (eq (oref pm/chunkmode :mode) 'r-mode)
+           (pm-with-narrowed-to-span nil
+             (goto-char (point-min))
+             (forward-line)
+             (fold-this (point) (point-max)))))
+
+    ;; E.g. to send a prefix, use C-u M-x rmd-send-buffer
+    (defun rmd-fold-all-blocks (arg)
+      "Fold all R blocks in an Rmarkdown file (can be undone with
+     fold-this-unfold-all)"
+      ;; Interactive, with a prefix argument
+      (interactive "P")
+      (save-restriction
+        (widen)
+        (save-excursion
+          (pm-map-over-spans
+           'rmd-fold-block (point-min)
+           ;; adjust this point to fold prior regions
            (if arg (point) (point-max))))))
     )
 #+END_SRC
@@ -5307,7 +5340,6 @@ Rmarkdown chunck
 
             "```"))
 #+END_SRC
-
 
 * Coba
 Untuk coba pakej sebelum dipakai. Install di tmp
