@@ -4028,8 +4028,8 @@ Pakai pakej [[https://github.com/magnars/fold-this.el][fold-this]] dan aturcara 
   (use-package fold-this
     :ensure t
     :bind (:map ybk/prog-map
-                ("*" . rmd-fold-block)
-                ("+" . rmd-fold-all-blocks)
+                ("+" . rmd-fold-block)
+                ("*" . rmd-fold-all-blocks)
                 ([?\\] . fold-this-unfold-all))
     :config
     ;; Fold chunck
