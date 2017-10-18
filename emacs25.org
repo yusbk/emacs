@@ -1635,15 +1635,16 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
           '("~/Dropbox/snippets"   ;; personal snippets
             ))
 
+    :config
+    ;; reload when yasnippet is loaded
+    (yas-reload-all)
+
     ;; Aktifkan yas-minor-mode bila mode dibawah dibuka
     (add-hook 'prog-mode-hook #'yas-minor-mode)
     (add-hook 'org-mode-hook #'yas-minor-mode)
     (add-hook 'markdown-mode-hook #'yas-minor-mode)
     (add-hook 'ess-mode-hook #'yas-minor-mode)
-
-    :config
-    ;; reload when yasnippet is loaded
-    (yas-reload-all)
+    (add-hook 'inferior-ess-mode-hook #'yas-minor-mode)
 
     ;; ;;Enable Yasnippet
     ;; (yas-global-mode 1)
@@ -3644,15 +3645,21 @@ memakai fungsi ini.
     :ensure t
     :pin melpa
     :config
+    ;; Aktifkan yasnippet sebab diperlukan utk r-autoyas
+    (require 'yasnippet)
+
     ;; Aktivkan di mode tertentu
-    (add-hook 'ess-mode-hook 'r-autoyas-ess-activate)
-    (add-hook 'markdown-mode-hook 'r-autoyas-ess-activate)
+    (add-hook 'ess-mode-hook #'r-autoyas-ess-activate)
+    (add-hook 'markdown-mode-hook #'r-autoyas-ess-activate)
+
     ;; Tunjuk mesej untuk debugging
     (setq r-autoyas-debug t)
 
+    ;; Keluar yas snippet dan buang argument selebihnya yang tidak dipakai
+    (r-autoyas-exit-snippet-delete-remaining)
+
     ;; Masukkan personal function
-    (setq r-autorays-expand-package-functions-only nil)
-    )
+    (setq r-autorays-expand-package-functions-only nil))
 #+END_SRC
 
 * CSV file
