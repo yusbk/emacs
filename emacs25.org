@@ -3644,6 +3644,9 @@ memakai fungsi ini.
   (use-package r-autoyas
     :ensure t
     :pin melpa
+    :bind (:map ybk/prog-map
+                ;; Keluar yas snippet dan buang argument selebihnya yang tidak dipakai
+                ("-" . r-autoyas-exit-snippet-delete-remaining))
     :config
     ;; Aktifkan yasnippet sebab diperlukan utk r-autoyas
     (require 'yasnippet)
@@ -3654,9 +3657,6 @@ memakai fungsi ini.
 
     ;; Tunjuk mesej untuk debugging
     (setq r-autoyas-debug t)
-
-    ;; Keluar yas snippet dan buang argument selebihnya yang tidak dipakai
-    (r-autoyas-exit-snippet-delete-remaining)
 
     ;; Masukkan personal function
     (setq r-autorays-expand-package-functions-only nil))
