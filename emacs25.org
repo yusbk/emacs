@@ -3074,7 +3074,7 @@ Selepas pasang versi org-mode 9.1.2, masalah untuk tukar stail
       (when (not split)
         (delete-other-windows)))
 
-    (bind-key "t" #'ybk/todo 'ybk/org-map)
+    (bind-key "d" #'ybk/todo 'ybk/org-map)
 
     ;;== Singkatan utk org-agenda REFILE
     (defun ybk/refile (&optional split)
@@ -3319,8 +3319,8 @@ gangguan dari semua buffer-buffer yang dibuka
     (winner-undo))    ;; Put the windows back in place
 
   ;; Kekunci
-  (bind-key "m" #'meeting-notes 'ybk/org-map)
-  (bind-key "d" #'meeting-done 'ybk/org-map)
+  (bind-key "n" #'meeting-notes 'ybk/org-map)
+  (bind-key "m" #'meeting-done 'ybk/org-map)
 #+END_SRC
 
 ** Insert photo
