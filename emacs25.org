@@ -5179,9 +5179,9 @@ aturcara yang ditetapkan dan kembali ke asalnya (/default/).
 #+BEGIN_SRC emacs-lisp
   (use-package google-translate
     :ensure t
-    :bind (("C-c t" . hydra-google-trans/body)
+    :bind (("C-c t" . google-translate-at-point)
            :map ybk/org-map
-           ("g" . hydra-google-trans/body))
+           ("t" . hydra-google-trans/body))
     :init
     ;;Hydra
     (defhydra hydra-google-trans (:color blue
@@ -5319,7 +5319,7 @@ Ini ialah chunk untuk dipakai bila buat *Kvartalsrapport*
 *** premeable
 Untuk pakai bila buat Rmarkdown
 #+BEGIN_SRC emacs-lisp
-  (defun rappremeable ()
+  (defun rap-premeable ()
     "Insert rapport premeable"
     (interactive)
     (insert "--- \n"
@@ -5333,7 +5333,7 @@ Untuk pakai bila buat Rmarkdown
 *** chunck
 Rmarkdown chunck
 #+BEGIN_SRC emacs-lisp
-  (defun rapchunk ()
+  (defun rap-chunk ()
     "Rapport chunck"
     (interactive)
     (insert "```{r setup , echo=FALSE, warning=FALSE, include=FALSE, message=FALSE} \n\n"
