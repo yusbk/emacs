@@ -3559,6 +3559,8 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           :map inferior-ess-mode-map
           ("M--" . ess-insert-S-assign)
           ("_"   . self-insert-command)
+          ("M-+" . my/dt-update)
+          ("M-m" . my/add-match)
           :map ybk/prog-map
           ("." . ess-describe-object-at-point))
     :config
