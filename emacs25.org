@@ -5276,9 +5276,9 @@ Stack Exchange mode for Emacs from [[https://github.com/vermiculus/sx.el][GitHub
   (use-package sx
     :ensure t
     :bind (:map ybk/map
-                ("s" . hydra-sx/body))
+                ("s" . hydra-stackExchange/body))
     :init
-    (defhydra hydra-sx (:color blue)
+    (defhydra hydra-stackExchange (:color blue)
       "Stack Exchange"
       ("x" sx-tab-all-questions "questions")
       ("i" sx-inbox "inbox")
