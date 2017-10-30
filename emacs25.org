@@ -346,6 +346,12 @@ Tunjukkan line number
   (add-hook 'ess-mode-hook #'ybk/line-nr)
   (add-hook 'prog-mode-hook #'ybk/line-nr)
 #+END_SRC
+** ag
+Untuk memudahkan pencarian dan abaikan fail seperti folder .git dan ikut cara .gitignore
+#+BEGIN_SRC emacs-lisp
+  (defalias 'find-grep 'ag)
+#+END_SRC
+
 * Kill-ring
 Dari [[https://github.com/browse-kill-ring/browse-kill-ring][GitHub]]
 #+BEGIN_SRC emacs-lisp
@@ -2009,6 +2015,9 @@ Aktivkan =Ivy= dengan =Projectile=.
 
     ;; Don't consider my home dir as a project
     (add-to-list 'projectile-ignored-projects `,(concat (getenv "HOME") "/"))
+
+    ;; catch projects
+    (setq projectile-enable-caching t)
 
     ;; ;; utk git
     ;; (def-projectile-commander-method ?F
