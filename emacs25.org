@@ -3570,6 +3570,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           ("_"   . self-insert-command)
           ("M-+" . my/dt-update)
           ("M-m" . my/add-match)
+          ("C-<up>" . ess-readline)
           :map ybk/prog-map
           ("." . ess-describe-object-at-point))
     :config
@@ -3622,6 +3623,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
                        (point))))
             (goto-char pos))
         (end-of-line)))
+
     (defun my/ess-eval-pipe-through-line (vis)
       "Like `ess-eval-paragraph' but only evaluates up to the pipe on this line.
 
@@ -3637,6 +3639,30 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
                           (ess-skip-blanks-forward 'multiline)
                           (point))))
           (ess-eval-region beg end vis))))
+
+    ;; Get commands run from script or console
+    ;; https://stackoverflow.com/questions/27307757/ess-retrieving-command-history-from-commands-entered-in-essr-inferior-mode-or
+    (defun ess-readline ()
+      "Move to previous command entered from script *or* R-process and copy
+     to prompt for execution or editing"
+      (interactive)
+      ;; See how many times function was called
+      (if (eq last-command 'ess-readline)
+          (setq ess-readline-count (1+ ess-readline-count))
+        (setq ess-readline-count 1))
+      ;; Move to prompt and delete current input
+      (comint-goto-process-mark)
+      (end-of-buffer nil) ;; tweak here
+      (comint-kill-input)
+      ;; Copy n'th command in history where n = ess-readline-count
+      (comint-previous-prompt ess-readline-count)
+      (comint-copy-old-input)
+      ;; Below is needed to update counter for sequential calls
+      (setq this-command 'ess-readline)
+      )
+
+    ;; (global-set-key (kbd "\C-cp") 'ess-readline)
+
     )
 #+END_SRC
 ** ESS snippet
