@@ -2654,7 +2654,7 @@ org mode. Just use =f2-i= or =C-c s i=
       (org-edit-src-code)))
 
   (bind-key "s" #'ybk/org-insert-src-block 'ybk/prog-map)
-  (bind-key "C-c s s" #'ybk/org-insert-src-block org-mode-map)
+  (bind-key "C-c s" #'ybk/org-insert-src-block org-mode-map)
 #+END_SRC
 ** References (org-ref)
 Utk pakai org-ref letak fail =.bib= dan tetapkan =ref style= di penghujung dokument
