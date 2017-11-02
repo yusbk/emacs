@@ -3570,7 +3570,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           ("_"   . self-insert-command)
           ("M-+" . my/dt-update)
           ("M-m" . my/add-match)
-          ("C-<up>" . ess-readline)
+          ("C-c <up>" . ess-readline);previous cmd from script
           :map ybk/prog-map
           ("." . ess-describe-object-at-point))
     :config
