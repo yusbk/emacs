@@ -3999,6 +3999,7 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
                 ("c" . rmd-insert-r-chunk)
                 ("r" . rmd-eval-chunk)
                 ("t" . rmd-eval-buffer)
+                ("d" . poly-ess-rmarkdown)
                 )
     :init
     (progn
@@ -4008,57 +4009,67 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
         (require 'poly-R)
         (require 'poly-markdown)
         (R-mode)
-        (poly-markdown+r-mode)))
-
-    :config
-    ;;Masukkan R-chunk M-n M-i
-    (defun polymode-insert-new-chunk ()
-      (interactive)
-      (insert "\n```{r}\n")
-      (save-excursion
-        (newline)
-        (insert "```\n")
-        (previous-line)))
-
-    ;; Masukkan R-chunk cara lain
-    ;; https://emacs.stackexchange.com/questions/27405/insert-code-chunk-in-r-markdown-with-yasnippet-and-polymode
-    (defun rmd-insert-r-chunk (header)
-      "Insert an r-chunk in markdown mode. Necessary due to interactions between polymode and yas snippet"
-      (interactive "sHeader: ")
-      (insert (concat "```{r " header "}\n\n```"))
-      (forward-line -1))
-
-    ;;Evaluate chunck
-    ;;https://stackoverflow.com/questions/40894202/execute-all-r-chunks-at-once-from-an-rmd-document
-    (eval-when-compile
-      (require 'polymode-core)  ;; SO format :('
-      (defvar pm/chunkmode))
-    (declare-function pm-map-over-spans "polymode-core")
-    (declare-function pm-narrow-to-span "polymode-core")
-
-    (defun rmd-eval-chunk ()
-      "Send current R chunk to ess process."
-      (interactive)
-      (and (eq (oref pm/chunkmode :mode) 'r-mode) ;;'
-           (pm-with-narrowed-to-span nil
-             (goto-char (point-min))
-             (forward-line)
-             (ess-eval-region (point) (point-max) nil nil 'R)))) ;;'
-
-    (defun rmd-eval-buffer (arg)
-      "Send all R code blocks in buffer to ess process. With prefix
-  send regions above point."
-      (interactive "P")
-      (save-restriction
-        (widen)
-        (save-excursion
-          (pm-map-over-spans
-           'rmd-eval-chunk (point-min) ;;'
-           ;; adjust this point to send prior regions
-           (if arg (point) (point-max))))))
-    )
+        (poly-markdown+r-mode))))
 #+END_SRC
-** Fold chunck
+
+** Masukkan chunk
+Untuk memasukkan =r-chunck= di polymode.
+
+#+BEGIN_SRC emacs-lisp
+  ;;Masukkan R-chunk M-n M-i
+  (defun polymode-insert-new-chunk ()
+    (interactive)
+    (insert "\n```{r}\n")
+    (save-excursion
+      (newline)
+      (insert "```\n")
+      (previous-line)))
+
+  ;; Masukkan R-chunk cara lain
+  ;; https://emacs.stackexchange.com/questions/27405/insert-code-chunk-in-r-markdown-with-yasnippet-and-polymode
+  (defun rmd-insert-r-chunk (header)
+    "Insert an r-chunk in markdown mode. Necessary due to interactions between polymode and yas snippet"
+    (interactive "sHeader: ")
+    (insert (concat "```{r " header "}\n\n```"))
+    (forward-line -1))
+#+END_SRC
+
+** Menilai atau proseskan chunk
+Untuk dapatkan hasilan dari chunk, boleh diproses chunk satu persatu atau semuanya serentak.
+#+BEGIN_SRC emacs-lisp
+  ;;Evaluate chunck
+  ;;https://stackoverflow.com/questions/40894202/execute-all-r-chunks-at-once-from-an-rmd-document
+  (eval-when-compile
+    (require 'polymode-core)  ;; SO format :('
+    (defvar pm/chunkmode))
+  (declare-function pm-map-over-spans "polymode-core")
+  (declare-function pm-narrow-to-span "polymode-core")
+
+  ;; Nilai satu persatu
+  (defun rmd-eval-chunk ()
+    "Send current R chunk to ess process."
+    (interactive)
+    (and (eq (oref pm/chunkmode :mode) 'r-mode) ;;'
+         (pm-with-narrowed-to-span nil
+           (goto-char (point-min))
+           (forward-line)
+           (ess-eval-region (point) (point-max) nil nil 'R)))) ;;'
+
+  ;; Nilai semua serentak
+  (defun rmd-eval-buffer (arg)
+    "Send all R code blocks in buffer to ess process. With prefix
+    send regions above point."
+    (interactive "P")
+    (save-restriction
+      (widen)
+      (save-excursion
+        (pm-map-over-spans
+         'rmd-eval-chunk (point-min) ;;'
+         ;; adjust this point to send prior regions
+         (if arg (point) (point-max))))))
+#+END_SRC
+
+** Sembunyikan chunk
 Pakai pakej [[https://github.com/magnars/fold-this.el][fold-this]] dan aturcara diambil dari [[https://github.com/brendan-r/dotemacs/blob/b601eb09e227d1a0ec3220a79884a743e4027e5a/init.el#L821-L843][Brendan]].
 
 #+BEGIN_SRC emacs-lisp
@@ -4093,8 +4104,63 @@ Pakai pakej [[https://github.com/magnars/fold-this.el][fold-this]] dan aturcara 
           (pm-map-over-spans
            'rmd-fold-block (point-min)
            ;; adjust this point to fold prior regions
-           (if arg (point) (point-max))))))
-    )
+           (if arg (point) (point-max)))))))
+#+END_SRC
+
+** Compile Rmd file
+Fungsi ini menggunakan informasi YAML di fail Rmd untuk menetapkan jenis fail samada
+PDF, HTML atau DOCX seperti di =RStudio=. Diambil dari [[https://gist.github.com/benmarwick/ee0f400b14af87a57e4a][gist]].
+
+contoh YAML:
+#+BEGIN_EXAMPLE
+  ---
+  title: "Tajuk dokumen"
+  author: "Nama penulis"
+  date: "2 november 2017"
+  output: pdf_document
+  ---
+#+END_EXAMPLE
+
+Sekiranya ingin mendapatkan pelbagai jenis dokumen boleh ditetapkan seperti di bawah
+tetapi diproses dengan menggunakan kekunci standard polymode =M-n e=
+
+#+BEGIN_EXAMPLE
+  ---
+  title: "Tajuk dokumen"
+  author: "Nama penulis"
+  date: "2 november 2017"
+  output:
+    pdf_document: default
+    html_document: default
+    word_document: default
+  ---
+
+#+END_EXAMPLE
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun poly-ess-rmarkdown ()
+    "Compile R markdown (.Rmd). Should work for any output type."
+    (interactive)
+    ;; Check if attached R-session
+    (condition-case nil
+        (ess-get-process)
+      (error
+       (ess-switch-process)))
+    (let* ((rmd-buf (current-buffer)))
+      (save-excursion
+        (let* ((sprocess (ess-get-process ess-current-process-name))
+               (sbuffer (process-buffer sprocess))
+               (buf-coding (symbol-name buffer-file-coding-system))
+               (R-cmd
+                (format "library(rmarkdown); rmarkdown::render(\"%s\")"
+                        buffer-file-name)))
+          (message "Running rmarkdown on %s" buffer-file-name)
+          (ess-execute R-cmd 'buffer nil nil)
+          (switch-to-buffer rmd-buf)
+          (ess-show-buffer (buffer-name sbuffer) nil)))))
+
+  ;; (define-key polymode-mode-map "\M-ns" 'ess-rmarkdown)
+  ;; (bind-key "d" #'ess-rmarkdown ybk/prog-map)
 #+END_SRC
 
 * Markdown
