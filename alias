@@ -1,0 +1,14 @@
+alias gitw ~/Git-work
+alias gitp ~/Git-personal
+alias cd.e cd ~/.emacs.d
+alias cde cd ~/Git-personal/emacs/
+alias cdd cd ~/Dropbox/
+alias cdm cd ~/Dropbox/org/møter/
+alias cpe2 cp emacs25.org ~/Git-personal/emacs/ ; cd ~/Git-personal/emacs
+alias cpe1 cp emacs25.org ~/.emacs.d/ ; cd ~/.emacs.d
+alias dd dired $1
+alias d dired $1
+alias la ls -a
+alias ll ls -l
+alias f find-file $1
+alias ff find-file $1
