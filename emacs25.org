@@ -3816,7 +3816,7 @@ Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
 
         ^Tukar Kamus^
         ^---------------------------------------------------------------------
-        _f_: Flysell _k_: tkr.kamus _g_: British_o_: Norwegian            _q_: QUIT
+        _f_: Flysell  _k_: tkr.kamus _g_: British _o_: Norwegian     _q_: QUIT
 
       "
       ("f" flyspell-mode)
