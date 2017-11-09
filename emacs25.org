@@ -3483,6 +3483,32 @@ Prefix =C-u M-x= arg akan pindahkan gambar ke subfolder dan utk hanya copy pakai
       ;; display image
       (org-display-inline-images t t)))
 #+END_SRC
+** CSS di org
+Untuk memasukkan CSS persendirian ke org file bila eksport. Diambil dari
+[[https://stackoverflow.com/questions/19614104/how-to-tell-org-mode-to-embed-my-css-file-on-html-export][StackOverflow]]. Fail CSS persendirian ialah =org-style.css= dan diletakkan di
+=~/Dropbox/customize/org-style.css= boleh edit bila perlu
+
+#+BEGIN_SRC emacs-lisp
+  (defun my-org-inline-css-hook (exporter)
+    "Insert custom inline css"
+    (when (eq exporter 'html)
+      (let* ((dir (ignore-errors (file-name-directory (buffer-file-name))))
+             (path (concat dir "style.css"))
+             (homestyle (or (null dir) (null (file-exists-p path))))
+             (final (if homestyle "~/Dropbox/customize/org-style.css" path))) ;; <- set your own style file path
+        (setq org-html-head-include-default-style nil)
+        (setq org-html-head (concat
+                             "<style type=\"text/css\">\n"
+                             "<!--/*--><![CDATA[/*><!--*/\n"
+                             (with-temp-buffer
+                               (insert-file-contents final)
+                               (buffer-string))
+                             "/*]]>*/-->\n"
+                             "</style>\n")))))
+
+  (add-hook 'org-export-before-processing-hook 'my-org-inline-css-hook)
+#+END_SRC
+
 ** Blogs
 Aktivkan library yang diperlukan untuk mengeksport ke html.
 
