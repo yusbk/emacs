@@ -1,5 +1,6 @@
 alias gitw ~/Git-work
 alias gitp ~/Git-personal
+alias gitb cd ~/Git-personal/yusbk.github.io/org
 alias cd.e cd ~/.emacs.d
 alias cde cd ~/Git-personal/emacs/
 alias cdd cd ~/Dropbox/
