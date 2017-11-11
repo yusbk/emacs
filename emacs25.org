@@ -2228,8 +2228,9 @@ xmlgraphics-commons-1.4.jar
 ** Maklumat
 Rujukkan utk aturcara org-mode diambil dari [[http://doc.norang.ca/org-mode.html#Setup][Bernt Hansen]] dan [[https://github.com/jabranham/emacs/blob/master/emacs.org][Jabraham]]. Utk asas sila rujuk [[https://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html][Aaron Bieber]]
 
-Fail-fail yang ditetapkan di folder =org-agenda-fail= perlu dibuat sendiri
-terlebih dahulu sebelum memakai fungsi =C-c c=.
+Program =org-mode= yang dipakai disini diklon dari ~GitHub ~ melalui [[git clone
+git://orgmode.org/org-mode.git]]. =Fail-fail yang ditetapkan di folder =org-agenda-fail=
+perlu dibuat sendiri terlebih dahulu sebelum memakai fungsi =C-c c=.
 
 ** Rujukkan kekunci
 Pasang dan kemaskini aturcara org-mode.
@@ -2273,6 +2274,7 @@ Aktifkan org-mode, auto-mode dan org-direktori. Sekiranya org-directory belum ad
 sila sediakan.
 #+BEGIN_SRC emacs-lisp
   (use-package org
+    :load-path "~/Dropbox/lisp/org-mode/"
     :mode (("\\.txt$" . org-mode)
            ("\\.org$" . org-mode))
     :config
@@ -2855,7 +2857,6 @@ Untuk tunjukkan semua TODO di current buffer yang tidak termasuk di
   (setq org-log-reschedule (quote time))
 
 #+END_SRC
-** TODO Test org-todo
 ** Agenda
 Tunjukkan semua TODO, temujanji dan pelbagai tugasan yang perlu
 diselesaikan. Fail-fail utk dimasukkan ke org-agenda diatur di sini. Pakai Dropbox
@@ -3330,6 +3331,31 @@ gangguan dari semua buffer-buffer yang dibuka
   ;; Kekunci
   (bind-key "n" #'meeting-notes 'ybk/org-map)
   (bind-key "m" #'meeting-done 'ybk/org-map)
+#+END_SRC
+** Slides Presentation
+Untuk buat slides pembentangan menggunakan =Reveal.js=. Untuk memakai Reveal
+menggunakan org-mode, harus memuatkan ~org-raveal~ dari [[https://github.com/yjwen/org-reveal][GitHub]] atau Elpa. Selain itu
+perlu dapatkan =Reveal.js= dari [[http://hakim.se/][Hakim El Hattab]] di [[https://github.com/hakimel/reveal.js][GitHub]].
+
+=Reveal.js= boleh diletakkan di folder yang sama setiap kali menyediakan
+slides. Sekiranya =Reveal.js= disimpan di folder yang sama, tetapkan =org-reveal-root=
+dengan hanya ="."= dan sekiranya difolder yang lain, tetapkan dengan
+=file:///tempat/folder/reveal.js=. Sekiranya tidak menbuat salinan =Reveal.js= maka boleh
+meletakkan =#+REVEAL_ROOT:= di org-file slide yang sedang dibuat.
+
+#+BEGIN_EXAMPLE
+#+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
+#+END_EXAMPLE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ox-reveal
+    :ensure org
+    :load-path "~/Dropbox/lisp/org-reveal/"
+    :init
+    ;; tetapkan lokasi
+    ;; (setq org-reveal-root "file:///home/Dropbox/lisp/reveal.js") ;lokasi di Dropbox
+    (setq org-reveal-root ".") ;lokasi reveal.js di folder yg sama dengan slides
+    )
 #+END_SRC
 
 ** Insert photo
