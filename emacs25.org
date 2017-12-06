@@ -76,7 +76,9 @@ Keymap utk berkaitan dengan Org-mode
          (load-file private-file)))))
 #+END_SRC
 * Go to settings file
-It's nice to have a function to find this file quickly. Here's one:
+Fungsi untuk menyenangkan membuka fail-fail yang selalu digunakan atau
+dirujuk. Contohnya fail aturcara Emacs =emacs25.org= dan shortcuts yang selalu dipakai
+=shortcuts=.
 
 #+BEGIN_SRC emacs-lisp
   (defun ybk/emacs-file ()
@@ -85,6 +87,14 @@ It's nice to have a function to find this file quickly. Here's one:
     (find-file (concat user-emacs-directory "emacs25.org")))
 
   (bind-key "y" #'ybk/emacs-file 'ybk/map)
+
+  ;; Shortcuts file
+  (defun ybk-shortcut ()
+    "Buka fail shortcuts"
+    (interactive)
+    (find-file (concat directory-sendiri "shortcuts.org")))
+
+  (bind-key "a" #'ybk-shortcut 'ybk/map)
 #+END_SRC
 * Info+
 Bantuan untuk Emacs Info
