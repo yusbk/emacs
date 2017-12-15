@@ -4059,8 +4059,8 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
     ("\\.[rR]md" . Rmd-mode)
     :bind (:map ybk/prog-map
                 ("c" . rmd-insert-r-chunk)
-                ("r" . rmd-eval-chunk)
-                ("t" . rmd-eval-buffer)
+                ("k" . rmd-eval-chunk)
+                ("l" . rmd-eval-buffer)
                 ("d" . poly-ess-rmarkdown)
                 )
     :init
