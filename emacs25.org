@@ -1003,7 +1003,7 @@ Kompilasi pelbagi fungsi untuk Emacs. [[https://github.com/bbatsov/crux#keybindi
           ("k" . crux-delete-file-and-buffer)
           :map ybk/prog-map
           ("b" . crux-cleanup-buffer-or-region) ;Whitespace-cleanup
-          :map ybk/mail-map
+          :map ybk/move-map
           ([?\\] . crux-swap-windows) ;swap between 2 windows
           )
     :config
@@ -1147,7 +1147,7 @@ Lompat dari window ke window dengan menggunakan =M= kemudian nombor window
     :ensure t
     :defer 1
     :bind (:map ybk/move-map
-                ("w" . winum-select-window-by-number))
+                ("1" . winum-select-window-by-number))
     :init
     (setq winum-keymap
           (let ((map (make-sparse-keymap)))
@@ -1171,7 +1171,8 @@ Untuk tukarkan window layout
   (use-package transpose-frame
     :ensure t
     :bind (:map ybk/move-map
-                ("f" . transpose-frame))
+                ("f" . transpose-frame)
+                ("w" . transpose-words))
     :commands (transpose-frame))
   ;;Transpose utk perkataan guna M-t
   (bind-keys :prefix "C-t"
