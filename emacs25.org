@@ -1170,6 +1170,8 @@ Untuk tukarkan window layout
 #+BEGIN_SRC emacs-lisp
   (use-package transpose-frame
     :ensure t
+    :bind (:map ybk/move-map
+                ("f" . transpose-frame))
     :commands (transpose-frame))
   ;;Transpose utk perkataan guna M-t
   (bind-keys :prefix "C-t"
