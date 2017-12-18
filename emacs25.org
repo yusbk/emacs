@@ -1000,10 +1000,11 @@ Kompilasi pelbagi fungsi untuk Emacs. [[https://github.com/bbatsov/crux#keybindi
           ("C-c r" . crux-rename-file-and-buffer) ;rename current buffer
           ("C-c k" . crux-kill-other-buffers) ;kill all open buffers but not this
           :map ybk/map
-          ([?\\] . crux-swap-windows) ;swap between 2 windows
           ("k" . crux-delete-file-and-buffer)
           :map ybk/prog-map
           ("b" . crux-cleanup-buffer-or-region) ;Whitespace-cleanup
+          :map ybk/mail-map
+          ([?\\] . crux-swap-windows) ;swap between 2 windows
           )
     :config
     ;;make a command acting normally on a region to operate on entire buffer
