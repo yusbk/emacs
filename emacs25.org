@@ -64,6 +64,15 @@ Keymap utk berkaitan dengan Org-mode
 
   (bind-key "q" #'keluar 'ybk/org-map)
 #+END_SRC
+** R keymap [F9]
+Keymap untuk penggunaan berkaitan R
+#+BEGIN_SRC emacs-lisp
+  (bind-keys :prefix "<f9>"
+             :prefix-map ybk/r-map )
+
+  (bind-key "q" #'keluar 'ybk/r-map)
+
+#+END_SRC
 
 * Directory sendiri
 #+BEGIN_SRC emacs-lisp
@@ -3610,7 +3619,6 @@ Shortcut =C-c C-x p= (org-set-property) dan utk padam C-c C-c d (org-delete-prop
 
 * ESS with R
 Aturcara dan ESS snippet
-
 ** Aturcara ESS
 Untuk guna R. Kekunci yang berguna antaranya:
 - =C-c C-d=   Pelbagai aturcara lain
@@ -3637,8 +3645,10 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           ("M-+" . my/dt-update)
           ("M-m" . my/add-match)
           ("C-c <up>" . ess-readline);previous cmd from script
-          :map ybk/prog-map
-          ("." . ess-describe-object-at-point))
+          :map ybk/r-map
+          ("." . ess-describe-object-at-point)
+          ("d" . ess-dev-map)
+          ("r" . ess-r-package-dev-map))
     :config
     (setq ess-nuke-trailing-whitespace-p t)
 
@@ -3670,7 +3680,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     ;; pipe
     (defun my/add-pipe ()
       "Adds a pipe operator %>% with one space to the left and then
-  starts a newline with proper indentation"
+    starts a newline with proper indentation"
       (interactive)
       (just-one-space 1)
       (insert "%>%")
@@ -3693,9 +3703,9 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     (defun my/ess-eval-pipe-through-line (vis)
       "Like `ess-eval-paragraph' but only evaluates up to the pipe on this line.
 
-  If no pipe, evaluate paragraph through the end of current line.
+    If no pipe, evaluate paragraph through the end of current line.
 
-  Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
+    Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
       (interactive "P")
       (save-excursion
         (let ((end (progn
@@ -3710,7 +3720,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     ;; https://stackoverflow.com/questions/27307757/ess-retrieving-command-history-from-commands-entered-in-essr-inferior-mode-or
     (defun ess-readline ()
       "Move to previous command entered from script *or* R-process and copy
-     to prompt for execution or editing"
+       to prompt for execution or editing"
       (interactive)
       ;; See how many times function was called
       (if (eq last-command 'ess-readline)
@@ -3756,6 +3766,27 @@ memakai fungsi ini.
     ;; Masukkan personal function
     (setq r-autorays-expand-package-functions-only nil))
 #+END_SRC
+** Debug
+=ess-tracebug= aktiv secara automatik dan untuk mematikan boleh tetapkan =(setq
+ess-use-tracebug nil)=. Untuk penggunaan debug guna kekuci =C-c C-t= [ess-dev-map]
+untuk dapatkan semua kekunci.
+
+Untuk penerangan mendalam baca di [[https://code.google.com/archive/p/ess-tracebug/][ess-tracedebug]]
+
+Bila debugging, kekuci ini boleh dipakai
+
+|-----------+---------------------------|
+| Kekuci    | Fungsi                    |
+|-----------+---------------------------|
+| M-C       | Teruskan (continue)       |
+| M-C-C     | Teruskan pelbagai (multi) |
+| M-C-N     | Next step multi           |
+| M-Q       | quit                      |
+| C-x M-g n | next-error                |
+| C-x M-g p | pervious-error            |
+|-----------+---------------------------|
+
+
 
 * CSV file
 Untuk menggendali fail csv
