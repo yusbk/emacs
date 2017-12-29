@@ -5310,11 +5310,11 @@ aturcara yang ditetapkan dan kembali ke asalnya (/default/).
     (defhydra hydra-google-trans (:color blue
                                          :columns 6)
       "Google-translate"
-      ("t" google-translate-smooth-translate "pilih terjemahan")
-      ("e" google-translate-at-point "terjemah BI-BM")
-      ("m" google-translate-at-point-reverse "terjemah BM-BI")
-      ("p" google-translate-query-translate "perkataan BI-BM")
-      ("o" google-translate-query-translate-reverse "perkataan BM-BI")
+      ("t" google-translate-smooth-translate "terjemahan BM")
+      ("e" google-translate-at-point "terjemah NO-BI")
+      ("m" google-translate-at-point-reverse "terjemah BI-NO")
+      ("p" google-translate-query-translate "perkataan NO-BI")
+      ("o" google-translate-query-translate-reverse "perkataan BI-NO")
       ("q" nil "keluar")))
 #+END_SRC
 
@@ -5331,8 +5331,8 @@ pelbagai bahasa. Jika bahasa untuk terjemahan selain dari BI ke BM, boleh matika
     ;;        )
     :init
     ;;sekiranya ingin menetapkan bahasa
-    (setq google-translate-default-target-language "ms") ;terjemah ke
-    (setq google-translate-default-source-language "en") ;terjemah dari
+    (setq google-translate-default-target-language "en") ;terjemah ke
+    (setq google-translate-default-source-language "no") ;terjemah dari
     )
 #+END_SRC
 
@@ -5348,7 +5348,7 @@ Untuk kombinasi pelbagi bahasa. Tukar bahasa untuk terjemah pakai =C-n= atau =C-
           '(("en" . "ms")
             ("no" . "ms")
             ("ms" . "en")
-            ("no" . "en") ("en" . "no")))
+            ))
 
     ;; ;; input disabled with source lang is "en" and ybk-blog when lang is "malay" or "norsk"
     ;; (setq google-translate-preferable-input-methods-alist '((nil . ("en"))
