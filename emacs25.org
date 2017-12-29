@@ -64,15 +64,6 @@ Keymap utk berkaitan dengan Org-mode
 
   (bind-key "q" #'keluar 'ybk/org-map)
 #+END_SRC
-** R keymap [F9]
-Keymap untuk penggunaan berkaitan R
-#+BEGIN_SRC emacs-lisp
-  (bind-keys :prefix "<f9>"
-             :prefix-map ybk/r-map )
-
-  (bind-key "q" #'keluar 'ybk/r-map)
-
-#+END_SRC
 
 * Directory sendiri
 #+BEGIN_SRC emacs-lisp
@@ -85,9 +76,7 @@ Keymap untuk penggunaan berkaitan R
          (load-file private-file)))))
 #+END_SRC
 * Go to settings file
-Fungsi untuk menyenangkan membuka fail-fail yang selalu digunakan atau
-dirujuk. Contohnya fail aturcara Emacs =emacs25.org= dan shortcuts yang selalu dipakai
-=shortcuts=.
+It's nice to have a function to find this file quickly. Here's one:
 
 #+BEGIN_SRC emacs-lisp
   (defun ybk/emacs-file ()
@@ -96,14 +85,6 @@ dirujuk. Contohnya fail aturcara Emacs =emacs25.org= dan shortcuts yang selalu d
     (find-file (concat user-emacs-directory "emacs25.org")))
 
   (bind-key "y" #'ybk/emacs-file 'ybk/map)
-
-  ;; Shortcuts file
-  (defun ybk-shortcut ()
-    "Buka fail shortcuts"
-    (interactive)
-    (find-file (concat directory-sendiri "shortcuts.org")))
-
-  (bind-key "a" #'ybk-shortcut 'ybk/map)
 #+END_SRC
 * Info+
 Bantuan untuk Emacs Info
@@ -1009,11 +990,10 @@ Kompilasi pelbagi fungsi untuk Emacs. [[https://github.com/bbatsov/crux#keybindi
           ("C-c r" . crux-rename-file-and-buffer) ;rename current buffer
           ("C-c k" . crux-kill-other-buffers) ;kill all open buffers but not this
           :map ybk/map
+          ([?\\] . crux-swap-windows) ;swap between 2 windows
           ("k" . crux-delete-file-and-buffer)
           :map ybk/prog-map
           ("b" . crux-cleanup-buffer-or-region) ;Whitespace-cleanup
-          :map ybk/move-map
-          ([?\\] . crux-swap-windows) ;swap between 2 windows
           )
     :config
     ;;make a command acting normally on a region to operate on entire buffer
@@ -1156,7 +1136,7 @@ Lompat dari window ke window dengan menggunakan =M= kemudian nombor window
     :ensure t
     :defer 1
     :bind (:map ybk/move-map
-                ("1" . winum-select-window-by-number))
+                ("w" . winum-select-window-by-number))
     :init
     (setq winum-keymap
           (let ((map (make-sparse-keymap)))
@@ -1179,9 +1159,6 @@ Untuk tukarkan window layout
 #+BEGIN_SRC emacs-lisp
   (use-package transpose-frame
     :ensure t
-    :bind (:map ybk/move-map
-                ("f" . transpose-frame)
-                ("w" . transpose-words))
     :commands (transpose-frame))
   ;;Transpose utk perkataan guna M-t
   (bind-keys :prefix "C-t"
@@ -2032,7 +2009,7 @@ Aktivkan =Ivy= dengan =Projectile=.
     (use-package counsel-projectile
       :ensure t
       :config
-      (counsel-projectile-on))
+      (counsel-projectile-mode 1))
 
     (setq projectile-completion-system 'ivy)
 
@@ -2251,9 +2228,8 @@ xmlgraphics-commons-1.4.jar
 ** Maklumat
 Rujukkan utk aturcara org-mode diambil dari [[http://doc.norang.ca/org-mode.html#Setup][Bernt Hansen]] dan [[https://github.com/jabranham/emacs/blob/master/emacs.org][Jabraham]]. Utk asas sila rujuk [[https://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html][Aaron Bieber]]
 
-Program =org-mode= yang dipakai disini diklon dari ~GitHub ~ melalui [[git clone
-git://orgmode.org/org-mode.git]]. =Fail-fail yang ditetapkan di folder =org-agenda-fail=
-perlu dibuat sendiri terlebih dahulu sebelum memakai fungsi =C-c c=.
+Fail-fail yang ditetapkan di folder =org-agenda-fail= perlu dibuat sendiri
+terlebih dahulu sebelum memakai fungsi =C-c c=.
 
 ** Rujukkan kekunci
 Pasang dan kemaskini aturcara org-mode.
@@ -2297,7 +2273,8 @@ Aktifkan org-mode, auto-mode dan org-direktori. Sekiranya org-directory belum ad
 sila sediakan.
 #+BEGIN_SRC emacs-lisp
   (use-package org
-    :load-path "~/Dropbox/lisp/org-mode/"
+    :ensure org-plus-contrib
+    :pin org
     :mode (("\\.txt$" . org-mode)
            ("\\.org$" . org-mode))
     :config
@@ -2880,6 +2857,7 @@ Untuk tunjukkan semua TODO di current buffer yang tidak termasuk di
   (setq org-log-reschedule (quote time))
 
 #+END_SRC
+** TODO Test org-todo
 ** Agenda
 Tunjukkan semua TODO, temujanji dan pelbagai tugasan yang perlu
 diselesaikan. Fail-fail utk dimasukkan ke org-agenda diatur di sini. Pakai Dropbox
@@ -3355,31 +3333,6 @@ gangguan dari semua buffer-buffer yang dibuka
   (bind-key "n" #'meeting-notes 'ybk/org-map)
   (bind-key "m" #'meeting-done 'ybk/org-map)
 #+END_SRC
-** Slides Presentation
-Untuk buat slides pembentangan menggunakan =Reveal.js=. Untuk memakai Reveal
-menggunakan org-mode, harus memuatkan ~org-raveal~ dari [[https://github.com/yjwen/org-reveal][GitHub]] atau Elpa. Selain itu
-perlu dapatkan =Reveal.js= dari [[http://hakim.se/][Hakim El Hattab]] di [[https://github.com/hakimel/reveal.js][GitHub]].
-
-=Reveal.js= boleh diletakkan di folder yang sama setiap kali menyediakan
-slides. Sekiranya =Reveal.js= disimpan di folder yang sama, tetapkan =org-reveal-root=
-dengan hanya ="."= dan sekiranya difolder yang lain, tetapkan dengan
-=file:///tempat/folder/reveal.js=. Sekiranya tidak menbuat salinan =Reveal.js= maka boleh
-meletakkan =#+REVEAL_ROOT:= di org-file slide yang sedang dibuat.
-
-#+BEGIN_EXAMPLE
-#+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
-#+END_EXAMPLE
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ox-reveal
-    :ensure org
-    :load-path "~/Dropbox/lisp/org-reveal/"
-    :init
-    ;; tetapkan lokasi
-    ;; (setq org-reveal-root "file:///home/Dropbox/lisp/reveal.js") ;lokasi di Dropbox
-    (setq org-reveal-root ".") ;lokasi reveal.js di folder yg sama dengan slides
-    )
-#+END_SRC
 
 ** Insert photo
 Masukkan gambar ke ~org-file~ melalui command folder contohnya dari Dropbox. File akan
@@ -3619,6 +3572,7 @@ Shortcut =C-c C-x p= (org-set-property) dan utk padam C-c C-c d (org-delete-prop
 
 * ESS with R
 Aturcara dan ESS snippet
+
 ** Aturcara ESS
 Untuk guna R. Kekunci yang berguna antaranya:
 - =C-c C-d=   Pelbagai aturcara lain
@@ -3645,10 +3599,8 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           ("M-+" . my/dt-update)
           ("M-m" . my/add-match)
           ("C-c <up>" . ess-readline);previous cmd from script
-          :map ybk/r-map
-          ("." . ess-describe-object-at-point)
-          ("d" . ess-dev-map)
-          ("r" . ess-r-package-dev-map))
+          :map ybk/prog-map
+          ("." . ess-describe-object-at-point))
     :config
     (setq ess-nuke-trailing-whitespace-p t)
 
@@ -3680,7 +3632,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     ;; pipe
     (defun my/add-pipe ()
       "Adds a pipe operator %>% with one space to the left and then
-    starts a newline with proper indentation"
+  starts a newline with proper indentation"
       (interactive)
       (just-one-space 1)
       (insert "%>%")
@@ -3703,9 +3655,9 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     (defun my/ess-eval-pipe-through-line (vis)
       "Like `ess-eval-paragraph' but only evaluates up to the pipe on this line.
 
-    If no pipe, evaluate paragraph through the end of current line.
+  If no pipe, evaluate paragraph through the end of current line.
 
-    Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
+  Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
       (interactive "P")
       (save-excursion
         (let ((end (progn
@@ -3720,7 +3672,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     ;; https://stackoverflow.com/questions/27307757/ess-retrieving-command-history-from-commands-entered-in-essr-inferior-mode-or
     (defun ess-readline ()
       "Move to previous command entered from script *or* R-process and copy
-       to prompt for execution or editing"
+     to prompt for execution or editing"
       (interactive)
       ;; See how many times function was called
       (if (eq last-command 'ess-readline)
@@ -3766,27 +3718,6 @@ memakai fungsi ini.
     ;; Masukkan personal function
     (setq r-autorays-expand-package-functions-only nil))
 #+END_SRC
-** Debug
-=ess-tracebug= aktiv secara automatik dan untuk mematikan boleh tetapkan =(setq
-ess-use-tracebug nil)=. Untuk penggunaan debug guna kekuci =C-c C-t= [ess-dev-map]
-untuk dapatkan semua kekunci.
-
-Untuk penerangan mendalam baca di [[https://code.google.com/archive/p/ess-tracebug/][ess-tracedebug]]
-
-Bila debugging, kekuci ini boleh dipakai
-
-|-----------+---------------------------|
-| Kekuci    | Fungsi                    |
-|-----------+---------------------------|
-| M-C       | Teruskan (continue)       |
-| M-C-C     | Teruskan pelbagai (multi) |
-| M-C-N     | Next step multi           |
-| M-Q       | quit                      |
-| C-x M-g n | next-error                |
-| C-x M-g p | pervious-error            |
-|-----------+---------------------------|
-
-
 
 * CSV file
 Untuk menggendali fail csv
@@ -4094,8 +4025,8 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
     ("\\.[rR]md" . Rmd-mode)
     :bind (:map ybk/prog-map
                 ("c" . rmd-insert-r-chunk)
-                ("k" . rmd-eval-chunk)
-                ("l" . rmd-eval-buffer)
+                ("r" . rmd-eval-chunk)
+                ("t" . rmd-eval-buffer)
                 ("d" . poly-ess-rmarkdown)
                 )
     :init
@@ -4493,6 +4424,7 @@ Untuk menukarkan file atau buffer ke kod HTML dan CSS. Untuk maklumat selajutnya
     ;; dan size harus ditetapkan di css. Boleh pakai 'absolute kalau
     ;; ingin ambil size yang ditetapkan
     (setq htmlize-ignore-face-size t)
+
     ;; ;; tetapkan nama prefix utk css
     ;; (setq htmlize-css-name-prefix "ybk")
 
@@ -5385,9 +5317,28 @@ aturcara yang ditetapkan dan kembali ke asalnya (/default/).
       ("o" google-translate-query-translate-reverse "perkataan BM-BI")
       ("q" nil "keluar")))
 #+END_SRC
+
+** Default-UI
+Sekiranya bahasa tidak sedia ditetapkan di 'Smooth UI' boleh pilih dari pilihan
+pelbagai bahasa. Jika bahasa untuk terjemahan selain dari BI ke BM, boleh matikan
+~source-language~ dan ~target-language~.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package google-translate-default-ui
+    :ensure google-translate
+    ;; :bind (("C-c t p" . google-translate-at-point)
+    ;;        ("C-c t o" . google-translate-at-point-reverse)
+    ;;        ("C-c t h" . google-translate-query-translate)
+    ;;        )
+    :init
+    ;;sekiranya ingin menetapkan bahasa
+    (setq google-translate-default-target-language "ms") ;terjemah ke
+    (setq google-translate-default-source-language "en") ;terjemah dari
+    )
+#+END_SRC
+
 ** Smooth-UI
 Untuk kombinasi pelbagi bahasa. Tukar bahasa untuk terjemah pakai =C-n= atau =C-p=
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package google-translate-smooth-ui
     :ensure google-translate
     ;; :bind ("C-c t t" . google-translate-smooth-translate)
@@ -5404,23 +5355,6 @@ Untuk kombinasi pelbagi bahasa. Tukar bahasa untuk terjemah pakai =C-n= atau =C-
     ;;                                                         (ybk-blog . ("ms""no"))))
     )
 
-#+END_SRC
-** Default-UI
-Sekiranya bahasa tidak sedia ditetapkan di 'Smooth UI' boleh pilih dari pilihan
-pelbagai bahasa. Jika bahasa untuk terjemahan selain dari BI ke BM, boleh matikan
-~source-language~ dan ~target-language~.
-#+BEGIN_SRC emacs-lisp
-  (use-package google-traslate-default-ui
-    :ensure google-translate
-    ;; :bind (("C-c t p" . google-translate-at-point)
-    ;;        ("C-c t o" . google-translate-at-point-reverse)
-    ;;        ("C-c t h" . google-translate-query-translate)
-    ;;        )
-    :init
-    ;;sekiranya ingin menetapkan bahasa
-    (setq google-translate-default-target-language "ms") ;terjemah ke
-    (setq google-translate-default-source-language "en") ;terjemah dari
-    )
 #+END_SRC
 
 * Code cleanup
