@@ -13,9 +13,10 @@
 ;; add MELPA, Org, and ELPA
 (require 'package)
 (setq package-archives
-      '(("melpa" . "https://melpa.org/packages/")
+      '(("melpa"        . "https://melpa.org/packages/")
         ("melpa-stable" . "https://stable.melpa.org/packages/")
-        ("gnu" . "https://elpa.gnu.org/packages/")))
+        ("org"          . "http://orgmode.org/elpa/")
+        ("gnu"          . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
 ;; Ambil masa pemasangan
