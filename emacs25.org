@@ -3800,6 +3800,39 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
        (bind-key "c" #'ess-r-devtools-check-package 'ybk/r-map)
        (bind-key "d" #'ess-r-devtools-document-package 'ybk/r-map)
        ))
+
+  ;; Cobaan untuk guna hydra cuma belum selesai
+  (eval-after-load 'ess-mode
+    '(progn
+       (defhydra ybk-r-debug (:color teal :hint nil)
+         "
+          ^ESS R-debug^
+          ^---^----------^---^----------^---^----------^---^----------
+          _._: Object    _n_: Next BP   _k_: Kill BP   _l_: Load PKG
+          _b_: Set BP    _p_: Prev BP   _K_: Kill all  _c_: Check PKG
+
+         "
+         ("." ess-describe-object-at-point)
+         ("b" ess-bp-set)
+         ("k" ess-bp-kill)
+         ("K" ess-bp-kill-all)
+         ("n" ess-bp-next)
+         ("p" ess-bp-previous)
+         ("l" ess-r-devtools-load-package)
+         ("c" ess-r-devtools-check-package)
+         ("q" nil "keluar"))
+
+       ;; ("." ess-describe-object-at-point "object")
+       ;; ("b" ess-bp-set "set bp")
+       ;; ("k" ess-bp-kill "kill bp")
+       ;; ("K" ess-bp-kill-all "kill all")
+       ;; ("n" ess-bp-next "next bp")
+       ;; ("p" ess-bp-previous "prev bp")
+       ;; ("l" ess-r-devtools-load-package "load pkg")
+       ;; ("c" ess-r-devtools-check-package "check pkg")
+       ;; ("q" nil "keluar"))
+       (define-key ybk/r-map "a" 'ybk-r-debug/body)
+       ))
 #+END_SRC
 
 * CSV file
