@@ -65,6 +65,16 @@ Keymap utk berkaitan dengan Org-mode
   (bind-key "q" #'keluar 'ybk/org-map)
 #+END_SRC
 
+** R keymap [F9]
+Keymap untuk penggunaan berkaitan R
+#+BEGIN_SRC emacs-lisp
+  (bind-keys :prefix "<f9>"
+             :prefix-map ybk/r-map )
+
+  (bind-key "q" #'keluar 'ybk/r-map)
+
+#+END_SRC
+
 * Directory sendiri
 #+BEGIN_SRC emacs-lisp
   (setq directory-sendiri "~/Dropbox/customize/")
@@ -3599,8 +3609,10 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           ("M-+" . my/dt-update)
           ("M-m" . my/add-match)
           ("C-c <up>" . ess-readline);previous cmd from script
-          :map ybk/prog-map
-          ("." . ess-describe-object-at-point))
+          :map ybk/r-map
+          ("." . ess-describe-object-at-point)
+          ("d" . ess-dev-map)
+          ("r" . ess-r-package-dev-map))
     :config
     (setq ess-nuke-trailing-whitespace-p t)
 
@@ -3718,6 +3730,26 @@ memakai fungsi ini.
     ;; Masukkan personal function
     (setq r-autorays-expand-package-functions-only nil))
 #+END_SRC
+
+** Debug
+=ess-tracebug= aktiv secara automatik dan untuk mematikan boleh tetapkan =(setq
+ess-use-tracebug nil)=. Untuk penggunaan debug guna kekuci =C-c C-t= [ess-dev-map]
+untuk dapatkan semua kekunci.
+
+Untuk penerangan mendalam baca di [[https://code.google.com/archive/p/ess-tracebug/][ess-tracedebug]]
+
+Bila debugging, kekuci ini boleh dipakai
+
+|-----------+---------------------------|
+| Kekuci    | Fungsi                    |
+|-----------+---------------------------|
+| M-C       | Teruskan (continue)       |
+| M-C-C     | Teruskan pelbagai (multi) |
+| M-C-N     | Next step multi           |
+| M-Q       | quit                      |
+| C-x M-g n | next-error                |
+| C-x M-g p | pervious-error            |
+|-----------+---------------------------|
 
 * CSV file
 Untuk menggendali fail csv
