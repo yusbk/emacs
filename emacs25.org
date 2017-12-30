@@ -4153,7 +4153,27 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
         (require 'poly-R)
         (require 'poly-markdown)
         (R-mode)
-        (poly-markdown+r-mode))))
+        (poly-markdown+r-mode)))
+    :config
+    ;; Hydra
+    (defhydra ybk-rmd (:color teal)
+      "RMarkdown keys"
+      ("c" rmd-insert-r-chunk "insert chunk")
+      ("r" rmd-eval-chunk "eval chunk")
+      ("t" rmd-eval-buffer "eval buffer")
+      ("d" poly-ess-rmarkdown "create doc")
+      ("q" nil "keluar")
+      )
+    (define-key ybk/prog-map "z" 'ybk-rmd/body)
+    )
+
+
+
+
+
+
+
+
 #+END_SRC
 
 ** Masukkan chunk
@@ -5270,10 +5290,10 @@ package-refresh-contents=
       ;; ("$" magit-process "process")
       ;; ("q" nil "quit" :color red))
 
-      (defhydra hydra-magit (:hint nil)
+      (defhydra hydra-magit (:color blue :hint nil)
 
         "
-  ^Kunci dan funksi^
+  ^Kunci magit/GIT^
   ^^^^^^^^----------------
   _s_: status     _f_: fetch      _o_: checkout    _b_: branch manager         _a_: blame
   _d_: diff       _c_: clone      _l_: log         _u_: branch and checkout    _q_: quit
@@ -5293,7 +5313,7 @@ package-refresh-contents=
         ("!" magit-git-command)
         ("k" magit-branch-delete)
         ("a" magit-blame-popup)
-        ("q" nil "quit" :color red))
+        ("q" nil))
 
       ;;(key-chord-define-global "xm" #'hydra-magit/body)
       (bind-key "g" #'hydra-magit/body 'ybk/prog-map)
