@@ -317,20 +317,20 @@ Scrolling tanpa menggerakkan tetikus/pointer tetapi kedua-dua kekunci mesti dite
 contohnya utk bergerak ke bawah F2-n mesti ditekan utk setiap pergerakkan
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defun ybk/scroll-up ()
+  (defun ybk-scroll-up ()
     "Scroll up."
     (interactive)
     (scroll-up 10))
 
-  (defun ybk/scroll-down ()
+  (defun ybk-scroll-down ()
     "Scroll down."
     (interactive)
     (scroll-down 10))
 
   (defhydra hydra-sc (global-map "<f2>")
     "Scroll screen"
-    ("<down>" ybk/scroll-up "↑")
-    ("<up>" ybk/scroll-down "↓")
+    ("<down>" ybk-scroll-up "↑")
+    ("<up>" ybk-scroll-down "↓")
     ("q" nil "stop"))
 #+END_SRC
 
