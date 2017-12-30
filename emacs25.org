@@ -951,7 +951,10 @@ Untuk menunjukkan =diff= file semasa dan file sebelumnya. Boleh guna =blame=
 #+BEGIN_SRC emacs-lisp
   (use-package backup-walker
     :ensure t
-    :bind ("C-c w s" . backup-walker-start))
+    :bind (("C-c w s" . backup-walker-start)
+           (:map ybk/map
+                 ("w" . backup-walker-start))
+           ))
 #+END_SRC
 * Undo
 =C-z= as undo, not minimize emacs
@@ -1227,6 +1230,7 @@ Aturcare berkaitan dengan buffer
         ^^^^^^^^--------------------------
          _↑_: atas       _→_: kanan
          _↓_: bawah      _←_: kiri
+
         "
       ("<left>" buf-move-left)
       ("<right>" buf-move-right)
@@ -1872,6 +1876,10 @@ Contoh =C-x r SPC b= daftarkan tempat cursor sebagai *b* dan utk kembali ke sini
 #+BEGIN_SRC emacs-lisp
   (global-set-key [M-home] 'point-to-register)
   (global-set-key [M-end] 'jump-to-register)
+
+  ;;bind-key dengan [f2] move key
+  (bind-key "SPC" #'point-to-register 'ybk/move-map)
+  (bind-key "<end>" #'jump-to-register 'ybk/move-map)
 #+END_SRC
 
 ** Bookmark
