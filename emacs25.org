@@ -136,9 +136,9 @@ Fungsi-fungsi di bawah diambil dari [[https://github.com/abo-abo/hydra/wiki/Emac
 ** Movement
 Hanya guna =C-n= untuk aktifkan kekuci
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (global-set-key
-   (kbd "C-n")
+   (kbd "C-<prior>")
    (defhydra hydra-move
      (:body-pre (next-line))
      "move"
