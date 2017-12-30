@@ -2093,7 +2093,6 @@ Aktivkan =Ivy= dengan =Projectile=.
     (bind-key* "C-c p p" 'counsel-switch-project)
     )
 
-
 #+END_SRC
 
 * PDF-Tools
@@ -4166,13 +4165,12 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
         (poly-markdown+r-mode)))
 
     ;; Hydra
-    (defhydra ybk-rmd (:color teal
-                              :hint nil)
+    (defhydra ybk-rmd (:hint nil)
       "
      ^RMarkdown keys^
      ^--^----------------^--^-------------^--^---------------^--^-------------
      _c_: Insert chunk   _t_: Eval buffer _f_: Fold chunk    _a_: Fold all chk
-     _r_: Evaluate chunk _d_: Create doc  _u_: Unfold chunk  ^  ^
+     _r_: Evaluate chunk _d_: Create doc  _u_: Unfold chunk  _q_: Keluar
 
      "
       ("c" rmd-insert-r-chunk)
@@ -4182,11 +4180,11 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
       ("f" rmd-fold-block)
       ("a" rmd-fold-all-blocks)
       ("u" fold-this-unfold-all)
-      ("q" nil "keluar" :color red)
+      ;; ("q" nil "keluar" :color red)
+      ("q" (message "Selesai") :exit t)
       )
-    (define-key ybk/prog-map "z" 'ybk-rmd/body)
+    (define-key ybk/r-map "z" 'ybk-rmd/body)
     )
-
 #+END_SRC
 
 ** Masukkan chunk
@@ -5303,16 +5301,16 @@ package-refresh-contents=
       ;; ("$" magit-process "process")
       ;; ("q" nil "quit" :color red))
 
-      (defhydra hydra-magit (:color blue :hint nil)
+      (defhydra hydra-magit (:hint nil)
 
         "
-  ^Kunci magit/GIT^
-  ^^^^^^^^----------------
-  _s_: status     _f_: fetch      _o_: checkout    _b_: branch manager         _a_: blame
-  _d_: diff       _c_: clone      _l_: log         _u_: branch and checkout    _q_: quit
-  _p_: pull       _m_: merge      _!_: command     _k_: branch delete
+   ^Kunci magit/GIT^
+   ^^^^^^^^----------------
+   _s_: status     _f_: fetch      _o_: checkout    _b_: branch manager         _a_: blame
+   _d_: diff       _c_: clone      _l_: log         _u_: branch and checkout    ^  ^
+   _p_: pull       _m_: merge      _!_: command     _k_: branch delete          _q_: keluar
 
-       "
+        "
         ("s" magit-status)
         ("f" magit-fetch)
         ("d" magit-diff)
@@ -5326,7 +5324,8 @@ package-refresh-contents=
         ("!" magit-git-command)
         ("k" magit-branch-delete)
         ("a" magit-blame-popup)
-        ("q" nil))
+        ("q" (message "Selesai") :exit t)
+        )
 
       ;;(key-chord-define-global "xm" #'hydra-magit/body)
       (bind-key "g" #'hydra-magit/body 'ybk/prog-map)
