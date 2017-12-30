@@ -1305,8 +1305,10 @@ Fungsi berguna bila di minibuffer =M-o=
     :diminish ivy-mode
     :bind (("C-x b" . ivy-switch-buffer)
            ("C-x d" . ivy-dired-recent-dirs)
-           :map ybk/map
-           ("'" . ivy-resume))
+           ("C-r" . ivy-resume) ;sambung cari bila pakai C-s "swiper"
+           ;; :map ybk/map
+           ;; ("'" . ivy-resume)
+           )
     :config
     (ivy-mode 1)
     (setq ivy-display-style 'fancy)
@@ -1445,7 +1447,7 @@ mula dengan cari =C-s= dan kemudian =M-q= utk perkataan yang ingin ditukarkan. K
     :ensure t
     :diminish ivy-mode
     :bind (("C-s" . swiper)
-           ("C-r" . swiper)
+           ;; ("C-r" . swiper) ;C-r pakai utk ivy-resume
            ("C-c m" . woman) ;manual
            ("C-c u" . swiper-all)))
 #+END_SRC
@@ -1479,12 +1481,12 @@ Guna seperti =ace-jump-mode= untuk mencari perkataan kemudian taip
     :ensure t
     :defer 1
     :bind (:map ybk/move-map
-                ("a" . hydra-avy/body))
+                ("a" . hydra-avy-goto/body))
     :config
     (use-package link-hint
       :ensure t)
     (global-set-key (kbd "C-c g") #'avy-goto-line)
-    (defhydra hydra-avy (:color blue
+    (defhydra hydra-avy-goto (:color blue
                                 :columns 8);(global-map "M-g")
       "avy-goto"
       ("g" avy-goto-line "line")
@@ -1499,7 +1501,7 @@ Guna seperti =ace-jump-mode= untuk mencari perkataan kemudian taip
     (setq avy-keys
           '(?c ?a ?s ?d ?e ?f ?h ?w ?y ?j ?k ?l ?n ?m ?v ?r ?u ?p))
 
-    (key-chord-define-global "xg" #'hydra-avy/body)
+    (key-chord-define-global "xg" #'hydra-avy-goto/body)
     )
 #+END_SRC
 
