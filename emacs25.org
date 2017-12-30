@@ -66,8 +66,8 @@ Keymap utk berkaitan dengan Org-mode
 #+END_SRC
 
 ** R keymap [F9]
-Keymap untuk penggunaan berkaitan R
-#+BEGIN_SRC emacs-lisp
+Keymap untuk penggunaan berkaitan ESS-R. Cuma aktiv di =ess-mode=
+#+BEGIN_SRC emacs-lisp :tangle yes
   (bind-keys :prefix "<f9>"
              :prefix-map ybk/r-map )
 
@@ -85,7 +85,7 @@ Keymap untuk penggunaan berkaitan R
        (when (file-exists-p private-file)
          (load-file private-file)))))
 #+END_SRC
-* Go to settings file
+* Go to my emacs settings file
 It's nice to have a function to find this file quickly. Here's one:
 
 #+BEGIN_SRC emacs-lisp
@@ -130,6 +130,37 @@ Format UTF-8. Tapi =org-mode= bullet jadi kecil itulah dimatikan
       (set-face-attribute 'hydra-face-pink     nil :foreground "HotPink1"   :bold t)
       (set-face-attribute 'hydra-face-teal     nil :foreground "#367588"    :bold t)
       (hydra-add-font-lock)))
+#+END_SRC
+
+Fungsi-fungsi di bawah diambil dari [[https://github.com/abo-abo/hydra/wiki/Emacs][Hydra Wiki]]
+** Movement
+Hanya guna =C-n= untuk aktifkan kekuci
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key
+   (kbd "C-n")
+   (defhydra hydra-move
+     (:body-pre (next-line))
+     "move"
+     ("n" next-line "next")
+     ("p" previous-line "prev")
+     ("f" forward-char "forward")
+     ("b" backward-char "backward")
+     ("a" beginning-of-line "line start")
+     ("e" move-end-of-line "line end")
+     ("v" scroll-up-command "up")
+     ;; Converting M-v to V here by analogy.
+     ("V" scroll-down-command "down")
+     ("l" recenter-top-bottom "recenter")))
+#+END_SRC
+** Page Navigation
+Sesuai bila banyak mukasurat
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-page (ctl-x-map "" :pre (widen))
+    "page"
+    ("]" forward-page "next")
+    ("[" backward-page "prev")
+    ("n" narrow-to-page "narrow" :bind nil :exit t))
 #+END_SRC
 
 * Settings
@@ -3609,10 +3640,11 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           ("M-+" . my/dt-update)
           ("M-m" . my/add-match)
           ("C-c <up>" . ess-readline);previous cmd from script
-          :map ybk/r-map
-          ("." . ess-describe-object-at-point)
-          ("d" . ess-dev-map)
-          ("r" . ess-r-package-dev-map))
+          ;; :map ybk/r-map
+          ;; ("." . ess-describe-object-at-point)
+          ;; ("d" . ess-dev-map)
+          ;; ("r" . ess-r-package-dev-map)
+          )
     :config
     (setq ess-nuke-trailing-whitespace-p t)
 
@@ -3702,7 +3734,6 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
       )
 
     ;; (global-set-key (kbd "\C-cp") 'ess-readline)
-
     )
 #+END_SRC
 ** ESS snippet
@@ -3750,6 +3781,26 @@ Bila debugging, kekuci ini boleh dipakai
 | C-x M-g n | next-error                |
 | C-x M-g p | pervious-error            |
 |-----------+---------------------------|
+
+Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
+
+#+BEGIN_SRC emacs-lisp
+  (eval-after-load 'ess-mode
+    '(progn
+       (bind-key "." #'ess-describe-object-at-point 'ybk/r-map)
+       (bind-key "b" #'ess-bp-set 'ybk/r-map)
+       (bind-key "n" #'ess-bp-next 'ybk/r-map)
+       (bind-key "p" #'ess-bp-previous 'ybk/r-map)
+       (bind-key "k" #'ess-bp-kill 'ybk/r-map)
+       (bind-key "K" #'ess-bp-kill-all 'ybk/r-map)
+       (bind-key "v" #'ess-bp-make-visible 'ybk/r-map)
+       (bind-key "t" #'ess-dev-map 'ybk/r-map)
+       (bind-key "r" #'ess-r-package-dev-map 'ybk/r-map)
+       (bind-key "l" #'ess-r-devtools-load-package 'ybk/r-map)
+       (bind-key "c" #'ess-r-devtools-check-package 'ybk/r-map)
+       (bind-key "d" #'ess-r-devtools-document-package 'ybk/r-map)
+       ))
+#+END_SRC
 
 * CSV file
 Untuk menggendali fail csv
@@ -5342,11 +5393,11 @@ aturcara yang ditetapkan dan kembali ke asalnya (/default/).
     (defhydra hydra-google-trans (:color blue
                                          :columns 6)
       "Google-translate"
-      ("t" google-translate-smooth-translate "terjemahan BM")
-      ("e" google-translate-at-point "terjemah NO-BI")
-      ("m" google-translate-at-point-reverse "terjemah BI-NO")
-      ("p" google-translate-query-translate "perkataan NO-BI")
-      ("o" google-translate-query-translate-reverse "perkataan BI-NO")
+      ("t" google-translate-smooth-translate "pilih terjemahan")
+      ("e" google-translate-at-point "terjemah BI-BM")
+      ("m" google-translate-at-point-reverse "terjemah BM-BI")
+      ("p" google-translate-query-translate "perkataan BI-BM")
+      ("o" google-translate-query-translate-reverse "perkataan BM-BI")
       ("q" nil "keluar")))
 #+END_SRC
 
@@ -5363,8 +5414,8 @@ pelbagai bahasa. Jika bahasa untuk terjemahan selain dari BI ke BM, boleh matika
     ;;        )
     :init
     ;;sekiranya ingin menetapkan bahasa
-    (setq google-translate-default-target-language "en") ;terjemah ke
-    (setq google-translate-default-source-language "no") ;terjemah dari
+    (setq google-translate-default-target-language "ms") ;terjemah ke
+    (setq google-translate-default-source-language "en") ;terjemah dari
     )
 #+END_SRC
 
@@ -5380,7 +5431,7 @@ Untuk kombinasi pelbagi bahasa. Tukar bahasa untuk terjemah pakai =C-n= atau =C-
           '(("en" . "ms")
             ("no" . "ms")
             ("ms" . "en")
-            ))
+            ("no" . "en") ("en" . "no")))
 
     ;; ;; input disabled with source lang is "en" and ybk-blog when lang is "malay" or "norsk"
     ;; (setq google-translate-preferable-input-methods-alist '((nil . ("en"))
