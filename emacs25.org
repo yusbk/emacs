@@ -1830,6 +1830,8 @@ represent as their background.
     (add-hook 'prog-mode-hook #'rainbow-mode)
     (add-hook 'inferior-ess-mode-hook #'rainbow-mode)
     (add-hook 'ess-mode-hook #'rainbow-mode)
+    (add-hook 'markdown-mode-hook #'rainbow-mode)
+    (add-hook 'LaTeX-mode-hook #'rainbow-mode)
     (add-hook 'text-mode-hook #'rainbow-mode))
 #+END_SRC
 
