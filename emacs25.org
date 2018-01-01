@@ -1888,9 +1888,11 @@ Contoh =C-x r SPC b= daftarkan tempat cursor sebagai *b* dan utk kembali ke sini
   (global-set-key [M-home] 'point-to-register)
   (global-set-key [M-end] 'jump-to-register)
 
-  ;;bind-key dengan [f2] move key
-  (bind-key "SPC" #'point-to-register 'ybk/move-map)
-  (bind-key "<end>" #'jump-to-register 'ybk/move-map)
+  ;; bind-key dengan [f2] move key
+  ;; (bind-key "SPC" #'point-to-register 'ybk/move-map)
+  ;; (bind-key "<end>" #'jump-to-register 'ybk/move-map)
+  (bind-key "p" #'point-to-register 'ybk/move-map)
+  (bind-key "o" #'jump-to-register 'ybk/move-map)
 #+END_SRC
 
 ** Bookmark
@@ -1926,7 +1928,7 @@ Berlu dipelajari. Sila baca [[https://www.emacswiki.org/emacs/BookMarks][Wiki:Bo
     :bind (:map ybk/move-map
                 ("r" . bookmark-set)
                 ("j" . bookmark-jump)
-                ("k" . ivy-bookmark-goto)
+                ("t" . ivy-bookmark-goto)
                 ("l" . bookmark-bmenu-list))
     :config
     (use-package bookmark+
@@ -2460,7 +2462,7 @@ utk 'Headings' diambil dari [[http://stackoverflow.com/questions/28030946/emacs-
     :bind (:map ybk/org-map
                 ("l" . ybk/worf-insert-internal-link)
                 :map ybk/move-map
-                ("g" . worf-goto))
+                ("h" . worf-goto))
     :config
 
     ;; use ivy to insert a link to a heading in the current document
@@ -5659,12 +5661,12 @@ Beberapa situasi yang pernah dialami dan beberikan masalah
 Sekiranya kekunci dari F2 ke F12 tidak berfungsi dan benunjukkan XF86New, XF86Open,
 XF86Close dll menandakan button ~LOCK~ diaktifkan.
 * Hydra keymaps
-** Hydra personal
+** Personal map
 Hydra untuk personal map
 #+BEGIN_SRC emacs-lisp
   (defhydra ybk-map-sendiri (:hint nil)
     "
-     ^Personal map key [F10] or 'yy'^
+     ^Personal map key [F10] or yy^
      ^^^-------------------------------
      _o_: scratch              _d_: musics         _r_: rss               _y_: ybk-emacs
      _w_: swap-windows         _m_: menu bar       _s_: stackExchange     _t_: tukar theme
@@ -5696,4 +5698,36 @@ Hydra untuk personal map
 
   (key-chord-define-global "yy" #'ybk-map-sendiri/body)
   ;; (bind-key "<f12>" #'ybk-personal-map/body 'ybk/map)
+#+END_SRC
+** Move keymap
+Hydra move keymap
+
+#+BEGIN_SRC emacs-lisp
+  (defhydra ybk-map-move (:hint nil)
+    "
+    ^Move keymap [F2] or jj
+    ^-----------------------------
+    _+_: resize window   _h_: doc heading   _a_: goto         _p_: register set   _r_: bookmark set    _t_: bookmark goto
+    _w_: select window   _m_: imenu         _b_: move buffer  _o_: register jump  _j_: bookmark jump   _l_: bookmark list
+
+    "
+    ("+" resize-window)
+    ("w" winum-select-window-by-number)
+    ("h" worf-goto)
+    ("m" counsel-imenu)
+
+    ("a" hydra-avy-goto/body :exit t)
+    ("b" hydra-buffer/body :exit t)
+    ("p" point-to-register)
+    ("o" jump-to-register)
+
+    ("r" bookmark-set)
+    ("j" bookmark-jump)
+    ("t" ivy-bookmark-goto)
+    ("l" bookmark-bmenu-list)
+
+    ("q" nil "KELUAR")
+    )
+
+  (key-chord-define-global "jj" #'ybk-map-move/body)
 #+END_SRC
