@@ -4177,16 +4177,17 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
     ;; Hydra
     (defhydra ybk-rmd (:hint nil)
       "
-     ^RMarkdown keys^
+     ^RMarkdown keys^  [_q_: Keluar]
      ^--^----------------^--^-------------^--^---------------^--^-------------
      _c_: Insert chunk   _t_: Eval buffer _f_: Fold chunk    _a_: Fold all chk
-     _r_: Evaluate chunk _d_: Create doc  _u_: Unfold chunk  _q_: Keluar
+     _r_: Evaluate chunk _d_: Create doc  _u_: Unfold chunk  _e_: Export M-n-e
 
      "
       ("c" rmd-insert-r-chunk)
       ("r" rmd-eval-chunk)
       ("t" rmd-eval-buffer)
       ("d" poly-ess-rmarkdown)
+      ("e" polymode-export)
       ("f" rmd-fold-block)
       ("a" rmd-fold-all-blocks)
       ("u" fold-this-unfold-all)
