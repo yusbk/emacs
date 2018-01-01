@@ -3768,7 +3768,7 @@ memakai fungsi ini.
     :ensure t
     :pin melpa
     :bind (:map ybk/prog-map
-                ;; Keluar yas snippet dan buang argument selebihnya yang tidak dipakai
+                ;; Keluar yassnippet dan buang argument selebihnya yang tidak dipakai
                 ("-" . r-autoyas-exit-snippet-delete-remaining))
     :config
     ;; Aktifkan yasnippet sebab diperlukan utk r-autoyas
@@ -3808,53 +3808,49 @@ Bila debugging, kekuci ini boleh dipakai
 Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
 
 #+BEGIN_SRC emacs-lisp
-  (eval-after-load 'ess-mode
-    '(progn
-       (bind-key "." #'ess-describe-object-at-point 'ybk/r-map)
-       (bind-key "b" #'ess-bp-set 'ybk/r-map)
-       (bind-key "n" #'ess-bp-next 'ybk/r-map)
-       (bind-key "p" #'ess-bp-previous 'ybk/r-map)
-       (bind-key "k" #'ess-bp-kill 'ybk/r-map)
-       (bind-key "K" #'ess-bp-kill-all 'ybk/r-map)
-       (bind-key "v" #'ess-bp-make-visible 'ybk/r-map)
-       (bind-key "t" #'ess-dev-map 'ybk/r-map)
-       (bind-key "r" #'ess-r-package-dev-map 'ybk/r-map)
-       (bind-key "l" #'ess-r-devtools-load-package 'ybk/r-map)
-       (bind-key "c" #'ess-r-devtools-check-package 'ybk/r-map)
-       (bind-key "d" #'ess-r-devtools-document-package 'ybk/r-map)
-       ))
+  ;; (eval-after-load 'ess-mode
+  ;;   '(progn
+  ;;      (bind-key "." #'ess-describe-object-at-point 'ybk/r-map)
+  ;;      (bind-key "b" #'ess-bp-set 'ybk/r-map)
+  ;;      (bind-key "n" #'ess-bp-next 'ybk/r-map)
+  ;;      (bind-key "p" #'ess-bp-previous 'ybk/r-map)
+  ;;      (bind-key "k" #'ess-bp-kill 'ybk/r-map)
+  ;;      (bind-key "K" #'ess-bp-kill-all 'ybk/r-map)
+  ;;      (bind-key "v" #'ess-bp-make-visible 'ybk/r-map)
+  ;;      (bind-key "x" #'ess-dev-map 'ybk/r-map)
+  ;;      (bind-key "y" #'ess-r-package-dev-map 'ybk/r-map)
+  ;;      (bind-key "l" #'ess-r-devtools-load-package 'ybk/r-map)
+  ;;      (bind-key "c" #'ess-r-devtools-check-package 'ybk/r-map)
+  ;;      (bind-key "d" #'ess-r-devtools-document-package 'ybk/r-map)
+  ;;      ))
 
   ;; Cobaan untuk guna hydra cuma belum selesai
   (eval-after-load 'ess-mode
     '(progn
        (defhydra ybk-r-debug (:color teal :hint nil)
          "
-          ^ESS R-debug^
-          ^---^----------^---^----------^---^----------^---^----------
-          _._: Object    _n_: Next BP   _k_: Kill BP   _l_: Load PKG
-          _b_: Set BP    _p_: Prev BP   _K_: Kill all  _c_: Check PKG
+          ^ESS R-debug  'C-c C-t' r-dev-map^
+          ^---^----------^---^----------^---^----------^---^---------------------------
+          _._: Object    _n_: Next BP   _k_: Kill BP   _l_: Load PKG   _d_: doc PKG
+          _b_: Set BP    _p_: Prev BP   _K_: Kill all  _c_: Check PKG  _t_: test PKG
 
          "
          ("." ess-describe-object-at-point)
          ("b" ess-bp-set)
          ("k" ess-bp-kill)
          ("K" ess-bp-kill-all)
+
          ("n" ess-bp-next)
          ("p" ess-bp-previous)
          ("l" ess-r-devtools-load-package)
          ("c" ess-r-devtools-check-package)
+
+         ("d" ess-r-devtools-document-package)
+         ("t" ess-r-devtools-test-package)
          ("q" nil "keluar"))
 
-       ;; ("." ess-describe-object-at-point "object")
-       ;; ("b" ess-bp-set "set bp")
-       ;; ("k" ess-bp-kill "kill bp")
-       ;; ("K" ess-bp-kill-all "kill all")
-       ;; ("n" ess-bp-next "next bp")
-       ;; ("p" ess-bp-previous "prev bp")
-       ;; ("l" ess-r-devtools-load-package "load pkg")
-       ;; ("c" ess-r-devtools-check-package "check pkg")
-       ;; ("q" nil "keluar"))
-       (define-key ybk/r-map "a" 'ybk-r-debug/body)
+       ;; (define-key ybk/r-map "a" 'ybk-r-debug/body)
+       (bind-key "<f9>" #'ybk-r-debug/body)
        ))
 #+END_SRC
 
@@ -4197,7 +4193,7 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
       ;; ("q" nil "keluar" :color red)
       ("q" (message "Selesai") :exit t)
       )
-    (define-key ybk/r-map "z" 'ybk-rmd/body)
+    (bind-key "<f7>" #'ybk-rmd/body)
     )
 #+END_SRC
 
@@ -5660,18 +5656,17 @@ Beberapa situasi yang pernah dialami dan beberikan masalah
 ** XF86 keys
 Sekiranya kekunci dari F2 ke F12 tidak berfungsi dan benunjukkan XF86New, XF86Open,
 XF86Close dll menandakan button ~LOCK~ diaktifkan.
-* Hydra keymaps
-** Personal map
-Hydra untuk personal map
+* My personal hydra keymaps
+** General map
+Hydra untuk fungsi awam
 #+BEGIN_SRC emacs-lisp
-  (defhydra ybk-map-sendiri (:hint nil)
+  (defhydra ybk-map-awam (:hint nil)
     "
-     ^Personal map key [F10] or yy^
+     ^Personal map key [F10] or yy^   [_q_: keluar]
      ^^^-------------------------------
-     _o_: scratch              _d_: musics         _r_: rss               _y_: ybk-emacs
-     _w_: swap-windows         _m_: menu bar       _s_: stackExchange     _t_: tukar theme
-     _k_: delete file/buffer   _n_: file explore   _b_: weather update    _l_: warna highlight
-     _x_: save buffers & exit  _f_: file diff      _c_: weather forecast
+     _x_: save buffers & exit   _k_: delete file/buffer  _d_: musics         _c_: weather         _y_: ybk-emacs
+     _w_: swap-windows          _n_: file explore        _r_: rss            _b_: weather update  _t_: tukar theme
+     _m_: menu bar              _f_: file diff           _s_: stackExchange  _o_: scratch         _l_: warna highlight
 
     "
     ("o" ybk/get-scratch)
@@ -5693,11 +5688,11 @@ Hydra untuk personal map
     ("t" cycle-my-theme)
     ("l" hydra-hl-line/body :exit t)
 
-    ("q" nil "KELUAR")
+    ("q" (message "KELUAR") :exit t)
     )
 
-  (key-chord-define-global "yy" #'ybk-map-sendiri/body)
-  ;; (bind-key "<f12>" #'ybk-personal-map/body 'ybk/map)
+  (key-chord-define-global "yy" #'ybk-map-awam/body)
+  ;; (bind-key "<f12>" #'ybk-map-awam/body)
 #+END_SRC
 ** Move keymap
 Hydra move keymap
