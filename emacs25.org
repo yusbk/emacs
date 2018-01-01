@@ -16,6 +16,106 @@ Aturcara ini tidak berhasil tanpa sumbangan dari:
 
 yang juga menerima sumbangan dari ramai lagi penyumbang di alam cyber.
 
+* Info+
+Bantuan untuk Emacs Info
+#+BEGIN_SRC emacs-lisp
+  (use-package info+
+    :ensure t
+    :defer 1
+    :after info)
+#+END_SRC
+
+* UTF-8
+
+Format UTF-8. Tapi =org-mode= bullet jadi kecil itulah dimatikan
+#+BEGIN_SRC emacs-lisp :tangle no
+  (set-language-environment "UTF-8")
+  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-buffer-file-coding-system 'utf-8)
+#+END_SRC
+
+* Hydra
+#+BEGIN_SRC emacs-lisp
+  (use-package hydra
+    :ensure t
+    :config
+    (progn
+      ;; (setq hydra-lv nil)
+      ;; (set-face-attribute 'hydra-face-red      nil :foreground "Red"        :bold t)
+      ;; (set-face-attribute 'hydra-face-blue     nil :foreground "RoyalBlue3" :bold t)
+      ;; (set-face-attribute 'hydra-face-amaranth nil :foreground "#e52b50"    :bold t)
+      ;; (set-face-attribute 'hydra-face-pink     nil :foreground "HotPink1"   :bold t)
+      ;; (set-face-attribute 'hydra-face-teal     nil :foreground "#367588"    :bold t)
+      (hydra-add-font-lock)))
+#+END_SRC
+
+Fungsi-fungsi di bawah diambil dari [[https://github.com/abo-abo/hydra/wiki/Emacs][Hydra Wiki]]
+** Movement
+Hanya guna =C-n= untuk aktifkan kekuci
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (global-set-key
+   (kbd "C-<prior>")
+   (defhydra hydra-move
+     (:body-pre (next-line))
+     "move"
+     ("n" next-line "next")
+     ("p" previous-line "prev")
+     ("f" forward-char "forward")
+     ("b" backward-char "backward")
+     ("a" beginning-of-line "line start")
+     ("e" move-end-of-line "line end")
+     ("v" scroll-up-command "up")
+     ;; Converting M-v to V here by analogy.
+     ("V" scroll-down-command "down")
+     ("l" recenter-top-bottom "recenter")))
+#+END_SRC
+** Page Navigation
+Sesuai bila banyak mukasurat
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-page (ctl-x-map "" :pre (widen))
+    "page"
+    ("]" forward-page "next")
+    ("[" backward-page "prev")
+    ("n" narrow-to-page "narrow" :bind nil :exit t))
+#+END_SRC
+
+* Key Chord
+Untuk buat kekunci singkatan dengan dua huruf ditekan serentak. Rujukan [[http://www.emacswiki.org/emacs/key-chord.el][Key Chord Mode]]
+#+BEGIN_SRC emacs-lisp
+  (use-package key-chord
+    :ensure t
+    :config
+    (progn
+      (key-chord-mode 1)))
+
+  ;; Sequence huruf
+  (use-package key-seq
+    :disabled t
+    :ensure key-chord
+    :after key-chord)
+#+END_SRC
+
+John Cook's post http://www.johndcook.com/blog/2015/02/01/rare-bigrams/
+provides a list of rare bi-grams that would work great for key-chords.
+
+Below list is based off that after removing all the key-chord duplicates
+like `xs' and `sx'.
+
+fb
+gb gp
+jj  jc jf jg jh jk jl jm jp jq js jt jv jw jx jy jz
+kk
+qq  qb qf qg qh qk ql qm qp qt qv qw qx qy qz
+vv  vc vf vg vh vk vm vp vw vz
+ww
+xb xd xg xk xm xs xw
+yy
+zb zd zf zg zk zm zp zs zw zx
+
 * Keymaps
 ** Personal keymap [F10]
 Setup a personal keymap. I'll bind various things to this later on:
@@ -37,8 +137,9 @@ To quickly access scratch press =ybk/map 0=:
     "Switch to scratch buffer."
     (interactive)
     (switch-to-buffer "*scratch*"))
-  (bind-key "0" #'ybk/get-scratch 'ybk/map)
+  (bind-key "o" #'ybk/get-scratch 'ybk/map)
 #+END_SRC
+
 ** Prog keymap [F12]
 Setup utk keymap berkaitan dengan programming
 #+BEGIN_SRC emacs-lisp
@@ -96,74 +197,7 @@ It's nice to have a function to find this file quickly. Here's one:
 
   (bind-key "y" #'ybk/emacs-file 'ybk/map)
 #+END_SRC
-* Info+
-Bantuan untuk Emacs Info
-#+BEGIN_SRC emacs-lisp
-  (use-package info+
-    :ensure t
-    :defer 1
-    :after info)
-#+END_SRC
-
-* UTF-8
-
-Format UTF-8. Tapi =org-mode= bullet jadi kecil itulah dimatikan
-#+BEGIN_SRC emacs-lisp :tangle no
-  (set-language-environment "UTF-8")
-  (prefer-coding-system 'utf-8)
-  (set-default-coding-systems 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-buffer-file-coding-system 'utf-8)
-#+END_SRC
-
-* Hydra
-#+BEGIN_SRC emacs-lisp
-  (use-package hydra
-    :ensure t
-    :config
-    (progn
-      ;; (setq hydra-lv nil)
-      (set-face-attribute 'hydra-face-red      nil :foreground "Red"        :bold t)
-      (set-face-attribute 'hydra-face-blue     nil :foreground "RoyalBlue3" :bold t)
-      (set-face-attribute 'hydra-face-amaranth nil :foreground "#e52b50"    :bold t)
-      (set-face-attribute 'hydra-face-pink     nil :foreground "HotPink1"   :bold t)
-      (set-face-attribute 'hydra-face-teal     nil :foreground "#367588"    :bold t)
-      (hydra-add-font-lock)))
-#+END_SRC
-
-Fungsi-fungsi di bawah diambil dari [[https://github.com/abo-abo/hydra/wiki/Emacs][Hydra Wiki]]
-** Movement
-Hanya guna =C-n= untuk aktifkan kekuci
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (global-set-key
-   (kbd "C-<prior>")
-   (defhydra hydra-move
-     (:body-pre (next-line))
-     "move"
-     ("n" next-line "next")
-     ("p" previous-line "prev")
-     ("f" forward-char "forward")
-     ("b" backward-char "backward")
-     ("a" beginning-of-line "line start")
-     ("e" move-end-of-line "line end")
-     ("v" scroll-up-command "up")
-     ;; Converting M-v to V here by analogy.
-     ("V" scroll-down-command "down")
-     ("l" recenter-top-bottom "recenter")))
-#+END_SRC
-** Page Navigation
-Sesuai bila banyak mukasurat
-#+BEGIN_SRC emacs-lisp
-  (defhydra hydra-page (ctl-x-map "" :pre (widen))
-    "page"
-    ("]" forward-page "next")
-    ("[" backward-page "prev")
-    ("n" narrow-to-page "narrow" :bind nil :exit t))
-#+END_SRC
-
-* Settings
+* Other settings
 ** Encypting file
 Guna Linux =gpg= untuk encyption. Bila buka sebarang =gpg= fail akan meng-encrypt fail
 tersebut bila buffer disimpan. Rujukan di [[https://www.emacswiki.org/emacs/EasyPG][EmacsWiki]]. Aturcara untuk menyimpan
@@ -398,43 +432,11 @@ Dari [[https://github.com/browse-kill-ring/browse-kill-ring][GitHub]]
 #+BEGIN_SRC emacs-lisp
   (use-package browse-kill-ring
     :ensure t
+    :defer 2
     :bind ("M-y" . browse-kill-ring)
     :config
     (setq browse-kill-ring-highlight-current-entry t))
 #+END_SRC
-
-* Key Chord
-Untuk buat kekunci singkatan dengan dua huruf ditekan serentak. Rujukan [[http://www.emacswiki.org/emacs/key-chord.el][Key Chord Mode]]
-#+BEGIN_SRC emacs-lisp
-  (use-package key-chord
-    :ensure t
-    :config
-    (progn
-      (key-chord-mode 1)))
-
-  ;; Sequence huruf
-  (use-package key-seq
-    :disabled t
-    :ensure key-chord
-    :after key-chord)
-#+END_SRC
-
-John Cook's post http://www.johndcook.com/blog/2015/02/01/rare-bigrams/
-provides a list of rare bi-grams that would work great for key-chords.
-
-Below list is based off that after removing all the key-chord duplicates
-like `xs' and `sx'.
-
-fb
-gb gp
-jj  jc jf jg jh jk jl jm jp jq js jt jv jw jx jy jz
-kk
-qq  qb qf qg qh qk ql qm qp qt qv qw qx qy qz
-vv  vc vf vg vh vk vm vp vw vz
-ww
-xb xd xg xk xm xs xw
-yy
-zb zd zf zg zk zm zp zs zw zx
 
 * Cache
 I set up a cache folder in my =.emacs.d= folder so that it's not quite as crowded:
@@ -953,7 +955,7 @@ Untuk menunjukkan =diff= file semasa dan file sebelumnya. Boleh guna =blame=
     :ensure t
     :bind (("C-c w s" . backup-walker-start)
            (:map ybk/map
-                 ("w" . backup-walker-start))
+                 ("f" . backup-walker-start))
            ))
 #+END_SRC
 * Undo
@@ -1017,6 +1019,7 @@ Tunjukkan kombinasi kekunci
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
     :ensure t
+    :defer 4
     :diminish which-key-mode
     :config
     (which-key-mode))
@@ -1034,7 +1037,8 @@ Kompilasi pelbagi fungsi untuk Emacs. [[https://github.com/bbatsov/crux#keybindi
           ("C-c r" . crux-rename-file-and-buffer) ;rename current buffer
           ("C-c k" . crux-kill-other-buffers) ;kill all open buffers but not this
           :map ybk/map
-          ([?\\] . crux-swap-windows) ;swap between 2 windows
+          ("w" . crux-swap-windows)
+          ;; ([?\\] . crux-swap-windows) ;swap between 2 windows
           ("k" . crux-delete-file-and-buffer)
           :map ybk/prog-map
           ("b" . crux-cleanup-buffer-or-region) ;Whitespace-cleanup
@@ -1221,6 +1225,7 @@ Aturcare berkaitan dengan buffer
 #+BEGIN_SRC emacs-lisp
   (use-package buffer-move
     :ensure t
+    :defer 4
     :bind (:map ybk/move-map
                 ("b" . hydra-buffer/body))
     :init
@@ -1248,6 +1253,7 @@ Guna =ibuffer= menggantikan =buffer= biasa bila pakai C-x C-b
 
 #+BEGIN_SRC emacs-lisp
   (use-package ibuffer                    ; Better buffer list
+    :defer 4
     :bind (([remap list-buffers] . ibuffer))
     ;; Show VC Status in ibuffer
     :config (setq ibuffer-formats
@@ -1781,6 +1787,7 @@ Untuk sembunyikan tekst yang panjang. Rujukan di [[https://github.com/gregsexton
 #+BEGIN_SRC emacs-lisp
   (use-package origami
     :ensure t
+    :defer t
     :commands origami-mode
     :bind (:map ybk/prog-map
                 ("o" . hydra-origami/body))
@@ -2108,6 +2115,7 @@ tekan =g= utk refresh pertukaran.
 #+BEGIN_SRC emacs-lisp
   (use-package pdf-tools
     :ensure t
+    :defer t
     :if (eq system-type 'gnu/linux)
     :config
     ;; Use C-RET in latex mode to jump to location in pdf file
@@ -2216,6 +2224,7 @@ Utk =quick-preview= sebarang fail menggunakan external tool seperti GNOME Sushi,
 #+BEGIN_SRC emacs-lisp
   (use-package quick-preview
     :ensure t
+    :defer t
     :bind ("C-c q" . quick-preview-at-point)
     :config
     (define-key dired-mode-map (kbd "Q") 'quick-preview-at-point))
@@ -2260,6 +2269,7 @@ xmlgraphics-commons-1.4.jar
 #+BEGIN_SRC emacs-lisp
   (use-package plantuml-mode
     :ensure t
+    :defer t
     :commands plantuml-mode
     :mode (("\\.puml$" . plantuml-mode)
            ("\\.plantuml$" . plantuml-mode)
@@ -5648,3 +5658,42 @@ Beberapa situasi yang pernah dialami dan beberikan masalah
 ** XF86 keys
 Sekiranya kekunci dari F2 ke F12 tidak berfungsi dan benunjukkan XF86New, XF86Open,
 XF86Close dll menandakan button ~LOCK~ diaktifkan.
+* Hydra keymaps
+** Hydra personal
+Hydra untuk personal map
+#+BEGIN_SRC emacs-lisp
+  (defhydra ybk-map-sendiri (:hint nil)
+    "
+     ^Personal map key [F10] or 'yy'^
+     ^^^-------------------------------
+     _o_: scratch              _d_: musics         _r_: rss               _y_: ybk-emacs
+     _w_: swap-windows         _m_: menu bar       _s_: stackExchange     _t_: tukar theme
+     _k_: delete file/buffer   _n_: file explore   _b_: weather update    _l_: warna highlight
+     _x_: save buffers & exit  _f_: file diff      _c_: weather forecast
+
+    "
+    ("o" ybk/get-scratch)
+    ("w" crux-swap-windows)
+    ("k" crux-delete-file-and-buffer)
+    ("x" save-buffers-kill-emacs)
+
+    ("d" emms)
+    ("m" menu-bar-open)
+    ("n" neotree-toggle)
+    ("f" backup-walker-start)
+
+    ("r" bjm/elfeed-load-db-and-open)
+    ("s" hydra-stackExchange/body :exit t)
+    ("b" weather-metno-update)
+    ("c" weather-metno-forecast)
+
+    ("y" ybk/emacs-file)
+    ("t" cycle-my-theme)
+    ("l" hydra-hl-line/body :exit t)
+
+    ("q" nil "KELUAR")
+    )
+
+  (key-chord-define-global "yy" #'ybk-map-sendiri/body)
+  ;; (bind-key "<f12>" #'ybk-personal-map/body 'ybk/map)
+#+END_SRC
