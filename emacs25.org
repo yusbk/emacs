@@ -1,6 +1,6 @@
 #+AUTHOR: Yusman Kamaleri
 #+TITLE: Aturcare Emacs versi 25.2
-#+DATE: 20 ogos 2017
+#+DATE: 02 Januari 2018
 #+OPTIONS: toc:nil
 #+PROPERTY: header-args :comments org :catch yes :results silent :tangle yes
 
@@ -4195,18 +4195,23 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
       "
      ^RMarkdown keys^  [_q_: Keluar]
      ^--^----------------^--^-------------^--^---------------^--^-------------
-     _c_: Insert chunk   _t_: Eval buffer _f_: Fold chunk    _a_: Fold all chk
-     _r_: Evaluate chunk _d_: Create doc  _u_: Unfold chunk  _e_: Export M-n-e
+     _c_: Insert chk   _t_: Eval buffer _f_: Fold chk    _a_: Fold all chk  _n_: next chk     _k_: kill chk
+     _r_: Evaluate chk _d_: Create doc  _u_: Unfold chk  _e_: Export M-n-e  _p_: previous chk
 
      "
       ("c" rmd-insert-r-chunk)
       ("r" rmd-eval-chunk)
       ("t" rmd-eval-buffer)
       ("d" poly-ess-rmarkdown)
+
       ("e" polymode-export)
       ("f" rmd-fold-block)
       ("a" rmd-fold-all-blocks)
       ("u" fold-this-unfold-all)
+
+      ("n" polymode-next-chunk-same-type)
+      ("p" polymode-previous-chunk-same-type)
+      ("k" polymode-kill-chunk)
       ;; ("q" nil "keluar" :color red)
       ("q" (message "Selesai") :exit t)
       )
