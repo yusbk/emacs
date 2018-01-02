@@ -2752,11 +2752,28 @@ Bole lihat di [[https://www.youtube.com/watch?v=2t925KRBbFc][video]]
      :map bibtex-mode-map
      ;;utk gantikan singkatan nama journal seperti di add-to-journal-list
      ("C-c C-c" . org-ref-clean-bibtex-entry)
-     :map ybk/org-map
-     ("b c" . crossref-add-bibtex-entry) ;utk kopi dari reference list di artikle
-     ("b d" . doi-ref-bibtex-entry) ;kopi dari nombor doi
-     ("b i" . isbn-to-bibtex)) ;kopi dari isbn
+     ;; :map ybk/org-map
+     ;; ("b c" . crossref-add-bibtex-entry) ;utk kopi dari reference list di artikle
+     ;; ("b d" . doi-ref-bibtex-entry) ;kopi dari nombor doi
+     ;; ("b i" . isbn-to-bibtex) ;kopi dari isbn
+     )
     :init
+    ;; Bibtex hydra
+    (defhydra hydra-ybk-bibtex (:hint nil)
+      "
+        ^Bibtex entry from^
+        ^--------------------------
+        _c_: ref. list  _d_: doi   _i_: isbn   _q_: DONE
+
+        "
+      ("c" crossref-add-bibtex-entry) ;utk kopi dari reference list di artikle
+      ("d" doi-ref-bibtex-entry) ;kopi dari nombor doi
+      ("i" isbn-to-bibtex) ;kopi dari isbn
+      ("q" (message "KELUAR") :exit t)
+      )
+
+    (bind-key "c" #'hydra-ybk-bibtex/body 'ybk/org-map)
+
     ;; (setq org-ref-completion-library 'org-ref-helm-bibtex)
     (setq org-ref-completion-library 'org-ref-ivy-cite) ;pakai ivy utk completion
 
@@ -2766,7 +2783,6 @@ Bole lihat di [[https://www.youtube.com/watch?v=2t925KRBbFc][video]]
     ;; (setq org-ref-default-citation-link "autocite")
 
     :config
-
     ;; utk masukkan reference list bila eksport ke PDF
     ;; dilarikan beberapa kali utk memastikan cross-references dimasukkan dgn betul
 
@@ -2811,10 +2827,10 @@ Bole lihat di [[https://www.youtube.com/watch?v=2t925KRBbFc][video]]
 
     (defun my/fix-journal-name (&optional key start end)
       "Replace journal name in a bibtex entry with the full name.
-      The strings are defined in
-      `org-ref-bibtex-journal-abbreviations'. The optional arguments
-      KEY, START and END allow you to use this with
-      `bibtex-map-entries'"
+        The strings are defined in
+        `org-ref-bibtex-journal-abbreviations'. The optional arguments
+        KEY, START and END allow you to use this with
+        `bibtex-map-entries'"
       (interactive)
       (bibtex-beginning-of-entry)
       (when
@@ -3997,7 +4013,7 @@ Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
       ("y" flyspell-correct-word-generic)
       ("x" flyspell-lazy-check-buffer)
       ("s" flyspell-region)
-      ("q" nil "quit" :color red))
+      ("q" (message "KELUAR") :exit t))
 
     ;;(key-chord-define-global "xs" #'hydra-kamus/body)
 
@@ -4488,10 +4504,10 @@ Cdlatex lets me write latex in org-mode. It's particularly useful for math. [[ht
 
 * HTML and Webpage
 ** Browser
-Buka link di browser guna =C-x o= kekunci yang asalnya berfungsi ~other-window~. Untuk
+Buka link di browser guna =C-x w= kekunci yang asalnya berfungsi ~other-window~. Untuk
 buka html fail ke browser boleh pakai =F12-w= browser-url-of-buffer
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x o") 'browse-url-at-point)
+  (global-set-key (kbd "C-x w") 'browse-url-at-point)
 
   ;;key-chord for C-c C-v
   (key-chord-define-global "qw" #'browse-url-of-buffer)
@@ -4526,7 +4542,7 @@ Sekiranya webpage terlalu komplex dan =eww= tidak sesuai, tukar ke system defaul
           ("0" . eww-browse-with-external-browser)))
 #+END_SRC
 
-Untuk menyenagkan ikuti link di =eww=
+Untuk menyenangkan ikuti link di =eww=
 
 #+BEGIN_SRC emacs-lisp
   (use-package eww-lnum
@@ -5469,16 +5485,16 @@ aturcara yang ditetapkan dan kembali ke asalnya (/default/).
                                          :columns 6)
       "Google-translate"
       ("t" google-translate-smooth-translate "pilih terjemahan")
-      ("e" google-translate-at-point "terjemah BI-BM")
-      ("m" google-translate-at-point-reverse "terjemah BM-BI")
-      ("p" google-translate-query-translate "perkataan BI-BM")
-      ("o" google-translate-query-translate-reverse "perkataan BM-BI")
+      ("n" google-translate-at-point "terjemah NO-BI")
+      ("b" google-translate-at-point-reverse "terjemah BI-NO")
+      ("o" google-translate-query-translate-reverse "perkataan NO-BI")
+      ("i" google-translate-query-translate "perkataan BI-NO")
       ("q" nil "keluar")))
 #+END_SRC
 
 ** Default-UI
 Sekiranya bahasa tidak sedia ditetapkan di 'Smooth UI' boleh pilih dari pilihan
-pelbagai bahasa. Jika bahasa untuk terjemahan selain dari BI ke BM, boleh matikan
+pelbagai bahasa. Jika bahasa untuk terjemahan selain dari NO ke BI, boleh matikan
 ~source-language~ dan ~target-language~.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package google-translate-default-ui
@@ -5489,7 +5505,7 @@ pelbagai bahasa. Jika bahasa untuk terjemahan selain dari BI ke BM, boleh matika
     ;;        )
     :init
     ;;sekiranya ingin menetapkan bahasa
-    (setq google-translate-default-target-language "ms") ;terjemah ke
+    (setq google-translate-default-target-language "no") ;terjemah ke
     (setq google-translate-default-source-language "en") ;terjemah dari
     )
 #+END_SRC
@@ -5504,9 +5520,9 @@ Untuk kombinasi pelbagi bahasa. Tukar bahasa untuk terjemah pakai =C-n= atau =C-
     ;; terjemahan utk dipakai
     (setq google-translate-translation-directions-alist
           '(("en" . "ms")
-            ("no" . "ms")
             ("ms" . "en")
-            ("no" . "en") ("en" . "no")))
+            ("no" . "ms")
+            ("ms" . "no")))
 
     ;; ;; input disabled with source lang is "en" and ybk-blog when lang is "malay" or "norsk"
     ;; (setq google-translate-preferable-input-methods-alist '((nil . ("en"))
@@ -5658,12 +5674,12 @@ Beberapa situasi yang pernah dialami dan beberikan masalah
 Sekiranya kekunci dari F2 ke F12 tidak berfungsi dan benunjukkan XF86New, XF86Open,
 XF86Close dll menandakan button ~LOCK~ diaktifkan.
 * My personal hydra keymaps
-** General map
+** General keymap
 Hydra untuk fungsi awam
 #+BEGIN_SRC emacs-lisp
-  (defhydra ybk-map-awam (:hint nil)
+  (defhydra ybk-keymap-awam (:hint nil)
     "
-     ^Personal map key [F10] or yy^   [_q_: keluar]
+     ^General keymap [F10] or yy^   [_q_: keluar]
      ^^^-------------------------------
      _x_: save buffers & exit   _k_: delete file/buffer  _d_: musics         _c_: weather         _y_: ybk-emacs
      _w_: swap-windows          _n_: file explore        _r_: rss            _b_: weather update  _t_: tukar theme
@@ -5692,8 +5708,8 @@ Hydra untuk fungsi awam
     ("q" (message "KELUAR") :exit t)
     )
 
-  (key-chord-define-global "yy" #'ybk-map-awam/body)
-  ;; (bind-key "<f12>" #'ybk-map-awam/body)
+  (key-chord-define-global "yy" #'ybk-keymap-awam/body)
+  ;; (bind-key "<f12>" #'ybk-keymap-awam/body)
 #+END_SRC
 ** Move keymap
 Hydra move keymap
@@ -5726,4 +5742,44 @@ Hydra move keymap
     )
 
   (key-chord-define-global "jj" #'ybk-map-move/body)
+#+END_SRC
+** Org keymap
+Hydra keymap untuk =org=
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra ybk-keymap-org (:hint nil)
+    "
+    ^Org-keymap [F6] or qq^   [tekan _q_ utk KELUAR]
+    ^-------------------------------------------------
+    _y_: my agenda      _f_: kamus             _i_: insert cite           _x_: export pdf    _<down>_: next heading
+    _r_: refile agenda  _k_: tukar bahasa      _l_: insert internal link  _z_: save as pdf   _<up>_  : previous heading
+    _w_: today          _t_: google-translate  _s_: org option (sparse)   _n_: meeting note
+    _d_: TODO           _p_: gambar/pic        _c_: bibtex                _m_: meeting done
+
+    "
+    ("y" ybk/min-agenda)
+    ("r" ybk/refile)
+    ("w" ybk/waktu-todo)
+    ("d" ybk/todo)
+
+    ("f" hydra-kamus/body :exit t)
+    ("k" ybk/change-languages)
+    ("t" hydra-google-trans/body :exit t)
+    ("p" hydra-photo/body :exit t)
+
+    ("i" org-ref-ivy-insert-cite-link)
+    ("l" ybk/worf-insert-internal-link)
+    ("s" org-sparse-tree)
+    ("c" hydra-ybk-bibtex/body :exit t)
+
+    ("x" org-export-pdf-open)
+    ("z" org-save-as-pdf)
+    ("n" meeting-notes)
+    ("m" meeting-done)
+
+    ("<down>" org-next-visible-heading)
+    ("<up>" org-previous-visible-heading)
+
+    ("q" (message "KELUAR") :exit t))
+
+  (key-chord-define-global "qq" #'ybk-keymap-org/body)
 #+END_SRC
