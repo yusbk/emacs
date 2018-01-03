@@ -5747,8 +5747,8 @@ Hydra keymap untuk =org=
     ^-------------------------------------------------
     _y_: my agenda      _f_: kamus             _i_: insert cite           _x_: export pdf    _<down>_: next heading
     _r_: refile agenda  _k_: tukar bahasa      _l_: insert internal link  _z_: save as pdf   _<up>_  : previous heading
-    _w_: today          _t_: google-translate  _s_: org option (sparse)   _n_: meeting note
-    _d_: TODO           _p_: gambar/pic        _c_: bibtex                _m_: meeting done
+    _w_: today          _t_: google-translate  _v_: org option (sparse)   _n_: meeting note
+    _d_: TODO           _p_: gambar/pic        _c_: bibtex                _m_: meeting done       _s_: insert src-block
 
     "
     ("y" ybk/min-agenda)
@@ -5763,7 +5763,7 @@ Hydra keymap untuk =org=
 
     ("i" org-ref-ivy-insert-cite-link)
     ("l" ybk/worf-insert-internal-link)
-    ("s" org-sparse-tree)
+    ("v" org-sparse-tree)
     ("c" hydra-ybk-bibtex/body :exit t)
 
     ("x" org-export-pdf-open)
@@ -5771,10 +5771,45 @@ Hydra keymap untuk =org=
     ("n" meeting-notes)
     ("m" meeting-done)
 
+    ("s" ybk/org-insert-src-block)
     ("<down>" org-next-visible-heading)
     ("<up>" org-previous-visible-heading)
 
     ("q" (message "KELUAR") :exit t))
 
   (key-chord-define-global "zd" #'ybk-keymap-org/body)
+#+END_SRC
+** Prog keymap
+Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-ybk-prog (:hint nil)
+    "
+    ^Programming keymap: [F12] or zp^
+    ^----------------------------------
+    _p_: Projectile      _a_: start exp    _g_: Magit
+    _f_: Find project    _e_: end exp      _w_: Send2browser
+    _y_: Yasnippet       _u_: unwrap exp   _o_: Origami
+    _-_: Del unuse yas.  _x_: kill exp     _c_: Cleanup/tabbify
+
+    "
+
+    ("p" hydra-projectile/body :exit t)
+    ("f" counsel-switch-project)
+    ("y" company-yasnippet)
+    ("-" r-autoyas-exit-snippet-delete-remaining)
+
+    ("a" sp-beginning-of-sexp)
+    ("e" sp-end-of-sexp)
+    ("u" sp-unwrap-sexp)
+    ("x" sp-kill-sexp)
+
+    ("g" hydra-magit/body :exit t)
+    ("w" browse-url-of-buffer)
+    ("o" hydra-origami/body :exit t)
+    ("c" crux-cleanup-buffer-or-region)
+
+    ("q" nil "KELUAR")
+    )
+
+  (key-chord-define-global "zp" #'hydra-ybk-prog/body)
 #+END_SRC
