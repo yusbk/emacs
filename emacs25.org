@@ -3824,21 +3824,6 @@ Bila debugging, kekuci ini boleh dipakai
 Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
 
 #+BEGIN_SRC emacs-lisp
-  ;; (eval-after-load 'ess-mode
-  ;;   '(progn
-  ;;      (bind-key "." #'ess-describe-object-at-point 'ybk/r-map)
-  ;;      (bind-key "b" #'ess-bp-set 'ybk/r-map)
-  ;;      (bind-key "n" #'ess-bp-next 'ybk/r-map)
-  ;;      (bind-key "p" #'ess-bp-previous 'ybk/r-map)
-  ;;      (bind-key "k" #'ess-bp-kill 'ybk/r-map)
-  ;;      (bind-key "K" #'ess-bp-kill-all 'ybk/r-map)
-  ;;      (bind-key "v" #'ess-bp-make-visible 'ybk/r-map)
-  ;;      (bind-key "x" #'ess-dev-map 'ybk/r-map)
-  ;;      (bind-key "y" #'ess-r-package-dev-map 'ybk/r-map)
-  ;;      (bind-key "l" #'ess-r-devtools-load-package 'ybk/r-map)
-  ;;      (bind-key "c" #'ess-r-devtools-check-package 'ybk/r-map)
-  ;;      (bind-key "d" #'ess-r-devtools-document-package 'ybk/r-map)
-  ;;      ))
 
   ;; Cobaan untuk guna hydra cuma belum selesai
   (eval-after-load 'ess-mode
@@ -3847,11 +3832,11 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
          "
           ^ESS R-debug  'C-c C-t' r-dev-map^
           ^---^----------^---^----------^---^----------^---^---------------------------
-          _._: Object    _n_: Next BP   _k_: Kill BP   _l_: Load PKG   _d_: doc PKG
+          _o_: Object    _n_: Next BP   _k_: Kill BP   _l_: Load PKG   _d_: doc PKG
           _b_: Set BP    _p_: Prev BP   _K_: Kill all  _c_: Check PKG  _t_: test PKG
 
          "
-         ("." ess-describe-object-at-point)
+         ("o" ess-describe-object-at-point)
          ("b" ess-bp-set)
          ("k" ess-bp-kill)
          ("K" ess-bp-kill-all)
@@ -3863,7 +3848,7 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
 
          ("d" ess-r-devtools-document-package)
          ("t" ess-r-devtools-test-package)
-         ("q" nil "keluar"))
+         ("q" nil "keluar" :color red))
 
        ;; (define-key ybk/r-map "a" 'ybk-r-debug/body)
        (bind-key "<f9>" #'ybk-r-debug/body)
