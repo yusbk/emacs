@@ -131,15 +131,6 @@ Setup a personal keymap. I'll bind various things to this later on:
   ;;(bind-key "q" #'quit 'ybk/map)
 #+END_SRC
 
-To quickly access scratch press =ybk/map 0=:
-#+BEGIN_SRC emacs-lisp
-  (defun ybk/get-scratch ()
-    "Switch to scratch buffer."
-    (interactive)
-    (switch-to-buffer "*scratch*"))
-  (bind-key "o" #'ybk/get-scratch 'ybk/map)
-#+END_SRC
-
 ** Prog keymap [F12]
 Setup utk keymap berkaitan dengan programming
 #+BEGIN_SRC emacs-lisp
@@ -224,6 +215,15 @@ Ini utk menyelesaikan masalah dengan =lexical-let= di ~auto-lang~
 Save buffer and exit
 #+BEGIN_SRC emacs-lisp
   (bind-key "x" #'save-buffers-kill-emacs 'ybk/map )
+#+END_SRC
+** Scratch
+Untuk buka ~scratch~ boleh dicapai melalui [[*General keymap][General keymap]] atau [[*Personal keymap %5BF10%5D][Personal keymap]]
+#+BEGIN_SRC emacs-lisp
+  (defun ybk/get-scratch ()
+    "Switch to scratch buffer."
+    (interactive)
+    (switch-to-buffer "*scratch*"))
+  ;; (bind-key "o" #'ybk/get-scratch 'ybk/map)
 #+END_SRC
 ** Cancel
 Buat [ESC] key utk batal proses sama seperti =C-g=. Diambil dari [[https://www.emacswiki.org/emacs/CancelingInEmacs][EmacsWiki]]
@@ -4191,31 +4191,36 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
         (poly-markdown+r-mode)))
 
     ;; Hydra
-    (defhydra ybk-rmd (:hint nil)
+    (defhydra hydra-ybk-rmd (:hint nil)
       "
-     ^RMarkdown keys^  [_q_: Keluar]
-     ^--^----------------^--^-------------^--^---------------^--^-------------
-     _c_: Insert chk   _t_: Eval buffer _f_: Fold chk    _a_: Fold all chk  _n_: next chk     _k_: kill chk
-     _r_: Evaluate chk _d_: Create doc  _u_: Unfold chk  _e_: Export M-n-e  _p_: previous chk
+     ^RMarkdown keys - zm^  [_q_: Keluar]
+     ^--^-------------^--^--------------
+     _c_: Insert chk  _r_: Evaluate chk  _n_: next chk      _f_: Fold chk      _u_: Unfold chk  _d_: Create doc
+     _k_: kill chk    _t_: Eval buffer   _p_: previous chk  _a_: Fold all chk  ^ ^              _e_: Export M-n-e
 
      "
       ("c" rmd-insert-r-chunk)
+      ("k" polymode-kill-chunk)
+
       ("r" rmd-eval-chunk)
       ("t" rmd-eval-buffer)
-      ("d" poly-ess-rmarkdown)
 
-      ("e" polymode-export)
+      ("n" polymode-next-chunk-same-type)
+      ("p" polymode-previous-chunk-same-type)
+
       ("f" rmd-fold-block)
       ("a" rmd-fold-all-blocks)
       ("u" fold-this-unfold-all)
 
-      ("n" polymode-next-chunk-same-type)
-      ("p" polymode-previous-chunk-same-type)
-      ("k" polymode-kill-chunk)
+      ("d" poly-ess-rmarkdown)
+      ("e" polymode-export)
+
       ;; ("q" nil "keluar" :color red)
       ("q" (message "Selesai") :exit t)
       )
-    (bind-key "<f7>" #'ybk-rmd/body)
+
+    (key-chord-define-global "zm" #'hydra-ybk-rmd/body)
+    (bind-key "<f7>" #'hydra-ybk-rmd/body)
     )
 #+END_SRC
 
@@ -5722,7 +5727,7 @@ Hydra move keymap
 #+BEGIN_SRC emacs-lisp
   (defhydra ybk-map-move (:hint nil)
     "
-    ^Move keymap [F2] or jj
+    ^Move keymap [F2] or zb
     ^-----------------------------
     _+_: resize window   _h_: doc heading   _a_: goto         _p_: register set   _r_: bookmark set    _t_: bookmark goto
     _w_: select window   _m_: imenu         _b_: move buffer  _o_: register jump  _j_: bookmark jump   _l_: bookmark list
@@ -5746,14 +5751,14 @@ Hydra move keymap
     ("q" nil "KELUAR")
     )
 
-  (key-chord-define-global "jj" #'ybk-map-move/body)
+  (key-chord-define-global "zb" #'ybk-map-move/body)
 #+END_SRC
 ** Org keymap
 Hydra keymap untuk =org=
 #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra ybk-keymap-org (:hint nil)
     "
-    ^Org-keymap [F6] or qq^   [tekan _q_ utk KELUAR]
+    ^Org-keymap [F6] or zd^   [tekan _q_ utk KELUAR]
     ^-------------------------------------------------
     _y_: my agenda      _f_: kamus             _i_: insert cite           _x_: export pdf    _<down>_: next heading
     _r_: refile agenda  _k_: tukar bahasa      _l_: insert internal link  _z_: save as pdf   _<up>_  : previous heading
@@ -5786,5 +5791,5 @@ Hydra keymap untuk =org=
 
     ("q" (message "KELUAR") :exit t))
 
-  (key-chord-define-global "qq" #'ybk-keymap-org/body)
+  (key-chord-define-global "zd" #'ybk-keymap-org/body)
 #+END_SRC
