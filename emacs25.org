@@ -868,6 +868,7 @@ Mulakan =eshell= dengan singkatan =C-x t=
 #+END_SRC
 
 ** Shell pop
+Boleh guna key-chort =-t= untuk pakai selain dari =C-x t=
 
 #+BEGIN_SRC emacs-lisp
   (use-package shell-pop
@@ -877,7 +878,11 @@ Mulakan =eshell= dengan singkatan =C-x t=
     (setq shell-pop-window-position 'bottom
           shell-pop-window-height 30
           shell-pop-full-span t
-          shell-pop-shell-type '("eshell" "*eshell*" (lambda nil (eshell)))))
+          shell-pop-shell-type '("eshell" "*eshell*" (lambda nil (eshell))))
+    :config
+    ;; key-chord guna key-seq
+    (key-seq-define-global "-t" 'shell-pop)
+    )
 
   (defun ybk-setup-sh-mode ()
     (interactive)
@@ -892,6 +897,7 @@ Mulakan =eshell= dengan singkatan =C-x t=
   ;; Make URLs clickable
   (add-hook 'shell-mode-hook #'goto-address-mode)
   (add-hook 'eshell-mode-hook #'goto-address-mode)
+
 #+END_SRC
 ** Bash
 Untuk penggunaan =alias=. Eshell akan simpan alias-alias di fail =~/.emacs.d/eshell/alias=. Utk simpan alias di
