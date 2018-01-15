@@ -117,10 +117,10 @@ yy
 zb zd zf zg zk zm zp zs zw zx
 
 * Keymaps
-** Personal keymap [F10]
+** Personal keymap [F6]
 Setup a personal keymap. I'll bind various things to this later on:
 #+BEGIN_SRC emacs-lisp
-  (bind-keys :prefix "<f10>"
+  (bind-keys :prefix "<f6>"
              :prefix-map ybk/map)
 
   (defun keluar ()
@@ -148,10 +148,10 @@ Keymap utk pergerakkan
   (bind-key "q" #'keluar 'ybk/move-map)
 #+END_SRC
 
-** Org keymap [F6]
+** Org keymap [F10]
 Keymap utk berkaitan dengan Org-mode
-#+BEGIN_SRC emacs-lisp
-  (bind-keys :prefix "<f6>"
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (bind-keys :prefix "<f10>"
              :prefix-map ybk/org-map )
 
   (bind-key "q" #'keluar 'ybk/org-map)
@@ -1040,8 +1040,8 @@ Kompilasi pelbagi fungsi untuk Emacs. [[https://github.com/bbatsov/crux#keybindi
           ("w" . crux-swap-windows)
           ;; ([?\\] . crux-swap-windows) ;swap between 2 windows
           ("k" . crux-delete-file-and-buffer)
-          :map ybk/prog-map
-          ("b" . crux-cleanup-buffer-or-region) ;Whitespace-cleanup
+          ;; :map ybk/prog-map
+          ;; ("b" . crux-cleanup-buffer-or-region) ;Whitespace-cleanup
           )
     :config
     ;;make a command acting normally on a region to operate on entire buffer
@@ -1548,7 +1548,7 @@ tunggu 1 saat. Untuk masalah di =eshall= bila pakai estrisk (*) boleh pakai quot
           company-show-numbers t                ; Easy navigation to candidates with M-<n>
           company-idle-delay .2                 ; delay before autocomplete popup
           company-tooltip-limit 6               ; list to show
-          company-minimum-prefix-length 3       ; 3 prefix sebelum tunjukkan cadangan (default)
+          company-minimum-prefix-length 2       ; 2 prefix sebelum tunjukkan cadangan (default)
           company-abort-manual-when-too-short t ; tanpa company sekiranya prefix pendek dari 'minimum-prefix-length'
           )
 
