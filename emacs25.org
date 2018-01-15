@@ -89,13 +89,18 @@ Untuk buat kekunci singkatan dengan dua huruf ditekan serentak. Rujukan [[http:/
   (use-package key-chord
     :ensure t
     :config
-    (progn
-      (key-chord-mode 1)))
+    (key-chord-mode 1)
+    ;; Max time delay between two key presses to be considered a key chord
+    (setq key-chord-two-keys-delay 0.2) ; default 0.1
+
+    ;; Max time delay between two presses of the same key to be considered a key chord.
+    ;; Should normally be a little longer than `key-chord-two-keys-delay'.
+    (setq key-chord-one-key-delay 0.3) ; default 0.2
+    )
 
   ;; Sequence huruf
   (use-package key-seq
-    :disabled t
-    :ensure key-chord
+    :ensure t
     :after key-chord)
 #+END_SRC
 
@@ -5669,7 +5674,7 @@ Beberapa situasi yang pernah dialami dan beberikan masalah
 Sekiranya kekunci dari F2 ke F12 tidak berfungsi dan benunjukkan XF86New, XF86Open,
 XF86Close dll menandakan button ~LOCK~ diaktifkan.
 * My personal hydra keymaps
-** General keymap
+** General keymap [yy]
 Hydra untuk fungsi awam
 #+BEGIN_SRC emacs-lisp
   (defhydra ybk-keymap-awam (:hint nil)
@@ -5706,13 +5711,13 @@ Hydra untuk fungsi awam
   (key-chord-define-global "yy" #'ybk-keymap-awam/body)
   ;; (bind-key "<f12>" #'ybk-keymap-awam/body)
 #+END_SRC
-** Move keymap
+** Move keymap [jj]
 Hydra move keymap
 
 #+BEGIN_SRC emacs-lisp
   (defhydra ybk-map-move (:hint nil)
     "
-    ^Move keymap [F2] or zb
+    ^Move keymap [F2] or jj
     ^-----------------------------
     _+_: resize window   _h_: doc heading   _a_: goto         _p_: register set   _r_: bookmark set    _t_: bookmark goto
     _w_: select window   _m_: imenu         _b_: move buffer  _o_: register jump  _j_: bookmark jump   _l_: bookmark list
@@ -5736,14 +5741,18 @@ Hydra move keymap
     ("q" nil "KELUAR")
     )
 
-  (key-chord-define-global "zb" #'ybk-map-move/body)
+  ;; pakai urutan huruf
+  (key-seq-define-global "jj" 'ybk-map-move/body)
+
+  ;; ;; tanpa ikut urutan huruf
+  ;; (key-chord-define-global "jj" #'ybk-map-move/body)
 #+END_SRC
-** Org keymap
+** Org keymap [jw]
 Hydra keymap untuk =org=
 #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra ybk-keymap-org (:hint nil)
     "
-    ^Org-keymap [F6] or zd^   [tekan _q_ utk KELUAR]
+    ^Org-keymap [F10] or jw^   [tekan _q_ utk KELUAR]
     ^-------------------------------------------------
     _y_: my agenda      _f_: kamus             _i_: insert cite           _x_: export pdf    _<down>_: next heading
     _r_: refile agenda  _k_: tukar bahasa      _l_: insert internal link  _z_: save as pdf   _<up>_  : previous heading
@@ -5777,20 +5786,22 @@ Hydra keymap untuk =org=
 
     ("q" (message "KELUAR") :exit t))
 
-  (key-chord-define-global "zd" #'ybk-keymap-org/body)
+  ;; ikut urutan huruf
+  (key-seq-define-global "jw" 'ybk-keymap-org/body)
+
+  ;; ;; tanpa ikut urutan huruf
+  ;; (key-chord-define-global "zd" #'ybk-keymap-org/body)
 #+END_SRC
-** Prog keymap
+** Prog keymap [jx]
 Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-ybk-prog (:hint nil)
     "
-    ^Programming keymap: [F12] or zp^
+    ^Programming keymap: [F12] or jx^  [_q_ keluar]
     ^----------------------------------
-    _p_: Projectile      _a_: start exp    _g_: Magit
-    _f_: Find project    _e_: end exp      _w_: Send2browser
-    _y_: Yasnippet       _u_: unwrap exp   _o_: Origami
-    _-_: Del unuse yas.  _x_: kill exp     _c_: Cleanup/tabbify
-
+    _p_: Projectile     _a_: start exp    _x_: kill exp        _o_: Origami
+    _f_: Find project   _e_: end exp      _y_: Yasnippet       _w_: Send2browser
+    _g_: Magit          _u_: unwrap exp   _-_: Del unuse yas.  _c_: Cleanup/tabbify
     "
 
     ("p" hydra-projectile/body :exit t)
@@ -5808,8 +5819,9 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas
     ("o" hydra-origami/body :exit t)
     ("c" crux-cleanup-buffer-or-region)
 
-    ("q" nil "KELUAR")
+    ("q" (message "KELUAR") :exit t)
     )
 
-  (key-chord-define-global "zp" #'hydra-ybk-prog/body)
+  ;; ikut urutan huruf
+  (key-seq-define-global "jx" 'hydra-ybk-prog/body)
 #+END_SRC
