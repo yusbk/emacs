@@ -3354,13 +3354,13 @@ Untuk meletakkan SCHEDULED =C-c C-s= dan DEADLINE =C-c C-d=
                  "* TODO [[%:link][%:description]]" :immediate-finish t))))
 #+END_SRC
 *** Capture shortcut
-=Super-c= utk terus ke TODO task
+Guna fungsi key-chord dan tekan =qq= utk terus ke TODO task
 #+BEGIN_SRC emacs-lisp
   (defun ybk/org-task-capture ()
     "Capture a task with my default template."
     (interactive)
     (org-capture nil "t"))
-  (define-key global-map (kbd "<f4>") 'ybk/org-task-capture)
+  (key-chord-define-global "qq" #'ybk/org-task-capture)
 
 #+END_SRC
 
