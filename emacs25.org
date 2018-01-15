@@ -4183,7 +4183,7 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
     ;; Hydra
     (defhydra hydra-ybk-rmd (:hint nil)
       "
-     ^RMarkdown keys - zm^  [_q_: Keluar]
+     ^RMarkdown keys - jz^  [_q_: Keluar]
      ^--^-------------^--^--------------
      _c_: Insert chk  _r_: Evaluate chk  _n_: next chk      _f_: Fold chk      _u_: Unfold chk  _d_: Create doc
      _k_: kill chk    _t_: Eval buffer   _p_: previous chk  _a_: Fold all chk  ^ ^              _e_: Export M-n-e
@@ -4209,7 +4209,9 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
       ("q" (message "Selesai") :exit t)
       )
 
-    (key-chord-define-global "zm" #'hydra-ybk-rmd/body)
+    ;;key ikut urutan
+    (key-seq-define-global "jz" 'hydra-ybk-rmd/body)
+
     (bind-key "<f7>" #'hydra-ybk-rmd/body)
     )
 #+END_SRC
