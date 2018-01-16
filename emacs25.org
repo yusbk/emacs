@@ -1454,6 +1454,9 @@ actions bila di Ivy minibuffer. Atau =C-o= utk Counsel commands
      ("C-M-y" . counsel-yank-pop)
      ("C-x l" . counsel-locate))
     :config
+    ;;key-chord utk find-file
+    (key-seq-define-global "jf" 'counsel-find-file)
+
     ;; tambah action bila pakai =M-o=
     (ivy-set-actions
      'counsel-find-file
