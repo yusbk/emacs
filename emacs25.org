@@ -1027,14 +1027,29 @@ Undo-tree
 #+END_SRC
 
 * Which key
-Tunjukkan kombinasi kekunci
+Tunjukkan kombinasi kekunci. Untuk aturcara sila rujuk [[https://github.com/justbur/emacs-which-key][GitHub]]. Bila kekunci
+ditunjukkan dipelbagai mukasurat, guna =C-h= untuk pilih mukasurat seterusnya atau sebelumnya.
+
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
     :ensure t
     :defer 4
     :diminish which-key-mode
     :config
-    (which-key-mode))
+    ;;aktifkan
+    (which-key-mode)
+
+    ;;Utk key yang panjang
+    (setq which-key-use-C-h-commands nil)
+
+    ;;Jenis pop-up
+    (setq which-key-popup-type 'side-window)
+    (setq which-key-side-window-max-height 0.15) ;berapa peratus dari window semasa
+
+    ;;Bezakan kekunci local dan global
+    (set-face-attribute 'which-key-command-description-face nil :inherit nil) ;buang warna
+    (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold) ;local bold
+    )
 #+END_SRC
 
 * Crux
