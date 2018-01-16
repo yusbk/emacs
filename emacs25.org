@@ -879,10 +879,11 @@ Boleh guna key-chort =-t= untuk pakai selain dari =C-x t=
           shell-pop-window-height 30
           shell-pop-full-span t
           shell-pop-shell-type '("eshell" "*eshell*" (lambda nil (eshell))))
-    :config
-    ;; key-chord guna key-seq
-    (key-seq-define-global "-t" 'shell-pop)
     )
+
+  ;; key-chord guna key-seq
+  (key-seq-define-global "jt" 'shell-pop)
+
 
   (defun ybk-setup-sh-mode ()
     (interactive)
