@@ -5846,8 +5846,8 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     "
     ^Programming keymap: [F12] or jc^  [_q_ keluar]
     ^----------------------------------
-    _p_: Projectile     _a_: start exp    _x_: kill exp        _o_: Origami
-    _f_: Find project   _e_: end exp      _y_: Yasnippet       _w_: Send2browser
+    _p_: Projectile     _a_: start exp    _x_: kill exp        _o_: Origami          _k_: kill other buffers
+    _f_: Find project   _e_: end exp      _y_: Yasnippet       _w_: Send2browser     _s_: create scratch
     _g_: Magit          _u_: unwrap exp   _-_: Del unuse yas.  _c_: Cleanup/tabbify
     "
 
@@ -5865,6 +5865,9 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     ("w" browse-url-of-buffer)
     ("o" hydra-origami/body :exit t)
     ("c" crux-cleanup-buffer-or-region)
+
+    ("k" crux-kill-other-buffers)
+    ("s" crux-create-scratch-buffer)
 
     ("q" (message "KELUAR") :exit t)
     )
