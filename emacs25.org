@@ -884,13 +884,13 @@ Boleh guna key-chort =-t= untuk pakai selain dari =C-x t=
   ;; key-chord guna key-seq
   (key-seq-define-global "jt" 'shell-pop)
 
+  ;; ;; bagi indent di shell
+  ;; (defun ybk-setup-sh-mode ()
+  ;;   (interactive)
+  ;;   (setq sh-basic-offset 2
+  ;;         sh-indentation 2))
 
-  (defun ybk-setup-sh-mode ()
-    (interactive)
-    (setq sh-basic-offset 2
-          sh-indentation 2))
-
-  (add-hook 'sh-mode-hook 'ybk-setup-sh-mode)
+  ;; (add-hook 'sh-mode-hook 'ybk-setup-sh-mode)
 
   ;; Fix dumb terminal
   (setenv "PAGER" "cat")
