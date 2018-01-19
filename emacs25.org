@@ -171,6 +171,14 @@ Keymap untuk penggunaan berkaitan ESS-R. Cuma aktiv di =ess-mode=
   (bind-key "q" #'keluar 'ybk/r-map)
 
 #+END_SRC
+** Misc keymap [F5]
+Fungsi lain yang berguna dan perlukan singkatan
+#+BEGIN_SRC emacs-lisp
+  (bind-keys :prefix "<f5>"
+             :prefix-map ybk/misc-map)
+
+  (bind-key "q" #'keluar 'ybk/misc-map)
+#+END_SRC
 
 * Directory sendiri
 #+BEGIN_SRC emacs-lisp
@@ -4550,10 +4558,10 @@ Cdlatex lets me write latex in org-mode. It's particularly useful for math. [[ht
 
 * HTML and Webpage
 ** Browser
-Buka link di browser guna =C-x w= kekunci yang asalnya berfungsi ~other-window~. Untuk
-buka html fail ke browser boleh pakai =F12-w= browser-url-of-buffer
+Buka link di browser guna =F5-w=. Untuk buka html fail ke browser boleh pakai =F12-w=
+browser-url-of-buffer
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x w") 'browse-url-at-point)
+  (bind-key "w" #'browse-url-at-point 'ybk/misc-map)
 
   ;;key-chord for C-c C-v
   (key-chord-define-global "qw" #'browse-url-of-buffer)
