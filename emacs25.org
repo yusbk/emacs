@@ -3911,7 +3911,15 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
        (bind-key "<f9>" #'ybk-r-debug/body)
        ))
 #+END_SRC
-
+** Buka data.frame
+*** ESS-view
+Untuk view data.frame di speadsheet software seperti Excel atau Calc. Untuk lihat
+dataframe pakai kekunci =C-x w=. Untuk buka dataframe dan edit kemudian dimasukkan
+semula ke R gunakan kekunci =C-x q=
+#+BEGIN_SRC emacs-lisp
+  (use-package ess-view
+    :ensure t)
+#+END_SRC
 * CSV file
 Untuk menggendali fail csv
 #+BEGIN_SRC emacs-lisp
