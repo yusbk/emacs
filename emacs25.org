@@ -2545,6 +2545,7 @@ utk 'Headings' diambil dari [[http://stackoverflow.com/questions/28030946/emacs-
       (delete-backward-char 1)))
 #+END_SRC
 ** Calendar
+*** Calendar settings
 Not technically part of org, but I'll stick the calendar config here since I mainly use it along with org-agenda (config'ed below)
 #+BEGIN_SRC emacs-lisp
   (use-package calendar
@@ -2566,6 +2567,28 @@ Not technically part of org, but I'll stick the calendar config here since I mai
                              holiday-islamic-holidays
                              holiday-christian-holidays))
     )
+#+END_SRC
+*** Google calendar sync
+Dapatkan Google kalender ke org-agenda. Cara ini boleh di baca di [[https://github.com/myuhe/org-gcal.el][org-gcal]] atau di [[http://cestlaz.github.io/posts/using-emacs-26-gcal/#.WmJ80N_ODSf][sini]].
+#+BEGIN_SRC emacs-lisp
+  (use-package org-gcal
+    :ensure t
+    :bind (:map ybk/misc-map
+                ("f" . org-gcal-fetch)
+                ("a" . org-gcal-sync)
+                ("c" . org-gcal-refresh-token))
+    :config
+    ;; aturcara persendirian
+    (setq gcal-dir "~/Dropbox/org")
+    (let ((ybkcal-file (concat gcal-dir "ybkcal.el")))
+      (when (file-exists-p ybkcal-file)
+        (load-file ybkcal-file)))
+
+    ;; hook utk sync agenda dengan google
+    (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+    (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync) ))
+    )
+
 #+END_SRC
 
 ** Nice bulleted lists
