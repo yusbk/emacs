@@ -2570,7 +2570,7 @@ Not technically part of org, but I'll stick the calendar config here since I mai
 #+END_SRC
 *** Google calendar sync
 Dapatkan Google kalender ke org-agenda. Cara ini boleh di baca di [[https://github.com/myuhe/org-gcal.el][org-gcal]] atau di [[http://cestlaz.github.io/posts/using-emacs-26-gcal/#.WmJ80N_ODSf][sini]].
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package org-gcal
     :ensure t
     :bind (:map ybk/misc-map
@@ -3419,7 +3419,8 @@ Untuk meletakkan SCHEDULED =C-c C-s= dan DEADLINE =C-c C-d=
   (defconst my/org-notes (concat org-directory "notes.org"))
 
   (setq org-capture-templates
-        (quote (
+        (quote (("a" "Appointment" entry (file  "~/Dropbox/org/gcal.org" )
+                 "* %?\n\n%^T\n\n:PROPERTIES:\n\n:END:\n\n")
                 ("s" "store" entry (file my/org-inbox)
                  "* TODO %?\n %a\n %i\n %U\n ")
                 ("t" "task" entry (file  my/org-inbox)
