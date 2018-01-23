@@ -1344,8 +1344,8 @@ Fungsi berguna bila di minibuffer =M-o=
   (use-package ivy
     :ensure t
     :diminish ivy-mode
-    :bind (("C-x b" . ivy-switch-buffer)
-           ("C-x d" . ivy-dired-recent-dirs)
+    :bind (("C-b" . ivy-switch-buffer)
+           ("C-d" . ivy-dired-recent-dirs)
            ("C-r" . ivy-resume) ;sambung cari bila pakai C-s "swiper"
            ;; :map ybk/map
            ;; ("'" . ivy-resume)
@@ -3746,15 +3746,16 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     :ensure ess
     ;;:pin melpa-stable
     :bind
-    (:map ess-mode-map
+    (:map ess-mode-map ;ESS
           ("C-a" . crux-move-beginning-of-line)
           ("M--" . ess-insert-S-assign) ; assign <-
           ("_"   . self-insert-command)
           ("M-+" . my/dt-update)
           ("M-m" . my/add-match)
+          ("M-*" . ess-switch-process) ;sama dengan C-c C-s
           ("M-p" . my/add-pipe)
           ("C-|" . my/ess-eval-pipe-through-line)
-          :map inferior-ess-mode-map
+          :map inferior-ess-mode-map ;iESS
           ("M--" . ess-insert-S-assign)
           ("_"   . self-insert-command)
           ("M-+" . my/dt-update)
