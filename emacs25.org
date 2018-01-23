@@ -4710,9 +4710,9 @@ Untuk tambah topik baru di =bookmark-jump=:
 - masukkan alamat RSS ke list di Dropbox
 - Bagi Tags dan tajuk di list
 - Defun elfeed-show.. dengan topic baru
-- Buka RSS all =F10-r=
+- Buka RSS all =F10-r= atau =yy-r=
 - Filter dengan (huruf besar S) =S-s= kemudian tambah +<topic>
-- Bookmar topic dengan =C-x r m=
+- Bookmark topic dengan =C-x r m=
 
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed-org
@@ -4735,8 +4735,9 @@ Untuk tambah topik baru di =bookmark-jump=:
           ("i" . bjm/elfeed-show-inter)
           ("n" . bjm/elfeed-show-norge)
           ("m" . bjm/elfeed-show-malay)
-          ("s" . bjm/elfeed-show-sport)
+          ("t" . bjm/elfeed-show-sport)
           ("f" . bjm/elfeed-show-fun)
+          ("s" . bmj/elfeed-show-stats)
           ("q" . bjm/elfeed-save-db-and-bury))
     :init
     ;; thanks - http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
@@ -4766,26 +4767,37 @@ Untuk tambah topik baru di =bookmark-jump=:
       (interactive)
       (bookmark-maybe-load-default-file)
       (bookmark-jump "rss-alle"))
+
     (defun bjm/elfeed-show-inter ()
       (interactive)
       (bookmark-maybe-load-default-file)
       (bookmark-jump "rss-inter"))
+
     (defun bjm/elfeed-show-norge ()
       (interactive)
       (bookmark-maybe-load-default-file)
       (bookmark-jump "rss-norge"))
+
     (defun bjm/elfeed-show-malay ()
       (interactive)
       (bookmark-maybe-load-default-file)
       (bookmark-jump "rss-malaysia"))
+
     (defun bjm/elfeed-show-sport ()
       (interactive)
       (bookmark-maybe-load-default-file)
       (bookmark-jump "rss-sport"))
+
     (defun bjm/elfeed-show-fun ()
       (interactive)
       (bookmark-maybe-load-default-file)
       (bookmark-jump "rss-fun"))
+
+    (defun bjm/elfeed-show-stats ()
+      (interactive)
+      (bookmark-maybe-load-default-file)
+      (bookmark-jump "rss-stats"))
+
 
     (setq elfeed-db-directory "~/Dropbox/rss")
     ;; Don't use visual line mode in elfeed-search:
