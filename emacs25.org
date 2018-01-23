@@ -4732,12 +4732,12 @@ Untuk tambah topik baru di =bookmark-jump=:
           ("r" . bjm/elfeed-load-db-and-open)
           :map elfeed-search-mode-map
           ("a" . bjm/elfeed-show-all)
-          ("i" . bjm/elfeed-show-inter)
+          ("s" . bjm/elfeed-show-stats)
           ("n" . bjm/elfeed-show-norge)
           ("m" . bjm/elfeed-show-malay)
           ("t" . bjm/elfeed-show-sport)
-          ("f" . bjm/elfeed-show-fun)
-          ("s" . bmj/elfeed-show-stats)
+          ("i" . bjm/elfeed-show-inter)
+          ("f" . bjm/elfeed-show-fun) ;tidak berfungsi sekiranya lebih dari 6
           ("q" . bjm/elfeed-save-db-and-bury))
     :init
     ;; thanks - http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
@@ -4768,10 +4768,10 @@ Untuk tambah topik baru di =bookmark-jump=:
       (bookmark-maybe-load-default-file)
       (bookmark-jump "rss-alle"))
 
-    (defun bjm/elfeed-show-inter ()
+    (defun bjm/elfeed-show-stats ()
       (interactive)
       (bookmark-maybe-load-default-file)
-      (bookmark-jump "rss-inter"))
+      (bookmark-jump "rss-stats"))
 
     (defun bjm/elfeed-show-norge ()
       (interactive)
@@ -4788,16 +4788,15 @@ Untuk tambah topik baru di =bookmark-jump=:
       (bookmark-maybe-load-default-file)
       (bookmark-jump "rss-sport"))
 
+    (defun bjm/elfeed-show-inter ()
+      (interactive)
+      (bookmark-maybe-load-default-file)
+      (bookmark-jump "rss-inter"))
+
     (defun bjm/elfeed-show-fun ()
       (interactive)
       (bookmark-maybe-load-default-file)
       (bookmark-jump "rss-fun"))
-
-    (defun bjm/elfeed-show-stats ()
-      (interactive)
-      (bookmark-maybe-load-default-file)
-      (bookmark-jump "rss-stats"))
-
 
     (setq elfeed-db-directory "~/Dropbox/rss")
     ;; Don't use visual line mode in elfeed-search:
