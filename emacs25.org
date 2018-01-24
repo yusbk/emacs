@@ -5779,9 +5779,9 @@ Hydra untuk fungsi awam
     "
      ^General keymap [F10] or yy^   [_q_: keluar]
      ^^^-------------------------------
-     _x_: save buffers & exit   _k_: delete file/buffer  _d_: musics         _c_: weather         _y_: ybk-emacs
-     _w_: swap-windows          _n_: file explore        _r_: rss            _b_: weather update  _t_: tukar theme
-     _m_: menu bar              _f_: file diff           _s_: stackExchange  _o_: scratch         _l_: warna highlight
+     _x_: save buffers & exit _k_: delete file/buffer _d_: musics         _c_: weather         _y_: ybk-emacs       _h_: heading
+     _w_: swap-windows        _n_: file explore       _r_: rss            _b_: weather update  _t_: tukar theme
+     _m_: menu bar            _f_: file diff          _s_: stackExchange  _o_: scratch         _l_: warna highlight
 
     "
     ("o" ybk/get-scratch)
@@ -5802,6 +5802,8 @@ Hydra untuk fungsi awam
     ("y" ybk/emacs-file)
     ("t" cycle-my-theme)
     ("l" hydra-hl-line/body :exit t)
+
+    ("h" worf-goto)
 
     ("q" (message "KELUAR") :exit t)
     )
@@ -5852,7 +5854,7 @@ Hydra keymap untuk =org=. Singkatan =w= sebagai *Word*
     "
     ^Org-keymap [F10] or jw^   [tekan _q_ utk KELUAR]
     ^-------------------------------------------------
-    _y_: my agenda      _f_: kamus             _i_: insert cite           _x_: export pdf        _j_: tunjuk kod
+    _y_: my agenda      _f_: kamus             _i_: insert cite           _x_: export pdf        _j_: tunjuk kod        _h_: heading
     _r_: refile agenda  _k_: tukar bahasa      _l_: insert internal link  _z_: save as pdf       _s_: insert src-block
     _w_: today          _t_: google-translate  _v_: org option (sparse)   _n_: meeting note   _<up>_: previous heading
     _d_: TODO           _p_: gambar/pic        _c_: bibtex                _m_: meeting done _<down>_: next heading
@@ -5882,6 +5884,8 @@ Hydra keymap untuk =org=. Singkatan =w= sebagai *Word*
     ("s" ybk/org-insert-src-block)
     ("<down>" org-next-visible-heading)
     ("<up>" org-previous-visible-heading)
+
+    ("h" worf-goto)
 
     ("q" (message "KELUAR") :exit t))
 
