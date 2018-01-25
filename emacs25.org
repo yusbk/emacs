@@ -3752,7 +3752,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           ("_"   . self-insert-command)
           ("M-+" . my/dt-update)
           ("M-m" . my/add-match)
-          ("M-*" . ess-switch-process) ;sama dengan C-c C-s
+          ("M-." . ess-switch-process) ;sama dengan C-c C-s
           ("M-p" . my/add-pipe)
           ("C-|" . my/ess-eval-pipe-through-line)
           :map inferior-ess-mode-map ;iESS
