@@ -2029,9 +2029,9 @@ Aktivkan =Ivy= dengan =Projectile=.
     :diminish (projectile-mode . " ")
     :bind (:map ybk/prog-map
                 ;; find project
-                ("f" . counsel-switch-project) ;boleh tukar project walaupun tidak di projectile buffer
+                ("p" . counsel-switch-project) ;boleh tukar project walaupun tidak di projectile buffer
                 ;; project hydra
-                ("p" . hydra-projectile/body))
+                ("P" . hydra-projectile/body))
     :init
     (setq projectile-cache-file (concat ybk/emacs-cache "projectile.cache"))
     (setq projectile-known-projects-file (concat ybk/emacs-cache "projectile-bookmarks.eld"))
@@ -5902,13 +5902,13 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     "
     ^Programming keymap: [F12] or jc^  [_q_ keluar]
     ^----------------------------------
-    _p_: Projectile     _a_: start exp    _x_: kill exp        _o_: Origami          _k_: kill other buffers
-    _f_: Find project   _e_: end exp      _y_: Yasnippet       _w_: Send2browser     _s_: create scratch
+    _P_: Projectile     _a_: start exp    _x_: kill exp        _o_: Origami          _k_: kill other buffers
+    _p_: Find project   _e_: end exp      _y_: Yasnippet       _w_: Send2browser     _s_: create scratch
     _g_: Magit          _u_: unwrap exp   _-_: Del unuse yas.  _c_: Cleanup/tabbify
     "
 
-    ("p" hydra-projectile/body :exit t)
-    ("f" counsel-switch-project)
+    ("P" hydra-projectile/body :exit t)
+    ("p" counsel-switch-project)
     ("y" company-yasnippet)
     ("-" r-autoyas-exit-snippet-delete-remaining)
 
