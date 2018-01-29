@@ -1048,7 +1048,7 @@ ditunjukkan dipelbagai mukasurat, guna =C-h= untuk pilih mukasurat seterusnya at
     (which-key-mode)
 
     ;;Utk key yang panjang
-    (setq which-key-use-C-h-commands nil)
+    ;; (setq which-key-use-C-h-commands nil)
 
     ;;Jenis pop-up
     (setq which-key-popup-type 'side-window)
