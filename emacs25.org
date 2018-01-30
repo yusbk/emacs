@@ -2343,7 +2343,7 @@ Pasang dan kemaskini aturcara org-mode.
 + =C-c a a= to get agenda entry
 + =C-c C-c= add tag
 + =C-c t c= Buka pop agenda di current window
-+ =F4=      TODO shortcut
++ =qq=      TODO shortcut
 + =C-c t a=   Agenda sendiri
 
 Bila di =Agenda list=, kekunci ini boleh di
@@ -5452,53 +5452,52 @@ package-refresh-contents=
         ("q" (message "Selesai") :exit t)
         )
 
-      ;;(key-chord-define-global "xm" #'hydra-magit/body)
+      (key-chord-define-global "jg" #'hydra-magit/body)
       (bind-key "g" #'hydra-magit/body 'ybk/prog-map)
       )
 
     :config
-    (progn
-      ;; restore previously hidden windows
-      (defadvice magit-quit-window (around magit-restore-screen activate)
-        (let ((current-mode major-mode))
-          ad-do-it
-          ;; we only want to jump to register when the last seen buffer
-          ;; was a magit-status buffer.
-          (when (eq 'magit-status-mode current-mode)
-            (jump-to-register :magit-fullscreen))))
+    ;; restore previously hidden windows
+    (defadvice magit-quit-window (around magit-restore-screen activate)
+      (let ((current-mode major-mode))
+        ad-do-it
+        ;; we only want to jump to register when the last seen buffer
+        ;; was a magit-status buffer.
+        (when (eq 'magit-status-mode current-mode)
+          (jump-to-register :magit-fullscreen))))
 
-      (defun magit-maybe-commit (&optional show-options)
-        "Runs magit-commit unless prefix is passed"
-        (interactive "P")
-        (if show-options
-            (magit-key-mode-popup-committing)
-          (magit-commit)))
+    (defun magit-maybe-commit (&optional show-options)
+      "Runs magit-commit unless prefix is passed"
+      (interactive "P")
+      (if show-options
+          (magit-key-mode-popup-committing)
+        (magit-commit)))
 
-      ;;  ;; major mode for editing `git rebase -i` files
-      ;;  (use-package rebase-mode
-      ;; :defer 2)
+    ;;  ;; major mode for editing `git rebase -i` files
+    ;;  (use-package rebase-mode
+    ;; :defer 2)
 
-      (define-key magit-mode-map "c" 'magit-maybe-commit)
+    (define-key magit-mode-map "c" 'magit-maybe-commit)
 
-      ;; magit settings
-      (setq
-       ;; use ivy to look for branches
-       magit-completing-read-function 'ivy-completing-read
-       ;; don't put "origin-" in front of new branch names by default
-       magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
-       ;; open magit status in same window as current buffer
-       magit-status-buffer-switch-function 'switch-to-buffer
-       ;; highlight word/letter changes in hunk diffs
-       magit-diff-refine-hunk t
-       ;; ask me if I want to include a revision when rewriting
-       magit-rewrite-inclusive 'ask
-       ;; ask me to save buffers
-       magit-save-some-buffers t
-       ;; pop the process buffer if we're taking a while to complete
-       magit-process-popup-time 30
-       ;; ask me if I want a tracking upstream
-       magit-set-upstream-on-push 'askifnotset
-       )))
+    ;; magit settings
+    (setq
+     ;; use ivy to look for branches
+     magit-completing-read-function 'ivy-completing-read
+     ;; don't put "origin-" in front of new branch names by default
+     magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
+     ;; open magit status in same window as current buffer
+     magit-status-buffer-switch-function 'switch-to-buffer
+     ;; highlight word/letter changes in hunk diffs
+     magit-diff-refine-hunk t
+     ;; ask me if I want to include a revision when rewriting
+     magit-rewrite-inclusive 'ask
+     ;; ask me to save buffers
+     magit-save-some-buffers t
+     ;; pop the process buffer if we're taking a while to complete
+     magit-process-popup-time 30
+     ;; ask me if I want a tracking upstream
+     magit-set-upstream-on-push 'askifnotset
+     ))
 #+END_SRC
 
 #+RESULTS:
@@ -5777,7 +5776,7 @@ Hydra untuk fungsi awam
 #+BEGIN_SRC emacs-lisp
   (defhydra ybk-keymap-awam (:hint nil)
     "
-     ^General keymap [F10] or yy^   [_q_: keluar]
+     ^General keymap [F10] or yy^
      ^^^-------------------------------
      _x_: save buffers & exit _k_: delete file/buffer _d_: musics         _c_: weather         _y_: ybk-emacs       _h_: heading
      _w_: swap-windows        _n_: file explore       _r_: rss            _b_: weather update  _t_: tukar theme
@@ -5805,7 +5804,7 @@ Hydra untuk fungsi awam
 
     ("h" worf-goto)
 
-    ("q" (message "KELUAR") :exit t)
+    ("q" nil "KELUAR")
     )
 
   (key-chord-define-global "yy" #'ybk-keymap-awam/body)
@@ -5852,8 +5851,8 @@ Hydra keymap untuk =org=. Singkatan =w= sebagai *Word*
 #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra ybk-keymap-org (:hint nil)
     "
-    ^Org-keymap [F10] or jw^   [tekan _q_ utk KELUAR]
-    ^-------------------------------------------------
+    ^Org-keymap [F10] or jw^
+    ^--------------------------
     _y_: my agenda      _f_: kamus             _i_: insert cite           _x_: export pdf        _j_: tunjuk kod        _h_: heading
     _r_: refile agenda  _k_: tukar bahasa      _l_: insert internal link  _z_: save as pdf       _s_: insert src-block
     _w_: today          _t_: google-translate  _v_: org option (sparse)   _n_: meeting note   _<up>_: previous heading
@@ -5887,7 +5886,7 @@ Hydra keymap untuk =org=. Singkatan =w= sebagai *Word*
 
     ("h" worf-goto)
 
-    ("q" (message "KELUAR") :exit t))
+    ("q" nil "KELUAR"))
 
   ;; ikut urutan huruf
   (key-seq-define-global "jw" 'ybk-keymap-org/body)
@@ -5900,11 +5899,12 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-ybk-prog (:hint nil)
     "
-    ^Programming keymap: [F12] or jc^  [_q_ keluar]
+    ^Programming keymap: [F12] or jc^
     ^----------------------------------
     _P_: Projectile     _a_: start exp    _x_: kill exp        _o_: Origami          _k_: kill other buffers
     _p_: Find project   _e_: end exp      _y_: Yasnippet       _w_: Send2browser     _s_: create scratch
     _g_: Magit          _u_: unwrap exp   _-_: Del unuse yas.  _c_: Cleanup/tabbify
+
     "
 
     ("P" hydra-projectile/body :exit t)
@@ -5925,7 +5925,7 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     ("k" crux-kill-other-buffers)
     ("s" crux-create-scratch-buffer)
 
-    ("q" (message "KELUAR") :exit t)
+    ("q" nil "KELUAR")
     )
 
   ;; ikut urutan huruf
