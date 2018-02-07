@@ -2244,6 +2244,14 @@ Aktivkan =Ivy= dengan =Projectile=.
 PDF Tools dipakai utk menggantikan =DocView= yang sedia ada di Emacs utk fail-fail
 PDF. PDF-Tools juga berfungsi utk membuat nota di fail PDF. Sila rujuk [[https://github.com/politza/pdf-tools][PDF-Tools]].
 
+Bila bermasalah untuk pasang PDF-tool boleh dapatkan bantuan di [[http://google-ebook.com/blog/2016/01/13/pdf-tools-in-emacs/][ebook]]. Antaranya ialah:
+- Pasang =pdf-tools= melalui =M-x package-list-packages=
+- Pasang pakej-pakej lain melalui terminal
+  #+BEGIN_EXAMPLE
+   $ sudo apt install libpng-dev libz-dev libpoppler-glib-dev libpoppler-private-dev
+  #+END_EXAMPLE
+- Kemudian kalau tidak tersedia dipasang boleh larikan =M-x pdf-tools-install= di mini buffer
+
 Pakai kekunci =C-c C-a= utk compile kemudian pakai =C-c C-v= utk View. Bila ke pdf-file
 tekan =g= utk refresh pertukaran.
 
@@ -2524,7 +2532,7 @@ sila sediakan.
     (setq org-catch-invisible-edits 'error)
 
     ;; make words italic or bold, hide / and *
-    (setq org-hide-emphasis-markers t)
+    (setq org-hide-emphasis-markers nil)
 
     ;; Masukkan image automatik ke file org
     (add-hook 'org-babel-after-execute-hook 'org-display-inline-images))
