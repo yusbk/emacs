@@ -1,6 +1,6 @@
 #+AUTHOR: Yusman Kamaleri
 #+TITLE: Aturcare Emacs versi 25.2
-#+DATE: 02 Januari 2018
+#+DATE: 07 Februari 2018
 #+OPTIONS: toc:nil
 #+PROPERTY: header-args :comments org :catch yes :results silent :tangle yes
 
@@ -17,10 +17,12 @@ Aturcara ini tidak berhasil tanpa sumbangan dari:
 yang juga menerima sumbangan dari ramai lagi penyumbang di alam cyber.
 
 * Info+
-Bantuan untuk Emacs Info
+Bantuan untuk Emacs Info. Untuk dapatkan info mengenai pakej pakai =C-h r= kemudian =i=
+untuk ke index dan cari nama pakej yang diingini
+
 #+BEGIN_SRC emacs-lisp
   (use-package info+
-    :ensure t
+    :load-path "~/Dropbox/customize/lisp/"
     :defer 1
     :after info)
 #+END_SRC
@@ -181,6 +183,7 @@ Fungsi lain yang berguna dan perlukan singkatan
 #+END_SRC
 
 * Directory sendiri
+** Customize file
 #+BEGIN_SRC emacs-lisp
   (setq directory-sendiri "~/Dropbox/customize/")
   (add-hook
@@ -190,6 +193,13 @@ Fungsi lain yang berguna dan perlukan singkatan
        (when (file-exists-p private-file)
          (load-file private-file)))))
 #+END_SRC
+** Personal elisp
+Semua pakej yang dimuatkan sendiri
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'load-path "~/Dropbox/customize/lisp")
+#+END_SRC
+
 * Go to my emacs settings file
 It's nice to have a function to find this file quickly. Here's one:
 
@@ -407,13 +417,24 @@ Tidak blink
 #+END_SRC
 
 ** Zoom in/out
-Untuk zoom in/out
+*** Zoom
+Untuk zoom in/out pakai kekunci =C-+/-= . Diambil dari [[https://github.com/purcell/default-text-scale][GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package zoom-frm
+  (use-package default-text-scale
     :ensure t
-    :bind (("C-+" . zoom-frm-in)
-           ("C--" . zoom-frm-out)))
+    :bind (("C--" . default-text-scale-decrease)
+           ("C-+" . default-text-scale-increase))
+    :config
+    (default-text-scale-mode))
 #+END_SRC
+*** Mouse
+Pakai mouse =C-Scroll=
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key [C-mouse-4] 'text-scale-increase)
+  (global-set-key [C-mouse-5] 'text-scale-decrease)
+#+END_SRC
+
 ** Menu bar
 Capaian ke menu bar. Biasanya hany pakai ~f10~ tetapi ~f10~ dipakai untuk =ybk/map=
 #+BEGIN_SRC emacs-lisp
@@ -529,6 +550,20 @@ jumpa cara lain.
 #+END_SRC
 
 ** Highlight line
+Masalah to load - error
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package hl-line+
+    :ensure hl-line
+    :load-path "~/Dropbox/customize/lisp/"
+    :config
+    (toggle-hl-line-when-idle 1) ; Highlight line only when idle
+    ;; Number of seconds of idle time after when the line should be highlighted
+    (setq hl-line-idle-interval 5)
+    ;; Number of seconds for `hl-line-flash' to highlight the line
+    (setq hl-line-flash-show-period 3)
+    )
+
+#+END_SRC
 
 Highlight current line.
 
@@ -536,88 +571,79 @@ Highlight current line.
   (use-package hl-line
     :ensure t
     :config
-    (progn
-      ;;highlight hanya aktif window
-      (setq hl-line-sticky-flag nil)
+    ;; ;; enable globally
+    ;; (global-hl-line-mode 1)
 
-      (use-package hl-spotlight
-        :ensure t
-        :config
-        (use-package centered-cursor-mode
-          :ensure t)
-        ;;cursor mula ditengah tapi perlukan centered-cursor-mode
-        (setq hl-spotlight-keep-centered-flag 1)
-        )
+    ;;highlight hanya aktif window
+    (setq hl-line-sticky-flag nil)
 
-      (use-package hl-line+
-        :ensure t
-        :config
-        (toggle-hl-line-when-idle 1) ; Highlight line only when idle
-        ;; Number of seconds of idle time after when the line should be highlighted
-        (setq hl-line-idle-interval 5)
-        ;; Number of seconds for `hl-line-flash' to highlight the line
-        (setq hl-line-flash-show-period 3)
-        )
+    (use-package hl-spotlight
+      :load-path "~/Dropbox/customize/lisp/"
+      :config
+      (use-package centered-cursor-mode
+        :ensure t)
+      ;;cursor mula ditengah tapi perlukan centered-cursor-mode
+      (setq hl-spotlight-keep-centered-flag 1)
       )
+
+    ;; ;; Tukar Cursor
+    ;; ;; Rujukan di https://ogbe.net/emacsconfig.html
+    ;; (defun ybk/set-cursor ()
+    ;;   ;; (set-cursor-color "red") ;; set cursor color to red
+    ;;   ;; (set-face-attribute 'region nil :background "red" :foreground "black")
+    ;;   ;; (set-face-background 'hl-line "gray30")
+    ;;   (set-face-foreground 'highlight nil)
+    ;;   (set-face-underline 'hl-line nil)
+    ;;   (cond
+    ;;    (buffer-read-only
+    ;;     (setq cursor-type 'box))
+    ;;    (t
+    ;;     (setq cursor-type 'bar)))
+    ;;   ;; ;; red cursor for overwrite mode
+    ;;   ;; (when overwrite-mode
+    ;;   ;;   (set-cursor-color "red"))
+    ;;   )
+    ;; (ybk/set-cursor)
+
+    ;; ;; run after every command
+    ;; (add-hook 'post-command-hook 'ybk/set-cursor)
+
+
+    ;; Tukar warna untuk highlight
+    ;; Warna standard
+    (eval-after-load 'hl-line
+      '(set-face-background 'hl-line "grey15")) ;default hl #271f87 #0a00a0
+
+    (defun ybk/hl-line-terang()
+      "Tukar highlight ke warna cerah."
+      (interactive)
+      (eval-after-load 'hl-line
+        '(set-face-background 'hl-line "#ede4a6")))
+
+    (defun ybk/hl-line-gelap()
+      "Tukar highlight ke warna gelap"
+      (interactive)
+      (eval-after-load 'hl-line
+        '(set-face-background 'hl-line "grey15")))
+
+    (defun ybk/hl-line-biru()
+      "Tukar highlight ke warna gelap"
+      (interactive)
+      (eval-after-load 'hl-line
+        '(set-face-background 'hl-line "#271f87")))
+
+    ;; Buka fail ybk-init.org
+    (defhydra hydra-hl-line (:color teal)
+      "Warna hl-line"
+      ("t" ybk/hl-line-terang  "terang")
+      ("g" ybk/hl-line-gelap "gelap")
+      ("b" ybk/hl-line-biru "biru")
+
+      ("q" nil "quit" :color blue))
+
+    (bind-key "l" #'hydra-hl-line/body 'ybk/map)
+    ;;(key-chord-define-global "gh" #'hydra-hl-line/body)
     )
-
-  ;; ;; Tukar Cursor
-  ;; ;; Rujukan di https://ogbe.net/emacsconfig.html
-  ;; (defun ybk/set-cursor ()
-  ;;   ;; (set-cursor-color "red") ;; set cursor color to red
-  ;;   ;; (set-face-attribute 'region nil :background "red" :foreground "black")
-  ;;   ;; (set-face-background 'hl-line "gray30")
-  ;;   (set-face-foreground 'highlight nil)
-  ;;   (set-face-underline 'hl-line nil)
-  ;;   (cond
-  ;;    (buffer-read-only
-  ;;     (setq cursor-type 'box))
-  ;;    (t
-  ;;     (setq cursor-type 'bar)))
-  ;;   ;; ;; red cursor for overwrite mode
-  ;;   ;; (when overwrite-mode
-  ;;   ;;   (set-cursor-color "red"))
-  ;;   )
-  ;; (ybk/set-cursor)
-
-  ;; ;; run after every command
-  ;; (add-hook 'post-command-hook 'ybk/set-cursor)
-
-
-  ;; Tukar warna untuk highlight
-  ;; Warna standard
-  (eval-after-load 'hl-line
-    '(set-face-background 'hl-line "grey15")) ;default hl #271f87 #0a00a0
-
-  (defun ybk/hl-line-terang()
-    "Tukar highlight ke warna cerah."
-    (interactive)
-    (eval-after-load 'hl-line
-      '(set-face-background 'hl-line "#ede4a6")))
-
-  (defun ybk/hl-line-gelap()
-    "Tukar highlight ke warna gelap"
-    (interactive)
-    (eval-after-load 'hl-line
-      '(set-face-background 'hl-line "grey15")))
-
-  (defun ybk/hl-line-biru()
-    "Tukar highlight ke warna gelap"
-    (interactive)
-    (eval-after-load 'hl-line
-      '(set-face-background 'hl-line "#271f87")))
-
-  ;; Buka fail ybk-init.org
-  (defhydra hydra-hl-line (:color teal)
-    "Warna hl-line"
-    ("t" ybk/hl-line-terang  "terang")
-    ("g" ybk/hl-line-gelap "gelap")
-    ("b" ybk/hl-line-biru "biru")
-
-    ("q" nil "quit" :color blue))
-
-  (bind-key "l" #'hydra-hl-line/body 'ybk/map)
-  ;;(key-chord-define-global "gh" #'hydra-hl-line/body)
 #+END_SRC
 
 ** Powerline
@@ -1956,11 +1982,15 @@ Berlu dipelajari. Sila baca [[https://www.emacswiki.org/emacs/BookMarks][Wiki:Bo
   Sila rujuk ke =Ivy= untuk funksi /ivy-bookmark-goto/ kekunci =bm=. Cara
   diambil dari [[http://blog.binchen.org/posts/hello-ivy-mode-bye-helm.html][Blog Binchen]]
 
+Dimatikan sebab masalah dengan bookmark+ .. boleh load tapi lambat
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package bookmark
     :ensure t
     :init
+    ;; pasang semua fail-fail el
+    (add-to-list 'load-path "~/Dropbox/customize/lisp/bookmark+/")
+
     (setq bookmark-default-file (concat ybk/emacs-cache "bookmarks")
           bookmark-save-flag 1) ;auto save
     :bind (:map ybk/move-map
@@ -1970,7 +2000,8 @@ Berlu dipelajari. Sila baca [[https://www.emacswiki.org/emacs/BookMarks][Wiki:Bo
                 ("l" . bookmark-bmenu-list))
     :config
     (use-package bookmark+
-      :ensure t)
+      :load-path "~/Dropbox/customize/lisp/"
+      )
 
     ;; http://blog.binchen.org/posts/hello-ivy-mode-bye-helm.html
     (defun ivy-bookmark-goto ()
@@ -2013,6 +2044,71 @@ Berlu dipelajari. Sila baca [[https://www.emacswiki.org/emacs/BookMarks][Wiki:Bo
     )
 
 #+END_SRC
+** bm
+Cara lain untuk pakai bookmark diambil dari [[https://github.com/joodland/bm][GitHub]]. Bolah tandah dibarisan dengan =C-f4=
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package bm
+    :ensure t
+    :demand t
+
+    :init
+    ;; restore on load (even before you require bm)
+    (setq bm-restore-repository-on-load t)
+
+
+    :config
+    ;; Allow cross-buffer 'next'
+    (setq bm-cycle-all-buffers t)
+
+    ;; where to store persistant files
+    (setq bm-repository-file "~/.emacs.d/bm-repository")
+
+    ;; save bookmarks
+    (setq-default bm-buffer-persistence t)
+
+    ;; Loading the repository from file when on start up.
+    (add-hook' after-init-hook 'bm-repository-load)
+
+    ;; Restoring bookmarks when on file find.
+    (add-hook 'find-file-hooks 'bm-buffer-restore)
+
+    ;; Saving bookmarks
+    (add-hook 'kill-buffer-hook #'bm-buffer-save)
+
+    ;; Saving the repository to file when on exit.
+    ;; kill-buffer-hook is not called when Emacs is killed, so we
+    ;; must save all bookmarks first.
+    (add-hook 'kill-emacs-hook #'(lambda nil
+                                   (bm-buffer-save-all)
+                                   (bm-repository-save)))
+
+    ;; The `after-save-hook' is not necessary to use to achieve persistence,
+    ;; but it makes the bookmark data in repository more in sync with the file
+    ;; state.
+    (add-hook 'after-save-hook #'bm-buffer-save)
+
+    ;; Restoring bookmarks
+    (add-hook 'find-file-hooks   #'bm-buffer-restore)
+    (add-hook 'after-revert-hook #'bm-buffer-restore)
+
+    ;; The `after-revert-hook' is not necessary to use to achieve persistence,
+    ;; but it makes the bookmark data in repository more in sync with the file
+    ;; state. This hook might cause trouble when using packages
+    ;; that automatically reverts the buffer (like vc after a check-in).
+    ;; This can easily be avoided if the package provides a hook that is
+    ;; called before the buffer is reverted (like `vc-before-checkin-hook').
+    ;; Then new bookmarks can be saved before the buffer is reverted.
+    ;; Make sure bookmarks is saved before check-in (and revert-buffer)
+    (add-hook 'vc-before-checkin-hook #'bm-buffer-save)
+
+
+    :bind (("<f4>" . bm-next)
+           ("S-<f4>" . bm-previous)
+           ("C-<f4>" . bm-toggle))
+    )
+#+END_SRC
+
 * Projectile
 Utk masukkan projek ke [[http://projectile.readthedocs.io/en/latest/][Projectile]], buka projek fail dan hidupkan =projectile-mode=
 di buffer tersebut. Untuk menggunakan =Projectile= di projek directory, gunakan komman
@@ -4515,9 +4611,9 @@ times to get references right.
 
     ;; Some extra files generated by xelatexmk that I don't generally
     ;; want to keep:
-    (push ".synctex.gz" dired-latex-unclean-extensions)
-    (push ".fdb_latexmk" dired-latex-unclean-extensions)
-    (push ".fls" dired-latex-unclean-extensions)
+    (push ".synctex.gz" completion-ignored-extensions)
+    (push ".fdb_latexmk" completion-ignored-extensions)
+    (push ".fls" completion-ignored-extensions)
     ;; (push "\\.fdb_latexmk" LaTeX-clean-intermediate-suffixes)
     ;; (push "\\.fls" LaTeX-clean-intermediate-suffixes)
     ;; (push "\\.synctex.gz" LaTeX-clean-intermediate-suffixes)
@@ -5779,7 +5875,7 @@ Hydra untuk fungsi awam
      ^General keymap [F10] or yy^
      ^^^-------------------------------
      _x_: save buffers & exit _k_: delete file/buffer _d_: musics         _c_: weather         _y_: ybk-emacs       _h_: heading
-     _w_: swap-windows        _n_: file explore       _r_: rss            _b_: weather update  _t_: tukar theme
+     _w_: swap-windows        _n_: file explore       _r_: rss            _b_: weather update  _g_: highlight       _t_: tukar theme
      _m_: menu bar            _f_: file diff          _s_: stackExchange  _o_: scratch         _l_: warna highlight
 
     "
@@ -5800,6 +5896,7 @@ Hydra untuk fungsi awam
 
     ("y" ybk/emacs-file)
     ("t" cycle-my-theme)
+    ("g" hl-line-mode)
     ("l" hydra-hl-line/body :exit t)
 
     ("h" worf-goto)
