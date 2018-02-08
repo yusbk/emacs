@@ -62,9 +62,9 @@ Hanya guna =C-n= untuk aktifkan kekuci
   (global-set-key
    (kbd "C-<prior>")
    (defhydra hydra-move
-     (:body-pre (next-line))
+     (:body-pre (forward-line))
      "move"
-     ("n" next-line "next")
+     ("n" forward-line "next")
      ("p" previous-line "prev")
      ("f" forward-char "forward")
      ("b" backward-char "backward")
@@ -194,7 +194,13 @@ Fungsi lain yang berguna dan perlukan singkatan
          (load-file private-file)))))
 #+END_SRC
 ** Personal elisp
-Semua pakej yang dimuatkan sendiri
+Semua pakej yang dimuatkan sendiri. Sekiranya perlu boleh compile semua file dengan
+melarikan komando ini:
+
+Recompile semua fail-fail =.el= walaupun sudah ada =.elc= tetapi bandingkan timestamps
+#+BEGIN_SRC emacs-lisp :tangle no
+  (byte-recompile-directory "~/Dropbox/lisp/" 0)
+#+END_SRC
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path "~/Dropbox/lisp/elisp")
@@ -1826,14 +1832,14 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
 
     ;; Conflict with org-mode solution use of TAB
     (defun yas/org-very-safe-expand ()
-      (let ((yas/fallback-behavior 'return-nil)) (yas/expand)))
+      (let ((yas-fallback-behavior 'return-nil)) (yas-expand)))
 
     (add-hook 'org-mode-hook
               (lambda ()
                 (make-variable-buffer-local 'yas/trigger-key)
                 (setq yas/trigger-key [tab])
                 (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
-                (define-key yas/keymap [tab] 'yas/next-field)))
+                (define-key yas-keymap [tab] 'yas/next-field)))
 
     ;;Masukkan snippet sekiranya ada else masukkan blank line (open-line)
     ;;https://emacs.stackexchange.com/questions/7908/how-to-make-yasnippet-and-company-work-nicer
@@ -1843,7 +1849,7 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
     move to the next field. Call `open-line' if nothing else applies."
       (interactive)
       (cond ((expand-abbrev))
-            ((yas--snippets-at-point)
+            ((yas-active-snippets)
              (yas-next-field-or-maybe-expand))
             ((ignore-errors
                (yas-expand)))
@@ -2044,7 +2050,7 @@ Dimatikan sebab masalah dengan bookmark+ .. boleh load tapi lambat
     (add-to-list 'load-path "~/Dropbox/lisp/elisp/bookmark+/")
 
     (setq bookmark-default-file (concat ybk/emacs-cache "bookmarks")
-          bookmark-save-flag 1) ;auto save
+          bookmark-save-flag 1) ;auto save when chnage else use "t" to autosave when emacs quits
     :bind (:map ybk/move-map
                 ("r" . bookmark-set)
                 ("j" . bookmark-jump)
@@ -2105,16 +2111,18 @@ Cara lain untuk pakai bookmark diambil dari [[https://github.com/joodland/bm][Gi
     :demand t
 
     :init
+    ;; where to store persistant files
+    (setq bm-repository-file "~/.emacs.d/bm-repository")
+
     ;; restore on load (even before you require bm)
     (setq bm-restore-repository-on-load t)
-
 
     :config
     ;; Allow cross-buffer 'next'
     (setq bm-cycle-all-buffers t)
 
-    ;; where to store persistant files
-    (setq bm-repository-file "~/.emacs.d/bm-repository")
+    ;; ;; where to store persistant files
+    ;; (setq bm-repository-file "~/.emacs.d/bm-repository")
 
     ;; save bookmarks
     (setq-default bm-buffer-persistence t)
@@ -2155,9 +2163,9 @@ Cara lain untuk pakai bookmark diambil dari [[https://github.com/joodland/bm][Gi
     (add-hook 'vc-before-checkin-hook #'bm-buffer-save)
 
 
-    :bind (("<f4>" . bm-next)
-           ("S-<f4>" . bm-previous)
-           ("C-<f4>" . bm-toggle))
+    ;; :bind (("<f4>" . bm-next)
+    ;;        ("S-<f4>" . bm-previous)
+    ;;        ("C-<f4>" . bm-toggle))
     )
 #+END_SRC
 
@@ -2251,7 +2259,7 @@ Aktivkan =Ivy= dengan =Projectile=.
 
     :config
     ;;hidupkan projectile
-    (projectile-global-mode t)
+    (projectile-mode t)
 
     ;;integrerer ivy i projectile
     (use-package counsel-projectile
@@ -2698,7 +2706,7 @@ utk 'Headings' diambil dari [[http://stackoverflow.com/questions/28030946/emacs-
       ;; return to original point and insert link
       (org-insert-last-stored-link 1)
       ;; org-insert-last-stored-link adds a newline so delete this
-      (delete-backward-char 1)))
+      (delete-char 1)))
 #+END_SRC
 ** Calendar
 *** Calendar settings
@@ -5975,24 +5983,33 @@ Hydra move keymap seperti =F2=. Singkatan =j= sebagai *Jalan*
     "
     ^Move keymap [F2] or jj
     ^-----------------------------
-    _+_: resize window   _h_: doc heading   _a_: goto         _p_: register set   _r_: bookmark set    _t_: bookmark goto
-    _w_: select window   _m_: imenu         _b_: move buffer  _o_: register jump  _j_: bookmark jump   _l_: bookmark list
+    _+_: resize window  _h_: doc heading _s_: register set   _m_: bookmark set   _r_: set mark      _a_: mark show
+    _w_: select window  _o_: imenu       _f_: find register  _j_: bookmark jump  _n_: next mark     _A_: mark show all
+    _b_: move buffer    _g_: goto        _l_: bookmark list  _t_: bookmark goto  _p_: previous mark _x_: mark remove all
 
     "
     ("+" resize-window)
     ("w" winum-select-window-by-number)
     ("h" worf-goto)
-    ("m" counsel-imenu)
+    ("o" counsel-imenu)
 
-    ("a" hydra-avy-goto/body :exit t)
+    ("g" hydra-avy-goto/body :exit t)
     ("b" hydra-buffer/body :exit t)
-    ("p" point-to-register)
-    ("o" jump-to-register)
+    ("s" point-to-register)
+    ("f" jump-to-register)
 
-    ("r" bookmark-set)
+    ("m" bookmark-set)
     ("j" bookmark-jump)
     ("t" ivy-bookmark-goto)
     ("l" bookmark-bmenu-list)
+
+    ("r" bm-toggle)
+    ("n" bm-next)
+    ("p" bm-previous)
+
+    ("a" bm-show)
+    ("A" bm-show-all)
+    ("x" bm-remove-all-all-buffers)
 
     ("q" nil "KELUAR")
     )
