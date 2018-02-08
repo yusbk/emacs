@@ -22,7 +22,7 @@ untuk ke index dan cari nama pakej yang diingini
 
 #+BEGIN_SRC emacs-lisp
   (use-package info+
-    :load-path "~/Dropbox/customize/lisp/"
+    :load-path "~/Dropbox/lisp/elisp/"
     :defer 1
     :after info)
 #+END_SRC
@@ -197,7 +197,7 @@ Fungsi lain yang berguna dan perlukan singkatan
 Semua pakej yang dimuatkan sendiri
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "~/Dropbox/customize/lisp")
+  (add-to-list 'load-path "~/Dropbox/lisp/elisp")
 #+END_SRC
 
 * Go to my emacs settings file
@@ -498,165 +498,24 @@ Buang menu bar dan sekiranya perlu tekan =F10=
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
 #+END_SRC
-** Tema utk paparan
-Utk tukar tema paparan yang lain tekan =C-9=
-
-Berbagai tema tetapi bermasalah sekiranya menukar tema di =Org-mode=. Untuk
-menghilangkan tanda * ditepi harus guna capture =C-c c=. Tidak terbaik tetapi belum
-jumpa cara lain.
-
-=color-theme-sanityinc-tomorrow= Tidak ada masalah tukar tema di =Org-mode=:
-- blue
-- bright
-- eighties
-- night
-- day
-
-#+BEGIN_SRC emacs-lisp
-  (use-package color-theme-sanityinc-tomorrow
-    :ensure t
-    ;; :bind (:map ybk/map
-    ;;             ("t" . cycle-my-theme))
-    :config
-    ;; utk tukar tema f10-t
-    (setq my-themes '(
-                      sanityinc-tomorrow-eighties
-                      ;; sanityinc-tomorrow-bright
-                      sanityinc-tomorrow-night
-                      sanityinc-tomorrow-blue
-                      sanityinc-tomorrow-day
-                      ))
-
-
-    (setq my-cur-theme nil)
-    (defun cycle-my-theme ()
-      "Cycle through a list of themes, my-themes"
-      (interactive)
-      (when my-cur-theme
-        (disable-theme my-cur-theme)
-        (setq my-themes (append my-themes (list my-cur-theme))))
-      (setq my-cur-theme (pop my-themes))
-      (load-theme my-cur-theme :no-confirm)
-      (message "Tema dipakai: %s" my-cur-theme))
-
-    ;; Switch to the first theme in the list above
-    (cycle-my-theme)
-
-    ;; Bind this to C-9
-    ;;(global-set-key (kbd "C-9") 'cycle-my-theme)
-    (bind-key "t" #'cycle-my-theme 'ybk/map)
-    )
-
-#+END_SRC
-
-** Highlight line
-Masalah to load - error
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package hl-line+
-    :ensure hl-line
-    :load-path "~/Dropbox/customize/lisp/"
-    :config
-    (toggle-hl-line-when-idle 1) ; Highlight line only when idle
-    ;; Number of seconds of idle time after when the line should be highlighted
-    (setq hl-line-idle-interval 5)
-    ;; Number of seconds for `hl-line-flash' to highlight the line
-    (setq hl-line-flash-show-period 3)
-    )
-
-#+END_SRC
-
-Highlight current line.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package hl-line
-    :ensure t
-    :config
-    ;; ;; enable globally
-    ;; (global-hl-line-mode 1)
-
-    ;;highlight hanya aktif window
-    (setq hl-line-sticky-flag nil)
-
-    (use-package hl-spotlight
-      :load-path "~/Dropbox/customize/lisp/"
-      :config
-      (use-package centered-cursor-mode
-        :ensure t)
-      ;;cursor mula ditengah tapi perlukan centered-cursor-mode
-      (setq hl-spotlight-keep-centered-flag 1)
-      )
-
-    ;; ;; Tukar Cursor
-    ;; ;; Rujukan di https://ogbe.net/emacsconfig.html
-    ;; (defun ybk/set-cursor ()
-    ;;   ;; (set-cursor-color "red") ;; set cursor color to red
-    ;;   ;; (set-face-attribute 'region nil :background "red" :foreground "black")
-    ;;   ;; (set-face-background 'hl-line "gray30")
-    ;;   (set-face-foreground 'highlight nil)
-    ;;   (set-face-underline 'hl-line nil)
-    ;;   (cond
-    ;;    (buffer-read-only
-    ;;     (setq cursor-type 'box))
-    ;;    (t
-    ;;     (setq cursor-type 'bar)))
-    ;;   ;; ;; red cursor for overwrite mode
-    ;;   ;; (when overwrite-mode
-    ;;   ;;   (set-cursor-color "red"))
-    ;;   )
-    ;; (ybk/set-cursor)
-
-    ;; ;; run after every command
-    ;; (add-hook 'post-command-hook 'ybk/set-cursor)
-
-
-    ;; Tukar warna untuk highlight
-    ;; Warna standard
-    (eval-after-load 'hl-line
-      '(set-face-background 'hl-line "grey15")) ;default hl #271f87 #0a00a0
-
-    (defun ybk/hl-line-terang()
-      "Tukar highlight ke warna cerah."
-      (interactive)
-      (eval-after-load 'hl-line
-        '(set-face-background 'hl-line "#ede4a6")))
-
-    (defun ybk/hl-line-gelap()
-      "Tukar highlight ke warna gelap"
-      (interactive)
-      (eval-after-load 'hl-line
-        '(set-face-background 'hl-line "grey15")))
-
-    (defun ybk/hl-line-biru()
-      "Tukar highlight ke warna gelap"
-      (interactive)
-      (eval-after-load 'hl-line
-        '(set-face-background 'hl-line "#271f87")))
-
-    ;; Buka fail ybk-init.org
-    (defhydra hydra-hl-line (:color teal)
-      "Warna hl-line"
-      ("t" ybk/hl-line-terang  "terang")
-      ("g" ybk/hl-line-gelap "gelap")
-      ("b" ybk/hl-line-biru "biru")
-
-      ("q" nil "quit" :color blue))
-
-    (bind-key "l" #'hydra-hl-line/body 'ybk/map)
-    ;;(key-chord-define-global "gh" #'hydra-hl-line/body)
-    )
-#+END_SRC
-
 ** Powerline
 Untuk modeline
 *** Caranya
 Beza warna bila buffer aktif atau tidak
 
+Aktifkan sekiranya pakai =moe-theme=
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package powerline
+    :ensure t)
+#+END_SRC
+
+
+Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package powerline
     :ensure t
     :init (setq powerline-default-separator 'wave) ;contour, butt, wave, arrow, arrow-fade etc
     :config (progn
-              (require 'powerline)
               (add-hook 'desktop-after-read-hook 'powerline-reset)
 
               ;; yus-theme
@@ -836,6 +695,199 @@ Beza warna bila buffer aktif atau tidak
               (ml-yus-theme)
 
               ))
+#+END_SRC
+
+** Tema utk paparan
+Utk tukar tema paparan yang lain tekan =yy-t=. Dua themes boleh di pakai:
+
+1. Sanityinc-tomorrow
+2. Moe-theme
+
+Berbagai tema tetapi bermasalah sekiranya menukar tema di =Org-mode=. Untuk
+menghilangkan tanda * ditepi harus guna capture =C-c c=. Tidak terbaik tetapi belum
+jumpa cara lain.
+
+*** Sanityinc-tomorrow
+=color-theme-sanityinc-tomorrow= Tidak ada masalah tukar tema di =Org-mode=:
+- blue
+- bright
+- eighties
+- night
+- day
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package color-theme-sanityinc-tomorrow
+    :ensure t
+    ;; :bind (:map ybk/map
+    ;;             ("t" . cycle-my-theme))
+    :config
+    ;; utk tukar tema f10-t
+    (setq my-themes '(
+                      sanityinc-tomorrow-eighties
+                      ;; sanityinc-tomorrow-bright
+                      sanityinc-tomorrow-night
+                      sanityinc-tomorrow-blue
+                      sanityinc-tomorrow-day
+                      ))
+
+
+    (setq my-cur-theme nil)
+    (defun cycle-my-theme ()
+      "Cycle through a list of themes, my-themes"
+      (interactive)
+      (when my-cur-theme
+        (disable-theme my-cur-theme)
+        (setq my-themes (append my-themes (list my-cur-theme))))
+      (setq my-cur-theme (pop my-themes))
+      (load-theme my-cur-theme :no-confirm)
+      (message "Tema dipakai: %s" my-cur-theme))
+
+    ;; Switch to the first theme in the list above
+    (cycle-my-theme)
+
+    ;; Bind this to C-9
+    ;;(global-set-key (kbd "C-9") 'cycle-my-theme)
+    (bind-key "t" #'cycle-my-theme 'ybk/map)
+    )
+
+#+END_SRC
+*** Moe-theme
+Untuk aturcara boleh baca di [[https://github.com/kuanyui/moe-theme.el][GitHub]]
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package moe-theme
+    :ensure t
+    :pin melpa
+    :config
+    ;; If too yellow background
+    (setq moe-light-pure-white-background-in-terminal t)
+
+    ;; tukar tema
+    (setq my-themes '(moe-dark
+                      moe-light))
+
+    (setq my-cur-theme nil)
+    (defun cycle-my-theme ()
+      "Cycle through a list of themes, my-themes"
+      (interactive)
+      (when my-cur-theme
+        (disable-theme my-cur-theme)
+        (setq my-themes (append my-themes (list my-cur-theme))))
+      (setq my-cur-theme (pop my-themes))
+      (load-theme my-cur-theme :no-confirm)
+      (message "Tema dipakai: %s" my-cur-theme))
+
+    ;; Switch to the first theme in the list above
+    (cycle-my-theme)
+
+    ;; Bind this to C-9
+    ;;(global-set-key (kbd "C-9") 'cycle-my-theme)
+    (bind-key "t" #'cycle-my-theme 'ybk/map)
+
+    ;; warna utk mode-line
+    (moe-theme-set-color 'orange) ;warna lain blue,red,purple,green,cyan,magenta
+
+    ;; pakai powerline mode selepas diaktifkan sebelum pasang moe-theme
+    (powerline-moe-theme))
+#+END_SRC
+
+** Highlight line
+Bila mahu aktifkan pakai =yy-g= dari *ybk/map*
+*** TODO hl-line+ beri error catch
+Masalah utk load =hl-line+= dan memberikan error
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package hl-line+
+    :ensure hl-line
+    :load-path "~/Dropbox/lisp/elisp/"
+    :config
+    (toggle-hl-line-when-idle 1) ; Highlight line only when idle
+    ;; Number of seconds of idle time after when the line should be highlighted
+    (setq hl-line-idle-interval 5)
+    ;; Number of seconds for `hl-line-flash' to highlight the line
+    (setq hl-line-flash-show-period 3)
+    )
+
+#+END_SRC
+*** Current line
+Highlight current line.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package hl-line
+    :ensure t
+    :config
+    ;; ;; enable globally
+    ;; (global-hl-line-mode 1)
+
+    ;;highlight hanya aktif window
+    (setq hl-line-sticky-flag nil)
+
+    (use-package hl-spotlight
+      :load-path "~/Dropbox/lisp/elisp/"
+      :config
+      (use-package centered-cursor-mode
+        :ensure t)
+      ;;cursor mula ditengah tapi perlukan centered-cursor-mode
+      (setq hl-spotlight-keep-centered-flag 1)
+      )
+
+    ;; ;; Tukar Cursor
+    ;; ;; Rujukan di https://ogbe.net/emacsconfig.html
+    ;; (defun ybk/set-cursor ()
+    ;;   ;; (set-cursor-color "red") ;; set cursor color to red
+    ;;   ;; (set-face-attribute 'region nil :background "red" :foreground "black")
+    ;;   ;; (set-face-background 'hl-line "gray30")
+    ;;   (set-face-foreground 'highlight nil)
+    ;;   (set-face-underline 'hl-line nil)
+    ;;   (cond
+    ;;    (buffer-read-only
+    ;;     (setq cursor-type 'box))
+    ;;    (t
+    ;;     (setq cursor-type 'bar)))
+    ;;   ;; ;; red cursor for overwrite mode
+    ;;   ;; (when overwrite-mode
+    ;;   ;;   (set-cursor-color "red"))
+    ;;   )
+    ;; (ybk/set-cursor)
+
+    ;; ;; run after every command
+    ;; (add-hook 'post-command-hook 'ybk/set-cursor)
+
+
+    ;; Tukar warna untuk highlight
+    ;; Warna standard
+    (eval-after-load 'hl-line
+      '(set-face-background 'hl-line "grey15")) ;default hl #271f87 #0a00a0
+
+    (defun ybk/hl-line-terang()
+      "Tukar highlight ke warna cerah."
+      (interactive)
+      (eval-after-load 'hl-line
+        '(set-face-background 'hl-line "#ede4a6")))
+
+    (defun ybk/hl-line-gelap()
+      "Tukar highlight ke warna gelap"
+      (interactive)
+      (eval-after-load 'hl-line
+        '(set-face-background 'hl-line "grey15")))
+
+    (defun ybk/hl-line-biru()
+      "Tukar highlight ke warna gelap"
+      (interactive)
+      (eval-after-load 'hl-line
+        '(set-face-background 'hl-line "#271f87")))
+
+    ;; Buka fail ybk-init.org
+    (defhydra hydra-hl-line (:color teal)
+      "Warna hl-line"
+      ("t" ybk/hl-line-terang  "terang")
+      ("g" ybk/hl-line-gelap "gelap")
+      ("b" ybk/hl-line-biru "biru")
+
+      ("q" nil "quit" :color blue))
+
+    (bind-key "l" #'hydra-hl-line/body 'ybk/map)
+    ;;(key-chord-define-global "gh" #'hydra-hl-line/body)
+    )
 #+END_SRC
 
 ** Jam dan batteri
@@ -1989,7 +2041,7 @@ Dimatikan sebab masalah dengan bookmark+ .. boleh load tapi lambat
     :ensure t
     :init
     ;; pasang semua fail-fail el
-    (add-to-list 'load-path "~/Dropbox/customize/lisp/bookmark+/")
+    (add-to-list 'load-path "~/Dropbox/lisp/elisp/bookmark+/")
 
     (setq bookmark-default-file (concat ybk/emacs-cache "bookmarks")
           bookmark-save-flag 1) ;auto save
@@ -2000,7 +2052,7 @@ Dimatikan sebab masalah dengan bookmark+ .. boleh load tapi lambat
                 ("l" . bookmark-bmenu-list))
     :config
     (use-package bookmark+
-      :load-path "~/Dropbox/customize/lisp/"
+      :load-path "~/Dropbox/lisp/elisp/"
       )
 
     ;; http://blog.binchen.org/posts/hello-ivy-mode-bye-helm.html
@@ -5314,14 +5366,14 @@ dan masukkan =(modeline-notify t)= di list. Boleh klik di modeline utk buka emai
 
 #+BEGIN_SRC emacs-lisp
   (use-package gnus-notify
-    :load-path "~/Dropbox/lisp/")
+    :load-path "~/Dropbox/lisp/elisp/")
 #+END_SRC
 
 Notify+ untuk notification di desktop. Tapi ada error ~gnus-group-get-new-news~
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package gnus-notify+
-    :load-path "~/Dropbox/lisp/"
+    :load-path "~/Dropbox/lisp/elisp/"
     :config
     (add-hook 'gnus-summary-exit-hook 'gnus-notify+)
     (add-hook 'gnus-group-catchup-group-hook 'gnus-notify+)
