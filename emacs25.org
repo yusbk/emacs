@@ -525,10 +525,10 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
               (add-hook 'desktop-after-read-hook 'powerline-reset)
 
               ;; yus-theme
-              (defface yus-aktif1 '((t (:background "#c7e" :inherit mode-line))) ;#a2e #2a5289 #4c52ee #179 #cfdfff #00d9ff #19a
+              (defface yus-aktif1 '((t (:background "#a2e" :inherit mode-line))) ;#a2e #2a5289 #4c52ee #179 #cfdfff #00d9ff #19a
                 "Powerline muka 1."
                 :group 'powerline)
-              (defface yus-aktif2 '((t (:background "purple" :inherit mode-line))) ;#2c5197 #a25ec3 #a19 #8b008b #369 #3a11ff #28a
+              (defface yus-aktif2 '((t (:background "#a669ef" :inherit mode-line))) ;#2c5197 #a25ec3 #a19 #8b008b #369 #3a11ff #28a #a669ef
                 "Powerline muka 2."
                 :group 'powerline)
               (defface yus-tidak-aktif1 '((t (:background "grey40" :inherit mode-line-inactive))) ;#1a5aee #35f #a25fff
