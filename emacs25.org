@@ -2009,6 +2009,7 @@ Penerangan boleh baca di [[https://www.emacswiki.org/emacs/PredictiveAbbreviatio
 #+BEGIN_SRC emacs-lisp
   (use-package pabbrev
     :ensure t
+    :diminish pabbrev-mode
     :init
     (setq pabbrev-idle-timer-verbose nil
           pabbrev-read-only-error nil
@@ -5705,6 +5706,7 @@ Menanda secara langsung pertukaran di dokument. Rujuk [[https://github.com/nonse
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter+
     :ensure t
+    :diminish git-gutter+-mode
     :init
     (global-git-gutter+-mode)
     :bind (("s-g" . git-gutter+-mode)
