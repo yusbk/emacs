@@ -1072,7 +1072,6 @@ Undo-tree
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
     :ensure t
-    :diminish (undo-tree-mode . " ")
     :bind (("C-x u" . undo-tree-visualize)
            ("C-S-z" . redo))
     :config
@@ -1115,7 +1114,8 @@ Undo-tree
 
     ;; Aktifkan
     (global-undo-tree-mode 1)
-    )
+
+    :diminish (undo-tree-mode . " "))
 #+END_SRC
 
 * Which key
@@ -1126,7 +1126,6 @@ ditunjukkan dipelbagai mukasurat, guna =C-h= untuk pilih mukasurat seterusnya at
   (use-package which-key
     :ensure t
     :defer 4
-    :diminish which-key-mode
     :config
     ;;aktifkan
     (which-key-mode)
@@ -1141,7 +1140,8 @@ ditunjukkan dipelbagai mukasurat, guna =C-h= untuk pilih mukasurat seterusnya at
     ;;Bezakan kekunci local dan global
     (set-face-attribute 'which-key-command-description-face nil :inherit nil) ;buang warna
     (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold) ;local bold
-    )
+
+    :diminish which-key-mode)
 #+END_SRC
 
 * Crux
@@ -1427,7 +1427,6 @@ Fungsi berguna bila di minibuffer =M-o=
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
     :ensure t
-    :diminish ivy-mode
     :bind (("C-b" . ivy-switch-buffer)
            ("C-d" . ivy-dired-recent-dirs)
            ("C-r" . ivy-resume) ;sambung cari bila pakai C-s "swiper"
@@ -1504,8 +1503,7 @@ Fungsi berguna bila di minibuffer =M-o=
     (ivy-add-actions t
                      '(("f" (lambda (x) (with-ivy-window (insert (file-relative-name x)))) "file name")))
 
-    )
-
+    :diminish ivy-mode)
 #+END_SRC
 ** Ivy-hydra
 #+BEGIN_SRC emacs-lisp
@@ -1573,11 +1571,11 @@ mula dengan cari =C-s= dan kemudian =M-q= utk perkataan yang ingin ditukarkan. K
 #+BEGIN_SRC emacs-lisp
   (use-package swiper
     :ensure t
-    :diminish ivy-mode
     :bind (("C-s" . swiper)
            ;; ("C-r" . swiper) ;C-r pakai utk ivy-resume
            ("C-c m" . woman) ;manual
-           ("C-c u" . swiper-all)))
+           ("C-c u" . swiper-all))
+    :diminish ivy-mode)
 #+END_SRC
 
 * Avy-goto
@@ -1658,8 +1656,6 @@ tunggu 1 saat. Untuk masalah di =eshall= bila pakai estrisk (*) boleh pakai quot
     :ensure t
     :bind (:map ybk/prog-map
                 ("m" . company-begin-backend))
-    :diminish
-    (company-mode . " ")
     :init
     (add-hook 'after-init-hook 'global-company-mode) ;aktifkan disemua buffer
     :config
@@ -1718,7 +1714,9 @@ tunggu 1 saat. Untuk masalah di =eshall= bila pakai estrisk (*) boleh pakai quot
                ("C-p" . company-select-previous)
                ("C-d" . company-show-doc-buffer)
                ("<tab>" . company-complete))
-    )
+    :diminish
+    (company-mode . " "))
+
 #+END_SRC
 ** Company go
 #+BEGIN_SRC emacs-lisp
@@ -1865,7 +1863,6 @@ Pasangan utk parentheses
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
     :ensure t
-    :diminish (smartparens-mode . "")
     :demand t
     :bind (:map ybk/prog-map
                 ("a" . sp-beginning-of-sexp)
@@ -1887,7 +1884,9 @@ Pasangan utk parentheses
 
     ;;(smartparens-global-strict-mode)
     (show-smartparens-global-mode)
-    (smartparens-global-mode))
+    (smartparens-global-mode)
+
+    :diminish (smartparens-mode . ""))
 
 #+END_SRC
 ** Rainbow-delimited
@@ -1954,14 +1953,15 @@ represent as their background.
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-mode
     :ensure t
-    :diminish (rainbow-mode . "")
     :config
     (add-hook 'prog-mode-hook #'rainbow-mode)
     (add-hook 'inferior-ess-mode-hook #'rainbow-mode)
     (add-hook 'ess-mode-hook #'rainbow-mode)
     (add-hook 'markdown-mode-hook #'rainbow-mode)
     (add-hook 'LaTeX-mode-hook #'rainbow-mode)
-    (add-hook 'text-mode-hook #'rainbow-mode))
+    (add-hook 'text-mode-hook #'rainbow-mode)
+
+    :diminish (rainbow-mode . ""))
 #+END_SRC
 
 * Singkatan/Abbrev
@@ -2182,7 +2182,6 @@ Aktivkan =Ivy= dengan =Projectile=.
   (use-package projectile
     :ensure t
     :defer 1
-    :diminish (projectile-mode . " ")
     :bind (:map ybk/prog-map
                 ;; find project
                 ("p" . counsel-switch-project) ;boleh tukar project walaupun tidak di projectile buffer
@@ -2296,7 +2295,8 @@ Aktivkan =Ivy= dengan =Projectile=.
                           ("s" (lambda (a) (setq default-directory a) (counsel-git-grep)) "git grep"))
                 :caller 'counsel-switch-project))
     (bind-key* "C-c p p" 'counsel-switch-project)
-    )
+
+    :diminish (projectile-mode . " "))
 
 #+END_SRC
 
@@ -4155,12 +4155,13 @@ apt-get install libxml2-dev libxslt-dev
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck ; checks for style and syntax
     :ensure t
-    :diminish (flycheck-mode . " ")
     :config
     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
     ;; I don't care if code is commented out in R:
     (setq flycheck-lintr-linters "with_defaults(commented_code_linter = NULL)")
-    (add-hook 'after-init-hook #'global-flycheck-mode))
+    (add-hook 'after-init-hook #'global-flycheck-mode)
+
+    :diminish (flycheck-mode . " "))
 #+END_SRC
 ** Electric operator
 Electric operator will turn ~a=10*5+2~ into ~a = 10 * 5 + 2~, so let's enable it for R:
@@ -5817,9 +5818,9 @@ https://github.com/jabranham/emacs/blob/master/emacs.org
 #+BEGIN_SRC emacs-lisp
   (use-package ws-butler
     :ensure t
-    :diminish (ws-butler-mode . "")
     :config
-    (ws-butler-global-mode))
+    (ws-butler-global-mode)
+    :diminish (ws-butler-mode . ""))
 #+END_SRC
 ** smart-newline
 Guna =RET= untuk newline bila buat kode

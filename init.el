@@ -33,12 +33,14 @@
 
 (eval-when-compile
   (require 'use-package))
+;; (require 'diminish)
+;; (require 'bind-key)
 
-;; diminish
 (use-package diminish
   :ensure t)
-;;(require 'diminish)
-(require 'bind-key)
+
+(use-package bind-key
+  :ensure t)
 
 ;; load up all literate org-mode files in this directory
 (require 'org)
