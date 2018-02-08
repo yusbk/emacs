@@ -1965,31 +1965,63 @@ represent as their background.
 #+END_SRC
 
 * Singkatan/Abbrev
+** Abbreviation
 Sila rujuk [[https://www.emacswiki.org/emacs/AbbrevMode][Abbrev Mode]] untuk penerangan lanjut.  Contoh untuk guna singkatan 'ns' ke
 'Nama Saya', taip 'ns' kemudian =C-x a i g=, kemudian 'Nama Saya'. Bila =Abbrev Mode=
 aktiv hanya taip 'ns' untuk dapatkan 'Nama Saya'
 
 #+BEGIN_SRC emacs-lisp
-  ;; where to read abbrev def from
-  (setq abbrev-file-name (concat ybk/emacs-cache "abbrev_defs"))
+  (use-package abbrev
+    :diminish abbrev-mode
+    :init
+    ;; where to read abbrev def from
+    (setq abbrev-file-name (concat ybk/emacs-cache "abbrev_defs"))
 
-  ;; (setq abbrev-file-name                    ;; tell emacs where to read abbrev
-  ;;       "~/.emacs.d/.cache/abbrev_defs")    ;; definitions from...
+    (if (file-exists-p abbrev-file-name)
+        (quietly-read-abbrev-file))
 
-  ;;== Save abbrev bila save fail - akan ditanya sebelum abbrev disimpan
-  (setq save-abbrevs t)
+    :hook ((org-mode
+            ess-mode
+            emacs-lisp-mode
+            text-mode). abbrev-mode)
 
-  ;;== Tanpa error bila tiada fail Abbrev
-  (if (file-exists-p abbrev-file-name)
-      (quietly-read-abbrev-file))
+    ;; ;;== Hanya aktivkan abbrev mode di mode tertentu - sama seperti :hook
+    ;; (dolist (hook '(org-mode-hook
+    ;;                 ess-mode-hook
+    ;;                 emacs-lisp-mode-hook
+    ;;                 text-mode-hook))
+    ;;   (add-hook hook (lambda () (abbrev-mode 1))))
 
-  ;;== Hanya aktivkan abbrev mode di mode tertentu
-  (dolist (hook '(org-mode-hook
-                  ess-mode-hook
-                  emacs-lisp-mode-hook
-                  text-mode-hook))
-    (add-hook hook (lambda () (abbrev-mode 1))))
+    ;; (setq abbrev-file-name                    ;; tell emacs where to read abbrev
+    ;;       "~/.emacs.d/.cache/abbrev_defs")    ;; definitions from...
+
+    :config
+    ;;== Save abbrev bila save fail - akan ditanya sebelum abbrev disimpan
+    ;; (setq save-abbrevs t)
+    (setq save-abbrevs 'silently)
+
+    (setq-default abbrev-mode t)
+    )
 #+END_SRC
+
+** Predictive abbreviation
+Penerangan boleh baca di [[https://www.emacswiki.org/emacs/PredictiveAbbreviation][Wiki]]
+#+BEGIN_SRC emacs-lisp
+  (use-package pabbrev
+    :ensure t
+    :init
+    (setq pabbrev-idle-timer-verbose nil
+          pabbrev-read-only-error nil
+          pabbrev-scavenge-on-large-move nil)
+    :config
+    (put 'yas-expand 'pabbrev-expand-after-command t)
+    (global-pabbrev-mode)
+    ;; Fix for pabbrev not working in org mode
+    ;; http://lists.gnu.org/archive/html/emacs-orgmode/2016-02/msg00311.html
+    (define-key pabbrev-mode-map [tab] 'pabbrev-expand-maybe)
+    (add-hook 'text-mode-hook (lambda () (pabbrev-mode))))
+#+END_SRC
+
 * Register dan bookmark
 
 | Kekunci | Fungsi            |
