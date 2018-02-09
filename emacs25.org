@@ -4725,6 +4725,17 @@ AuCTeX is better than the built in tex mode; let's use it. It's good out of the
 box, but I like to use latexmk so that I don't have to remember to rerun the file X
 times to get references right.
 
+Untuk memproses fail =.Rnw= atau =.Rmd= ke PDF harus memasang *TeX-Live*. Cara ini
+ialah untuk memasang TeX Live 2016 di Ubuntu 16.04. Diambil dari [[http://chrisstrelioff.ws/sandbox/2016/10/31/install_tex_live_2016_on_ubuntu_16_04.html][Chris blog]] dan rujuk
+blog sekiranya ada masalah terutama bila pasang versi TeX Live sebelumnya.
+
+#+BEGIN_EXAMPLE
+  $ sudo add-apt-repository ppa:jonathonf/texlive-2016
+  $ sudo apt update
+  $ sudo apt install texlive-full
+#+END_EXAMPLE
+
+
 Pastikan fail-fail ini dipasang sebelum melarikan fail =.Rnw= di *ESS*
 
 #+BEGIN_EXAMPLE
