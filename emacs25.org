@@ -124,16 +124,19 @@ yy
 zb zd zf zg zk zm zp zs zw zx
 
 * Keymaps
-** Personal keymap [F6]
-Setup a personal keymap. I'll bind various things to this later on:
+Utk keluar keymap
 #+BEGIN_SRC emacs-lisp
-  (bind-keys :prefix "<f6>"
-             :prefix-map ybk/map)
-
   (defun keluar ()
     "Keluar dari fungsi."
     (interactive)
     (setq quit t))
+#+END_SRC
+** Personal keymap [F6]
+Setup a personal keymap. I'll bind various things to this later on:
+#+BEGIN_SRC emacs-lisp :tangle no
+  (bind-keys :prefix "<f6>"
+             :prefix-map ybk/map)
+
   (bind-key "q" #'keluar 'ybk/map)
   ;;(bind-key "q" #'quit 'ybk/map)
 #+END_SRC
@@ -215,7 +218,7 @@ It's nice to have a function to find this file quickly. Here's one:
     (interactive)
     (find-file (concat user-emacs-directory "emacs25.org")))
 
-  (bind-key "y" #'ybk/emacs-file 'ybk/map)
+  ;; (bind-key "y" #'ybk/emacs-file 'ybk/map)
 #+END_SRC
 * Other settings
 ** Encypting file
@@ -251,8 +254,8 @@ Ini utk menyelesaikan masalah dengan =lexical-let= di ~auto-lang~
 #+END_SRC
 ** Exit
 Save buffer and exit
-#+BEGIN_SRC emacs-lisp
-  (bind-key "x" #'save-buffers-kill-emacs 'ybk/map )
+#+BEGIN_SRC emacs-lisp :tangle no
+  (bind-key "9" #'save-buffers-kill-emacs 'ybk/map )
 #+END_SRC
 ** Scratch
 Untuk buka ~scratch~ boleh dicapai melalui [[*General keymap][General keymap]] atau [[*Personal keymap %5BF10%5D][Personal keymap]]
@@ -463,8 +466,8 @@ Pakai mouse =C-Scroll=
 #+END_SRC
 
 ** Menu bar
-Capaian ke menu bar. Biasanya hany pakai ~f10~ tetapi ~f10~ dipakai untuk =ybk/map=
-#+BEGIN_SRC emacs-lisp
+Capaian ke menu bar. Biasanya hany pakai ~f6~ tetapi ~f6~ dipakai untuk =ybk/map=
+#+BEGIN_SRC emacs-lisp :tangle no
   (bind-key "m" #'menu-bar-open 'ybk/map)
 #+END_SRC
 ** Line number
@@ -745,8 +748,6 @@ jumpa cara lain.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package color-theme-sanityinc-tomorrow
     :ensure t
-    ;; :bind (:map ybk/map
-    ;;             ("t" . cycle-my-theme))
     :config
     ;; utk tukar tema f10-t
     (setq my-themes '(
@@ -773,10 +774,9 @@ jumpa cara lain.
     (cycle-my-theme)
 
     ;; Bind this to C-9
-    ;;(global-set-key (kbd "C-9") 'cycle-my-theme)
-    (bind-key "t" #'cycle-my-theme 'ybk/map)
+    (global-set-key (kbd "C-9") 'cycle-my-theme)
+    ;; (bind-key "t" #'cycle-my-theme 'ybk/map)
     )
-
 #+END_SRC
 *** Moe-theme
 Untuk aturcara boleh baca di [[https://github.com/kuanyui/moe-theme.el][GitHub]]
@@ -808,8 +808,8 @@ Untuk aturcara boleh baca di [[https://github.com/kuanyui/moe-theme.el][GitHub]]
     (cycle-my-theme)
 
     ;; Bind this to C-9
-    ;;(global-set-key (kbd "C-9") 'cycle-my-theme)
-    (bind-key "t" #'cycle-my-theme 'ybk/map)
+    (global-set-key (kbd "C-9") 'cycle-my-theme)
+    ;;(bind-key "t" #'cycle-my-theme 'ybk/map)
 
     ;; warna utk mode-line
     (moe-theme-set-color 'orange) ;warna lain blue,red,purple,green,cyan,magenta
@@ -912,7 +912,7 @@ Highlight current line.
 
       ("q" nil "quit" :color blue))
 
-    (bind-key "l" #'hydra-hl-line/body 'ybk/map)
+    ;; (bind-key "l" #'hydra-hl-line/body 'ybk/map)
     ;;(key-chord-define-global "gh" #'hydra-hl-line/body)
     )
 #+END_SRC
@@ -1073,16 +1073,6 @@ the ~backups~ directory.
         )
   (setq vc-make-backup-files t) ;;  backup versioned files, which Emacs does not do by default
 #+END_SRC
-** Backup-walker
-Untuk menunjukkan =diff= file semasa dan file sebelumnya. Boleh guna =blame=
-#+BEGIN_SRC emacs-lisp
-  (use-package backup-walker
-    :ensure t
-    :bind (("C-c w s" . backup-walker-start)
-           (:map ybk/map
-                 ("f" . backup-walker-start))
-           ))
-#+END_SRC
 * Undo
 =C-z= as undo, not minimize emacs
 #+BEGIN_SRC emacs-lisp
@@ -1176,10 +1166,10 @@ Kompilasi pelbagi fungsi untuk Emacs. [[https://github.com/bbatsov/crux#keybindi
           ("C-<backspace>" . crux-kill-line-backwards)
           ("C-c r" . crux-rename-file-and-buffer) ;rename current buffer
           ("C-c k" . crux-kill-other-buffers) ;kill all open buffers but not this
-          :map ybk/map
-          ("w" . crux-swap-windows)
+          ;; :map ybk/map
+          ;; ("w" . crux-swap-windows)
           ;; ([?\\] . crux-swap-windows) ;swap between 2 windows
-          ("k" . crux-delete-file-and-buffer)
+          ;; ("k" . crux-delete-file-and-buffer)
           ;; :map ybk/prog-map
           ;; ("b" . crux-cleanup-buffer-or-region) ;Whitespace-cleanup
           )
@@ -2731,7 +2721,7 @@ Tunjukkan kandungan sebagai ~sparse tree~ cth TODO, SCHEDULE, DEADLINE dll. Asal
 #+END_SRC
 
 *** Navigate headings
-Bind =F6-h-b= and =F6-h-d= to navigate heading more easily (these are bound to =C-c C-p/n=
+Bind =F10-h-b= and =F10-h-d= to navigate heading more easily (these are bound to =C-c C-p/n=
 by default):
 #+BEGIN_SRC emacs-lisp
   (bind-keys :map ybk/org-map
@@ -2892,7 +2882,7 @@ Shortcut latex-to-pdf-open dan latex-save-pdf di ambil di [[https://stackoverflo
    'org-mode-hook
    (lambda()
      (define-key org-mode-map
-       (kbd "<f6> x") 'org-export-pdf-open)))
+       (kbd "<f5> x") 'org-export-pdf-open)))
 #+END_SRC
 
 Proses ke PDF bila save
@@ -2906,7 +2896,7 @@ Proses ke PDF bila save
    'org-mode-hook
    (lambda()
      (define-key org-mode-map
-       (kbd "<f6> z") 'org-save-as-pdf)))
+       (kbd "<f5> z") 'org-save-as-pdf)))
 #+END_SRC
 
 *** others
@@ -3063,7 +3053,7 @@ Bole lihat di [[https://www.youtube.com/watch?v=2t925KRBbFc][video]]
     :ensure t
     :demand t ; make sure this gets loaded since I use it all the time
     :bind*
-    (("<f6> i" . org-ref-ivy-insert-cite-link)
+    (("<f5> i" . org-ref-ivy-insert-cite-link)
      :map bibtex-mode-map
      ;;utk gantikan singkatan nama journal seperti di add-to-journal-list
      ("C-c C-c" . org-ref-clean-bibtex-entry)
@@ -4974,9 +4964,7 @@ Untuk tambah topik baru di =bookmark-jump=:
   (use-package elfeed
     :ensure t
     :bind
-    (:map ybk/map
-          ("r" . bjm/elfeed-load-db-and-open)
-          :map elfeed-search-mode-map
+    (:map elfeed-search-mode-map
           ("a" . bjm/elfeed-show-all)
           ("s" . bjm/elfeed-show-stats)
           ("n" . bjm/elfeed-show-norge)
@@ -5490,8 +5478,6 @@ Untuk navigasi di directory. Rujukkan di [[https://github.com/jaypei/emacs-neotr
   (use-package neotree
     :ensure t
     :defer 1
-    :bind (:map ybk/map
-                ("n" . neotree-toggle))
     :init
     (progn
       (setq-default neo-smart-open t) ;  every time when the neotree window is
@@ -5579,7 +5565,8 @@ Untuk navigasi di directory. Rujukkan di [[https://github.com/jaypei/emacs-neotr
 
 
 #+END_SRC
-* Ediff
+* Tunjuk beza (ediff)
+** Ediff
 Untuk melihat perbezaan antara dua fail menggunakan =ediff=. Aturcara ini diambil dari =[[https://oremacs.com/2015/01/17/setting-up-ediff/][Oremacs]]=
 
 #+BEGIN_SRC emacs-lisp
@@ -5605,6 +5592,13 @@ Untuk melihat perbezaan antara dua fail menggunakan =ediff=. Aturcara ini diambi
   (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
 #+END_SRC
 
+** Backup-walker
+Untuk menunjukkan =diff= file semasa dan file sebelumnya. Boleh guna =blame=
+#+BEGIN_SRC emacs-lisp
+  (use-package backup-walker
+    :ensure t
+    :bind ("C-c w s" . backup-walker-start))
+#+END_SRC
 * Version control
 
 | Kekunci | Fungsi           |
@@ -5822,9 +5816,6 @@ lihat cuaca tempat lain boleh pakai =M-x weather-metno-forecast-location= atau =
 #+BEGIN_SRC emacs-lisp
   (use-package weather-metno
     :ensure t
-    :bind (:map ybk/map
-                ("c" . weather-metno-forecast)
-                ("b" . weather-metno-update))
     :config
     (setq weather-metno-location-name "Oslo, Norge"
           weather-metno-location-latitude 59
@@ -5950,8 +5941,6 @@ Stack Exchange mode for Emacs from [[https://github.com/vermiculus/sx.el][GitHub
 #+BEGIN_SRC emacs-lisp
   (use-package sx
     :ensure t
-    :bind (:map ybk/map
-                ("s" . hydra-stackExchange/body))
     :init
     (defhydra hydra-stackExchange (:color blue)
       "Stack Exchange"
@@ -6022,8 +6011,6 @@ Untuk dengar lagu-lagu diambil dari [[https://www.gnu.org/software/emms/index.ht
 #+BEGIN_SRC emacs-lisp
   (use-package emms-setup
     :load-path "~/Dropbox/lisp/emms/lisp/"
-    :bind (:map ybk/map
-                ("d". emms))
     :config
     (emms-standard)
     (emms-default-players)
@@ -6046,9 +6033,9 @@ XF86Close dll menandakan button ~LOCK~ diaktifkan.
 ** General keymap [yy]
 Hydra untuk fungsi awam
 #+BEGIN_SRC emacs-lisp
-  (defhydra ybk-keymap-awam (:hint nil)
+  (defhydra hydra-ybk-general (:hint nil)
     "
-     ^General keymap [F10] or yy^
+     ^General keymap [F6] or yy^
      ^^^-------------------------------
      _x_: save buffers & exit _k_: delete file/buffer _d_: musics         _c_: weather         _y_: ybk-emacs       _h_: heading
      _w_: swap-windows        _n_: file explore       _r_: rss            _b_: weather update  _g_: highlight       _t_: tukar theme
@@ -6077,11 +6064,10 @@ Hydra untuk fungsi awam
 
     ("h" worf-goto)
 
-    ("q" nil "KELUAR")
-    )
+    ("q" nil "KELUAR"))
 
-  (key-chord-define-global "yy" #'ybk-keymap-awam/body)
-  ;; (bind-key "<f12>" #'ybk-keymap-awam/body)
+  (key-chord-define-global "yy" #'hydra-ybk-general/body)
+  (global-set-key (kbd "<f6>") 'hydra-ybk-general/body)
 #+END_SRC
 ** Move keymap [jj]
 Hydra move keymap seperti =F2=. Singkatan =j= sebagai *Jalan*
