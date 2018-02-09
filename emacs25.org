@@ -421,6 +421,18 @@ Tidak blink
     (global-aggressive-indent-mode)
     )
 #+END_SRC
+** Find-file
+Cari fail guna =C-x C-f= dan buat folder sekiranya belum tersedia seperti guna =mkdir
+-p= di terminal
+
+#+BEGIN_SRC emacs-lisp
+  (defadvice find-file (before make-directory-maybe (filename &optional wildcards) activate)
+    "Create parent directory if not exists while visiting file."
+    (unless (file-exists-p filename)
+      (let ((dir (file-name-directory filename)))
+        (unless (file-exists-p dir)
+          (make-directory dir)))))
+#+END_SRC
 
 ** Zoom in/out
 *** Zoom
@@ -3930,7 +3942,6 @@ Shortcut =C-c C-x p= (org-set-property) dan utk padam C-c C-c d (org-delete-prop
 
 * ESS with R
 Aturcara dan ESS snippet
-
 ** Aturcara ESS
 Untuk guna R. Kekunci yang berguna antaranya:
 - =C-c C-d=   Pelbagai aturcara lain
