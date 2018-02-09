@@ -1678,7 +1678,7 @@ tunggu 1 saat. Untuk masalah di =eshall= bila pakai estrisk (*) boleh pakai quot
           company-show-numbers t                ; Easy navigation to candidates with M-<n>
           company-idle-delay .2                 ; delay before autocomplete popup
           company-tooltip-limit 6               ; list to show
-          company-minimum-prefix-length 2       ; 2 prefix sebelum tunjukkan cadangan (default)
+          company-minimum-prefix-length 3       ; 3 prefix sebelum tunjukkan cadangan (default)
           company-abort-manual-when-too-short t ; tanpa company sekiranya prefix pendek dari 'minimum-prefix-length'
           )
 
@@ -2022,17 +2022,34 @@ Penerangan boleh baca di [[https://www.emacswiki.org/emacs/PredictiveAbbreviatio
   (use-package pabbrev
     :ensure t
     :diminish pabbrev-mode
+    :hook ((org-mode
+            ess-mode
+            emacs-lisp-mode
+            text-mode). pabbrev-mode)
+
     :init
     (setq pabbrev-idle-timer-verbose nil
           pabbrev-read-only-error nil
           pabbrev-scavenge-on-large-move nil)
     :config
     (put 'yas-expand 'pabbrev-expand-after-command t)
+
+    ;;aktifkan pabbrev
     (global-pabbrev-mode)
+
     ;; Fix for pabbrev not working in org mode
     ;; http://lists.gnu.org/archive/html/emacs-orgmode/2016-02/msg00311.html
     (define-key pabbrev-mode-map [tab] 'pabbrev-expand-maybe)
-    (add-hook 'text-mode-hook (lambda () (pabbrev-mode))))
+
+    ;; ;; hook to text-mode-hook
+    ;; (add-hook 'text-mode-hook (lambda () (pabbrev-mode)))
+
+    ;; pretty print a hash
+    (setq pabbrev-debug-print-hash t)
+
+    ;;limit suggestions and sort
+    (setq pabbrev-suggestions-limit-alpha-sort 5)
+    )
 #+END_SRC
 
 * Register dan bookmark
@@ -3974,6 +3991,13 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           ;; ("d" . ess-dev-map)
           ;; ("r" . ess-r-package-dev-map)
           )
+    :init
+    ;; Tetapkan Rsetting folder
+    (defvar ybk/r-dir "~/Rsetting/") ;definere hvor epost skal være
+    ;; lage direktori om ikke allerede finnes
+    (unless (file-exists-p ybk/r-dir)
+      (make-directory ybk/r-dir t))
+
     :config
     (setq ess-nuke-trailing-whitespace-p t)
 
@@ -3985,8 +4009,12 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     (setq ess-ask-for-ess-directory nil) ; don't ask for dir when starting a process
     (setq ess-eldoc-show-on-symbol t) ; show eldoc on symbol instead of only inside of parens
     (setq ess-use-ido nil) ; rely on ivy instead of ido
-    (setq ess-history-file nil) ;ESS not saving .Rhistory
-    (setq inferior-R-args "--no-restore-history --no-save") ;utk R comman not to restore and save Rhistory
+
+    ;; History
+    (setq ess-history-directory ybk/r-dir) ;tetapkan folder utk history
+    (setq ess-history-file t) ;nil if not saving .Rhistory
+    ;; (setq inferior-R-args "--no-restore-history --no-save") ;utk R comman not to restore and save Rhistory
+    (setq inferior-R-args "--no-restore-history --vanilla") ; guna vanilla sebagai default utk reproducibility
     (setq ess-pdf-viewer-pref "emacsclient") ; guna pdf-tools
 
     ;; data.table update
