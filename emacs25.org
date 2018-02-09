@@ -234,6 +234,15 @@ Untuk elakkan dari memasukkan key setiapkali encrypted file buffer disimpan, mul
   -*- mode: org -*- -*- epa-file-encrypt-to: ("your@email.com") -*-
 #+END_EXAMPLE
 ~Org-mode~ adalah optional dan dipakai untuk memudahkan struktur fail sekiranya memakai table atau header.
+** Customizing key
+Diambil dari =[[https://oremacs.com/2015/01/17/setting-up-ediff/][Oremacs]]= utk aturcara custom variable menggunakan singkatan =csetq=
+
+#+BEGIN_SRC emacs-lisp
+  (defmacro csetq (variable value)
+    `(funcall (or (get ',variable 'custom-set)
+                  'set-default)
+              ',variable ,value))
+#+END_SRC
 
 ** Compile
 Ini utk menyelesaikan masalah dengan =lexical-let= di ~auto-lang~
@@ -5570,6 +5579,31 @@ Untuk navigasi di directory. Rujukkan di [[https://github.com/jaypei/emacs-neotr
 
 
 #+END_SRC
+* Ediff
+Untuk melihat perbezaan antara dua fail menggunakan =ediff=. Aturcara ini diambil dari =[[https://oremacs.com/2015/01/17/setting-up-ediff/][Oremacs]]=
+
+#+BEGIN_SRC emacs-lisp
+  ;; Tidak gunakan separate frame utk control panel
+  (csetq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+  ;; Asingkan window melintang
+  (csetq ediff-split-window-function 'split-window-horizontally)
+
+  ;; Abaikan whitespace
+  (csetq ediff-diff-options "-w")
+
+  ;; Bagi key bindings
+  (defun ora-ediff-hook ()
+    (ediff-setup-keymap)
+    (define-key ediff-mode-map "j" 'ediff-next-difference)
+    (define-key ediff-mode-map "k" 'ediff-previous-difference))
+
+  (add-hook 'ediff-mode-hook 'ora-ediff-hook)
+
+  ;; Pasang semula window configuration bila keluar (q)
+  ;; (winner-mode) ;aktifkan winner-mode kalau tidak dipasang secara global
+  (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
+#+END_SRC
 
 * Version control
 
@@ -6151,7 +6185,7 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     ^----------------------------------
     _P_: Projectile     _a_: start exp    _x_: kill exp        _o_: Origami          _k_: kill other buffers
     _p_: Find project   _e_: end exp      _y_: Yasnippet       _w_: Send2browser     _s_: create scratch
-    _g_: Magit          _u_: unwrap exp   _-_: Del unuse yas.  _c_: Cleanup/tabbify
+    _g_: Magit          _u_: unwrap exp   _-_: Del unuse yas.  _c_: Cleanup/tabbify  _d_: Ediff
 
     "
 
@@ -6172,6 +6206,7 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
 
     ("k" crux-kill-other-buffers)
     ("s" crux-create-scratch-buffer)
+    ("d" ediff)
 
     ("q" nil "KELUAR")
     )
