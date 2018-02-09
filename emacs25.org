@@ -4725,6 +4725,13 @@ AuCTeX is better than the built in tex mode; let's use it. It's good out of the
 box, but I like to use latexmk so that I don't have to remember to rerun the file X
 times to get references right.
 
+Pastikan fail-fail ini dipasang sebelum melarikan fail =.Rnw= di *ESS*
+
+#+BEGIN_EXAMPLE
+apt install libssl-dev libcurl4-openssl-dev libxml2-dev libmagick++-dev
+#+END_EXAMPLE
+
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package tex-site
     :ensure auctex
