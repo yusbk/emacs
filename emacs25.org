@@ -524,13 +524,13 @@ Save a few misc files in the =.cache= directory:
 ** Menu bar
 Buang menu bar dan sekiranya perlu tekan =F10=
 #+BEGIN_SRC emacs-lisp
-  (tool-bar-mode -1)
-  (menu-bar-mode -1)
+  (tool-bar-mode -1) ;sembunyikan tool-bar
+  (menu-bar-mode 1)
   (scroll-bar-mode -1)
 #+END_SRC
 ** Powerline
 Untuk modeline
-*** Caranya
+*** Cara 1
 Beza warna bila buffer aktif atau tidak
 
 Aktifkan sekiranya pakai =moe-theme=
@@ -545,188 +545,193 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
   (use-package powerline
     :ensure t
     :init (setq powerline-default-separator 'wave) ;contour, butt, wave, arrow, arrow-fade etc
-    :config (progn
-              (add-hook 'desktop-after-read-hook 'powerline-reset)
+    :config
+    (add-hook 'desktop-after-read-hook 'powerline-reset)
 
-              ;; yus-theme
-              (defface yus-aktif1 '((t (:background "#a2e" :inherit mode-line))) ;#a2e #2a5289 #4c52ee #179 #cfdfff #00d9ff #19a
-                "Powerline muka 1."
-                :group 'powerline)
-              (defface yus-aktif2 '((t (:background "#a669ef" :inherit mode-line))) ;#2c5197 #a25ec3 #a19 #8b008b #369 #3a11ff #28a #a669ef
-                "Powerline muka 2."
-                :group 'powerline)
-              (defface yus-tidak-aktif1 '((t (:background "grey40" :inherit mode-line-inactive))) ;#1a5aee #35f #a25fff
-                "Powerline muka 1."
-                :group 'powerline)
-              (defface yus-tidak-aktif2 '((t (:background "grey20" :inherit mode-line-inactive))) ;#273f87 #5478e4
-                "Powerline muka 2."
-                :group 'powerline)
-              (defface yus-hujung '((t (:background "#5478e4" :inherit mode-line)))
-                "Powerline muka 1."
-                :group 'powerline)
-              (defface yus-buffer-id-tidak-aktif
-                '((t (:background "grey20" :inherit mode-line-buffer-id)))
-                "Powerline mode-line face"
-                :group 'powerline)
+    ;; yus-theme
+    (defface yus-aktif1 '((t (:background "#a2e" :inherit mode-line))) ;#a2e #2a5289 #4c52ee #179 #cfdfff #00d9ff #19a
+      "Powerline muka 1."
+      :group 'powerline)
+    (defface yus-aktif2 '((t (:background "#a669ef" :inherit mode-line))) ;#2c5197 #a25ec3 #a19 #8b008b #369 #3a11ff #28a #a669ef
+      "Powerline muka 2."
+      :group 'powerline)
+    (defface yus-tidak-aktif1 '((t (:background "grey40" :inherit mode-line-inactive))) ;#1a5aee #35f #a25fff
+      "Powerline muka 1."
+      :group 'powerline)
+    (defface yus-tidak-aktif2 '((t (:background "grey20" :inherit mode-line-inactive))) ;#273f87 #5478e4
+      "Powerline muka 2."
+      :group 'powerline)
+    (defface yus-hujung '((t (:background "#5478e4" :inherit mode-line)))
+      "Powerline muka 1."
+      :group 'powerline)
+    (defface yus-buffer-id-tidak-aktif
+      '((t (:background "grey20" :inherit mode-line-buffer-id)))
+      "Powerline mode-line face"
+      :group 'powerline)
 
 
-              ;; ybk-theme
-              (defface ml-aktif1 '((t (:background "#273f87" :inherit mode-line)))
-                "Powerline muka 1."
-                :group 'powerline)
-              (defface ml-aktif2 '((t (:background "#cfe" :inherit mode-line)))
-                "Powerline muka 2."
-                :group 'powerline)
-              (defface ml-tidak-aktif1 '((t (:background "#ffe" :inherit mode-line-inactive)))
-                "Powerline muka 1."
-                :group 'powerline)
-              (defface ml-tidak-aktif2 '((t (:background "#69f" :inherit mode-line-inactive)))
-                "Powerline muka 2."
-                :group 'powerline)'
-              (defface ml-hujung '((t (:background "#273f87" :inherit mode-line)))
-                "Powerline muka 1."
-                :group 'powerline)
-              (defface ml-buffer-id-tidak-aktif
-                '((t (:inherit mode-line-buffer-id)))
-                "Powerline mode-line face"
-                :group 'powerline)
+    ;; ;; ybk-theme
+    ;; (defface ml-aktif1 '((t (:background "#273f87" :inherit mode-line)))
+    ;;   "Powerline muka 1."
+    ;;   :group 'powerline)
+    ;; (defface ml-aktif2 '((t (:background "#cfe" :inherit mode-line)))
+    ;;   "Powerline muka 2."
+    ;;   :group 'powerline)
+    ;; (defface ml-tidak-aktif1 '((t (:background "#ffe" :inherit mode-line-inactive)))
+    ;;   "Powerline muka 1."
+    ;;   :group 'powerline)
+    ;; (defface ml-tidak-aktif2 '((t (:background "#69f" :inherit mode-line-inactive)))
+    ;;   "Powerline muka 2."
+    ;;   :group 'powerline)'
+    ;; (defface ml-hujung '((t (:background "#273f87" :inherit mode-line)))
+    ;;   "Powerline muka 1."
+    ;;   :group 'powerline)
+    ;; (defface ml-buffer-id-tidak-aktif
+    ;;   '((t (:inherit mode-line-buffer-id)))
+    ;;   "Powerline mode-line face"
+    ;;   :group 'powerline)
 
-              ;;untuk display
+    ;;untuk display
 
-              (defun ml-yus-theme ()
-                "Setup utk ml-yus-theme."
-                (interactive)
-                (setq-default mode-line-format
-                              '("%e"
-                                (:eval
-                                 (let* ((file-name (buffer-file-name (current-buffer)))
-                                        (active (powerline-selected-window-active))
-                                        (mode-line-buffer-id (if active 'mode-line-buffer-id 'yus-buffer-id-tidak-aktif))
-                                        (mode-line (if active 'mode-line 'mode-line-inactive))
-                                        (wajah1 (if active 'yus-aktif1 'yus-tidak-aktif1))
-                                        (wajah2 (if active 'yus-aktif2 'yus-tidak-aktif2))
-                                        (separator-left (intern (format "powerline-%s-%s"
-                                                                        (powerline-current-separator)
-                                                                        (car powerline-default-separator-dir))))
-                                        (separator-right (intern (format "powerline-%s-%s"
-                                                                         (powerline-current-separator)
-                                                                         (cdr powerline-default-separator-dir))))
+    (defun ml-yus-theme ()
+      "Setup utk ml-yus-theme."
+      (interactive)
+      (setq-default mode-line-format
+                    '("%e"
+                      (:eval
+                       (let* ((file-name (buffer-file-name (current-buffer)))
+                              (active (powerline-selected-window-active))
+                              (mode-line-buffer-id (if active 'mode-line-buffer-id 'yus-buffer-id-tidak-aktif))
+                              (mode-line (if active 'mode-line 'mode-line-inactive))
+                              (wajah1 (if active 'yus-aktif1 'yus-tidak-aktif1))
+                              (wajah2 (if active 'yus-aktif2 'yus-tidak-aktif2))
+                              (separator-left (intern (format "powerline-%s-%s"
+                                                              (powerline-current-separator)
+                                                              (car powerline-default-separator-dir))))
+                              (separator-right (intern (format "powerline-%s-%s"
+                                                               (powerline-current-separator)
+                                                               (cdr powerline-default-separator-dir))))
 
-                                        (lhs (list (powerline-raw "%  " mode-line 'l)
-                                                   ;; (when powerline-display-buffer-size
-                                                   ;;   (powerline-buffer-size mode-line 'l))
-                                                   ;; (when powerline-display-mule-info
-                                                   ;;   (powerline-raw mode-line-mule-info mode-line 'l))
-                                                   ;; (powerline-buffer-id mode-line-buffer-id 'l)
-                                                   ;; (when (and (boundp 'which-func-mode) which-func-mode)
-                                                   ;;   (powerline-raw which-func-format nil 'l))
+                              (lhs (list (powerline-raw "%  " mode-line 'l)
+                                         ;; (when powerline-display-buffer-size
+                                         ;;   (powerline-buffer-size mode-line 'l))
+                                         ;; (when powerline-display-mule-info
+                                         ;;   (powerline-raw mode-line-mule-info mode-line 'l))
+                                         ;; (powerline-buffer-id mode-line-buffer-id 'l)
+                                         ;; (when (and (boundp 'which-func-mode) which-func-mode)
+                                         ;;   (powerline-raw which-func-format nil 'l))
 
-                                                   (powerline-raw "[" mode-line)
-                                                   (powerline-raw (projectile-project-name) mode-line)
-                                                   (powerline-raw "] %b %*" mode-line)
-                                                   (powerline-raw (concat " "
-                                                                          (when (and file-name vc-mode)
-                                                                            (concat "(" (-> file-name
-                                                                                            vc-working-revision
-                                                                                            (string-utils-truncate-to 40))
-                                                                                    ")")))
-                                                                  mode-line 'r)
+                                         (powerline-raw "[" mode-line)
+                                         (powerline-raw (projectile-project-name) mode-line)
+                                         (powerline-raw "] %b %*" mode-line)
+                                         (powerline-raw (concat " "
+                                                                (when (and file-name vc-mode)
+                                                                  (concat "(" (-> file-name
+                                                                                  vc-working-revision
+                                                                                  (string-utils-truncate-to 40))
+                                                                          ")")))
+                                                        mode-line 'r)
 
-                                                   (powerline-raw " ")
-                                                   ;; pembahagian kiri
-                                                   (funcall separator-left mode-line wajah1)
-                                                   (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
-                                                     (powerline-raw erc-modified-channels-object wajah1 'l))
-                                                   (powerline-major-mode wajah1 'l)
-                                                   (powerline-process wajah1)
-                                                   (powerline-minor-modes wajah1 'l)
-                                                   ;;(powerline-narrow wajah1 'l)
-                                                   (powerline-raw " " wajah1)
-                                                   ;;pembahagian kiri
-                                                   (funcall separator-left wajah1 wajah2)
-                                                   (powerline-vc wajah2 'r)
-                                                   (when (bound-and-true-p nyan-mode)
-                                                     (powerline-raw (list (nyan-create)) wajah2 'l))))
-                                        (rhs (list (powerline-raw global-mode-string wajah2 'r)
-                                                   ;; pembahagian kanan
-                                                   (funcall separator-right wajah2 wajah1)
-                                                   (unless window-system
-                                                     (powerline-raw (char-to-string #xe0a1) wajah1 'l))
-                                                   (powerline-raw "%4l" wajah1 'l)
-                                                   (powerline-raw ":" wajah1 'l)
-                                                   (powerline-raw "%3c" wajah1 'r)
-                                                   ;; pembahagian kanan
-                                                   (funcall separator-right wajah1 'yus-hujung) ;mode-line
-                                                   (powerline-raw " " 'yus-hujung)
-                                                   (powerline-raw "%6p" 'yus-hujung 'r) ;mode-line
-                                                   (when powerline-display-hud
-                                                     (powerline-hud wajah2 wajah1)))))
-                                   (concat (powerline-render lhs)
-                                           (powerline-fill wajah2 (powerline-width rhs))
-                                           (powerline-render rhs)))
+                                         (powerline-raw " ")
+                                         ;; pembahagian kiri
+                                         (funcall separator-left mode-line wajah1)
+                                         (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
+                                           (powerline-raw erc-modified-channels-object wajah1 'l))
+                                         (powerline-major-mode wajah1 'l)
+                                         (powerline-process wajah1)
+                                         (powerline-minor-modes wajah1 'l)
+                                         ;;(powerline-narrow wajah1 'l)
+                                         (powerline-raw " " wajah1)
+                                         ;;pembahagian kiri
+                                         (funcall separator-left wajah1 wajah2)
+                                         (powerline-vc wajah2 'r)
+                                         (when (bound-and-true-p nyan-mode)
+                                           (powerline-raw (list (nyan-create)) wajah2 'l))))
+                              (rhs (list (powerline-raw global-mode-string wajah2 'r)
+                                         ;; pembahagian kanan
+                                         (funcall separator-right wajah2 wajah1)
+                                         (unless window-system
+                                           (powerline-raw (char-to-string #xe0a1) wajah1 'l))
+                                         (powerline-raw "%4l" wajah1 'l)
+                                         (powerline-raw ":" wajah1 'l)
+                                         (powerline-raw "%3c" wajah1 'r)
+                                         ;; pembahagian kanan
+                                         (funcall separator-right wajah1 'yus-hujung) ;mode-line
+                                         (powerline-raw " " 'yus-hujung)
+                                         (powerline-raw "%6p" 'yus-hujung 'r) ;mode-line
+                                         (when powerline-display-hud
+                                           (powerline-hud wajah2 wajah1)))))
+                         (concat (powerline-render lhs)
+                                 (powerline-fill wajah2 (powerline-width rhs))
+                                 (powerline-render rhs)))
 
-                                 ))))
+                       ))))
 
-              (defun powerline-ybk-theme ()
-                "Setup the ybk-mode-line."
-                (interactive)
-                (setq-default mode-line-format
-                              '("%e"
-                                (:eval
-                                 (let* ((active (powerline-selected-window-active))
-                                        (mode-line-buffer-id (if active 'mode-line-buffer-id 'ml-buffer-id-tidak-aktif))
-                                        (mode-line (if active 'mode-line 'mode-line-inactive))
-                                        (muka1 (if active 'ml-aktif1 'ml-tidak-aktif1))
-                                        (muka2 (if active 'ml-aktif2 'ml-tidak-aktif2))
-                                        (separator-left (intern (format "powerline-%s-%s"
-                                                                        (powerline-current-separator)
-                                                                        (car powerline-default-separator-dir))))
-                                        (separator-right (intern (format "powerline-%s-%s"
-                                                                         (powerline-current-separator)
-                                                                         (cdr powerline-default-separator-dir))))
-                                        (lhs (list (powerline-raw "%*" mode-line 'l)
-                                                   (when powerline-display-buffer-size
-                                                     (powerline-buffer-size mode-line 'l))
-                                                   (when powerline-display-mule-info
-                                                     (powerline-raw mode-line-mule-info mode-line 'l))
-                                                   (powerline-buffer-id mode-line-buffer-id 'l)
-                                                   (when (and (boundp 'which-func-mode) which-func-mode)
-                                                     (powerline-raw which-func-format nil 'l))
-                                                   (powerline-raw " ")
-                                                   (funcall separator-left mode-line muka1)
-                                                   (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
-                                                     (powerline-raw erc-modified-channels-object muka1 'l))
-                                                   (powerline-major-mode muka1 'l)
-                                                   (powerline-process muka1)
-                                                   (powerline-minor-modes muka1 'l)
-                                                   (powerline-narrow muka1 'l)
-                                                   (powerline-raw " " muka1)
-                                                   (funcall separator-left muka1 muka2)
-                                                   (powerline-vc muka2 'r)
-                                                   (when (bound-and-true-p nyan-mode)
-                                                     (powerline-raw (list (nyan-create)) muka2 'l))))
-                                        (rhs (list (powerline-raw global-mode-string muka2 'r)
-                                                   (funcall separator-right muka2 muka1)
-                                                   (unless window-system
-                                                     (powerline-raw (char-to-string #xe0a1) muka1 'l))
-                                                   (powerline-raw "%4l" muka1 'l)
-                                                   (powerline-raw ":" muka1 'l)
-                                                   (powerline-raw "%3c" muka1 'r)
-                                                   (funcall separator-right muka1 mode-line)
-                                                   (powerline-raw " ")
-                                                   (powerline-raw "%6p" mode-line 'r)
-                                                   (when powerline-display-hud
-                                                     (powerline-hud muka2 muka1)))))
-                                   (concat (powerline-render lhs)
-                                           (powerline-fill muka2 (powerline-width rhs))
-                                           (powerline-render rhs)))))))
+    ;; (defun powerline-ybk-theme ()
+    ;;   "Setup the ybk-mode-line."
+    ;;   (interactive)
+    ;;   (setq-default mode-line-format
+    ;;                 '("%e"
+    ;;                   (:eval
+    ;;                    (let* ((active (powerline-selected-window-active))
+    ;;                           (mode-line-buffer-id (if active 'mode-line-buffer-id 'ml-buffer-id-tidak-aktif))
+    ;;                           (mode-line (if active 'mode-line 'mode-line-inactive))
+    ;;                           (muka1 (if active 'ml-aktif1 'ml-tidak-aktif1))
+    ;;                           (muka2 (if active 'ml-aktif2 'ml-tidak-aktif2))
+    ;;                           (separator-left (intern (format "powerline-%s-%s"
+    ;;                                                           (powerline-current-separator)
+    ;;                                                           (car powerline-default-separator-dir))))
+    ;;                           (separator-right (intern (format "powerline-%s-%s"
+    ;;                                                            (powerline-current-separator)
+    ;;                                                            (cdr powerline-default-separator-dir))))
+    ;;                           (lhs (list (powerline-raw "%*" mode-line 'l)
+    ;;                                      (when powerline-display-buffer-size
+    ;;                                        (powerline-buffer-size mode-line 'l))
+    ;;                                      (when powerline-display-mule-info
+    ;;                                        (powerline-raw mode-line-mule-info mode-line 'l))
+    ;;                                      (powerline-buffer-id mode-line-buffer-id 'l)
+    ;;                                      (when (and (boundp 'which-func-mode) which-func-mode)
+    ;;                                        (powerline-raw which-func-format nil 'l))
+    ;;                                      (powerline-raw " ")
+    ;;                                      (funcall separator-left mode-line muka1)
+    ;;                                      (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
+    ;;                                        (powerline-raw erc-modified-channels-object muka1 'l))
+    ;;                                      (powerline-major-mode muka1 'l)
+    ;;                                      (powerline-process muka1)
+    ;;                                      (powerline-minor-modes muka1 'l)
+    ;;                                      (powerline-narrow muka1 'l)
+    ;;                                      (powerline-raw " " muka1)
+    ;;                                      (funcall separator-left muka1 muka2)
+    ;;                                      (powerline-vc muka2 'r)
+    ;;                                      (when (bound-and-true-p nyan-mode)
+    ;;                                        (powerline-raw (list (nyan-create)) muka2 'l))))
+    ;;                           (rhs (list (powerline-raw global-mode-string muka2 'r)
+    ;;                                      (funcall separator-right muka2 muka1)
+    ;;                                      (unless window-system
+    ;;                                        (powerline-raw (char-to-string #xe0a1) muka1 'l))
+    ;;                                      (powerline-raw "%4l" muka1 'l)
+    ;;                                      (powerline-raw ":" muka1 'l)
+    ;;                                      (powerline-raw "%3c" muka1 'r)
+    ;;                                      (funcall separator-right muka1 mode-line)
+    ;;                                      (powerline-raw " ")
+    ;;                                      (powerline-raw "%6p" mode-line 'r)
+    ;;                                      (when powerline-display-hud
+    ;;                                        (powerline-hud muka2 muka1)))))
+    ;;                      (concat (powerline-render lhs)
+    ;;                              (powerline-fill muka2 (powerline-width rhs))
+    ;;                              (powerline-render rhs)))))))
 
-              ;; aktivkan theme yang ingin dipakai
-              (ml-yus-theme)
+    ;; aktivkan theme yang ingin dipakai
+    (ml-yus-theme)
 
-              ))
+    )
+
+
+
+
+
+
 #+END_SRC
-
 ** Tema utk paparan
 Utk tukar tema paparan yang lain tekan =yy-t=. Dua themes boleh di pakai:
 
@@ -3955,6 +3960,292 @@ Untuk pastikan cara menamakan fail di blogs mengikut cara [[http://jekyllrb.com/
 *** Properties
 Shortcut =C-c C-x p= (org-set-property) dan utk padam C-c C-c d (org-delete-property)
 
+* CSV file
+Untuk menggendali fail csv
+#+BEGIN_SRC emacs-lisp
+  (use-package csv-mode
+    :ensure t
+    :mode (("\\.csv" . csv-mode)))
+#+END_SRC
+* Periksa ejaan (spelling)
+Untuk periksa enjaan
+** Kerja
+*** TODO Elisp periksa kalau hunspell atau aspell sudah tersedia dan pakai apa yang tersedia
+** Flyspell: periksa ejaan
+
+=Ispell= ialah prog untuk memeriksa ejaan yang tersedia bersama Emacs. Di sini =Aspell=
+dipakai bersama =Flyspell= sebab ia lebih baik dari =Hunspell=. Tetapi pemasangan =Aspell=
+selalunya memberikan masalah berbanding dengan =Hunspell=. Langkah-langkah pemasangan
+seperti dibawah boleh diikuti sebagai cadangan. Sekurang-kurangnya ia berfungsi di
+komputer saya.
+
+1. Turunkan program aspell di [[http://aspell.net/]]
+2. Unzip fail seperti begini =$ tar xvzf file.tar.gz=
+3. Pasang [[https://launchpad.net/ubuntu/+source/gcc-7][gcc7]] dengan cara di bawah. Tetapi tidak terdapat utk ubuntu 16.10
+   #+BEGIN_EXAMPLE
+     sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+     sudo apt-get update
+     sudo apt-get install gcc-7
+     gcc-7 --version
+   #+END_EXAMPLE
+4. Ikut selajutnya cara seperti di [[http://www.linuxfromscratch.org/blfs/view/svn/general/aspell.html][sini]]
+   #+BEGIN_EXAMPLE
+     ##pasang aspell
+     ./configure --prefix=/usr && make
+     sudo make install
+
+     ## aturcara utk penggunaan di program lain
+     sudo ln -svfn aspell-0.60 /usr/lib/aspell
+     sudo install -v -m755 -d /usr/share/doc/aspell-0.60.6.1/aspell{,-dev}.html
+     sudo install -v -m644 manual/aspell.html/* \
+         /usr/share/doc/aspell-0.60.6.1/aspell.html
+
+     sudo install -v -m644 manual/aspell-dev.html/* \
+         /usr/share/doc/aspell-0.60.6.1/aspell-dev.html
+   #+END_EXAMPLE
+5. Turunkan bahasa di [[ftp://ftp.gnu.org/gnu/aspell/dict/0index.html][sini]] atau di [[https://ftp.gnu.org/gnu/aspell/dict/][sini]]. Sekiranya fail jenis ~gz2~ boleh di-zip seperti ini =$ tar -xvjf
+   fail_bahasa.tar.bz2=. Kemudian pasang dengan =./configure && make= kemudian sebagai
+   root =make install=. Bahasa Norwegian cth nya perlu kedua-dua fail ~nb~ dan ~no~.
+6. Larikan =aspell config= di terminal utk lihat dimana direktori-direktori yang dipakai
+
+Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package flyspell
+    :ensure t
+    :diminish (flyspell-mode . "")
+    :bind (("C-c f" . flyspell-correct-word-generic)
+           ("C-." . flyspell-auto-correct-word) ;C-M-i alternatif
+           ("C-," . flyspell-goto-next-error)
+           ("C-;" . flyspell-auto-correct-previous-word)
+           ("C-c v" . ybk/flyspell-goto-previous-error)
+           ("C-c i" . ispell-word)
+           :map ybk/org-map
+           ("f" . hydra-kamus/body))
+    :init
+    ;; Hydra flyspell
+    (defhydra hydra-kamus (:hint nil )
+      "
+        ^Periksa perkataan (prefix i-Ispell dan f-Flyspell)^
+        ^--^---------^--^-----------^--^-------^--^-----------^--^----------^--^-----------
+        _n_: next.err_p_: prev.err _w_: iword  _b_: ibuffer  _r_: iregion  _c_: icontinue
+        _i_: ikill   _z_: prev.cor _y_: fword  _x_: fbuffer  _s_: fregion
+
+        ^Tukar Kamus^
+        ^---------------------------------------------------------------------
+        _f_: Flysell  _k_: tkr.kamus _g_: British _o_: Norwegian     _q_: QUIT
+
+      "
+      ("f" flyspell-mode)
+      ("k" ybk/change-languages)
+      ("g" lang-eng)
+      ("o" lang-norsk)
+      ("c" ispell-continue)
+      ("n" flyspell-goto-next-error)
+      ("p" ybk/flyspell-goto-previous-error)
+      ("w" ispell-word)
+      ("b" ispell-buffer)
+      ("r" ispell-region)
+      ("i" ispell-kill-ispell)
+      ("z" flyspell-corect-previous-word-generic)
+      ("y" flyspell-correct-word-generic)
+      ("x" flyspell-lazy-check-buffer)
+      ("s" flyspell-region)
+      ("q" (message "KELUAR") :exit t))
+
+    ;;(key-chord-define-global "xs" #'hydra-kamus/body)
+
+    :config
+    ;;(flyspell-mode t)
+
+    ;; Pakai Aspell
+    (setq ispell-program-name "aspell")
+    ;;flyspell-buffer dan flyspell-region perlu "-l" sebagi "--lang" sekiranya pakai aspell
+    (setq ispell-list-command "--list")
+    (setq ispell-extra-args   '("--sug-mode=ultra" ;normal|fast|ultra utk melajukan proses
+                                "--lang=en_GB")) ;british en_GB
+
+    ;; ;; Save a new word to personal dictionary without asking
+    ;; (setq ispell-silently-savep t) ;hanya hidupkan sekiranya sudah tahu fungsinya
+
+    (add-hook 'org-mode-hook 'turn-on-flyspell)
+    (add-hook 'text-mode-hook 'turn-on-flyspell)
+    (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+    (add-hook 'ess-mode-hook 'flyspell-prog-mode)
+
+    ;; Boleh betulkan pakai mouse kalau mahu
+    (eval-after-load "flyspell"
+      '(progn
+         (define-key flyspell-mouse-map [s-mouse-1] #'flyspell-correct-word-generic)))
+
+    ;; move point to previous error
+    ;; based on code by hatschipuh at
+    ;; http://emacs.stackexchange.com/a/14912/2017
+    (defun ybk/flyspell-goto-previous-error (arg)
+      "Go to arg previous spelling error."
+      (interactive "p")
+      (while (not (= 0 arg))
+        (let ((pos (point))
+              (min (point-min)))
+          (if (and (eq (current-buffer) flyspell-old-buffer-error)
+                   (eq pos flyspell-old-pos-error))
+              (progn
+                (if (= flyspell-old-pos-error min)
+                    ;; goto beginning of buffer
+                    (progn
+                      (message "Restarting from end of buffer")
+                      (goto-char (point-max)))
+                  (backward-word 1))
+                (setq pos (point))))
+          ;; seek the next error
+          (while (and (> pos min)
+                      (let ((ovs (overlays-at pos))
+                            (r '()))
+                        (while (and (not r) (consp ovs))
+                          (if (flyspell-overlay-p (car ovs))
+                              (setq r t)
+                            (setq ovs (cdr ovs))))
+                        (not r)))
+            (backward-word 1)
+            (setq pos (point)))
+          ;; save the current location for next invocation
+          (setq arg (1- arg))
+          (setq flyspell-old-pos-error pos)
+          (setq flyspell-old-buffer-error (current-buffer))
+          (goto-char pos)
+          (if (= pos min)
+              (progn
+                (message "No more miss-spelled word!")
+                (setq arg 0))
+            (forward-word)))))
+
+    ;; Tukar bahasa
+    (defun lang-norsk ()
+      "Bahasa Norwegian."
+      (interactive)
+      (ispell-change-dictionary "norsk")
+      (flyspell-buffer))
+
+    (defun lang-eng ()
+      "Bahasa Inggris."
+      (interactive)
+      (ispell-change-dictionary "en_GB")
+      (flyspell-buffer))
+
+    ;; Utk cadangkan perkataan cara Ivy
+    (use-package flyspell-correct-ivy
+      :ensure t))
+#+END_SRC
+
+** Tukar bahasa
+Hanya dipakai sekiranya fungsi di =auto-lang= memili basa yang lain.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; ;;cara 1
+  ;; (defun ybk/tukar-kamus ()
+  ;;   "Tukar kamus."
+  ;;   (interactive)
+  ;;   (let* ((dic ispell-current-dictionary)
+  ;;          (change (if (string= dic "british") "norsk" "american"))) ;"en_US"
+  ;;     (ispell-change-dictionary change)
+  ;;     (message "Dictionary switched from %s to %s" dic change)
+  ;;     ))
+
+  ;; (bind-key "k" #'ybk/tukar-kamus 'ybk/org-map)
+  ;;(global-set-key (kbd "<f6> b") 'ybk-tukar-kamus)
+
+  ;;Cara 2
+  (let ((langs '("british" "norsk"))) ;"american""
+    (setq lang-ring (make-ring (length langs)))
+    (dolist (elem langs) (ring-insert lang-ring elem)))
+
+  (defun ybk/change-languages ()
+    (interactive)
+    (let ((lang (ring-ref lang-ring -1)))
+      (ring-insert lang-ring lang)
+      (ispell-change-dictionary lang)))
+
+  (bind-key "k" #'ybk/change-languages 'ybk/org-map)
+  ;;(global-set-key (kbd "C-<f7>") 'change-languages)
+#+END_SRC
+
+** Auto lang
+Kenal pasti bahasa secara automatik. Utk larikan secara manual guna =M-x
+auto-lang-minor-mode=. Diambil dari [[https://github.com/altruizine/auto-lang/blob/master/auto-lang.el][sini]] cuma dansk ditukar ke norwegian dan polish
+dimatikan sebab crash dengan BM
+
+#+BEGIN_SRC emacs-lisp
+  (use-package auto-lang
+    :load-path "~/Dropbox/lisp/"
+    :config
+    (defun ybk/auto-lang () (auto-lang-minor-mode t))
+
+    (add-hook 'message-setup-hook 'ybk/auto-lang)
+    (add-hook 'text-mode-hook 'ybk/auto-lang))
+#+END_SRC
+* Periksa kode (flycheck)
+Untuk periksa kode
+** Flycheck: periksa kode
+Emacs can tell you magically if your code is wrong (or just ugly). Flycheck is a
+minor mode for this. Let's enable it globally. Untuk rujukkan boleh baca [[http://www.flycheck.org/en/latest/index.html][di sini]].
+
+Flycheck can check your R code too, but you'll need to install the ~lintr~ ([[https://github.com/jimhester/lintr][Rujukan)]]
+package. Sekiranya ada masalah untuk =install.package("lintr")= disebabkan ~curl~, ~openssl~ atau ~httr~ larikan komdo ini
+
+#+BEGIN_EXAMPLE
+sudo apt-get install libcurl4-openssl-dev libssl-dev
+#+END_EXAMPLE
+
+sekiranya bermasalah pemasangan berkaitan ~igraph~ atau ~irlba~. Coba buang dan pasang semula R, atau pasang
+
+#+BEGIN_EXAMPLE
+# apt-get install liblapack-dev
+# apt-get install libblas-dev
+#+END_EXAMPLE
+
+Kemudian pasang di R
+
+#+BEGIN_EXAMPLE
+> install.packages("igraph")
+> devtools::install_github("jimhester/lintr")
+#+END_EXAMPLE
+
+Sekiranya ada masalah berkaitan ~xml2~ atau ~libxml2~. Pasangkan
+
+#+BEGIN_EXAMPLE
+apt-get install libxml2-dev libxslt-dev
+#+END_EXAMPLE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck ; checks for style and syntax
+    :ensure t
+    :init (global-flycheck-mode)
+    :config
+    (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+
+    ;; I don't care if code is commented out in R:
+    (setq flycheck-lintr-linters "with_defaults(commented_code_linter = NULL)")
+
+    ;; (add-hook 'after-init-hook #'global-flycheck-mode)
+
+    ;; :diminish (flycheck-mode . " ")
+    )
+#+END_SRC
+** Electric operator
+Electric operator will turn ~a=10*5+2~ into ~a = 10 * 5 + 2~, so let's enable it for R:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package electric-operator
+    :ensure t
+    ;; :hook (ess-mode python-mode)
+    :config
+    (add-hook 'ess-mode-hook #'electric-operator-mode)
+    (add-hook 'python-mode-hook #'electric-operator-mode)
+
+    (setq electric-operator-R-named-argument-style 'spaced)
+    )
+#+END_SRC
+
 * ESS with R
 Aturcara dan ESS snippet
 ** Aturcara ESS
@@ -4170,6 +4461,20 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
        (bind-key "<f9>" #'ybk-r-debug/body)
        ))
 #+END_SRC
+** Flycheck-julia
+Periksa kode di ESS. Diambil dari [[https://github.com/gdkrmr/flycheck-julia][GitHub]]
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck-julia
+    :ensure t
+    :config
+    ;; loads ess, which contains ess-julia-mode
+    (require 'ess-site)
+    ;; enable flycheck globally
+    (add-hook 'after-init-hook #'global-flycheck-mode)
+
+    (flycheck-julia-setup))
+#+END_SRC
+
 ** Buka data.frame
 *** ESS-view
 Untuk view data.frame di speadsheet software seperti Excel atau Calc. Untuk lihat
@@ -4179,283 +4484,6 @@ semula ke R gunakan kekunci =C-x q=
   (use-package ess-view
     :ensure t)
 #+END_SRC
-* CSV file
-Untuk menggendali fail csv
-#+BEGIN_SRC emacs-lisp
-  (use-package csv-mode
-    :ensure t
-    :mode (("\\.csv" . csv-mode)))
-#+END_SRC
-* Spelling and code checking
-Untuk periksa enjaan dan kode
-** Kerja
-*** TODO Elisp periksa kalau hunspell atau aspell sudah tersedia dan pakai apa yang tersedia
-** Flycheck: periksa kode
-
-Emacs can tell you magically if your code is wrong (or just ugly). Flycheck is a
-minor mode for this. Let's enable it globally.
-
-Flycheck can check your R code too, but you'll need to install the ~lintr~ ([[https://github.com/jimhester/lintr][Rujukan)]]
-package. Sekiranya ada masalah untuk =install.package("lintr")= disebabkan ~curl~, ~openssl~ atau ~httr~ larikan komdo ini
-
-#+BEGIN_EXAMPLE
-sudo apt-get install libcurl4-openssl-dev libssl-dev
-#+END_EXAMPLE
-
-sekiranya bermasalah pemasangan berkaitan ~igraph~ atau ~irlba~. Coba buang dan pasang semula R, atau pasang
-
-#+BEGIN_EXAMPLE
-# apt-get install liblapack-dev
-# apt-get install libblas-dev
-#+END_EXAMPLE
-
-Kemudian pasang di R
-
-#+BEGIN_EXAMPLE
-> install.packages("igraph")
-> devtools::install_github("jimhester/lintr")
-#+END_EXAMPLE
-
-Sekiranya ada masalah berkaitan ~xml2~ atau ~libxml2~. Pasangkan
-
-#+BEGIN_EXAMPLE
-apt-get install libxml2-dev libxslt-dev
-#+END_EXAMPLE
-
-#+BEGIN_SRC emacs-lisp
-  (use-package flycheck ; checks for style and syntax
-    :ensure t
-    :config
-    (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-    ;; I don't care if code is commented out in R:
-    (setq flycheck-lintr-linters "with_defaults(commented_code_linter = NULL)")
-    (add-hook 'after-init-hook #'global-flycheck-mode)
-
-    :diminish (flycheck-mode . " "))
-#+END_SRC
-** Electric operator
-Electric operator will turn ~a=10*5+2~ into ~a = 10 * 5 + 2~, so let's enable it for R:
-
-#+BEGIN_SRC emacs-lisp
-  (use-package electric-operator
-    :ensure t
-    :config
-    (setq electric-operator-R-named-argument-style 'spaced)
-    (add-hook 'ess-mode-hook #'electric-operator-mode)
-    (add-hook 'python-mode-hook #'electric-operator-mode))
-#+END_SRC
-** Flyspell: periksa ejaan
-
-=Ispell= ialah prog untuk memeriksa ejaan yang tersedia bersama Emacs. Di sini =Aspell=
-dipakai bersama =Flyspell= sebab ia lebih baik dari =Hunspell=. Tetapi pemasangan =Aspell=
-selalunya memberikan masalah berbanding dengan =Hunspell=. Langkah-langkah pemasangan
-seperti dibawah boleh diikuti sebagai cadangan. Sekurang-kurangnya ia berfungsi di
-komputer saya.
-
-1. Turunkan program aspell di [[http://aspell.net/]]
-2. Unzip fail seperti begini =$ tar xvzf file.tar.gz=
-3. Pasang [[https://launchpad.net/ubuntu/+source/gcc-7][gcc7]] dengan cara di bawah. Tetapi tidak terdapat utk ubuntu 16.10
-   #+BEGIN_EXAMPLE
-     sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-     sudo apt-get update
-     sudo apt-get install gcc-7
-     gcc-7 --version
-   #+END_EXAMPLE
-4. Ikut selajutnya cara seperti di [[http://www.linuxfromscratch.org/blfs/view/svn/general/aspell.html][sini]]
-   #+BEGIN_EXAMPLE
-     ##pasang aspell
-     ./configure --prefix=/usr && make
-     sudo make install
-
-     ## aturcara utk penggunaan di program lain
-     sudo ln -svfn aspell-0.60 /usr/lib/aspell
-     sudo install -v -m755 -d /usr/share/doc/aspell-0.60.6.1/aspell{,-dev}.html
-     sudo install -v -m644 manual/aspell.html/* \
-         /usr/share/doc/aspell-0.60.6.1/aspell.html
-
-     sudo install -v -m644 manual/aspell-dev.html/* \
-         /usr/share/doc/aspell-0.60.6.1/aspell-dev.html
-   #+END_EXAMPLE
-5. Turunkan bahasa di [[ftp://ftp.gnu.org/gnu/aspell/dict/0index.html][sini]] atau di [[https://ftp.gnu.org/gnu/aspell/dict/][sini]]. Sekiranya fail jenis ~gz2~ boleh di-zip seperti ini =$ tar -xvjf
-   fail_bahasa.tar.bz2=. Kemudian pasang dengan =./configure && make= kemudian sebagai
-   root =make install=. Bahasa Norwegian cth nya perlu kedua-dua fail ~nb~ dan ~no~.
-6. Larikan =aspell config= di terminal utk lihat dimana direktori-direktori yang dipakai
-
-Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package flyspell
-    :ensure t
-    :bind (("C-c f" . flyspell-correct-word-generic)
-           ("C-." . flyspell-auto-correct-word) ;C-M-i alternatif
-           ("C-," . flyspell-goto-next-error)
-           ("C-;" . flyspell-auto-correct-previous-word)
-           ("C-c v" . ybk/flyspell-goto-previous-error)
-           ("C-c i" . ispell-word)
-           :map ybk/org-map
-           ("f" . hydra-kamus/body))
-    :init
-    ;; Hydra flyspell
-    (defhydra hydra-kamus (:hint nil )
-      "
-        ^Periksa perkataan (prefix i-Ispell dan f-Flyspell)^
-        ^--^---------^--^-----------^--^-------^--^-----------^--^----------^--^-----------
-        _n_: next.err_p_: prev.err _w_: iword  _b_: ibuffer  _r_: iregion  _c_: icontinue
-        _i_: ikill   _z_: prev.cor _y_: fword  _x_: fbuffer  _s_: fregion
-
-        ^Tukar Kamus^
-        ^---------------------------------------------------------------------
-        _f_: Flysell  _k_: tkr.kamus _g_: British _o_: Norwegian     _q_: QUIT
-
-      "
-      ("f" flyspell-mode)
-      ("k" ybk/change-languages)
-      ("g" lang-eng)
-      ("o" lang-norsk)
-      ("c" ispell-continue)
-      ("n" flyspell-goto-next-error)
-      ("p" ybk/flyspell-goto-previous-error)
-      ("w" ispell-word)
-      ("b" ispell-buffer)
-      ("r" ispell-region)
-      ("i" ispell-kill-ispell)
-      ("z" flyspell-corect-previous-word-generic)
-      ("y" flyspell-correct-word-generic)
-      ("x" flyspell-lazy-check-buffer)
-      ("s" flyspell-region)
-      ("q" (message "KELUAR") :exit t))
-
-    ;;(key-chord-define-global "xs" #'hydra-kamus/body)
-
-    :config
-    ;;(flyspell-mode t)
-
-    ;; Pakai Aspell
-    (setq ispell-program-name "aspell")
-    ;;flyspell-buffer dan flyspell-region perlu "-l" sebagi "--lang" sekiranya pakai aspell
-    (setq ispell-list-command "--list")
-    (setq ispell-extra-args   '("--sug-mode=ultra" ;normal|fast|ultra utk melajukan proses
-                                "--lang=en_GB")) ;british en_GB
-
-    ;; ;; Save a new word to personal dictionary without asking
-    ;; (setq ispell-silently-savep t) ;hanya hidupkan sekiranya sudah tahu fungsinya
-
-    (add-hook 'org-mode-hook 'turn-on-flyspell)
-    (add-hook 'text-mode-hook 'turn-on-flyspell)
-    (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-    (add-hook 'ess-mode-hook 'flyspell-prog-mode)
-
-    ;; Boleh betulkan pakai mouse kalau mahu
-    (eval-after-load "flyspell"
-      '(progn
-         (define-key flyspell-mouse-map [s-mouse-1] #'flyspell-correct-word-generic)))
-
-    ;; move point to previous error
-    ;; based on code by hatschipuh at
-    ;; http://emacs.stackexchange.com/a/14912/2017
-    (defun ybk/flyspell-goto-previous-error (arg)
-      "Go to arg previous spelling error."
-      (interactive "p")
-      (while (not (= 0 arg))
-        (let ((pos (point))
-              (min (point-min)))
-          (if (and (eq (current-buffer) flyspell-old-buffer-error)
-                   (eq pos flyspell-old-pos-error))
-              (progn
-                (if (= flyspell-old-pos-error min)
-                    ;; goto beginning of buffer
-                    (progn
-                      (message "Restarting from end of buffer")
-                      (goto-char (point-max)))
-                  (backward-word 1))
-                (setq pos (point))))
-          ;; seek the next error
-          (while (and (> pos min)
-                      (let ((ovs (overlays-at pos))
-                            (r '()))
-                        (while (and (not r) (consp ovs))
-                          (if (flyspell-overlay-p (car ovs))
-                              (setq r t)
-                            (setq ovs (cdr ovs))))
-                        (not r)))
-            (backward-word 1)
-            (setq pos (point)))
-          ;; save the current location for next invocation
-          (setq arg (1- arg))
-          (setq flyspell-old-pos-error pos)
-          (setq flyspell-old-buffer-error (current-buffer))
-          (goto-char pos)
-          (if (= pos min)
-              (progn
-                (message "No more miss-spelled word!")
-                (setq arg 0))
-            (forward-word)))))
-
-    ;; Tukar bahasa
-    (defun lang-norsk ()
-      "Bahasa Norwegian."
-      (interactive)
-      (ispell-change-dictionary "norsk")
-      (flyspell-buffer))
-
-    (defun lang-eng ()
-      "Bahasa Inggris."
-      (interactive)
-      (ispell-change-dictionary "en_GB")
-      (flyspell-buffer))
-
-    ;; Utk cadangkan perkataan cara Ivy
-    (use-package flyspell-correct-ivy
-      :ensure t))
-#+END_SRC
-
-** Tukar bahasa
-Hanya dipakai sekiranya fungsi di =auto-lang= memili basa yang lain.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; ;;cara 1
-  ;; (defun ybk/tukar-kamus ()
-  ;;   "Tukar kamus."
-  ;;   (interactive)
-  ;;   (let* ((dic ispell-current-dictionary)
-  ;;          (change (if (string= dic "british") "norsk" "american"))) ;"en_US"
-  ;;     (ispell-change-dictionary change)
-  ;;     (message "Dictionary switched from %s to %s" dic change)
-  ;;     ))
-
-  ;; (bind-key "k" #'ybk/tukar-kamus 'ybk/org-map)
-  ;;(global-set-key (kbd "<f6> b") 'ybk-tukar-kamus)
-
-  ;;Cara 2
-  (let ((langs '("british" "norsk"))) ;"american""
-    (setq lang-ring (make-ring (length langs)))
-    (dolist (elem langs) (ring-insert lang-ring elem)))
-
-  (defun ybk/change-languages ()
-    (interactive)
-    (let ((lang (ring-ref lang-ring -1)))
-      (ring-insert lang-ring lang)
-      (ispell-change-dictionary lang)))
-
-  (bind-key "k" #'ybk/change-languages 'ybk/org-map)
-  ;;(global-set-key (kbd "C-<f7>") 'change-languages)
-#+END_SRC
-
-** Auto lang
-Kenal pasti bahasa secara automatik. Utk larikan secara manual guna =M-x
-auto-lang-minor-mode=. Diambil dari [[https://github.com/altruizine/auto-lang/blob/master/auto-lang.el][sini]] cuma dansk ditukar ke norwegian dan polish
-dimatikan sebab crash dengan BM
-
-#+BEGIN_SRC emacs-lisp
-  (use-package auto-lang
-    :load-path "~/Dropbox/lisp/"
-    :config
-    (defun ybk/auto-lang () (auto-lang-minor-mode t))
-
-    (add-hook 'message-setup-hook 'ybk/auto-lang)
-    (add-hook 'text-mode-hook 'ybk/auto-lang))
-#+END_SRC
-
 * Polymode (for knitr)
 Mode ini dipakai untuk membuat dokumen yang menggunakan program R.
 ** Aturcara
