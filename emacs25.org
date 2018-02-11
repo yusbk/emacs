@@ -2714,16 +2714,17 @@ Link guna ivy rujuk di heading [[*Worf][Worf]]
   (setq org-src-window-setup 'current-window)
 #+END_SRC
 
-Tunjukkan kandungan sebagai ~sparse tree~ cth TODO, SCHEDULE, DEADLINE dll. Asal key =C-c /= di org.el
+Tunjukkan kandungan sebagai ~sparse tree~ cth TODO, SCHEDULE, DEADLINE dll. Asal key
+=C-c /= di org.el. Dipakai di kekunci F10.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (bind-key "s" #'org-sparse-tree 'ybk/org-map)
 #+END_SRC
 
 *** Navigate headings
 Bind =F10-h-b= and =F10-h-d= to navigate heading more easily (these are bound to =C-c C-p/n=
 by default):
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (bind-keys :map ybk/org-map
              ("<up>" . org-previous-visible-heading) ;belakang
              ("<down>" . org-next-visible-heading)) ;depan
@@ -2740,9 +2741,7 @@ utk 'Headings' diambil dari [[http://stackoverflow.com/questions/28030946/emacs-
     (use-package ivy
       :ensure t)
     :ensure t
-    :bind (:map ybk/org-map
-                ("l" . ybk/worf-insert-internal-link)
-                :map ybk/move-map
+    :bind (:map ybk/move-map
                 ("h" . worf-goto))
     :config
 
@@ -6157,7 +6156,7 @@ Hydra keymap untuk =org=. Singkatan =w= sebagai *Word*
 
     ("i" org-ref-ivy-insert-cite-link)
     ("l" ybk/worf-insert-internal-link)
-    ("v" org-sparse-tree)
+    ("v" org-sparse-tree) ;list things like TODO, SCHEDULED etc
     ("c" hydra-ybk-bibtex/body :exit t)
 
     ("x" org-export-pdf-open)
@@ -6167,8 +6166,8 @@ Hydra keymap untuk =org=. Singkatan =w= sebagai *Word*
 
     ("j" org-toggle-link-display)
     ("s" ybk/org-insert-src-block)
-    ("<down>" org-next-visible-heading)
-    ("<up>" org-previous-visible-heading)
+    ("<down>" org-next-visible-heading) ;navigate headings down
+    ("<up>" org-previous-visible-heading) ;navigate headings up
 
     ("h" worf-goto)
 
