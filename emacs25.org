@@ -789,7 +789,7 @@ Untuk aturcara boleh baca di [[https://github.com/kuanyui/moe-theme.el][GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package moe-theme
     :ensure t
-    :pin melpa
+    ;;:pin melpa
     :config
     ;; If too yellow background
     (setq moe-light-pure-white-background-in-terminal t)
@@ -1806,7 +1806,8 @@ supaya snippet mode diaktifkan secara automatik.
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet-snippets
     :ensure t
-    :pin melpa)
+    ;;:pin melpa
+    )
 #+END_SRC
 
 Untuk ESS-snippet boleh muat turun di [[https://github.com/mattfidler/yasnippet-ess-mode.git][GitHub]].
@@ -3529,7 +3530,7 @@ Diambil dari [[https://github.com/alphapapa/org-super-agenda][GitHub:alphapapa]]
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package org-super-agenda
     :ensure t
-    :pin melpa
+    ;;:pin melpa
     :config
     ;;Enable mode
     (org-super-agenda-mode t)
@@ -4393,7 +4394,7 @@ memakai fungsi ini.
 #+BEGIN_SRC emacs-lisp
   (use-package r-autoyas
     :ensure t
-    :pin melpa
+    ;;:pin melpa
     :bind (:map ybk/prog-map
                 ;; Keluar yassnippet dan buang argument selebihnya yang tidak dipakai
                 ("-" . r-autoyas-exit-snippet-delete-remaining))
@@ -4964,7 +4965,7 @@ Untuk menukarkan file atau buffer ke kod HTML dan CSS. Untuk maklumat selajutnya
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package htmlize
     :ensure t
-    :pin melpa
+    ;;:pin melpa
     :config
     ;; utk tidak ambil face-size bila ditukar ke html
     ;; dan size harus ditetapkan di css. Boleh pakai 'absolute kalau
