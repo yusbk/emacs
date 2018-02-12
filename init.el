@@ -1,7 +1,7 @@
 ;; init.el --- Mula di sini
 
-(if (version< emacs-version "25.1") ; Minimum version 
-    (error "Your Emacs is too old -- this config requires v25.1 or higher"))
+;; (if (version< emacs-version "25.1") ; Minimum version 
+;;    (error "Emacs-mu versi lama -- aturcara ini perlukan versi 25.1 dan ke atas"))
 
 ;; This file loads Org-mode and then loads the rest of our Emacs
 ;; initialization from Emacs lisp embedded in emacs.org.
@@ -20,11 +20,15 @@
         ("org"          . "http://orgmode.org/elpa/")
         ("gnu"          . "https://elpa.gnu.org/packages/"))
       package-archive-priorities
-      '(("melpa-stable" . 10)
-        ("melpa"        . 0)
+      '(("melpa-stable" . 8)
+        ("melpa"        . 10)
         ("org"          . 0)
         ("gnu"          . 5)))
 (package-initialize)
+
+;; package muat turun sendiri
+(add-to-list 'load-path "~/Dropbox/lisp/elisp")
+(add-to-list 'load-path "~/Dropbox/lisp/elisp/bookmark+")
 
 ;; Ambil masa pemasangan
 (defconst emacs-start-time (current-time))
