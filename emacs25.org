@@ -533,12 +533,13 @@ Save a few misc files in the =.cache= directory:
 
 * Estetik
 ** Menu bar
-Buang menu bar dan sekiranya perlu tekan =F10=
+Buang menu bar dan sekiranya perlu tekan =F10-m= atau =M-x toggle-menu-bar-mode-from-frame=
 #+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1) ;sembunyikan tool-bar
-  (menu-bar-mode 1)
+  (menu-bar-mode -1)
   (scroll-bar-mode -1)
 #+END_SRC
+
 ** Powerline
 Untuk modeline
 *** Cara 1
@@ -6105,7 +6106,7 @@ Hydra untuk fungsi awam
      ^^^-------------------------------
      _x_: save buffers & exit _k_: delete file/buffer _d_: musics         _c_: weather         _y_: ybk-emacs       _h_: heading
      _w_: swap-windows        _n_: file explore       _r_: rss            _b_: weather update  _g_: highlight       _t_: tukar theme
-     _m_: menu bar            _f_: file diff          _s_: stackExchange  _o_: scratch         _l_: warna highlight
+     _m_: show/hide menu bar  _f_: file diff          _s_: stackExchange  _o_: scratch         _l_: warna highlight
 
     "
     ("o" ybk/get-scratch)
@@ -6114,7 +6115,7 @@ Hydra untuk fungsi awam
     ("x" save-buffers-kill-emacs)
 
     ("d" emms)
-    ("m" menu-bar-open)
+    ("m" toggle-menu-bar-mode-from-frame)
     ("n" neotree-toggle)
     ("f" backup-walker-start)
 
