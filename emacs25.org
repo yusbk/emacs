@@ -4077,10 +4077,22 @@ Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
     ;; ;; Save a new word to personal dictionary without asking
     ;; (setq ispell-silently-savep t) ;hanya hidupkan sekiranya sudah tahu fungsinya
 
-    (add-hook 'org-mode-hook 'turn-on-flyspell)
-    (add-hook 'text-mode-hook 'turn-on-flyspell)
-    (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-    (add-hook 'ess-mode-hook 'flyspell-prog-mode)
+    ;; aktifkan flyspell-mode di mode-mode tertentu
+    (add-hook 'org-mode-hook 'flyspell-mode)
+    (add-hook 'text-mode-hook 'flyspell-mode)
+    (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+    (add-hook 'markdown-mode-hook 'flyspell-mode)
+
+    ;; flyspell-prog-mode hanya periksa comments dan strings
+    (dolist (mode '(emacs-lisp-mode-hook
+                    inferior-lisp-mode-hook
+                    clojure-mode-hook
+                    python-mode-hook
+                    js-mode-hook
+                    R-mode-hook))
+      (add-hook mode
+                '(lambda ()
+                   (flyspell-prog-mode))))
 
     ;; Boleh betulkan pakai mouse kalau mahu
     (eval-after-load "flyspell"
