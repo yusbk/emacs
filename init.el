@@ -12,12 +12,18 @@
 
 ;; add MELPA, Org, and ELPA
 (require 'package)
+
+;; utamakan "melpa-stable" sebelum pakai melpa
 (setq package-archives
-      '(
-        ;;("melpa"        . "https://melpa.org/packages/")
+      '(("melpa"        . "https://melpa.org/packages/")
         ("melpa-stable" . "https://stable.melpa.org/packages/")
         ("org"          . "http://orgmode.org/elpa/")
-        ("gnu"          . "https://elpa.gnu.org/packages/")))
+        ("gnu"          . "https://elpa.gnu.org/packages/"))
+      package-archive-priorities
+      '(("melpa-stable" . 10)
+        ("melpa"        . 0)
+        ("org"          . 0)
+        ("gnu"          . 5)))
 (package-initialize)
 
 ;; Ambil masa pemasangan
