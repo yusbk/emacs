@@ -2093,7 +2093,6 @@ Berlu dipelajari. Sila baca [[https://www.emacswiki.org/emacs/BookMarks][Wiki:Bo
 - ‘C-x r m’ – set a bookmark at the current location (e.g. in a file)
 - ‘C-x r b’ – jump to a bookmark
 - ‘C-x r l’ – list your bookmarks
-- 'C-x r v' – ivy-bookmark-goto with file location
 - ‘M-x bookmark-delete’ – delete a bookmark by name
 
   Some keys for bookmark list:
@@ -2117,54 +2116,13 @@ Dimatikan sebab masalah dengan bookmark+ .. boleh load tapi lambat
   (use-package bookmark
     :ensure t
     :init
-    ;; pasang semua fail-fail el
-    (add-to-list 'load-path "~/Dropbox/lisp/elisp/bookmark+/")
-
-    (setq bookmark-default-file (concat ybk/emacs-cache "bookmarks")
+    (setq bookmark-default-file (concat ybk/emacs-cache "bookmarks") ;bookmarks dir
           bookmark-save-flag 1) ;auto save when chnage else use "t" to autosave when emacs quits
     :bind (:map ybk/move-map
                 ("r" . bookmark-set)
                 ("j" . bookmark-jump)
-                ("t" . ivy-bookmark-goto)
                 ("l" . bookmark-bmenu-list))
     :config
-    (use-package bookmark+
-      :load-path "~/Dropbox/lisp/elisp/"
-      )
-
-    ;; http://blog.binchen.org/posts/hello-ivy-mode-bye-helm.html
-    (defun ivy-bookmark-goto ()
-      "Open ANY bookmark"
-      (interactive)
-      (let (bookmarks filename)
-        ;; load bookmarks
-        (unless (featurep 'bookmark)
-          (require 'bookmark))
-        (bookmark-maybe-load-default-file)
-        (setq bookmarks (and (boundp 'bookmark-alist) bookmark-alist))
-
-        ;; do the real thing
-        (ivy-read "bookmarks:"
-                  (delq nil (mapcar (lambda (bookmark)
-                                      (let (key)
-                                        ;; build key which will be displayed
-                                        (cond
-                                         ((and (assoc 'filename bookmark) (cdr (assoc 'filename bookmark)))
-                                          (setq key (format "%s (%s)" (car bookmark) (cdr (assoc 'filename bookmark)))))
-                                         ((and (assoc 'location bookmark) (cdr (assoc 'location bookmark)))
-                                          ;; bmkp-jump-w3m is from bookmark+
-                                          (unless (featurep 'bookmark+)
-                                            (require 'bookmark+))
-                                          (setq key (format "%s (%s)" (car bookmark) (cdr (assoc 'location bookmark)))))
-                                         (t
-                                          (setq key (car bookmark))))
-                                        ;; re-shape the data so full bookmark be passed to ivy-read:action
-                                        (cons key bookmark)))
-                                    bookmarks))
-                  :action (lambda (bookmark)
-                            (bookmark-jump bookmark)))
-        ))
-
     ;; Last visited bookmark on top
     (defadvice bookmark-jump (after bookmark-jump activate)
       (let ((latest (bookmark-get-bookmark bookmark)))
@@ -2173,7 +2131,7 @@ Dimatikan sebab masalah dengan bookmark+ .. boleh load tapi lambat
     )
 
 #+END_SRC
-** bm
+** Mark with bm
 Cara lain untuk pakai bookmark diambil dari [[https://github.com/joodland/bm][GitHub]]. Bolah tandah dibarisan dengan =C-f4=
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -5686,7 +5644,7 @@ package-refresh-contents=
   (use-package magit
     :ensure t
     :commands magit-get-top-dir
-    :pin melpa-stable
+    ;;:pin melpa-stable
     :bind (("C-x g s" . magit-status)
            ("C-x g c" . magit-clone)
            ("C-x g p" . magit-pull)
@@ -6129,7 +6087,7 @@ Hydra move keymap seperti =F2=. Singkatan =j= sebagai *Jalan*
     ^-----------------------------
     _+_: resize window  _h_: doc heading _s_: register set   _m_: bookmark set   _r_: set mark      _a_: mark show
     _w_: select window  _o_: imenu       _f_: find register  _j_: bookmark jump  _n_: next mark     _A_: mark show all
-    _b_: move buffer    _g_: goto        _l_: bookmark list  _t_: bookmark goto  _p_: previous mark _x_: mark remove all
+    _b_: move buffer    _g_: goto                            _l_: bookmark list  _p_: previous mark _x_: mark remove all
 
     "
     ("+" resize-window)
@@ -6144,7 +6102,6 @@ Hydra move keymap seperti =F2=. Singkatan =j= sebagai *Jalan*
 
     ("m" bookmark-set)
     ("j" bookmark-jump)
-    ("t" ivy-bookmark-goto)
     ("l" bookmark-bmenu-list)
 
     ("r" bm-toggle)
