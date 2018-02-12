@@ -4037,13 +4037,13 @@ Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
     (defhydra hydra-kamus (:hint nil )
       "
         ^Periksa perkataan (prefix i-Ispell dan f-Flyspell)^
-        ^--^---------^--^-----------^--^-------^--^-----------^--^----------^--^-----------
-        _n_: next.err_p_: prev.err _w_: iword  _b_: ibuffer  _r_: iregion  _c_: icontinue
-        _i_: ikill   _z_: prev.cor _y_: fword  _x_: fbuffer  _s_: fregion
+        ^--^----------^--^------------^--^-------^--^-----------^--^----------^--^-----------
+        _n_: next.err  _p_: prev.err  _w_: iword  _b_: ibuffer  _r_: iregion  _c_: icontinue
+        _i_: ikill     _z_: prev.cor  _y_: fword  _x_: fbuffer  _s_: fregion
 
         ^Tukar Kamus^
         ^---------------------------------------------------------------------
-        _f_: Flysell  _k_: tkr.kamus _g_: British _o_: Norwegian     _q_: QUIT
+        _f_: Flysell  _k_: tkr.kamus  _g_: British  _o_: Norwegian     _q_: KELUAR
 
       "
       ("f" flyspell-mode)
@@ -4063,7 +4063,7 @@ Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
       ("s" flyspell-region)
       ("q" (message "KELUAR") :exit t))
 
-    ;;(key-chord-define-global "xs" #'hydra-kamus/body)
+    (key-chord-define-global "js" #'hydra-kamus/body)
 
     :config
     ;;(flyspell-mode t)
