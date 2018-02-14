@@ -2943,7 +2943,7 @@ dan tidak dilarikan.
 Untuk menghasilkan TikZ object sebagi svg untuk dimasukkan di HTML dokumen, guna
 premable seperti ini. Dirujuk dari [[http://www.homepages.ucl.ac.uk/~ucahjde/blog/tikz.html][sini]]. ImageMagick dipakai utk menukarkan PDF ke SVG.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_EXAMPLE
   ,#+HEADER: :file ../img/contoh.svg :imagemagick yes
   ,#+HEADER: :results output silent :headers '("\\usepackage{tikz}")
   ,#+HEADER: :fit yes :imoutoptions -geometry 400 :iminoptions -density 600
@@ -2954,7 +2954,7 @@ premable seperti ini. Dirujuk dari [[http://www.homepages.ucl.ac.uk/~ucahjde/blo
   \filldraw (1.5,0) circle[radius=1mm];
   \end{tikzpicture}
   ,#+END_src
-#+END_SRC
+#+END_EXAMPLE
 
 Larikan source-code dengan =C-c C-c= untuk menghasilkan =contoh.svg=, kemudian masukkan hasilan tersebut difail HTML dengan begini:
 
@@ -2970,7 +2970,6 @@ Tiga baris pertama yang menggandunggi =HEADER= berfungsi utk:
  2. Header kedua mengarahkan utk tidak memasukkan results langsung ke fail sebab
     hasil pertama ialah LaTeX. Oleh itu perlu tetapkan secara manual seperti di atas.
  3. Header ketiga menetapkan berapa besar dan jelas image diingini menggunakan fungsi dari ImageMagick
-
 
 ** Exporting
 *** markdown
