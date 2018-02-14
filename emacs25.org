@@ -2899,6 +2899,7 @@ Mencatikkan *bullet* di Org-mode
   (setq org-plantuml-jar-path (expand-file-name "plantuml.jar" my-diagram-dir))
 #+END_SRC
 *** TikZ
+**** PDF
 Untuk membolehkan preview image Tikz di org-mode diambil dari [[http://bnbeckwith.com/blog/org-mode-tikz-previews-on-windows.html][sini]]. Pakai kekuci =C-c
 C-x C-l= untuk preview di source code dan =C-c C-c= kembali ke source teks.
 
@@ -2916,7 +2917,7 @@ Contoh utk pakai di org-mode. Pastikan =:results raw= supaya code hanya dikopi k
 dan tidak dilarikan.
 
 #+BEGIN_EXAMPLE
-  #+begin_src latex :file fsa.pdf :packages '(("" "tikz")) :border 1em :results raw
+  ,#+begin_src latex :file fsa.pdf :packages '(("" "tikz")) :border 1em :results raw
     % Define block styles
     \usetikzlibrary{shapes,arrows}
     \tikzstyle{astate} = [circle, draw, text centered, font=\footnotesize, fill=blue!25]
@@ -2931,12 +2932,45 @@ dan tidak dilarikan.
             (2) edge [bend left] node {a} (1)
             (3) edge [loop above] node {(a, b)} (3);
     \end{tikzpicture}
-  #+end_src
-  #+CAPTION: tikz caption
-  #+LABEL: fig:tikz
-  #+RESULTS:
+  ,#+end_src
+  ,#+CAPTION: tikz caption
+  ,#+LABEL: fig:tikz
+  ,#+RESULTS:
   [[file:fsa.pdf]]
 #+END_EXAMPLE
+
+**** HTML
+Untuk menghasilkan TikZ object sebagi svg untuk dimasukkan di HTML dokumen, guna
+premable seperti ini. Dirujuk dari [[http://www.homepages.ucl.ac.uk/~ucahjde/blog/tikz.html][sini]]. ImageMagick dipakai utk menukarkan PDF ke SVG.
+
+#+BEGIN_SRC emacs-lisp
+  ,#+HEADER: :file ../img/contoh.svg :imagemagick yes
+  ,#+HEADER: :results output silent :headers '("\\usepackage{tikz}")
+  ,#+HEADER: :fit yes :imoutoptions -geometry 400 :iminoptions -density 600
+  ,#+BEGIN_src latex
+  \begin{tikzpicture}
+  \draw[->] (-3,0) -- (-2,0) arc[radius=0.5cm,start angle=-180,end angle=0] (-1,0) -- (1,0) arc[radius=0.5cm,start angle=180,end angle=0] (2,0) -- (3,0);
+  \filldraw (-1.5,0) circle[radius=1mm];
+  \filldraw (1.5,0) circle[radius=1mm];
+  \end{tikzpicture}
+  ,#+END_src
+#+END_SRC
+
+Larikan source-code dengan =C-c C-c= untuk menghasilkan =contoh.svg=, kemudian masukkan hasilan tersebut difail HTML dengan begini:
+
+#+BEGIN_EXAMPLE
+[[../img/contoh.svg]]
+#+END_EXAMPLE
+
+Tiga baris pertama yang menggandunggi =HEADER= berfungsi utk:
+
+ 1. Header pertama menetapkan dimana fail ingin disimpan dan bagimana fail harus
+    di-compile mengganggu ImageMagick. Folder =img= harus disediakan sekiranya tidak
+    sedia ada.
+ 2. Header kedua mengarahkan utk tidak memasukkan results langsung ke fail sebab
+    hasil pertama ialah LaTeX. Oleh itu perlu tetapkan secara manual seperti di atas.
+ 3. Header ketiga menetapkan berapa besar dan jelas image diingini menggunakan fungsi dari ImageMagick
+
 
 ** Exporting
 *** markdown
