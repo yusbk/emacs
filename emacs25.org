@@ -2509,7 +2509,8 @@ Utk =quick-preview= sebarang fail menggunakan external tool seperti GNOME Sushi,
     :config
     (define-key dired-mode-map (kbd "Q") 'quick-preview-at-point))
 #+END_SRC
-* Plant UML mode
+* Graphics
+** PlantUML
 Major mode untuk edit [[http://plantuml.com/][PlantUML]]. Untuk memastikan plantuml befungsi, pastikan =java=
 dan =graphviz= dipasang
 
@@ -2565,6 +2566,27 @@ xmlgraphics-commons-1.4.jar
       ;;autocomplete
       (bind-key "C-c u" #'plantuml-complete-symbol)))
 #+END_SRC
+** DOT dan Graphviz
+Cara untuk guna =DOT= boleh dibaca di [[http://tonyballantyne.com/graphs.html][sini]] dan untuk =GraphViz= di [[http://graphs.grevian.org/example][sini]]. Untuk pakai
+di =Org-mode= harus aktifkan =DOT= di =org-babel=. *GraphVis* mesti dipasang sebelum
+memakai DOT seperti di =PlantUML= di atas.
+
+Contoh untuk memakai di org-mode
+
+#+BEGIN_EXAMPLE
+  ,#+begin_src dot :file ./img/example1.png :cmdline -Kdot -Tpng
+  graph graphname {
+                  a -- b;
+                  b -- c;
+                  b -- d;
+                  d -- a;
+          }
+  ,#+end_src
+#+END_EXAMPLE
+** TikZ
+TikZ digunakan terutama sebab ia amat robus. TikZ boleh di baca di [[https://en.wikibooks.org/wiki/LaTeX/PGF/TikZ][Wikibook]]. Untuk
+membolehkan menukarkan fail PDF yang dihasilkan bila memakai TikZ, program
+[[https://www.imagemagick.org/script/index.php][ImageMagick]] harus dipasang dan paling mudah ialah menggunakan Synaptic.
 
 * Org
 ** Maklumat
@@ -2869,12 +2891,52 @@ Mencatikkan *bullet* di Org-mode
      ))
 #+END_SRC
 ** Diagrams
+*** Ditaa
 #+BEGIN_SRC emacs-lisp
   (setq my-diagram-dir "~/Dropbox/softwares/")
 
   (setq org-ditaa-jar-path (expand-file-name "ditaa.jar" my-diagram-dir))
   (setq org-plantuml-jar-path (expand-file-name "plantuml.jar" my-diagram-dir))
 #+END_SRC
+*** TikZ
+Untuk membolehkan preview image Tikz di org-mode diambil dari [[http://bnbeckwith.com/blog/org-mode-tikz-previews-on-windows.html][sini]]. Pakai kekuci =C-c
+C-x C-l= untuk preview di source code dan =C-c C-c= kembali ke source teks.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'org-latex-packages-alist
+               '("" "tikz" t))
+
+  (eval-after-load "preview"
+    '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
+
+  (setq org-latex-create-formula-image-program 'imagemagick)
+#+END_SRC
+
+Contoh utk pakai di org-mode. Pastikan =:results raw= supaya code hanya dikopi ke TeX
+dan tidak dilarikan.
+
+#+BEGIN_EXAMPLE
+  #+begin_src latex :file fsa.pdf :packages '(("" "tikz")) :border 1em :results raw
+    % Define block styles
+    \usetikzlibrary{shapes,arrows}
+    \tikzstyle{astate} = [circle, draw, text centered, font=\footnotesize, fill=blue!25]
+    \tikzstyle{rstate} = [circle, draw, text centered, font=\footnotesize, fill=red!25]
+
+    \begin{tikzpicture}[->,>=stealth', shorten >=1pt, auto, node distance=2.8cm, semithick]
+      \node [astate] (1) at (0,0) {1};
+      \node [astate] (2) at (1,0) {2};
+      \node [rstate] (3) at (2,0) {3};
+      \path (1) edge [bend left] node {b} (2)
+            (2) edge node {b} (3)
+            (2) edge [bend left] node {a} (1)
+            (3) edge [loop above] node {(a, b)} (3);
+    \end{tikzpicture}
+  #+end_src
+  #+CAPTION: tikz caption
+  #+LABEL: fig:tikz
+  #+RESULTS:
+  [[file:fsa.pdf]]
+#+END_EXAMPLE
 
 ** Exporting
 *** markdown
@@ -4754,6 +4816,7 @@ sudo apt install pandoc
     :mode (("README\\.md\\'" . gfm-mode)
            ("\\.md\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown")
     :config
     ;;(setq markdown-enable-math t)
 
