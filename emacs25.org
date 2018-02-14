@@ -4158,7 +4158,7 @@ Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
       ("s" flyspell-region)
       ("q" (message "KELUAR") :exit t))
 
-    (key-chord-define-global "js" #'hydra-kamus/body)
+    (key-chord-define-global "jx" #'hydra-kamus/body)
 
     :config
     ;;(flyspell-mode t)
