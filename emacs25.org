@@ -5860,8 +5860,8 @@ package-refresh-contents=
    ^Kunci magit/GIT^
    ^^^^^^^^----------------
    _s_: status     _f_: fetch      _o_: checkout    _b_: branch manager         _a_: blame
-   _d_: diff       _c_: clone      _l_: log         _u_: branch and checkout    ^  ^
-   _p_: pull       _m_: merge      _!_: command     _k_: branch delete          _q_: keluar
+   _d_: diff       _c_: clone      _l_: log buffer  _u_: branch and checkout    _!_: command
+   _p_: pull       _m_: merge      _L_: log         _k_: branch delete          _q_: keluar
 
         "
         ("s" magit-status)
@@ -5873,7 +5873,8 @@ package-refresh-contents=
         ("o" magit-checkout)
         ("b" magit-branch-popup)
         ("u" magit-branch-and-checkout)
-        ("l" magit-log)
+        ("L" magit-log)
+        ("l" magit-log-buffer-file)
         ("!" magit-git-command)
         ("k" magit-branch-delete)
         ("a" magit-blame-popup)
