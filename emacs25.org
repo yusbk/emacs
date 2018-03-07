@@ -4391,7 +4391,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           ("_"   . self-insert-command)
           ("M-+" . my/dt-update)
           ("M-m" . my/add-match)
-          ("C-c <up>" . ess-readline);previous cmd from script
+          ("M-<up>" . ess-readline);previous cmd from script
           ;; :map ybk/r-map
           ;; ("." . ess-describe-object-at-point)
           ;; ("d" . ess-dev-map)
