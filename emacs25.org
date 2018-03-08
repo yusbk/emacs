@@ -4582,7 +4582,7 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
          ("l" ess-r-devtools-load-package)
          ("c" ess-r-devtools-check-package)
 
-         ("r" ess-dev-mode)
+         ("r" ess-dev-map)
          ("d" ess-r-devtools-document-package)
          ("t" ess-r-devtools-test-package)
          ("q" nil "keluar" :color red))
