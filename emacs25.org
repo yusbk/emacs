@@ -4537,7 +4537,7 @@ memakai fungsi ini.
 ** Debug
 =ess-tracebug= aktiv secara automatik dan untuk mematikan boleh tetapkan =(setq
 ess-use-tracebug nil)=. Untuk penggunaan debug guna kekuci =C-c C-t= [ess-dev-map]
-untuk dapatkan semua kekunci.
+untuk dapatkan semua kekunci. Hydra utk ess-debug pakai =jv= atau =F9=
 
 Untuk penerangan mendalam baca di [[https://code.google.com/archive/p/ess-tracebug/][ess-tracedebug]]
 
@@ -4561,7 +4561,7 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
   ;; Cobaan untuk guna hydra cuma belum selesai
   (eval-after-load 'ess-mode
     '(progn
-       (defhydra ybk-r-debug (:color teal :hint nil)
+       (defhydra hydra-ybk-r-debug (:color teal :hint nil)
          "
          ^ESS R-debug  'C-c C-t' r-dev-map^
 
@@ -4588,7 +4588,8 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
          ("q" (message "KELUAR") :exit t))
 
        ;; (define-key ybk/r-map "a" 'ybk-r-debug/body)
-       (bind-key "<f9>" #'ybk-r-debug/body)
+       (bind-key "<f9>" #'hydra-ybk-r-debug/body)
+       (key-chord-define-global "jv" #'hydra-ybk-r-debug/body)
        ))
 #+END_SRC
 ** Flycheck-julia
