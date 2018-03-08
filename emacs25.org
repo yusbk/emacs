@@ -1003,12 +1003,18 @@ Boleh guna key-chort =-t= untuk pakai selain dari =C-x t=
 #+BEGIN_SRC emacs-lisp
   (use-package shell-pop
     :ensure t
-    :bind ("C-x t" . shell-pop)
-    :init
+    :config
     (setq shell-pop-window-position 'bottom
           shell-pop-window-height 30
           shell-pop-full-span t
           shell-pop-shell-type '("eshell" "*eshell*" (lambda nil (eshell))))
+
+
+    ;; ;;== alternatif måte å gjøre det hvis vil bruke shell
+    ;; (setq shell-pop-window-position 'bottom
+    ;;       shell-pop-window-height 30
+    ;;       shell-pop-full-span t
+    ;;       shell-pop-shell-type '("shell" "*shell*" (lambda nil (shell shell-pop-term-shell))))
     )
 
   ;; key-chord guna key-seq
@@ -1029,6 +1035,8 @@ Boleh guna key-chort =-t= untuk pakai selain dari =C-x t=
   (add-hook 'shell-mode-hook #'goto-address-mode)
   (add-hook 'eshell-mode-hook #'goto-address-mode)
 
+  ;; Bruk standard shell hvis ønskelig
+  (global-set-key (kbd "C-x t") 'shell)
 #+END_SRC
 ** Bash
 Untuk penggunaan =alias=. Eshell akan simpan alias-alias di fail =~/.emacs.d/eshell/alias=. Utk simpan alias di
