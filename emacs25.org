@@ -4563,11 +4563,13 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
     '(progn
        (defhydra ybk-r-debug (:color teal :hint nil)
          "
-          ^ESS R-debug  'C-c C-t' r-dev-map^
-          ^---^----------^---^----------^---^----------^---^---------------------------
-          _o_: Object    _n_: Next BP   _k_: Kill BP   _l_: Load PKG   _d_: doc PKG
-          _b_: Set BP    _p_: Prev BP   _K_: Kill all  _c_: Check PKG  _t_: test PKG
+         ^ESS R-debug  'C-c C-t' r-dev-map^
 
+         ^Misc          ^Package^               ^^Break point
+         ^--------------^-------------------------^----------------------
+         _o_: object     _m_: create  _t_: test    _b_: set    _k_: kill
+         _a_: devtools   _l_: load    _c_: check   _n_: next   _K_: kill all
+                       ^^_d_: doc                ^^_p_: prev
          "
          ("o" ess-describe-object-at-point)
          ("b" ess-bp-set)
@@ -4576,9 +4578,11 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
 
          ("n" ess-bp-next)
          ("p" ess-bp-previous)
+         ("a" ess-r-devtools-ask)
          ("l" ess-r-devtools-load-package)
          ("c" ess-r-devtools-check-package)
 
+         ("m" ess-r-devtools-create-package)
          ("d" ess-r-devtools-document-package)
          ("t" ess-r-devtools-test-package)
          ("q" nil "keluar" :color red))
