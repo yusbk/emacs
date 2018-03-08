@@ -4565,11 +4565,11 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
          "
          ^ESS R-debug  'C-c C-t' r-dev-map^
 
-         ^Misc          ^Package^               ^^Break point
-         ^--------------^-------------------------^----------------------
-         _o_: object     _l_: load   _t_: test    _b_: set    _k_: kill
-         _a_: devtools   _d_: doc    _c_: check   _n_: next   _K_: kill all
-                       ^^_r_: dev               ^^_p_: prev
+         ^Misc          ^Package^             ^^Break point^           ^^^Exit [_q_]
+         ^--------------^-----------------------^-----------------------
+         _o_: object     _l_: load  _t_: test    _b_: set    _k_: kill
+         _a_: devtools   _d_: doc   _c_: check   _n_: next   _K_: kill all
+         _e_: traceback                      ^^^^_p_: prev
          "
          ("o" ess-describe-object-at-point)
          ("b" ess-bp-set)
@@ -4582,10 +4582,10 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
          ("l" ess-r-devtools-load-package)
          ("c" ess-r-devtools-check-package)
 
-         ("r" ess-dev-map)
+         ("e" ess-show-traceback)
          ("d" ess-r-devtools-document-package)
          ("t" ess-r-devtools-test-package)
-         ("q" nil "keluar" :color red))
+         ("q" (message "KELUAR") :exit t))
 
        ;; (define-key ybk/r-map "a" 'ybk-r-debug/body)
        (bind-key "<f9>" #'ybk-r-debug/body)
