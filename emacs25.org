@@ -5765,7 +5765,8 @@ Untuk melihat perbezaan antara dua fail menggunakan =ediff=. Aturcara ini diambi
 #+END_SRC
 
 ** Backup-walker
-Untuk menunjukkan =diff= file semasa dan file sebelumnya. Boleh guna =blame=
+Untuk menunjukkan =diff= file semasa dan file sebelumnya sekiranya fail ada di
+/backup/. Boleh guna =blame= atau =backup-walker=
 #+BEGIN_SRC emacs-lisp
   (use-package backup-walker
     :ensure t
@@ -6342,9 +6343,9 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     "
     ^Programming keymap: [F12] or jc^
     ^----------------------------------
-    _P_: Projectile     _a_: start exp    _x_: kill exp        _o_: Origami          _k_: kill other buffers
-    _p_: Find project   _e_: end exp      _y_: Yasnippet       _w_: Send2browser     _s_: create scratch
-    _g_: Magit          _u_: unwrap exp   _-_: Del unuse yas.  _c_: Cleanup/tabbify  _d_: Ediff
+    _P_: Projectile    _a_: start exp   _x_: kill exp        _k_: kill other buffers  _g_: Magit       _s_: create scratch
+    _p_: Find project  _e_: end exp     _y_: Yasnippet       _w_: Send2browser        _d_: Ediff
+    _o_: Origami       _u_: unwrap exp  _-_: Del unuse yas.  _c_: Cleanup/tabbify     _b_: diff-walker
 
     "
 
@@ -6366,6 +6367,7 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     ("k" crux-kill-other-buffers)
     ("s" crux-create-scratch-buffer)
     ("d" ediff)
+    ("b" backup-walker-start)
 
     ("q" nil "KELUAR")
     )
