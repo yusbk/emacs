@@ -4647,6 +4647,13 @@ semula ke R gunakan kekunci =C-x q=
 * Polymode (for knitr)
 Mode ini dipakai untuk membuat dokumen yang menggunakan program R.
 ** Aturcara
+
+|-----+-----------|
+| key | fungsi    |
+|-----+-----------|
+| jz  | hydra-Rmd |
+|     |           |
+
 Polymode is a (relatively new) way of working with multiple major modes. This is
 especially helpful if we want to use latex or markdown together with R code. The
 process is as follows:
@@ -4718,8 +4725,8 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
       )
 
     ;;==key ikut urutan
-    ;;(key-seq-define-global "jz" 'hydra-ybk-rmd/body)
-    (key-seq-define polymode-mode-map "jz" 'hydra-ybk-rmd/body)
+    (key-seq-define-global "jz" 'hydra-ybk-rmd/body)
+    ;;(key-seq-define ess-mode-map "jz" 'hydra-ybk-rmd/body)
 
     ;; (bind-key "<f7>" #'hydra-ybk-rmd/body)
     )
