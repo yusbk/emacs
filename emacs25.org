@@ -4561,23 +4561,23 @@ memakai fungsi ini.
 ** Debug
 =ess-tracebug= aktiv secara automatik dan untuk mematikan boleh tetapkan =(setq
 ess-use-tracebug nil)=. Untuk penggunaan debug guna kekuci =C-c C-t= [ess-dev-map]
-untuk dapatkan semua kekunci. Hydra utk ess-debug pakai =jv= atau =F9=
+untuk dapatkan semua kekunci. Hydra utk ess-debug pakai =jk= atau =F9=
 
 Untuk penerangan mendalam baca di [[https://code.google.com/archive/p/ess-tracebug/][ess-tracedebug]]
 
 Bila debugging, kekuci ini boleh dipakai
 
-|-----------+---------------------------|
-| Kekuci    | Fungsi                    |
-|-----------+---------------------------|
-| F9        | hydra-r-debug             |
-| M-C       | Teruskan (continue)       |
-| M-C-C     | Teruskan pelbagai (multi) |
-| M-C-N     | Next step multi           |
-| M-Q       | quit                      |
-| C-x M-g n | next-error                |
-| C-x M-g p | pervious-error            |
-|-----------+---------------------------|
+|------------+---------------------------|
+| Kekuci     | Fungsi                    |
+|------------+---------------------------|
+| F9 atau jk | hydra-r-debug             |
+| M-C        | Teruskan (continue)       |
+| M-C-C      | Teruskan pelbagai (multi) |
+| M-C-N      | Next step multi           |
+| M-Q        | quit                      |
+| C-x M-g n  | next-error                |
+| C-x M-g p  | pervious-error            |
+|------------+---------------------------|
 
 Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
 
@@ -4618,8 +4618,8 @@ Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
        ;;(bind-key "<f9>" #'hydra-ybk-r-debug/body)
 
        ;;(key-chord-define-global "jv" #'hydra-ybk-r-debug/body)
-       (key-seq-define ess-mode-map "jv" #'hydra-ybk-r-debug/body)
-       (key-seq-define inferior-ess-mode-map "jv" #'hydra-ybk-r-debug/body)
+       (key-seq-define ess-mode-map "jk" #'hydra-ybk-r-debug/body)
+       (key-seq-define inferior-ess-mode-map "jk" #'hydra-ybk-r-debug/body)
        ))
 #+END_SRC
 ** Flycheck-julia
@@ -4649,11 +4649,11 @@ semula ke R gunakan kekunci =C-x q=
 Mode ini dipakai untuk membuat dokumen yang menggunakan program R.
 ** Aturcara
 
-|-----+-----------|
-| key | fungsi    |
-|-----+-----------|
-| jz  | hydra-Rmd |
-|     |           |
+|-----+--------------------|
+| key | fungsi             |
+|-----+--------------------|
+| js  | hydra-Rmd (Sweave) |
+|     |                    |
 
 Polymode is a (relatively new) way of working with multiple major modes. This is
 especially helpful if we want to use latex or markdown together with R code. The
@@ -4728,8 +4728,8 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
       )
 
     ;;==key ikut urutan
-    (key-seq-define-global "jz" 'hydra-ybk-poly/body)
-    ;;(key-seq-define ess-mode-map "jz" 'hydra-ybk-poly/body)
+    (key-seq-define-global "js" 'hydra-ybk-poly/body)
+    ;;(key-seq-define ess-mode-map "js" 'hydra-ybk-poly/body)
 
     ;; (bind-key "<f7>" #'hydra-ybk-poly/body)
     )
