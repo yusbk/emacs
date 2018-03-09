@@ -4701,10 +4701,11 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
       ("q" (message "Selesai") :exit t)
       )
 
-    ;;key ikut urutan
-    (key-seq-define-global "jz" 'hydra-ybk-rmd/body)
+    ;;==key ikut urutan
+    ;;(key-seq-define-global "jz" 'hydra-ybk-rmd/body)
+    (key-seq-define polymode-mode-map "jz" 'hydra-ybk-rmd/body)
 
-    (bind-key "<f7>" #'hydra-ybk-rmd/body)
+    ;; (bind-key "<f7>" #'hydra-ybk-rmd/body)
     )
 #+END_SRC
 
