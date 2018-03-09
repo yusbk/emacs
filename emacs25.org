@@ -85,8 +85,9 @@ Sesuai bila banyak mukasurat
     ("n" narrow-to-page "narrow" :bind nil :exit t))
 #+END_SRC
 
-* Key Chord
-Untuk buat kekunci singkatan dengan dua huruf ditekan serentak. Rujukan [[http://www.emacswiki.org/emacs/key-chord.el][Key Chord Mode]]
+* Kekunci
+** Key chord
+Untuk membuat kekunci singkatan dengan hanya dua huruf. Rujukan [[http://www.emacswiki.org/emacs/key-chord.el][Key Chord Mode]]
 #+BEGIN_SRC emacs-lisp
   (use-package key-chord
     :ensure t
@@ -99,11 +100,6 @@ Untuk buat kekunci singkatan dengan dua huruf ditekan serentak. Rujukan [[http:/
     ;; Should normally be a little longer than `key-chord-two-keys-delay'.
     (setq key-chord-one-key-delay 0.3) ; default 0.2
     )
-
-  ;; Sequence huruf
-  (use-package key-seq
-    :ensure t
-    :after key-chord)
 #+END_SRC
 
 John Cook's post http://www.johndcook.com/blog/2015/02/01/rare-bigrams/
@@ -122,6 +118,23 @@ ww
 xb xd xg xk xm xs xw
 yy
 zb zd zf zg zk zm zp zs zw zx
+
+** Key sequence
+Pakej =key-seq= dipakai untuk memastikan turutan kekunci sebelum mengaktifkan
+fungsi. Ia bergantung pada pakej =key-chord=. Untuk rujukan boleh baca di [[https://github.com/vlevit/key-seq.el][GitHub]].
+
+Dua fungsi yang boleh dipakai iaitu:
+
+#+BEGIN_EXAMPLE
+(key-seq-define-global "qd" 'dired)
+(key-seq-define text-mode-map "qf" 'flyspell-buffer)
+#+END_EXAMPLE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package key-seq
+    :ensure t
+    :after key-chord)
+#+END_SRC
 
 * Keymaps
 Utk keluar keymap
