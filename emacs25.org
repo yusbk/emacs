@@ -4611,8 +4611,11 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
          ("t" ess-r-devtools-test-package)
          ("q" (message "KELUAR") :exit t))
 
-       ;; (define-key ybk/r-map "a" 'ybk-r-debug/body)
-       (bind-key "<f9>" #'hydra-ybk-r-debug/body)
+       ;;== key-binding
+       (define-key ess-mode-map "<f9>" 'ybk-r-debug/body)
+       (define-key inferior-ess-mode-map "<f9>" 'ybk-r-debug/body)
+       ;;(bind-key "<f9>" #'hydra-ybk-r-debug/body)
+
        ;;(key-chord-define-global "jv" #'hydra-ybk-r-debug/body)
        (key-seq-define ess-mode-map "jv" #'hydra-ybk-r-debug/body)
        (key-seq-define inferior-ess-mode-map "jv" #'hydra-ybk-r-debug/body)
@@ -5923,7 +5926,8 @@ package-refresh-contents=
         ("q" (message "Selesai") :exit t)
         )
 
-      (key-chord-define-global "jg" #'hydra-magit/body)
+      ;;(key-chord-define-global "jg" #'hydra-magit/body)
+      (key-seq-define-global "jg" #'hydra-magit/body)
       (bind-key "g" #'hydra-magit/body 'ybk/prog-map)
       )
 
