@@ -6393,7 +6393,7 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     "
     ^Programming keymap: [F12] or jc^
 
-    ^Project^          ^SEXP^            ^misc^                   ^kode^                ^extra^
+    ^Project^          ^expr^            ^misc^                   ^kode^                ^extra^
     ^---------------------------------------------------------------------------------------------------
     _P_: Projectile    _a_: start exp    _k_: kill other buffers  _g_: Magit            _r_: knitr
     _p_: find project  _e_: end exp      _y_: Yasnippet           _d_: Ediff            _R_: debug R
