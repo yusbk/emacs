@@ -4696,39 +4696,41 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
         (poly-markdown+r-mode)))
 
     ;; Hydra
-    (defhydra hydra-ybk-rmd (:hint nil)
+    (defhydra hydra-ybk-poly (:hint nil)
       "
-     ^RMarkdown keys - jz^  [_q_: Keluar]
-     ^--^-------------^--^--------------
-     _c_: Insert chk  _r_: Evaluate chk  _n_: next chk      _f_: Fold chk      _u_: Unfold chk  _d_: Create doc
-     _k_: kill chk    _t_: Eval buffer   _p_: previous chk  _a_: Fold all chk  ^ ^              _e_: Export M-n-e
+     ^Polymode^                   ^Markdown^
+     ^----------------------------------------------------------------------------------
+     _n_: next      _e_: evaluate   _c_: insert chk     _f_: Fold chk      _d_: Create html
+     _p_: previous  _w_: weave      _t_: eval. buffer   _a_: Fold all chk
+     _k_: kill                    ^^_r_: eval. chk      _u_: Unfold chk    _q_: KELUAR
 
+     Rnw guna '<' utk masukkan chunck baru
      "
-      ("c" rmd-insert-r-chunk)
-      ("k" polymode-kill-chunk)
-
-      ("r" rmd-eval-chunk)
-      ("t" rmd-eval-buffer)
-
       ("n" polymode-next-chunk-same-type)
       ("p" polymode-previous-chunk-same-type)
+      ("k" polymode-kill-chunk)
+
+      ("e" polymode-export)
+      ("w" polymode-weave)
+
+      ("c" rmd-insert-r-chunk)
+      ("r" rmd-eval-chunk)
+      ("t" rmd-eval-buffer)
 
       ("f" rmd-fold-block)
       ("a" rmd-fold-all-blocks)
       ("u" fold-this-unfold-all)
 
       ("d" poly-ess-rmarkdown)
-      ("e" polymode-export)
-
       ;; ("q" nil "keluar" :color red)
       ("q" (message "Selesai") :exit t)
       )
 
     ;;==key ikut urutan
-    (key-seq-define-global "jz" 'hydra-ybk-rmd/body)
-    ;;(key-seq-define ess-mode-map "jz" 'hydra-ybk-rmd/body)
+    (key-seq-define-global "jz" 'hydra-ybk-poly/body)
+    ;;(key-seq-define ess-mode-map "jz" 'hydra-ybk-poly/body)
 
-    ;; (bind-key "<f7>" #'hydra-ybk-rmd/body)
+    ;; (bind-key "<f7>" #'hydra-ybk-poly/body)
     )
 #+END_SRC
 
