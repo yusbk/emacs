@@ -6392,11 +6392,13 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
   (defhydra hydra-ybk-prog (:hint nil)
     "
     ^Programming keymap: [F12] or jc^
-    ^----------------------------------
-    _P_: Projectile    _a_: start exp   _x_: kill exp        _k_: kill other buffers  _g_: Magit       _s_: create scratch
-    _p_: find project  _e_: end exp     _y_: Yasnippet       _w_: send2browser        _d_: Ediff
-    _o_: Origami       _u_: unwrap exp  _-_: del unuse yas.  _c_: cleanup/tabbify     _f_: diff-walker _q_: KELUAR
 
+    ^Project^          ^SEXP^            ^misc^                   ^kode^                ^extra^
+    ^---------------------------------------------------------------------------------------------------
+    _P_: Projectile    _a_: start exp    _k_: kill other buffers  _g_: Magit            _r_: knitr
+    _p_: find project  _e_: end exp      _y_: Yasnippet           _d_: Ediff            _R_: debug R
+    _o_: Origami       _u_: unwrap exp   _-_: del unuse yas.      _f_: diff-walker
+    _s_: scratch       _x_: kill exp     _w_: send2browser        _c_: cleanup/tabbify  _q_: KELUAR
     "
 
     ("P" hydra-projectile/body :exit t)
@@ -6418,6 +6420,9 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     ("s" crux-create-scratch-buffer)
     ("d" ediff)
     ("f" backup-walker-start)
+
+    ("r" hydra-ybk-poly/body :exit t)
+    ("R" hydra-ybk-r-debug/body :exit t)
 
     ("q" (message "KELUAR") :exit t)
     )
