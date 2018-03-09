@@ -182,7 +182,7 @@ Keymap utk berkaitan dengan Org-mode
 
 ** R keymap [F9]
 Keymap untuk penggunaan berkaitan ESS-R. Cuma aktiv di =ess-mode=
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (bind-keys :prefix "<f9>"
              :prefix-map ybk/r-map )
 
@@ -4570,6 +4570,7 @@ Bila debugging, kekuci ini boleh dipakai
 |-----------+---------------------------|
 | Kekuci    | Fungsi                    |
 |-----------+---------------------------|
+| F9        | hydra-r-debug             |
 | M-C       | Teruskan (continue)       |
 | M-C-C     | Teruskan pelbagai (multi) |
 | M-C-N     | Next step multi           |
@@ -4578,7 +4579,7 @@ Bila debugging, kekuci ini boleh dipakai
 | C-x M-g p | pervious-error            |
 |-----------+---------------------------|
 
-Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
+Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
 
 #+BEGIN_SRC emacs-lisp
 
@@ -4612,8 +4613,8 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
          ("q" (message "KELUAR") :exit t))
 
        ;;== key-binding
-       (define-key ess-mode-map "<f9>" 'ybk-r-debug/body)
-       (define-key inferior-ess-mode-map "<f9>" 'ybk-r-debug/body)
+       (define-key ess-mode-map "<f9>" 'hydra-ybk-r-debug/body)
+       (define-key inferior-ess-mode-map "<f9>" 'hydra-ybk-r-debug/body)
        ;;(bind-key "<f9>" #'hydra-ybk-r-debug/body)
 
        ;;(key-chord-define-global "jv" #'hydra-ybk-r-debug/body)
@@ -5685,15 +5686,16 @@ minit scan di aplikasi
 |---------+---------|
 | Kekunci | Fungsi  |
 |---------+---------|
-| f9      | Neotree |
+| F4      | Neotree |
 |---------+---------|
 
-Untuk navigasi di directory. Rujukkan di [[https://github.com/jaypei/emacs-neotree][Neotree]]. Pakai melalui =f9= launch menu.
+Untuk navigasi di directory. Rujukkan di [[https://github.com/jaypei/emacs-neotree][Neotree]]. Pakai melalui =F4= launch menu.
 
 #+BEGIN_SRC emacs-lisp
   (use-package neotree
     :ensure t
     :defer 1
+    :bind (("<f4>" . neotree-toggle))
     :init
     (progn
       (setq-default neo-smart-open t) ;  every time when the neotree window is
@@ -5777,9 +5779,9 @@ Untuk navigasi di directory. Rujukkan di [[https://github.com/jaypei/emacs-neotr
        ("c"          . neotree-create-node)
        ("+"          . neotree-create-node)
        ("d"          . neotree-delete-node)
-       ("r"          . neotree-rename-node))))
-
-
+       ("r"          . neotree-rename-node)
+       ("h"          . neotree-hidden-file-toggle)
+       ("f"          . neotree-refresh))))
 #+END_SRC
 * Tunjuk beza (ediff)
 ** Ediff
@@ -5811,6 +5813,7 @@ Untuk melihat perbezaan antara dua fail menggunakan =ediff=. Aturcara ini diambi
 ** Backup-walker
 Untuk menunjukkan =diff= file semasa dan file sebelumnya sekiranya fail ada di
 /backup/. Boleh guna =blame= atau =backup-walker=
+
 #+BEGIN_SRC emacs-lisp
   (use-package backup-walker
     :ensure t
@@ -5832,6 +5835,7 @@ Untuk menunjukkan =diff= file semasa dan file sebelumnya sekiranya fail ada di
 | branch -v   | Tunjuk last commit utk semua branch |
 | branch -vv  | Tunjuk tracking branches            |
 | branch -u   | Tetapkan upstream                   |
+
 ** Git
 Untuk pakai git command line:
 - Utk periksa last commit. Boleh pakai salah satu
@@ -6246,8 +6250,8 @@ Untuk dengar lagu-lagu diambil dari [[https://www.gnu.org/software/emms/index.ht
 Beberapa situasi yang pernah dialami dan beberikan masalah
 
 ** XF86 keys
-Sekiranya kekunci dari F2 ke F12 tidak berfungsi dan benunjukkan XF86New, XF86Open,
-XF86Close dll menandakan button ~LOCK~ diaktifkan.
+Sekiranya kekunci dari F2 ke F12 tidak berfungsi dan hanya menunjukkan XF86New, XF86Open,
+XF86Close dan sebagainya ini menandakan yang button ~LOCK~ diaktifkan.
 * My personal hydra keymaps
 ** General keymap [yy]
 Hydra untuk fungsi awam
@@ -6390,8 +6394,8 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     ^Programming keymap: [F12] or jc^
     ^----------------------------------
     _P_: Projectile    _a_: start exp   _x_: kill exp        _k_: kill other buffers  _g_: Magit       _s_: create scratch
-    _p_: Find project  _e_: end exp     _y_: Yasnippet       _w_: Send2browser        _d_: Ediff
-    _o_: Origami       _u_: unwrap exp  _-_: Del unuse yas.  _c_: Cleanup/tabbify     _b_: diff-walker
+    _p_: find project  _e_: end exp     _y_: Yasnippet       _w_: send2browser        _d_: Ediff
+    _o_: Origami       _u_: unwrap exp  _-_: del unuse yas.  _c_: cleanup/tabbify     _f_: diff-walker _q_: KELUAR
 
     "
 
@@ -6413,9 +6417,9 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     ("k" crux-kill-other-buffers)
     ("s" crux-create-scratch-buffer)
     ("d" ediff)
-    ("b" backup-walker-start)
+    ("f" backup-walker-start)
 
-    ("q" nil "KELUAR")
+    ("q" (message "KELUAR") :exit t)
     )
 
   ;; ikut urutan huruf
