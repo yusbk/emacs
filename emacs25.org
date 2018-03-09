@@ -4602,7 +4602,9 @@ Guna [F9] ybk/r-map bila di ess-mode untuk dapatkan kekuci di bawah:
 
        ;; (define-key ybk/r-map "a" 'ybk-r-debug/body)
        (bind-key "<f9>" #'hydra-ybk-r-debug/body)
-       (key-chord-define-global "jv" #'hydra-ybk-r-debug/body)
+       ;;(key-chord-define-global "jv" #'hydra-ybk-r-debug/body)
+       (key-seq-define ess-mode-map "jv" #'hydra-ybk-r-debug/body)
+       (key-seq-define inferior-ess-mode-map "jv" #'hydra-ybk-r-debug/body)
        ))
 #+END_SRC
 ** Flycheck-julia
@@ -6350,7 +6352,8 @@ Hydra keymap untuk =org=. Singkatan =w= sebagai *Word*
     ("q" nil "KELUAR"))
 
   ;; ikut urutan huruf
-  (key-seq-define-global "jw" 'ybk-keymap-org/body)
+  ;;(key-seq-define-global "jw" 'ybk-keymap-org/body)
+  (key-seq-define org-mode-map "jw" 'ybk-keymap-org/body)
 
   ;; ;; tanpa ikut urutan huruf
   ;; (key-chord-define-global "zd" #'ybk-keymap-org/body)
