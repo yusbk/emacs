@@ -6259,10 +6259,10 @@ Hydra untuk fungsi awam
   (defhydra hydra-ybk-general (:hint nil)
     "
      ^General keymap [F6] or yy^
-     ^^^-------------------------------
-     _x_: save buffers & exit _k_: delete file/buffer _d_: musics         _c_: weather         _y_: ybk-emacs       _h_: heading
-     _w_: swap-windows        _n_: file explore       _r_: rss            _b_: weather update  _g_: highlight       _t_: tukar theme
-     _m_: show/hide menu bar  _f_: file diff          _s_: stackExchange  _o_: scratch         _l_: warna highlight
+     ^-------------------------------
+     _y_: ybk-emac     _g_: highlight        _s_: stackExchange  _w_: swap-windows       _d_: musics          _x_: save buffers & exit
+     _h_: heading      _l_: warna highlight  _r_: rss            _n_: file explore       _c_: weather
+     _t_: tukar theme  _m_: menu bar         _o_: scratch        _k_: delete file/buffer _b_: weather update  _q_: KELUAR
 
     "
     ("o" ybk/get-scratch)
@@ -6273,7 +6273,6 @@ Hydra untuk fungsi awam
     ("d" emms)
     ("m" toggle-menu-bar-mode-from-frame)
     ("n" neotree-toggle)
-    ("f" backup-walker-start)
 
     ("r" bjm/elfeed-load-db-and-open)
     ("s" hydra-stackExchange/body :exit t)
@@ -6287,7 +6286,9 @@ Hydra untuk fungsi awam
 
     ("h" worf-goto)
 
-    ("q" nil "KELUAR"))
+    ("q" (message "KELUAR") :exit t)
+    ;; ("q" nil "KELUAR")
+    )
 
   (key-chord-define-global "yy" #'hydra-ybk-general/body)
   (global-set-key (kbd "<f6>") 'hydra-ybk-general/body)
