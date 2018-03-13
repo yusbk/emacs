@@ -6261,7 +6261,7 @@ Hydra untuk fungsi awam
      ^General keymap [F6] or yy^
      ^-------------------------------
      _y_: ybk-emac     _g_: highlight        _s_: stackExchange  _w_: swap-windows       _d_: musics          _x_: save buffers & exit
-     _h_: heading      _l_: warna highlight  _r_: rss            _n_: file explore       _c_: weather
+     _h_: heading      _l_: warna highlight  _r_: rss            _n_: file explore [F4]  _c_: weather
      _t_: tukar theme  _m_: menu bar         _o_: scratch        _k_: delete file/buffer _b_: weather update  _q_: KELUAR
 
     "
