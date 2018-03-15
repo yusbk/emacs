@@ -1,9 +1,8 @@
 alias gitw ~/Git-work/
 alias gitp ~/Git-personal/
-alias gite ~/Git-personal/emacs/
 alias gitb cd ~/Git-personal/yusbk.github.io/org
-alias cd.e cd ~/.emacs.d
-alias cde cd ~/Git-personal/emacs/
+alias gite cd ~/Git-personal/emacs/
+alias cde cd ~/.emacs.d
 alias cdd cd ~/Dropbox/
 alias cdm cd ~/Dropbox/org/møter/
 alias cpe2 cp emacs25.org ~/Git-personal/emacs/ ; cd ~/Git-personal/emacs
@@ -14,3 +13,4 @@ alias la ls -a
 alias ll ls -l
 alias f find-file $1
 alias ff find-file $1
+alias asd find -name "#*#" -print -delete
