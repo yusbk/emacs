@@ -366,9 +366,34 @@ Sembunyikan tetikus masa menaip
 #+END_SRC
 ** Komen region
 Komen bahagian teks selepas di-highlight
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (global-set-key (kbd "M-'") 'comment-or-uncomment-region)
 #+END_SRC
+
+Kommen line tanpa perlu highlight seperti menggunakan
+=comment-or-uncommment-region=. Barisan yang ada kursor akan di komen. Cara ini
+diambil dari [[  (global-set-key (kbd "M-'") 'comment-or-uncomment-region)][StackOverflow]]
+
+#+BEGIN_SRC emacs-lisp
+  (defun comment-eclipse ()
+    (interactive)
+    (let ((start (line-beginning-position))
+          (end (line-end-position)))
+      (when (or (not transient-mark-mode) (region-active-p))
+        (setq start (save-excursion
+                      (goto-char (region-beginning))
+                      (beginning-of-line)
+                      (point))
+              end (save-excursion
+                    (goto-char (region-end))
+                    (end-of-line)
+                    (point))))
+      (comment-or-uncomment-region start end)))
+
+  (global-set-key (kbd "M-'") 'comment-eclipse)
+#+END_SRC
+
+
 ** Scrolling
 Diambil dari [[http://whattheemacsd.com/key-bindings.el-02.html][What the emacs.d]]
 
