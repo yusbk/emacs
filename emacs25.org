@@ -393,7 +393,6 @@ diambil dari [[  (global-set-key (kbd "M-'") 'comment-or-uncomment-region)][Stac
   (global-set-key (kbd "M-'") 'comment-eclipse)
 #+END_SRC
 
-
 ** Scrolling
 Diambil dari [[http://whattheemacsd.com/key-bindings.el-02.html][What the emacs.d]]
 
@@ -1119,17 +1118,14 @@ ditetapkan di =Ivy= atau =C-x C-r= dari [[https://www.emacswiki.org/emacs/Recent
 * Backup and auto-save files
 Aturcara berkenaan dengan backup
 ** Backup settings
-I want emacs to make these, but don't want to clutter up my
-project folders with tons of backup files with ~#file.name#~. Solution: put them in
-the ~backups~ directory.
+Setiap fail akan di backup bila fail di simpan /(save)/ dan versi sebelumnya disimpan
+dengan meletakkan simbol =~= dinama fail contohnya fail =nama~= bila fail =nama=
+disimpan. Fail-fail ini disimpan di folder ~backups~ supaya tidak terselerak di folder utama.
 
 #+BEGIN_SRC emacs-lisp
-  ;; ;; matikan autosave
-  ;; (setq auto-save-default nil)
-
   ;; simpan auto-save di direktori "backups"
   (setq backup-directory-alist
-        `(("." . ,(concat user-emacs-directory "backups"))))
+        `((".*" . ,(concat user-emacs-directory "backups"))))
 
   (setq make-backup-files t               ; backup of a file the first time it is saved.
         backup-by-copying t               ; don't clobber symlinks
@@ -1141,6 +1137,27 @@ the ~backups~ directory.
         )
   (setq vc-make-backup-files t) ;;  backup versioned files, which Emacs does not do by default
 #+END_SRC
+
+** Auto-save
+Fail-fail yang sedang dibuka akan disimpan setiap saat atau setiap tambahan huruf
+dibuat. Fail-fail seperti =#nama#= disimpan sekiranya fail yang tersebut berubah
+tetapi tidak disimpan. Bila fail disimpan /(save)/ maka fail auto-save akan dipadam
+secara automatik.
+
+#+BEGIN_SRC emacs-lisp
+  ;; buat direktori utk auto-save
+  (defvar ybk/auto-save (concat user-emacs-directory "autosave/"))
+  (unless (file-exists-p ybk/auto-save)
+    (make-directory ybk/auto-save))
+
+  ;; simpan auto-save di direktori "backups"
+  (setq auto-save-file-name-transforms
+        `((".*" "~/.emacs.d/autosave/" t)))
+
+  ;; ;; matikan autosave
+  ;; (setq auto-save-default nil)
+#+END_SRC
+
 * Undo
 =C-z= as undo, not minimize emacs
 #+BEGIN_SRC emacs-lisp
