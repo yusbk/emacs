@@ -6302,35 +6302,34 @@ Hydra untuk fungsi awam
     "
      ^General keymap [F6] or yy^
      ^-------------------------------
-     _y_: ybk-emac     _g_: highlight        _s_: stackExchange  _w_: swap-windows       _d_: musics          _x_: save buffers & exit
-     _h_: heading      _l_: warna highlight  _r_: rss            _n_: file explore [F4]  _c_: weather
-     _t_: tukar theme  _m_: menu bar         _o_: scratch        _k_: delete file/buffer _b_: weather update  _q_: KELUAR
-
+     _y_: ybk-init  _g_: highlight        _s_: stackOverflow  _w_: swap-windows       _e_: musics (emms)   _x_: save buffers & exit
+     _h_: heading   _l_: warna highlight  _r_: rss            _n_: file explore [F4]  _u_: weather (metno) _c_: key-chord-mode
+     _t_: theme     _m_: menu bar         _o_: scratch        _k_: delete file/buffer _U_: weather update  _q_: KELUAR
     "
-    ("o" ybk/get-scratch)
-    ("w" crux-swap-windows)
-    ("k" crux-delete-file-and-buffer)
-    ("x" save-buffers-kill-emacs)
-
-    ("d" emms)
-    ("m" toggle-menu-bar-mode-from-frame)
-    ("n" neotree-toggle)
-
-    ("r" bjm/elfeed-load-db-and-open)
-    ("s" hydra-stackExchange/body :exit t)
-    ("b" weather-metno-update)
-    ("c" weather-metno-forecast)
 
     ("y" ybk/emacs-file)
+    ("h" worf-goto)
     ("t" cycle-my-theme)
+
     ("g" hl-line-mode)
     ("l" hydra-hl-line/body :exit t)
+    ("m" toggle-menu-bar-mode-from-frame)
 
-    ("h" worf-goto)
+    ("s" hydra-stackExchange/body :exit t)
+    ("r" bjm/elfeed-load-db-and-open)
+    ("o" ybk/get-scratch)
 
-    ("q" (message "KELUAR") :exit t)
-    ;; ("q" nil "KELUAR")
-    )
+    ("w" crux-swap-windows)
+    ("n" neotree-toggle)
+    ("k" crux-delete-file-and-buffer)
+
+    ("e" emms)
+    ("u" weather-metno-forecast)
+    ("U" weather-metno-update)
+
+    ("x" save-buffers-kill-emacs)
+    ("c" key-chord-mode)
+    ("q" (message "KELUAR") :exit t))
 
   (key-chord-define-global "yy" #'hydra-ybk-general/body)
   (global-set-key (kbd "<f6>") 'hydra-ybk-general/body)
