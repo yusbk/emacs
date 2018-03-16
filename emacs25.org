@@ -4630,7 +4630,7 @@ Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
     '(progn
        (defhydra hydra-ybk-r-debug (:color teal :hint nil)
          "
-         ^ESS R-debug  'C-c C-t' r-dev-map^
+         ^ESS R-debug  'C-c C-t' r-dev-map. F9 or 'jk'^
 
          ^Misc          ^Package^             ^^Break point^           ^^^Exit [_q_]
          ^--------------^-----------------------^-----------------------
@@ -4655,8 +4655,8 @@ Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
          ("q" (message "KELUAR") :exit t))
 
        ;;== key-binding
-       (define-key ess-mode-map "<f9>" 'hydra-ybk-r-debug/body)
-       (define-key inferior-ess-mode-map "<f9>" 'hydra-ybk-r-debug/body)
+       (define-key ess-mode-map [f9] 'hydra-ybk-r-debug/body)
+       (define-key inferior-ess-mode-map[ f9] 'hydra-ybk-r-debug/body)
        ;;(bind-key "<f9>" #'hydra-ybk-r-debug/body)
 
        ;;(key-chord-define-global "jv" #'hydra-ybk-r-debug/body)
