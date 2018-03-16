@@ -6342,26 +6342,27 @@ Hydra move keymap seperti =F2=. Singkatan =j= sebagai *Jalan*
   (defhydra ybk-map-move (:hint nil)
     "
     ^Move keymap [F2] or jj
-    ^-----------------------------
-    _+_: resize window  _h_: doc heading  _m_: bookmark set   _r_: mark set    _a_: mark show        _s_: reg set
-    _w_: select window  _o_: imenu        _j_: bookmark jump  _n_: mark next   _A_: mark show all    _f_: reg find
-    _b_: move buffer    _g_: goto         _l_: bookmark list  _p_: mark prev   _x_: mark remove all  _t_: bookmark-goto
-
+    ^Misc^                                 ^Bookmarks^          ^Register^
+    ^--------------------------------------^---------^----------^--------^-----------------------------------------------
+    _+_: resize window  _h_: doc heading  _m_: bookmark set  _SPC_: reg set       _r_: mark set    _a_: mark show       _s_: search
+    _w_: select window  _o_: imenu        _t_: bookmark-goto   _j_: reg jump      _n_: mark next   _A_: mark show all
+    _b_: move buffer    _g_: goto         _J_: bookmark jump   _l_: bookmark list _p_: mark prev   _x_: mark remove all _q_: KELUAR
     "
     ("+" resize-window)
     ("w" winum-select-window-by-number)
+    ("b" hydra-buffer/body :exit t)
+
     ("h" worf-goto)
     ("o" counsel-imenu)
-
     ("g" hydra-avy-goto/body :exit t)
-    ("b" hydra-buffer/body :exit t)
-    ("s" point-to-register)
-    ("f" jump-to-register)
 
     ("m" bookmark-set)
-    ("j" bookmark-jump)
-    ("l" bookmark-bmenu-list)
     ("t" ivy-bookmark-goto)
+    ("J" bookmark-jump)
+
+    ("SPC" point-to-register)
+    ("j" jump-to-register)
+    ("l" bookmark-bmenu-list)
 
     ("r" bm-toggle)
     ("n" bm-next)
@@ -6371,7 +6372,8 @@ Hydra move keymap seperti =F2=. Singkatan =j= sebagai *Jalan*
     ("A" bm-show-all)
     ("x" bm-remove-all-all-buffers)
 
-    ("q" nil "KELUAR")
+    ("s" swiper)
+    ("q" (message "KELUAR") :exit t)
     )
 
   ;; pakai urutan huruf
