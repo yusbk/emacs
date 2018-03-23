@@ -14,3 +14,5 @@ alias ll ls -l
 alias f find-file $1
 alias ff find-file $1
 alias asd find -name "#*#" -print -delete
+alias ct encfs ~/Dropbox/.encrypted ~/work
+alias co fusermount -u ~/work
