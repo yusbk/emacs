@@ -4,15 +4,13 @@ alias gitb cd ~/Git-personal/yusbk.github.io/org
 alias gite cd ~/Git-personal/emacs/
 alias cde cd ~/.emacs.d
 alias cdd cd ~/Dropbox/
-alias cdm cd ~/Dropbox/org/møter/
+alias cdm cd ~/Dropbox/org/Meetings/
 alias cpe2 cp emacs25.org ~/Git-personal/emacs/ ; cd ~/Git-personal/emacs
 alias cpe1 cp emacs25.org ~/.emacs.d/ ; cd ~/.emacs.d
 alias dd dired $1
-alias d dired $1
 alias la ls -a
 alias ll ls -l
-alias f find-file $1
 alias ff find-file $1
-alias asd find -name "#*#" -print -delete
+alias bkd find -name "#*#" -print -delete
 alias ct encfs ~/Dropbox/.encrypted ~/work
 alias co fusermount -u ~/work
