@@ -4190,143 +4190,144 @@ komputer saya.
 Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-    (use-package flyspell
-      :ensure t
-      :diminish (flyspell-mode . "")
-      :bind (("C-c f" . flyspell-correct-word-generic)
-             ("C-." . flyspell-auto-correct-word) ;C-M-i alternatif
-             ("C-," . flyspell-goto-next-error)
-             ("C-;" . flyspell-auto-correct-previous-word)
-             ("C-c v" . ybk/flyspell-goto-previous-error)
-             ("C-c i" . ispell-word)
-             :map ybk/org-map
-             ("f" . hydra-ybk-kamus/body))
-      :init
-      ;; Hydra flyspell
-      (defhydra hydra-ybk-kamus (:hint nil )
-        "
-          ^Periksa perkataan (prefix i-Ispell dan f-Flyspell)^
-          ^--^----------^--^------------^--^-------^--^-----------^--^----------^--^-----------
-          _n_: next.err  _p_: prev.err  _w_: iword  _b_: ibuffer  _r_: iregion  _c_: icontinue
-          _i_: ikill     _z_: prev.cor  _y_: fword  _x_: fbuffer  _s_: fregion
+  (use-package flyspell
+    :ensure t
+    :diminish (flyspell-mode . "")
+    :bind (("C-c f" . flyspell-correct-word-generic)
+           ("C-\\" . flyspell-correct-word-generic) ;kekeunci asal C-\ ialah toggle-input-method
+           ("C-." . flyspell-auto-correct-word) ;C-M-i alternatif
+           ("C-," . flyspell-goto-next-error)
+           ("C-;" . flyspell-auto-correct-previous-word)
+           ("C-c v" . ybk/flyspell-goto-previous-error)
+           ("C-c i" . ispell-word)
+           :map ybk/org-map
+           ("f" . hydra-ybk-kamus/body))
+    :init
+    ;; Hydra flyspell
+    (defhydra hydra-ybk-kamus (:hint nil )
+      "
+        ^Periksa perkataan (prefix i-Ispell dan f-Flyspell)^
+        ^--^----------^--^------------^--^-------^--^-----------^--^----------^--^-----------
+        _n_: next.err  _p_: prev.err  _w_: iword  _b_: ibuffer  _r_: iregion  _c_: icontinue
+        _i_: ikill     _z_: prev.cor  _y_: fword  _x_: fbuffer  _s_: fregion
 
-          ^Tukar Kamus^
-          ^---------------------------------------------------------------------
-          _f_: Flysell  _k_: tkr.kamus  _g_: British  _o_: Norwegian     _q_: KELUAR
+        ^Tukar Kamus^
+        ^---------------------------------------------------------------------
+        _f_: Flysell  _k_: tkr.kamus  _g_: British  _o_: Norwegian     _q_: KELUAR
 
-        "
-        ("f" flyspell-mode)
-        ("k" ybk/change-languages)
-        ("g" lang-eng)
-        ("o" lang-norsk)
-        ("c" ispell-continue)
-        ("n" flyspell-goto-next-error)
-        ("p" ybk/flyspell-goto-previous-error)
-        ("w" ispell-word)
-        ("b" ispell-buffer)
-        ("r" ispell-region)
-        ("i" ispell-kill-ispell)
-        ("z" flyspell-corect-previous-word-generic)
-        ("y" flyspell-correct-word-generic)
-        ("x" flyspell-lazy-check-buffer)
-        ("s" flyspell-region)
-        ("q" (message "KELUAR") :exit t))
+      "
+      ("f" flyspell-mode)
+      ("k" ybk/change-languages)
+      ("g" lang-eng)
+      ("o" lang-norsk)
+      ("c" ispell-continue)
+      ("n" flyspell-goto-next-error)
+      ("p" ybk/flyspell-goto-previous-error)
+      ("w" ispell-word)
+      ("b" ispell-buffer)
+      ("r" ispell-region)
+      ("i" ispell-kill-ispell)
+      ("z" flyspell-corect-previous-word-generic)
+      ("y" flyspell-correct-word-generic)
+      ("x" flyspell-lazy-check-buffer)
+      ("s" flyspell-region)
+      ("q" (message "KELUAR") :exit t))
 
-      ;;(key-chord-define-global "qk" #'hydra-kamus/body)
-      (key-seq-define-global "qk" #'hydra-ybk-kamus/body)
+    ;;(key-chord-define-global "qk" #'hydra-kamus/body)
+    (key-seq-define-global "qk" #'hydra-ybk-kamus/body)
 
-      :config
-      ;;(flyspell-mode t)
+    :config
+    ;;(flyspell-mode t)
 
-      ;; Pakai Aspell
-      (setq ispell-program-name "aspell")
-      ;;flyspell-buffer dan flyspell-region perlu "-l" sebagi "--lang" sekiranya pakai aspell
-      (setq ispell-list-command "--list")
-      (setq ispell-extra-args   '("--sug-mode=ultra" ;normal|fast|ultra utk melajukan proses
-                                  "--lang=en_GB")) ;british en_GB
+    ;; Pakai Aspell
+    (setq ispell-program-name "aspell")
+    ;;flyspell-buffer dan flyspell-region perlu "-l" sebagi "--lang" sekiranya pakai aspell
+    (setq ispell-list-command "--list")
+    (setq ispell-extra-args   '("--sug-mode=ultra" ;normal|fast|ultra utk melajukan proses
+                                "--lang=en_GB")) ;british en_GB
 
-      ;; ;; Save a new word to personal dictionary without asking
-      ;; (setq ispell-silently-savep t) ;hanya hidupkan sekiranya sudah tahu fungsinya
+    ;; ;; Save a new word to personal dictionary without asking
+    ;; (setq ispell-silently-savep t) ;hanya hidupkan sekiranya sudah tahu fungsinya
 
-      ;; aktifkan flyspell-mode di mode-mode tertentu
-      (add-hook 'org-mode-hook 'flyspell-mode)
-      (add-hook 'text-mode-hook 'flyspell-mode)
-      (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-      (add-hook 'markdown-mode-hook 'flyspell-mode)
+    ;; aktifkan flyspell-mode di mode-mode tertentu
+    (add-hook 'org-mode-hook 'flyspell-mode)
+    (add-hook 'text-mode-hook 'flyspell-mode)
+    (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+    (add-hook 'markdown-mode-hook 'flyspell-mode)
 
-      ;; flyspell-prog-mode hanya periksa comments dan strings
-      (dolist (mode '(emacs-lisp-mode-hook
-                      inferior-lisp-mode-hook
-                      clojure-mode-hook
-                      python-mode-hook
-                      js-mode-hook
-                      R-mode-hook))
-        (add-hook mode
-                  '(lambda ()
-                     (flyspell-prog-mode))))
+    ;; flyspell-prog-mode hanya periksa comments dan strings
+    (dolist (mode '(emacs-lisp-mode-hook
+                    inferior-lisp-mode-hook
+                    clojure-mode-hook
+                    python-mode-hook
+                    js-mode-hook
+                    R-mode-hook))
+      (add-hook mode
+                '(lambda ()
+                   (flyspell-prog-mode))))
 
-      ;; Boleh betulkan pakai mouse kalau mahu
-      (eval-after-load "flyspell"
-        '(progn
-           (define-key flyspell-mouse-map [s-mouse-1] #'flyspell-correct-word-generic)))
+    ;; Boleh betulkan pakai mouse kalau mahu
+    (eval-after-load "flyspell"
+      '(progn
+         (define-key flyspell-mouse-map [s-mouse-1] #'flyspell-correct-word-generic)))
 
-      ;; move point to previous error
-      ;; based on code by hatschipuh at
-      ;; http://emacs.stackexchange.com/a/14912/2017
-      (defun ybk/flyspell-goto-previous-error (arg)
-        "Go to arg previous spelling error."
-        (interactive "p")
-        (while (not (= 0 arg))
-          (let ((pos (point))
-                (min (point-min)))
-            (if (and (eq (current-buffer) flyspell-old-buffer-error)
-                     (eq pos flyspell-old-pos-error))
-                (progn
-                  (if (= flyspell-old-pos-error min)
-                      ;; goto beginning of buffer
-                      (progn
-                        (message "Restarting from end of buffer")
-                        (goto-char (point-max)))
-                    (backward-word 1))
-                  (setq pos (point))))
-            ;; seek the next error
-            (while (and (> pos min)
-                        (let ((ovs (overlays-at pos))
-                              (r '()))
-                          (while (and (not r) (consp ovs))
-                            (if (flyspell-overlay-p (car ovs))
-                                (setq r t)
-                              (setq ovs (cdr ovs))))
-                          (not r)))
-              (backward-word 1)
-              (setq pos (point)))
-            ;; save the current location for next invocation
-            (setq arg (1- arg))
-            (setq flyspell-old-pos-error pos)
-            (setq flyspell-old-buffer-error (current-buffer))
-            (goto-char pos)
-            (if (= pos min)
-                (progn
-                  (message "No more miss-spelled word!")
-                  (setq arg 0))
-              (forward-word)))))
+    ;; move point to previous error
+    ;; based on code by hatschipuh at
+    ;; http://emacs.stackexchange.com/a/14912/2017
+    (defun ybk/flyspell-goto-previous-error (arg)
+      "Go to arg previous spelling error."
+      (interactive "p")
+      (while (not (= 0 arg))
+        (let ((pos (point))
+              (min (point-min)))
+          (if (and (eq (current-buffer) flyspell-old-buffer-error)
+                   (eq pos flyspell-old-pos-error))
+              (progn
+                (if (= flyspell-old-pos-error min)
+                    ;; goto beginning of buffer
+                    (progn
+                      (message "Restarting from end of buffer")
+                      (goto-char (point-max)))
+                  (backward-word 1))
+                (setq pos (point))))
+          ;; seek the next error
+          (while (and (> pos min)
+                      (let ((ovs (overlays-at pos))
+                            (r '()))
+                        (while (and (not r) (consp ovs))
+                          (if (flyspell-overlay-p (car ovs))
+                              (setq r t)
+                            (setq ovs (cdr ovs))))
+                        (not r)))
+            (backward-word 1)
+            (setq pos (point)))
+          ;; save the current location for next invocation
+          (setq arg (1- arg))
+          (setq flyspell-old-pos-error pos)
+          (setq flyspell-old-buffer-error (current-buffer))
+          (goto-char pos)
+          (if (= pos min)
+              (progn
+                (message "No more miss-spelled word!")
+                (setq arg 0))
+            (forward-word)))))
 
-      ;; Tukar bahasa
-      (defun lang-norsk ()
-        "Bahasa Norwegian."
-        (interactive)
-        (ispell-change-dictionary "norsk")
-        (flyspell-buffer))
+    ;; Tukar bahasa
+    (defun lang-norsk ()
+      "Bahasa Norwegian."
+      (interactive)
+      (ispell-change-dictionary "norsk")
+      (flyspell-buffer))
 
-      (defun lang-eng ()
-        "Bahasa Inggris."
-        (interactive)
-        (ispell-change-dictionary "en_GB")
-        (flyspell-buffer))
+    (defun lang-eng ()
+      "Bahasa Inggris."
+      (interactive)
+      (ispell-change-dictionary "en_GB")
+      (flyspell-buffer))
 
-      ;; Utk cadangkan perkataan cara Ivy
-      (use-package flyspell-correct-ivy
-        :ensure t))
+    ;; Utk cadangkan perkataan cara Ivy
+    (use-package flyspell-correct-ivy
+      :ensure t))
 #+END_SRC
 
 ** Tukar bahasa
@@ -6302,35 +6303,34 @@ Hydra untuk fungsi awam
     "
      ^General keymap [F6] or yy^
      ^-------------------------------
-     _y_: ybk-emac     _g_: highlight        _s_: stackExchange  _w_: swap-windows       _d_: musics          _x_: save buffers & exit
-     _h_: heading      _l_: warna highlight  _r_: rss            _n_: file explore [F4]  _c_: weather
-     _t_: tukar theme  _m_: menu bar         _o_: scratch        _k_: delete file/buffer _b_: weather update  _q_: KELUAR
-
+     _y_: ybk-init  _g_: highlight        _s_: stackOverflow  _w_: swap-windows       _e_: musics (emms)   _x_: save buffers & exit
+     _h_: heading   _l_: warna highlight  _r_: rss            _n_: file explore [F4]  _u_: weather (metno) _c_: key-chord-mode
+     _t_: theme     _m_: menu bar         _o_: scratch        _k_: delete file/buffer _U_: weather update  _q_: KELUAR
     "
-    ("o" ybk/get-scratch)
-    ("w" crux-swap-windows)
-    ("k" crux-delete-file-and-buffer)
-    ("x" save-buffers-kill-emacs)
-
-    ("d" emms)
-    ("m" toggle-menu-bar-mode-from-frame)
-    ("n" neotree-toggle)
-
-    ("r" bjm/elfeed-load-db-and-open)
-    ("s" hydra-stackExchange/body :exit t)
-    ("b" weather-metno-update)
-    ("c" weather-metno-forecast)
 
     ("y" ybk/emacs-file)
+    ("h" worf-goto)
     ("t" cycle-my-theme)
+
     ("g" hl-line-mode)
     ("l" hydra-hl-line/body :exit t)
+    ("m" toggle-menu-bar-mode-from-frame)
 
-    ("h" worf-goto)
+    ("s" hydra-stackExchange/body :exit t)
+    ("r" bjm/elfeed-load-db-and-open)
+    ("o" ybk/get-scratch)
 
-    ("q" (message "KELUAR") :exit t)
-    ;; ("q" nil "KELUAR")
-    )
+    ("w" crux-swap-windows)
+    ("n" neotree-toggle)
+    ("k" crux-delete-file-and-buffer)
+
+    ("e" emms)
+    ("u" weather-metno-forecast)
+    ("U" weather-metno-update)
+
+    ("x" save-buffers-kill-emacs)
+    ("c" key-chord-mode)
+    ("q" (message "KELUAR") :exit t))
 
   (key-chord-define-global "yy" #'hydra-ybk-general/body)
   (global-set-key (kbd "<f6>") 'hydra-ybk-general/body)
