@@ -4053,7 +4053,7 @@ dan original di biarkan di folder asal pakai prefix =M-x=
 *** Kekalkan saiz imej
 Untuk pastikan yang saiz imej sama untuk semua imej-imej di dokument. Pastikan
 program =ImageMagick= sudah dipasang. Sekiranya ingin size lebih besar, boleh tukar
-=300x300= ke saiz yang diingini.
+=300x300= ke saiz yang diingini. Fungsi ini diambil dari [[https://stackoverflow.com/questions/17637685/configuring-emacs-for-showing-fixed-width-inline-images][StackOverflow]]
 
 #+BEGIN_SRC emacs-lisp
   (defun org-display-inline-images (&optional include-linked refresh beg end)
@@ -4103,7 +4103,12 @@ program =ImageMagick= sudah dipasang. Sekiranya ingin size lebih besar, boleh tu
 #+END_SRC
 *** Imej PDF
 Secara asalnya imej PDF tidak dapat ditunjukkan /inline/ di Org-mode. Fungsi di bawah
-membolehkan imej PDF dan pelbagai jenis imej ditunjukkan di Org-mode.
+membolehkan imej PDF dan pelbagai jenis imej ditunjukkan di Org-mode. Fungsi dari
+[[https://stackoverflow.com/questions/15407485/inline-pdf-images-in-org-mode][StackOverflow]]. Fail /PDF/ akan ditukarkan ke /PNG/ menggunakan =ImageMagick= dan
+diberikan nama baru ke /<nama-fail-asal>_thumb.png/.
+
+Sekiranya ingin membuat link, namakan ke =./<nama-fail>_thumb.png=
+
 #+BEGIN_SRC emacs-lisp
   (setq image-file-name-extensions
         (quote
@@ -4162,6 +4167,68 @@ membolehkan imej PDF dan pelbagai jenis imej ditunjukkan di Org-mode.
                     (overlay-put ov 'modification-hooks
                                  (list 'org-display-inline-remove-overlay))
                     (push ov org-inline-image-overlays))))))))))
+#+END_SRC
+*** Tukar PDF ke png
+Cara lain yang boleh dipakai untuk tukarkan imej PDF ke PNG diambil dari [[https://emacs.stackexchange.com/questions/390/display-pdf-images-in-org-mode][Kaushal
+Modi]]. Cara ini ialah dengan meletakkan komando =# ()convertfrompdf:t= sebelum
+masukkan link, dan fail di link harus dinamakan dengan sambungan PNG. Contohnya:
+
+#+BEGIN_EXAMPLE
+# ()convertfrompdf
+[[./namafail.png]]
+#+END_EXAMPLE
+
+Fungsinya ialah =org-include-img-from-pdf= dan dilarikan setiap kali fail di simpan
+(/save/) yang ditetapkan di /hook/.
+
+#+BEGIN_SRC emacs-lisp
+  (defun org-include-img-from-pdf (&rest _)
+    "Convert pdf files to image files in org-mode bracket links.
+
+      # ()convertfrompdf:t # This is a special comment; tells that the upcoming
+                           # link points to the to-be-converted-to file.
+      # If you have a foo.pdf that you need to convert to foo.png, use the
+      # foo.png file name in the link.
+      [[./foo.png]]
+  "
+    (interactive)
+    (if (executable-find "convert")
+        (save-excursion
+          (goto-char (point-min))
+          (while (re-search-forward "^[ \t]*#\\s-+()convertfrompdf\\s-*:\\s-*t"
+                                    nil :noerror)
+            ;; Keep on going to the next line till it finds a line with bracketed
+            ;; file link.
+            (while (progn
+                     (forward-line 1)
+                     (not (looking-at org-bracket-link-regexp))))
+            ;; Get the sub-group 1 match, the link, from `org-bracket-link-regexp'
+            (let ((link (match-string-no-properties 1)))
+              (when (stringp link)
+                (let* ((imgfile (expand-file-name link))
+                       (pdffile (expand-file-name
+                                 (concat (file-name-sans-extension imgfile)
+                                         "." "pdf")))
+                       (cmd (concat "convert -density 96 -quality 85 "
+                                    pdffile " " imgfile)))
+                  (when (and (file-readable-p pdffile)
+                             (file-newer-than-file-p pdffile imgfile))
+                    ;; This block is executed only if pdffile is newer than
+                    ;; imgfile or if imgfile does not exist.
+                    (shell-command cmd)
+                    (message "%s" cmd)))))))
+      (user-error "`convert' executable (part of Imagemagick) is not found")))
+
+
+  ;; Hook fungsi ke sebelum simpan fail
+  (defun my/org-include-img-from-pdf-before-save ()
+    "Execute `org-include-img-from-pdf' just before saving the file."
+    (add-hook 'before-save-hook #'org-include-img-from-pdf nil :local))
+  (add-hook 'org-mode-hook #'my/org-include-img-from-pdf-before-save)
+
+  ;; If you want to attempt to auto-convert PDF to PNG  only during exports, and not during each save.
+  ;; (with-eval-after-load 'ox
+  ;;   (add-hook 'org-export-before-processing-hook #'org-include-img-from-pdf))
 #+END_SRC
 
 ** CSS di org
