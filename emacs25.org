@@ -3367,8 +3367,8 @@ Tambah keyword =org-todo= dan pakai =C-c C-t= untuk tukar status. Bila =Hold= at
 =Cancelled= masukkan penjelasan sekiranya perlu =h@/!=. Bila tekan =C-c C-t= di
 heading memasukkan memasukkan keyword di heading.
 
-Untuk tunjukkan semua TODO di current buffer yang tidak termasuk di
-=org-agenda-files= guna =org-show-todo-tree= dan kekuncinya ialah =C-c / t= atau shortcut ke =org-sparse-tree= F6-s-t
+wUntuk tunjukkan semua TODO di current buffer yang tidak termasuk di
+=org-agenda-files= guna =org-show-todo-tree= dan kekuncinya ialah =C-c / t= atau shortcut ke =org-sparse-tree= ~j-w-v~
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq org-todo-keywords
@@ -3894,7 +3894,105 @@ gangguan dari semua buffer-buffer yang dibuka
   (bind-key "n" #'meeting-notes 'ybk/org-map)
   (bind-key "m" #'meeting-done 'ybk/org-map)
 #+END_SRC
+** Slides Reveal
+Cara buat slides pembentangan menggunakan =Reveal.js=. Untuk memakai Reveal
+menggunakan org-mode, harus memuatkan ~ox-raveal~ dari [[https://github.com/yjwen/org-reveal][GitHub]] atau [[http://melpa.org/#/getting-started][Melpa]]. Selain itu
+perlu dapatkan =Reveal.js= dari [[http://hakim.se/][Hakim El Hattab]] di [[https://github.com/hakimel/reveal.js][GitHub]]. Cara untuk pakai dan
+aturcara lain boleh dibaca di [[https://github.com/yjwen/org-reveal][sini]]. Kemudian pakai =C-c C-e R R= untuk hasilkan slides.
 
+=Reveal.js= boleh diletakkan di folder yang sama setiap kali menyediakan
+slides. Folder *css, js, lib* dan *plugin* dikopi ke folder slides. Sekiranya
+=Reveal.js= disimpan di folder yang sama, tetapkan =org-reveal-root= dengan hanya
+="."= dan sekiranya difolder yang lain, tetapkan dengan
+=file:///tempat/folder/reveal.js=. Sekiranya tidak menbuat salinan =Reveal.js= maka
+boleh meletakkan =#+REVEAL_ROOT:= di org-file slide yang sedang dibuat.
+
+#+BEGIN_EXAMPLE
+#+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
+#+END_EXAMPLE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ox-reveal
+    :ensure t
+    :config
+    ;; tetapkan lokasi
+    (setq org-reveal-root ".") ;lokasi reveal.js di folder yg sama dengan slides
+
+    ;; ;; tetapkan di Dropbox tapi ada masalah.. jadi pakai cara atas
+    ;;(setq org-reveal-root "file:///home/Dropbox/lisp/reveal.js") ;lokasi di Dropbox
+    )
+#+END_SRC
+
+Sekiranya ingin meletakkan slides di GitHub, branch =gh-pages= harus buat untuk
+menyimpan semua slides. Untuk lihat contoh aturcara di fail =org= boleh lihat di
+[[https://raw.githubusercontent.com/ybkamaleri/slides/gh-pages/2017-06-08-Workshop-resultat/workshop.org][sini]].
+
+Antara fungsi berguna yang disenaraikan di [[https://github.com/yjwen/org-reveal#set-the-location-of-revealjs][sini]] ialah:
+*** Force split
+Masukkan =#+REVEAL: split= dan slide baru bermula selepas kekunci =#+REVEAL= tersebut.
+*** Tajuk
+Tajuk dimasukkan secara automatik dari =#+Title:=. Sekiranya tidak ingin masukkan
+tajuk, boleh letakkan =reveal_title_slide:nil= di =#+OPTIONS:=
+*** Ubah tajuk
+Untuk ubah tajuk slide boleh gunakan fungsi =org-reveal-title-slide= dan tetapkan
+informasi yang diinginkan menggunakan:
+
+| kod | Infomasi  |
+|-----+-----------|
+| %t  | Title     |
+| %a  | Author    |
+| %e  | Email     |
+| %d  | Date      |
+| %%  | Literal % |
+*** Latarbelakang
+**** Satu warna
+Tetapkan di fungsi =reveal_background= guna RGB atau format warna CSS. Contohnya:
+
+#+BEGIN_EXAMPLE
+   *** Single Colored Background
+      :PROPERTIES:
+      :reveal_background: #123456
+      :END:
+#+END_EXAMPLE
+**** Imej
+Gunakan URL atau tetapkan imej. =reveal_background_trans= gunakan =slide= untuk
+menetapkan yang imej latarbelakang /sliding/ dan tidak /fading/.
+
+#+BEGIN_EXAMPLE
+   *** Single Image Background
+      :PROPERTIES:
+      :reveal_background: ./images/whale.jpg
+      :reveal_background_trans: slide
+      :END:
+#+END_EXAMPLE
+**** Ulang imej latarbelakang
+Gunakan fungsi =reveal_background_repeat= dan tetapkan =repeat=
+
+#+BEGIN_EXAMPLE
+  *** Repeating Image Background
+      :PROPERTIES:
+      :reveal_background: ./images/whale.jpg
+      :reveal_background_size: 200px
+      :reveal_background_repeat: repeat
+      :END:
+#+END_EXAMPLE
+**** Imej untuk tajuk latarbelakang
+Untuk menggunakan imej utk tajuk latarbelakang, tetapkan:
+- =REVEAL_TITLE_SLIDE_BACKGROUND= tetapkan image URL
+- =REVEAL_TITLE_SLIDE_BACKGROUND_SIZE= contohnya 200px
+- =REVEAL_TITLE_SLIDE_BACKGROUND_REPEAT= ditetapkan ke =repeat=
+*** Tunjukkan isi-kandungan
+Tetapkan =:frag t= di =#+OPTIONS= akan menggunakan /fragment style/ sedia ada. Untuk
+tukar boleh tetapkan /fragment style/ secara local menggunakan
+=#+REVEAL_DEFAULT_FRAG_STYLE= atau umum menggunakan =org-reveal-default-frag-style=.
+
+Guna =#+ATTR_REVEAL= untuk tetapkan cara menunjukkan kandungan di slides. Contohnya:
+
+#+BEGIN_EXAMPLE
+ #+ATTR_REVEAL: :frag (roll-in)
+  - Bistand til analyse av registerdata
+  - Etablering av resultattjenester
+#+END_EXAMPLE
 ** Insert photo
 Masukkan gambar ke ~org-file~ melalui command folder contohnya dari Dropbox. File
 akan dipindahkan ke folder yang sama dengan ~org-file~ yang digunakan. Diambil dari
