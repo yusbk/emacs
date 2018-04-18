@@ -5729,11 +5729,7 @@ Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
                           ;;(nnmail-expiry-target "nnimap+gmail:[Gmail]/Søppelpost")
                           (nnmail-expiry-target "ubk:[Gmail]/Søppelpost")
                           (nnmail-expiry-wait 90)))
-    ;; Sendes fra hoved epost
-    ;; om port 587 ikke funker, endres til port 27, men specifisere port 587 i authinfo.gpg fil
-    (setq smtpmail-smtp-service "smtp.gmail.com"
-          smtpmail-smtp-service 25
-          gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
+
 
     ;; Sort emails
     (setq gnus-thread-sort-functions
@@ -5870,13 +5866,13 @@ Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
          (defhydra hydra-gnus-group (:color green
                                             :hint nil)
            "
-          ^Group (gp)^
-          ^---^-------------^---^------------^---^----------
-          _a_: Remote gp     _c_: Read All    _f_: Search server
-          _l_: Local gp      _m_: Compose     _s_: Servers
-          _L_: All local gp  _x_: Mark        _g_: Refresh
+            ^Group (gp)^
+            ^---^-------------^---^------------^---^----------
+            _a_: Remote gp     _c_: Read All    _f_: Search server
+            _l_: Local gp      _m_: Compose     _s_: Servers
+            _L_: All local gp  _x_: Mark        _g_: Refresh
 
-         "
+           "
            ("a" gnus-group-list-active) ;A A
            ("l" gnus-group-list-groups) ;l
            ("L" gnus-group-list-all-groups) ;L
@@ -5939,36 +5935,55 @@ Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
          ;; y is not used by default
          (define-key gnus-article-mode-map "y" 'hydra-gnus-article/body)))
 
-    (eval-after-load 'message
-      '(progn
-         (defhydra hydra-message (:hint nil)
-           "
-             ^E-mailing^
-             ^--^----------^--^----------
-             _e_: email     _c_: check   _v_: vedlegg  _s_: send
-             _a_: show all  _w_: compose _x_: keep     _o_: insert old  _q_: KELUAR
-            "
-           ("e" gnus)
-           ("a" ybk/gnus-list-all)
-
-           ("c" xsteve-show-nnmail-split-history) ;show latest received mails
-           ("w" compose-mail)
-
-           ("x" keep-mail)
-           ("v" mml-attach-file) ;C-c C-a
-
-           ("o" gnus-summary-insert-old-articles)
-           ("s" message-send-and-exit) ;C-c C-c
-
-           ("q" (message "KELUAR") :exit t)
-           )
-
-         ;; "Do?"
-         ;; ("ca" mml-attach-file "Attach C-c C-a")
-         ;; ("cc" message-send-and-exit "Send C-c C-c")
-         ;; ("q" nil "cancel"))
-         (global-set-key (kbd "<f8>") 'hydra-message/body))))
+    )
 #+END_SRC
+** SMTP
+Untuk menghantar email. Rujukan di [[https://www.emacswiki.org/emacs/SendingMail][Wiki]].
+#+BEGIN_SRC emacs-lisp
+  (use-package smtpmail
+    :ensure t
+    :config
+    ;; Sendes fra hoved epost. Kan leses her:
+    ;; https://www.emacswiki.org/emacs/SendingMail
+    ;;use smtp to send email not mail client
+    (setq send-mail-function 'smtpmail-send-it)
+    (setq message-send-mail-function 'smtpmail-send-it)
+    ;; om port 587 ikke funker, endres til port 27, men specifisere port 587 i authinfo.gpg fil
+    (setq smtpmail-default-smtp-server "smtp.gmail.com"
+          smtpmail-smtp-service  25
+          gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
+    )
+#+END_SRC
+** Hydra email
+Kekunci email gunakan hydra
+#+BEGIN_SRC emacs-lisp
+  (eval-after-load 'message
+    '(progn
+       (defhydra ybk-hydra-message (:hint nil)
+         "
+               ^E-mailing^
+               ^--^----------^--^----------
+               _e_: email     _c_: check   _v_: vedlegg  _s_: send
+               _a_: show all  _w_: compose _x_: keep     _o_: insert old  _q_: KELUAR
+              "
+         ("e" gnus)
+         ("a" ybk/gnus-list-all)
+
+         ("c" xsteve-show-nnmail-split-history) ;show latest received mails
+         ("w" compose-mail)
+
+         ("x" keep-mail)
+         ("v" mml-attach-file) ;C-c C-a
+
+         ("o" gnus-summary-insert-old-articles)
+         ("s" message-send-and-exit) ;C-c C-c
+
+         ("q" (message "KELUAR") :exit t)
+         )
+
+       (global-set-key (kbd "<f8>") 'ybk-hydra-message/body)))
+#+END_SRC
+
 ** Summary view
 Bagaimana cara untuk ditujukkan di summary
 #+BEGIN_SRC emacs-lisp
