@@ -5585,7 +5585,7 @@ Untuk tambah topik baru di =bookmark-jump=:
 #+END_SRC
 * Email
 [[https://www.emacswiki.org/emacs/GnusTutorial][Gnus]] digunakan untuk membaca email. Tetapi ~Gmail web~ juga digunakan dari masa ke
-semasa terutama bila ada lampiran. Aturcara di ambil di [[https://github.com/redguardtoo/mastering-emacs-in-one-year-guide/blob/25e9fdf494c7cc33e53abeda234fe573ec4f4f58/gnus-guide-en.org][sini]] dan [[https://www.emacswiki.org/emacs/GnusGmail][sini]]
+semasa terutama bila ada lampiran. Aturcara di ambil di [[https://github.com/redguardtoo/mastering-emacs-in-one-year-guide/blob/25e9fdf494c7cc33e53abeda234fe573ec4f4f58/gnus-guide-en.org][sini]] dan [[https://www.emacswiki.org/emacs/GnusGmail][sini]]. Atau di [[https://www.emacswiki.org/emacs/GnusTutorial][Gnus Tutorial]].
 
 Aturcara di *~/.mailcap* menentukan aplikasi sesuai untuk membuka lampiran di
 email. Guna =M-x mailcap-parse-mailcaps= untuk pasang data di fail ~/.mailcap ke
@@ -5674,18 +5674,19 @@ Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
     :bind (:map ybk/mail-map
                 ("e" . gnus)
                 ("x" . keep-mail)
-                ("a" . mml-attach-file) ;C-c C-a
+                ("w" . compose-mail)
+                ("v" . mml-attach-file) ;C-c C-a
                 ("s" . message-send-and-exit) ;C-c C-c
                 ;; :map gnus-group-mode-map
-                ("o" . ybk/gnus-list-all)
-                ("r" . gnus-summary-insert-old-articles)
-                ("n" . xsteve-show-nnmail-split-history) ;show latest received mails
+                ("a" . ybk/gnus-list-all)
+                ("o" . gnus-summary-insert-old-articles)
+                ("c" . xsteve-show-nnmail-split-history) ;show latest received mails
                 ;; :map gnus-summary-mode-map
                 ;; ("x" . keep-mail)
                 )
     :init
     ;; make mail-map
-    (bind-keys :prefix "<f8>"
+    (bind-keys :prefix "C-c y"
                :prefix-map ybk/mail-map)
     (bind-key "q" #'keluar 'ybk/mail-map)
     ;; message mode instead of mail mode
@@ -5700,8 +5701,9 @@ Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
                    (nnimap-server-port 993)
                    (nnimap-stream ssl)
                    (nnir-search-engine imap)
-                   ;;(nnmail-expiry-target "nnimap+gmail:[Gmail]/Søppelpost") ;click E to expire mail
-                   (nnmail-expiry-target "gmail:[Gmail]/Søppelpost") ;click E to expire mail
+                   ;; the next option gives error "cannot find file or folder gmail"
+                   (nnmail-expiry-target "nnimap+gmail:[Gmail]/Søppelpost") ;click E to expire mail
+                   ;;(nnmail-expiry-target "gmail:[Gmail]/Søppelpost") ;click E to expire mail
                    (nnmail-expiry-wait 90))) ;keep 3 months for expired mails
     ;; Annet Konto bare for å lese e-poster
     (add-to-list 'gnus-secondary-select-methods
@@ -5749,7 +5751,7 @@ Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
     (defun ybk/gnus-list-all ()
       "List all subscribed groups with or without un-read messages"
       (interactive)
-      (gnus-group-list-all-groups ))
+      (gnus-group-list-all-groups 5))
 
     ;; open attachment
     (eval-after-load 'mailcap
@@ -5798,6 +5800,9 @@ Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
     ;; Increase score for followups to a sent article
     (add-hook 'message-sent-hook 'gnus-score-followup-article)
     (add-hook 'message-sent-hook 'gnus-score-followup-thread)
+
+    ;; Don't ask how many to show and show all including read mail
+    (setq gnus-large-newsgroup 'nil)
 
     ;; Specify directories
     (defvar ybk/mail-dir "~/Mail/") ;definere hvor epost skal være
@@ -5936,23 +5941,33 @@ Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
 
     (eval-after-load 'message
       '(progn
-         (defhydra hydra-message (:color blue
-                                         :hint nil)
+         (defhydra hydra-message (:hint nil)
            "
              ^E-mailing^
              ^--^----------^--^----------
-             _a_: Vedlegg  _s_: Send
+             _e_: email     _c_: check   _v_: vedlegg  _s_: send
+             _a_: show all  _w_: compose _x_: keep     _o_: insert old  _q_: KELUAR
+            "
+           ("e" gnus)
+           ("a" ybk/gnus-list-all)
 
-             "
-           ("a" mml-attach-file) ;C-c C-a
+           ("c" xsteve-show-nnmail-split-history) ;show latest received mails
+           ("w" compose-mail)
+
+           ("x" keep-mail)
+           ("v" mml-attach-file) ;C-c C-a
+
+           ("o" gnus-summary-insert-old-articles)
            ("s" message-send-and-exit) ;C-c C-c
-           ("q" nil "quit" "cancel"))
+
+           ("q" (message "KELUAR") :exit t)
+           )
 
          ;; "Do?"
          ;; ("ca" mml-attach-file "Attach C-c C-a")
          ;; ("cc" message-send-and-exit "Send C-c C-c")
          ;; ("q" nil "cancel"))
-         (global-set-key (kbd "C-c y") 'hydra-message/body))))
+         (global-set-key (kbd "<f8>") 'hydra-message/body))))
 #+END_SRC
 ** Summary view
 Bagaimana cara untuk ditujukkan di summary
