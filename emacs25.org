@@ -6609,12 +6609,12 @@ Beberapa situasi yang pernah dialami dan beberikan masalah
 Sekiranya kekunci dari F2 ke F12 tidak berfungsi dan hanya menunjukkan XF86New, XF86Open,
 XF86Close dan sebagainya ini menandakan yang button ~LOCK~ diaktifkan.
 * My personal hydra keymaps
-** General keymap [yy]
+** General keymap [jy]
 Hydra untuk fungsi awam
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-ybk-general (:hint nil)
     "
-     ^General keymap [F6] or yy^
+     ^General keymap [F6] or jy^
      ^-------------------------------
      _y_: ybk-init  _g_: highlight        _s_: stackOverflow  _w_: swap-windows       _e_: musics (emms)   _x_: save buffers & exit
      _h_: heading   _l_: warna highlight  _r_: rss            _n_: file explore [F4]  _u_: weather (metno) _c_: key-chord-mode
@@ -6645,7 +6645,7 @@ Hydra untuk fungsi awam
     ("c" key-chord-mode)
     ("q" (message "KELUAR") :exit t))
 
-  (key-chord-define-global "yy" #'hydra-ybk-general/body)
+  (key-chord-define-global "jy" #'hydra-ybk-general/body)
   (global-set-key (kbd "<f6>") 'hydra-ybk-general/body)
 #+END_SRC
 ** Move keymap [jj]
