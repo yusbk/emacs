@@ -4480,8 +4480,8 @@ Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
            ("C-\\" . flyspell-correct-word-generic) ;kekeunci asal C-\ ialah toggle-input-method
            ("C-." . flyspell-auto-correct-word) ;C-M-i alternatif
            ("C-," . flyspell-goto-next-error)
-           ("C-;" . flyspell-auto-correct-previous-word)
-           ("C-c v" . ybk/flyspell-goto-previous-error)
+           ("C-;" . ybk/flyspell-goto-previous-error)
+           ("C-c v" . flyspell-auto-correct-previous-word)
            ("C-c i" . ispell-word)
            :map ybk/org-map
            ("f" . hydra-ybk-kamus/body))
