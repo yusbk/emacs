@@ -5797,8 +5797,8 @@ Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
     (add-hook 'message-sent-hook 'gnus-score-followup-article)
     (add-hook 'message-sent-hook 'gnus-score-followup-thread)
 
-    ;; Don't ask how many to show and show all including read mail
-    (setq gnus-large-newsgroup 'nil)
+    ;; ;; Don't ask how many to show and show all including read mail
+    ;; (setq gnus-large-newsgroup 'nil)
 
     ;; Specify directories
     (defvar ybk/mail-dir "~/Mail/") ;definere hvor epost skal være
@@ -6655,15 +6655,17 @@ Hydra move keymap seperti =F2=. Singkatan =j= sebagai *Jalan*
   (defhydra ybk-map-move (:hint nil)
     "
     ^Move keymap [F2] or jj
-    ^Misc^                                 ^Bookmarks^          ^Register^
-    ^--------------------------------------^---------^----------^--------^-----------------------------------------------
-    _+_: resize window  _h_: doc heading  _m_: bookmark set  _SPC_: reg set       _r_: mark set    _a_: mark show       _s_: search
-    _w_: select window  _o_: imenu        _t_: bookmark-goto   _j_: reg jump      _n_: mark next   _A_: mark show all
-    _b_: move buffer    _g_: goto         _J_: bookmark jump   _l_: bookmark list _p_: mark prev   _x_: mark remove all _q_: KELUAR
+    ^Misc^                                   ^Bookmarks^          ^Register^                      ^_q_: KELUAR^
+    ^----------------------------------------^---------^----------^--------^-----------------------------------------------
+    _+_: resize window     _h_: doc heading  _m_: bookmark set  _SPC_: reg set       _r_: mark set    _a_: mark show
+    _w_: select window     _o_: imenu        _t_: bookmark-goto   _j_: reg jump      _n_: mark next   _A_: mark show all
+    _b_: move buffer       _g_: goto         _J_: bookmark jump   _l_: bookmark list _p_: mark prev   _x_: mark remove all
+    _f_: trans. frame C-t  _s_: search
     "
     ("+" resize-window)
     ("w" winum-select-window-by-number)
     ("b" hydra-buffer/body :exit t)
+    ("f" transpose-frame)
 
     ("h" worf-goto)
     ("o" counsel-imenu)
