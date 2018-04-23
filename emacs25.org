@@ -5800,8 +5800,11 @@ Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
     (add-hook 'message-sent-hook 'gnus-score-followup-article)
     (add-hook 'message-sent-hook 'gnus-score-followup-thread)
 
-    ;; ;; Don't ask how many to show and show all including read mail
-    ;; (setq gnus-large-newsgroup 'nil)
+    ;; ;; show 500 articles
+    ;; (setq large-newsgroup-initial 500)
+
+    ;; Don't ask how many to show and show all including read mail
+    (setq gnus-large-newsgroup 500)
 
     ;; Specify directories
     (defvar ybk/mail-dir "~/Mail/") ;definere hvor epost skal være
