@@ -5960,6 +5960,52 @@ Untuk menghantar email. Rujukan di [[https://www.emacswiki.org/emacs/SendingMail
           gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
     )
 #+END_SRC
+** Address database
+Email address database. Contoh aturcara di [[https://github.com/redguardtoo/emacs.d/blob/master/lisp/init-bbdb.el][sini]].
+*** BBDB
+
+#+BEGIN_SRC emacs-lisp
+  (use-package bbdb
+    :ensure t
+    :config
+    ;; file path
+    (setq bbdb-file "~/Dropbox/address/.bbdb")
+    )
+#+END_SRC
+
+*** Counsel-bbdb
+ Rujuk di [[https://github.com/redguardtoo/counsel-bbdb][GitHub]].
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel-bbdb
+    :ensure t
+    :config
+    ;;Custom insert mail address
+    (setq counsel-bbdb-customized-insert
+          (lambda (r append-comma)
+            (let* ((family-name (nth 1 r))
+                   (given-name (nth 2 r))
+                   (display-name (nth 3 r))
+                   (mail (nth 4 r))))
+            (insert (format "%s:%s:%s:%s%s"
+                            given-name
+                            family-name
+                            display-name
+                            mail
+                            (if append-comma ", " " ")))))
+    )
+#+END_SRC
+*** gmail2bbdb
+Sila rujuk ke [[https://github.com/redguardtoo/gmail2bbdb][Github]]
+
+#+BEGIN_SRC emacs-lisp
+  (use-package gmail2bbdb
+    :ensure t
+    :config
+    ;; tetapkan path
+    (setq gmail2bbdb-bbdb-file "~/Dropbox/address/.bbdb")
+    )
+#+END_SRC
+
 ** Hydra email
 Kekunci email gunakan hydra
 #+BEGIN_SRC emacs-lisp
@@ -5969,10 +6015,11 @@ Kekunci email gunakan hydra
          "
                ^E-mailing^
                ^--^----------^--^----------
-               _e_: email     _c_: check   _v_: vedlegg  _s_: send
+               _e_: email     _c_: check   _v_: vedlegg  _k_: contact     _s_: send
                _a_: show all  _w_: compose _x_: keep     _o_: insert old  _q_: KELUAR
               "
          ("e" gnus)
+         ("k" counsel-bbdb-complete-mail)
          ("a" ybk/gnus-list-all)
 
          ("c" xsteve-show-nnmail-split-history) ;show latest received mails
