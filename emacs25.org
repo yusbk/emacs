@@ -5986,7 +5986,7 @@ Email address database. Contoh aturcara di [[https://github.com/redguardtoo/emac
                    (given-name (nth 2 r))
                    (display-name (nth 3 r))
                    (mail (nth 4 r))))
-            (insert (format "%s:%s:%s:%s%s"
+            (insert (format "%s:%s:%s <%s>"
                             given-name
                             family-name
                             display-name
