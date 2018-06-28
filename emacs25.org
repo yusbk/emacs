@@ -4478,7 +4478,7 @@ Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package flyspell
     :ensure t
-    :diminish (flyspell-mode . "")
+    :diminish (flyspell-mode . "FS")
     :bind (("C-c f" . flyspell-correct-word-generic)
            ("C-\\" . flyspell-correct-word-generic) ;kekeunci asal C-\ ialah toggle-input-method
            ("C-." . flyspell-auto-correct-word) ;C-M-i alternatif
@@ -4515,7 +4515,7 @@ Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
       ("i" ispell-kill-ispell)
       ("z" flyspell-corect-previous-word-generic)
       ("y" flyspell-correct-word-generic)
-      ("x" flyspell-lazy-check-buffer)
+      ("x" flyspell-buffer)
       ("s" flyspell-region)
       ("q" (message "KELUAR") :exit t))
 
@@ -4536,10 +4536,11 @@ Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
     ;; (setq ispell-silently-savep t) ;hanya hidupkan sekiranya sudah tahu fungsinya
 
     ;; aktifkan flyspell-mode di mode-mode tertentu
-    (add-hook 'org-mode-hook 'flyspell-mode)
-    (add-hook 'text-mode-hook 'flyspell-mode)
-    (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-    (add-hook 'markdown-mode-hook 'flyspell-mode)
+    (add-hook 'org-mode-hook 'turn-on-flyspell)
+    (add-hook 'text-mode-hook 'turn-on-flyspell)
+    (add-hook 'LaTeX-mode-hook 'turn-on-flyspell)
+    (add-hook 'markdown-mode-hook 'turn-on-flyspell)
+
 
     ;; flyspell-prog-mode hanya periksa comments dan strings
     (dolist (mode '(emacs-lisp-mode-hook
@@ -4660,7 +4661,9 @@ dimatikan sebab crash dengan BM
     (defun ybk/auto-lang () (auto-lang-minor-mode t))
 
     (add-hook 'message-setup-hook 'ybk/auto-lang)
-    (add-hook 'text-mode-hook 'ybk/auto-lang))
+    (add-hook 'org-mode-hook 'ybk/auto-lang)
+    (add-hook 'text-mode-hook 'ybk/auto-lang)
+    )
 #+END_SRC
 * Periksa kode (flycheck)
 Untuk periksa kode
@@ -4698,6 +4701,7 @@ apt-get install libxml2-dev libxslt-dev
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck ; checks for style and syntax
     :ensure t
+    :diminish (flycheck-mode . "FC")
     :init (global-flycheck-mode)
     :config
     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
