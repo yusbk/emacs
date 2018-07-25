@@ -1903,7 +1903,7 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
     :commands (yas-minor-mode) ;autoload 'yasnippet' when 'yas-minor-mode' is called
     :mode ("\\.yasnippet" . snippet-mode) ;aktifkan mode bila ada fail dengan .yasnippet
     :bind (;; masukkan abbrev atau snippet sekiranya ada
-           ("C-x y" . aya-open-line)
+           ("C-x y" . company-yasnippet)
            :map ybk/prog-map
            ("y" . company-yasnippet))
 
@@ -1940,20 +1940,24 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
 
     ;;Masukkan snippet sekiranya ada else masukkan blank line (open-line)
     ;;https://emacs.stackexchange.com/questions/7908/how-to-make-yasnippet-and-company-work-nicer
-    (defun aya-open-line ()
-      "Call `open-line', unless there are abbrevs or snippets at point.
-    In that case expand them.  If there's a snippet expansion in progress,
-    move to the next field. Call `open-line' if nothing else applies."
-      (interactive)
-      (cond ((expand-abbrev))
-            ((yas-active-snippets)
-             (yas-next-field-or-maybe-expand))
-            ((ignore-errors
-               (yas-expand)))
-            (t
-             (open-line 1))))
 
-    (global-set-key (kbd "C-x y") 'aya-open-line)
+    ;;   (defun aya-open-line ()
+    ;;     "Call `open-line', unless there are abbrevs or snippets at point.
+    ;; In that case expand them.  If there's a snippet expansion in progress,
+    ;; move to the next field. Call `open-line' if nothing else applies."
+    ;;     (interactive)
+    ;;     (cond ((expand-abbrev))
+
+    ;;           ((yas--snippets-at-point)
+    ;;            (yas-next-field-or-maybe-expand))
+
+    ;;           ((ignore-errors
+    ;;              (yas-expand)))
+
+    ;;           (t
+    ;;            (open-line 1))))
+
+    ;;   (global-set-key (kbd "C-x y") 'aya-open-line)
     )
 #+END_SRC
 * Parentheses
