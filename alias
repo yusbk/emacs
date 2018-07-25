@@ -1,3 +1,5 @@
+# kopi fail alias ke ~/.emacs.d/eshell/ untuk mengaktifkan
+
 alias gitw ~/Git-work/
 alias gitp ~/Git-personal/
 alias gitb cd ~/Git-personal/yusbk.github.io/org
