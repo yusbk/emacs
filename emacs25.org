@@ -574,15 +574,81 @@ Buang menu bar dan sekiranya perlu tekan =F10-m= atau =M-x toggle-menu-bar-mode-
 
 ** Powerline
 Untuk modeline
-*** Cara 1
+*** Cara Powerlie
 Beza warna bila buffer aktif atau tidak
 
 Aktifkan sekiranya pakai =moe-theme=
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package powerline
-    :ensure t)
+    :ensure t
+    :config
+    (powerline-default-theme))
+#+END_SRC
+*** Cara diambil dari GitHug
+Diambil di [[https://github.com/sandhu/emacs.d/blob/master/config/008-ui-config.el][sini]]
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package powerline :ensure t
+    :init (setq powerline-default-separator 'wave)
+    :config (progn
+              (require 'powerline)
+              (add-hook 'desktop-after-read-hook 'powerline-reset)
+              (defface modes-ml-face '((t (:background "#002b36" :inherit mode-line)))
+                "Powerline face for modes section of the mode-line"
+                :group 'powerline)
+              (defface file-ml-face '((t (:background "#586e75" :inherit mode-line)))
+                "Powerline face for file and branch section of the mode-line"
+                :group 'powerline)
+              (defface line-ml-face '((t (:background "#93a1a1" :inherit mode-line)))
+                "Powerline face for line number section of the mode-line"
+                :group 'powerline)
+              (defface pos-ml-face '((t (:background "#586e75" :inherit mode-line)))
+                "Powerline face for file position section of the mode-line"
+                :group 'powerline)
+              (defface ml-fill-face '((t (:background "#93a1a1" :inherit mode-line)))
+                "Powerline face used to fill the unused portion of the mode-line"
+                :group 'powerline)
+              (setq-default mode-line-format
+                            '("%e"
+                              (:eval
+                               (let* ((file-name (buffer-file-name (current-buffer)))
+                                      (active (powerline-selected-window-active))
+                                      (separator-left (intern (format "powerline-%s-%s"
+                                                                      (powerline-current-separator)
+                                                                      (car powerline-default-separator-dir))))
+                                      (separator-right (intern (format "powerline-%s-%s"
+                                                                       (powerline-current-separator)
+                                                                       (cdr powerline-default-separator-dir))))
+                                      (lhs (list (powerline-major-mode 'modes-ml-face 'l)
+                                                 (powerline-process 'modes-ml-face 'l)
+                                                 (powerline-minor-modes 'modes-ml-face 'l)
+                                                 (powerline-raw " " 'modes-ml-face)
+                                                 (funcall separator-left 'modes-ml-face 'file-ml-face)
+
+                                                 (powerline-raw "[" 'file-ml-face)
+                                                 (powerline-raw (projectile-project-name) 'file-ml-face)
+                                                 (powerline-raw "] %b %*" 'file-ml-face)
+                                                 (powerline-raw (concat " "
+                                                                        (when (and file-name vc-mode)
+                                                                          (concat "(" (-> file-name
+                                                                                          vc-working-revision
+                                                                                          (string-utils-truncate-to 40))
+                                                                                  ")")))
+                                                                'file-ml-face 'r)
+                                                 (funcall separator-left 'file-ml-face 'ml-fill-face)))
+
+                                      (rhs (list (powerline-raw global-mode-string 'ml-fill-face 'r)
+                                                 (funcall separator-right 'ml-fill-face 'pos-ml-face)
+                                                 (powerline-raw "%p " 'pos-ml-face 'l)
+                                                 (funcall separator-right 'pos-ml-face 'line-ml-face)
+
+                                                 (powerline-raw " %4l " 'line-ml-face 'r))))
+
+                                 (concat (powerline-render lhs)
+                                         (powerline-fill 'ml-fill-face (powerline-width rhs))
+                                         (powerline-render rhs))))))))
 #+END_SRC
 
+*** Powerline aturcara sendiri
 
 Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -593,16 +659,16 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
     (add-hook 'desktop-after-read-hook 'powerline-reset)
 
     ;; yus-theme
-    (defface yus-aktif1 '((t (:background "#a2e" :inherit mode-line))) ;#a2e #2a5289 #4c52ee #179 #cfdfff #00d9ff #19a
+    (defface yus-aktif1 '((t (:background "#3a11ff" :inherit mode-line))) ;#a2e #2a5289 #4c52ee #179 #cfdfff #00d9ff #19a
       "Powerline muka 1."
       :group 'powerline)
-    (defface yus-aktif2 '((t (:background "#a669ef" :inherit mode-line))) ;#2c5197 #a25ec3 #a19 #8b008b #369 #3a11ff #28a #a669ef
+    (defface yus-aktif2 '((t (:background "#4c56aa" :inherit mode-line))) ;#2c5197 #a25ec3 #a19 #8b008b #369 #3a11ff #28a #a669ef
       "Powerline muka 2."
       :group 'powerline)
-    (defface yus-tidak-aktif1 '((t (:background "grey40" :inherit mode-line-inactive))) ;#1a5aee #35f #a25fff
+    (defface yus-tidak-aktif1 '((t (:background "gray10" :inherit mode-line-inactive))) ;#1a5aee #35f #a25fff #586e75
       "Powerline muka 1."
       :group 'powerline)
-    (defface yus-tidak-aktif2 '((t (:background "grey20" :inherit mode-line-inactive))) ;#273f87 #5478e4
+    (defface yus-tidak-aktif2 '((t (:background "gray30" :inherit mode-line-inactive))) ;#273f87 #5478e4 #93a1a1
       "Powerline muka 2."
       :group 'powerline)
     (defface yus-hujung '((t (:background "#5478e4" :inherit mode-line)))
@@ -767,14 +833,7 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
 
     ;; aktivkan theme yang ingin dipakai
     (ml-yus-theme)
-
     )
-
-
-
-
-
-
 #+END_SRC
 ** Tema utk paparan
 Utk tukar tema paparan yang lain tekan =yy-t=. Dua themes boleh di pakai:
