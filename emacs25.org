@@ -295,13 +295,13 @@ Bergantung dengan =hostname=. Dynamik size font diambil dari [[https://coderwall
   ;;     (set-face-attribute 'default nil :height 120)
   ;;   (set-face-attribute 'default nil :height 110))
 
-  ;; ;; set a default font
-  ;; (when (member "Tlwg Typewriter-12" (font-family-list)) ;Tlwg Typewriter
-  ;;   (set-face-attribute 'default nil :font "Tlwg Typewriter")) ;Tlwg Typewriter
-
   ;; set a default font
-  (when (member "Tlwg Mono" (font-family-list)) ;Tlwg Typewriter
-    (set-face-attribute 'default nil :font "Tlwg Mono Bold")) ;Tlwg Typewriter
+  (when (member "Ubuntu Mono" (font-family-list)) ;"Tlwg Typewriter" "Cousine"
+    (set-face-attribute 'default nil :font "Ubuntu Mono-12")) ;Tlwg Typewriter
+
+  ;; ;; set a default font
+  ;; (when (member "Tlwg Mono" (font-family-list)) ;Tlwg Typewriter
+  ;;   (set-face-attribute 'default nil :font "Tlwg Mono Bold")) ;Tlwg Typewriter
 
 
   ;; ;; Change fonts dynamically based on screen resolution
@@ -1023,12 +1023,52 @@ Mulakan =eshell= dengan singkatan =C-x t=
 
     (setq eshell-scroll-to-bottom-on-input 'this)
 
-    (use-package eshell-git-prompt
-      :ensure t
-      :config
-      (eshell-git-prompt-use-theme 'powerline)))
-#+END_SRC
+    ;; ;; Fancy prompt form EmacsWiki - EshellPrompt
+    ;; (defmacro with-face (str &rest properties)
+    ;;   `(propertize ,str 'face (list ,@properties)))
 
+    ;; (defun shk-eshell-prompt ()
+    ;;   (let ((header-bg "grey"))
+    ;;     (concat
+    ;;      (with-face (concat (eshell/pwd) " ") :background header-bg)
+    ;;      (with-face (format-time-string "(%Y-%m-%d %H:%M) " (current-time)) :background header-bg :foreground "#888")
+    ;;      (with-face
+    ;;          (or (ignore-errors (format "(%s)" (vc-responsible-backend default-directory))) "")
+    ;;        :background header-bg)
+    ;;      (with-face "\n" :background header-bg)
+    ;;      (with-face user-login-name :foreground "blue")
+    ;;      "@"
+    ;;      (with-face "ybk" :foreground "green")
+    ;;      (if (= (user-uid) 0)
+    ;;          (with-face " #" :foreground "red")
+    ;;        " $")
+    ;;      " ")))
+    ;; (setq eshell-prompt-function 'shk-eshell-prompt)
+    ;; (setq eshell-highlight-prompt nil)
+    )
+#+END_SRC
+** Fancy prompt
+*** Eshell-git-prompt
+Boleh di lihat di [[https://github.com/xuchunyang/eshell-git-prompt][sini]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package eshell-git-prompt
+    :ensure t
+    :config
+    (eshell-git-prompt-use-theme 'powerline))
+#+END_SRC
+*** Eshell-git-extras
+Boleh lihat di [[https://github.com/kaihaosw/eshell-prompt-extras][sini]]. Tema samada ~epe-theme-lambda~ atau ~epe-theme-dakrone~
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package eshell-prompt-extras
+    :ensure t
+    :config
+    (with-eval-after-load "esh-opt"
+      (autoload 'epe-theme-dakrone "eshell-prompt-extras")
+      (setq eshell-highlight-prompt nil
+            eshell-prompt-function 'epe-theme-dakrone))
+    )
+#+END_SRC
 ** Shell pop
 Boleh guna key-chort =-t= untuk pakai selain dari =C-x t=
 
