@@ -2932,7 +2932,7 @@ Mencatikkan *bullet* di Org-mode
     ;; make available "org-bullet-face" such that I can control the font size individually
     (setq org-bullets-face-name (quote org-bullet-face))
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-    (setq org-bullets-bullet-list '("⚫""◉""◎""▶""○""⚪""◯"))
+    (setq org-bullets-bullet-list '("◎""◉""⚫""⚪""▶""○""◯"))
     ;; org ellipsis options, other than the default Go to Node...
     ;; not supported in common font, but supported in Symbola (my fall-back font) ⬎, ⤷, ⤵
     ;; (setq org-ellipsis " ⤵") ;; ⤵ ≫
