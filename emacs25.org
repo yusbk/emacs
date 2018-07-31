@@ -297,7 +297,7 @@ Bergantung dengan =hostname=. Dynamik size font diambil dari [[https://coderwall
 
   ;; set a default font
   (when (member "Ubuntu Mono" (font-family-list)) ;"Tlwg Typewriter" "Cousine"
-    (set-face-attribute 'default nil :font "Ubuntu Mono-14")) ;Tlwg Typewriter
+    (set-face-attribute 'default nil :font "Ubuntu Mono-13")) ;Tlwg Typewriter
 
   ;; ;; set a default font
   ;; (when (member "Tlwg Mono" (font-family-list)) ;Tlwg Typewriter
@@ -4534,7 +4534,9 @@ Untuk periksa enjaan
 | qk    | hydra-kamus/body        |
 | C-c f | betulkan ejaan flyspell |
 | C-c i | betulkan ejaan ispell   |
-| C-,   | next error              |
+| C-c n | next error              |
+| C-c b | pervious error (back)   |
+
 
 =Ispell= ialah prog untuk memeriksa ejaan yang tersedia bersama Emacs. Di sini =Aspell=
 dipakai bersama =Flyspell= sebab ia lebih baik dari =Hunspell=. Tetapi pemasangan =Aspell=
@@ -4584,8 +4586,8 @@ Untuk tukar bahasa boleh ditetapkan di ~ispell-local-dictionary~.
     :bind (("C-c f" . flyspell-correct-word-generic)
            ("C-\\" . flyspell-correct-word-generic) ;kekeunci asal C-\ ialah toggle-input-method
            ("C-." . flyspell-auto-correct-word) ;C-M-i alternatif
-           ("C-," . flyspell-goto-next-error)
-           ("C-;" . ybk/flyspell-goto-previous-error)
+           ("C-c n" . flyspell-goto-next-error)
+           ("C-c b" . ybk/flyspell-goto-previous-error)
            ("C-c v" . flyspell-auto-correct-previous-word)
            ("C-c i" . ispell-word)
            :map ybk/org-map
