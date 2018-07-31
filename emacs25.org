@@ -4542,10 +4542,9 @@ selalunya memberikan masalah berbanding dengan =Hunspell=. Langkah-langkah pemas
 seperti dibawah boleh diikuti sebagai cadangan. Sekurang-kurangnya ia berfungsi di
 komputer saya.
 
-*OBSS!!* Boleh cuba pasang melalui Synaptic atau App manager dulu. Sekiranya tidak
-berjaya baru cuba cara di bawah ini:
-
-
+*OBSS!!* Boleh cuba pasang aspell melalui Synaptic atau App manager dulu. Sekiranya
+tidak berjaya baru cuba cara di bawah. Tapi yang penting bahasa harus di download dan
+di pasang seperti cara yang disebutkan di no. 5.
 
 1. Turunkan program aspell di [[http://aspell.net/]]
 2. Unzip fail seperti begini =$ tar xvzf file.tar.gz=
