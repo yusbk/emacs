@@ -297,7 +297,7 @@ Bergantung dengan =hostname=. Dynamik size font diambil dari [[https://coderwall
 
   ;; set a default font
   (when (member "Ubuntu Mono" (font-family-list)) ;"Tlwg Typewriter" "Cousine"
-    (set-face-attribute 'default nil :font "Ubuntu Mono-12")) ;Tlwg Typewriter
+    (set-face-attribute 'default nil :font "Ubuntu Mono-14")) ;Tlwg Typewriter
 
   ;; ;; set a default font
   ;; (when (member "Tlwg Mono" (font-family-list)) ;Tlwg Typewriter
@@ -4541,6 +4541,11 @@ dipakai bersama =Flyspell= sebab ia lebih baik dari =Hunspell=. Tetapi pemasanga
 selalunya memberikan masalah berbanding dengan =Hunspell=. Langkah-langkah pemasangan
 seperti dibawah boleh diikuti sebagai cadangan. Sekurang-kurangnya ia berfungsi di
 komputer saya.
+
+*OBSS!!* Boleh cuba pasang melalui Synaptic atau App manager dulu. Sekiranya tidak
+berjaya baru cuba cara di bawah ini:
+
+
 
 1. Turunkan program aspell di [[http://aspell.net/]]
 2. Unzip fail seperti begini =$ tar xvzf file.tar.gz=
