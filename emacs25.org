@@ -297,7 +297,7 @@ Bergantung dengan =hostname=. Dynamik size font diambil dari [[https://coderwall
 
   ;; set a default font
   (when (member "Ubuntu Mono" (font-family-list)) ;"Tlwg Typewriter" "Cousine"
-    (set-face-attribute 'default nil :font "Ubuntu Mono-13")) ;Tlwg Typewriter
+    (set-face-attribute 'default nil :font "Ubuntu Mono-14")) ;Tlwg Typewriter
 
   ;; ;; set a default font
   ;; (when (member "Tlwg Mono" (font-family-list)) ;Tlwg Typewriter
@@ -2107,31 +2107,46 @@ Untuk sembunyikan tekst yang panjang. Rujukan di [[https://github.com/gregsexton
     :ensure t
     :defer t
     :commands origami-mode
-    :bind (:map ybk/prog-map
-                ("o" . hydra-origami/body))
+    :bind (("C-:" . hydra-origami/body)
+           :map ybk/prog-map
+           ("o" . hydra-origami/body)
+           ;; :map origami-mode-map
+           ;; ("C-:" . hydra-origami/body)
+           )
+
+    :custom-face
+    (origami-fold-replacement-face ((t (:inherit magit-diff-context-highlight))))
+    (origami-fold-fringe-face ((t (:inherit magit-diff-context-highlight))))
+
     :config
     (global-origami-mode)
+    (face-spec-reset-face 'origami-fold-header-face)
 
     ;; Hydra tidak berfungsi bila diletakkan di init.
     ;; origami mode harus aktiv dahulu utk pakai fungsi2
-    (defhydra hydra-origami (:color blue
-                                    :columns 5)
+    (defhydra hydra-origami (:hint nil)
 
-      "Origami for codes"
-      ("o" origami-open-node                  "open")
-      ("c" origami-close-node                 "close")
-      ("n" origami-next-fold                  "next")
+      "
+      ^Origami for codes^
+      ^-----------------
+      _:_: recursively toggle     _p_: previous           _u_: undo      _q_: Keluar
+      _a_: toggle all nodes       _o_: only current node  _z_: redo
+      _t_: toggle node                                  ^^_r_: reset
 
-      ("p" origami-previous-fold              "previous")
-      ("t" origami-recursively-toggle-node    "toggle")
-      ("a" origami-show-only-node             "only node")
+     "
+      (":" origami-recursively-toggle-node)
+      ("a" origami-toggle-all-nodes)
+      ("t" origami-toggle-node)
 
-      ("u" origami-undo                       "undo")
-      ("z" origami-redo                       "redo")
-      ("r" origami-reset                      "reset")
+      ("p" origami-previous-fold)
+      ("o" origami-show-only-node)
 
-      ("q" nil "Keluar")
-      ))
+      ("u" origami-undo)
+      ("z" origami-redo)
+      ("r" origami-reset)
+
+      ("q" (message "KELUAR") :exit t))
+    )
 #+END_SRC
 
 * Winner mode
