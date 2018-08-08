@@ -2137,6 +2137,12 @@ Untuk sembunyikan tekst yang panjang. Rujukan di [[https://github.com/gregsexton
     (global-origami-mode)
     (face-spec-reset-face 'origami-fold-header-face)
 
+    ;; fold symbols
+    (setq origami-fold-replacement "...**")
+
+    ;; Highlight line where the fold starts
+    (setq origami-show-fold-header t)
+
     ;; Hydra tidak berfungsi bila diletakkan di init.
     ;; origami mode harus aktiv dahulu utk pakai fungsi2
     (defhydra hydra-origami (:hint nil)
