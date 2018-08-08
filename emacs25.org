@@ -137,13 +137,28 @@ Dua fungsi yang boleh dipakai iaitu:
 #+END_SRC
 
 * Keymaps
-Utk keluar keymap
+Untuk lihat fungsi kekunci terdapat pelbagai cara:
+1. =M-x describe-key= atau =F1-k= / =C-h k= untuk dapatkan fungsi bagi kekunci.
+2. =M-x describe-bindings= atau =C-h b= untuk tunjukkan semua kekunci kombinasi.
+3. =M-x describe-function= atau =C-h f= untuk dapatakan kekunci dari fungsi yang diketahui.
+
+Namakan fungsi =keluar=.
+
 #+BEGIN_SRC emacs-lisp
   (defun keluar ()
     "Keluar dari fungsi."
     (interactive)
     (setq quit t))
 #+END_SRC
+** Saiz kolom
+Saiz untuk sebaris atau kolom ialah 85 =(fill-column)= tetapi sekiranya ingin menukarkan ke saiz
+lain, boleh pakai =set-fill-column= menggunakan =C-:= (asal kekunci ialah C-x f tapi
+depakai untuk *Origami*).
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-:") 'set-fill-column)
+#+END_SRC
+
 ** Personal keymap [F6]
 Setup a personal keymap. I'll bind various things to this later on:
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -2107,7 +2122,7 @@ Untuk sembunyikan tekst yang panjang. Rujukan di [[https://github.com/gregsexton
     :ensure t
     :defer t
     :commands origami-mode
-    :bind (("C-:" . hydra-origami/body)
+    :bind (("C-x f" . hydra-origami/body)
            :map ybk/prog-map
            ("o" . hydra-origami/body)
            ;; :map origami-mode-map
@@ -2129,17 +2144,18 @@ Untuk sembunyikan tekst yang panjang. Rujukan di [[https://github.com/gregsexton
       "
       ^Origami for codes^
       ^-----------------
-      _:_: recursively toggle     _p_: previous           _u_: undo      _q_: Keluar
-      _a_: toggle all nodes       _o_: only current node  _z_: redo
-      _t_: toggle node                                  ^^_r_: reset
+      _f_: recursively toggle  _p_: previous fold      _u_: undo      _q_: Keluar
+      _a_: toggle all nodes    _n_: next fold          _z_: redo
+      _t_: toggle node         _o_: only current node  _r_: reset
 
      "
-      (":" origami-recursively-toggle-node)
+      ("f" origami-recursively-toggle-node)
       ("a" origami-toggle-all-nodes)
       ("t" origami-toggle-node)
 
       ("p" origami-previous-fold)
       ("o" origami-show-only-node)
+      ("n" origami-forward-fold)
 
       ("u" origami-undo)
       ("z" origami-redo)
@@ -4864,7 +4880,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     :bind
     (:map ess-mode-map ;ESS
           ("C-a" . crux-move-beginning-of-line)
-          ("M--" . ess-insert-S-assign) ; assign <-
+          ("M--" . ess-insert-assign) ; assign <-
           ("_"   . self-insert-command)
           ("M-+" . my/dt-update)
           ("M-m" . my/add-match)
@@ -4872,7 +4888,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           ("M-p" . my/add-pipe)
           ("C-|" . my/ess-eval-pipe-through-line)
           :map inferior-ess-mode-map ;iESS
-          ("M--" . ess-insert-S-assign)
+          ("M--" . ess-insert-assign)
           ("_"   . self-insert-command)
           ("M-+" . my/dt-update)
           ("M-m" . my/add-match)
