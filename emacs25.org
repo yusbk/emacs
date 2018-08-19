@@ -343,8 +343,8 @@ Hanya pakai 'y' atau 'n' untuk 'Yes' dan 'No'
 Mulakan tanpa startup message
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-message t)
-  (setq initial-major-mode #'org-mode
-        initial-scratch-message "# Untuk nota2 sementara yang tidak perlu disimpan\n\n")
+  ;; (setq initial-major-mode #'org-mode)
+  (setq initial-scratch-message "# Untuk nota2 sementara yang tidak perlu disimpan\n\n")
 #+END_SRC
 ** Start maximized
 #+BEGIN_SRC emacs-lisp :tangle yes
