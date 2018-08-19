@@ -339,12 +339,15 @@ Hanya pakai 'y' atau 'n' untuk 'Yes' dan 'No'
 #+BEGIN_SRC emacs-lisp
   (defalias 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
-** startup message
+** Lisp dan message permulaan
 Mulakan tanpa startup message
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-message t)
   ;; (setq initial-major-mode #'org-mode)
   (setq initial-scratch-message "# Untuk nota2 sementara yang tidak perlu disimpan\n\n")
+
+  ;; Untuk evaluasi lisp seperti C-x C-e
+  (define-key lisp-interaction-mode-map (kbd "<C-return>") 'eval-last-sexp)
 #+END_SRC
 ** Start maximized
 #+BEGIN_SRC emacs-lisp :tangle yes
