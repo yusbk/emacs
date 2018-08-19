@@ -5070,6 +5070,31 @@ memakai fungsi ini.
     ;; Masukkan personal function
     (setq r-autorays-expand-package-functions-only nil))
 #+END_SRC
+** Deploy shiny app
+Untuk buka Shiny app. Fail "deployApp.R" harus disediakan dan diletakkan di dalam
+app-folder. Untuk larikan fungsi ini menggunakan =C-c s= mesti berada di app-folder.
+
+Fail =deployApp.R= harus menggandungi kode ini:
+
+#+BEGIN_SRC R
+  #!//usr/lib/R/bin/Rscript
+  shiny::runApp('~/Git-work/traume/ntrApp', launch.browser = TRUE)
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp
+  (setq deploy-file "deployApp.R")
+
+  (defvar app-path
+    (expand-file-name deploy-file (file-name-directory (buffer-file-name))))
+
+  (defun run-app ()
+    "run shiny"
+    (interactive)
+    (shell-command-to-string (format "Rscript  %s" app-path)))
+
+  (global-set-key (kbd "C-c s") 'run-app)
+#+END_SRC
 
 ** Debug
 =ess-tracebug= aktiv secara automatik dan untuk mematikan boleh tetapkan =(setq
