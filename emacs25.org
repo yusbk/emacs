@@ -5076,21 +5076,19 @@ app-folder. Untuk larikan fungsi ini menggunakan =C-c s= mesti berada di app-fol
 
 Fail =deployApp.R= harus menggandungi kode ini:
 
-#+BEGIN_SRC R
-  #!//usr/lib/R/bin/Rscript
-  shiny::runApp('~/Git-work/traume/ntrApp', launch.browser = TRUE)
-#+END_SRC
-
+#+BEGIN_EXAMPLE
+ #!//usr/lib/R/bin/Rscript
+ shiny::runApp('~/Git-work/traume/ntrApp', launch.browser = TRUE)
+#+END_EXAMPLE
 
 #+BEGIN_SRC emacs-lisp
   (setq deploy-file "deployApp.R")
 
-  (defvar app-path
-    (expand-file-name deploy-file (file-name-directory (buffer-file-name))))
-
   (defun run-app ()
     "run shiny"
     (interactive)
+    (setq app-path
+          (expand-file-name deploy-file (file-name-directory (buffer-file-name))))
     (shell-command-to-string (format "Rscript  %s" app-path)))
 
   (global-set-key (kbd "C-c s") 'run-app)
