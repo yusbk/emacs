@@ -4926,6 +4926,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     ;;:pin melpa-stable
     :bind
     (:map ess-mode-map ;ESS
+          ("C-c s" . run-shiny-app)
           ("C-a" . crux-move-beginning-of-line)
           ("M--" . ess-insert-assign) ; assign <-
           ("_"   . self-insert-command)
