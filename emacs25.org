@@ -5213,7 +5213,7 @@ Buka buffer untuk test fungsi R dll guna =R-mode=. Fungsi ini dimodifikasikan da
     (let (($buf (generate-new-buffer "*r-test*"))
           (test-mode2 (quote R-mode)))
       (switch-to-buffer $buf)
-      (insert (format "## == Test R == \n\n"))
+      (insert (format "## == Test %s == \n\n" "R script"))
       (funcall test-mode2)
       (setq buffer-offer-save t)
       $buf
