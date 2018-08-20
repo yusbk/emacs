@@ -587,6 +587,8 @@ Cara untuk menyalin file path di buffer yang sedang digunakan.
 
   (global-set-key (kbd "C-c d") 'xah-copy-file-path)
 #+END_SRC
+** Test buffer utk R
+Pindah ke test buffer bila ingin cuba fungsi di R.
 
 * Kill-ring
 Dari [[https://github.com/browse-kill-ring/browse-kill-ring][GitHub]]
@@ -5189,7 +5191,27 @@ Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
   ;;== key-binding
   (key-seq-define-global "jk" 'hydra-ybk-r-debug/body)
   (global-set-key (kbd "<f9>") 'hydra-ybk-r-debug/body)
+#+END_SRC\n
+** Test R buffer
+Buka buffer untuk test fungsi R dll guna =R-mode=. Fungsi ini dimodifikasikan dari
+[[http://ergoemacs.org/emacs/emacs_new_empty_buffer.html][ErgoEmacs]].
+
+#+BEGIN_SRC emacs-lisp
+  (defun test-r-buffer ()
+    "Create a new empty buffer with R-mode."
+    (interactive)
+    (let (($buf (generate-new-buffer "*r-test*"))
+          (test-mode2 (quote R-mode)))
+      (switch-to-buffer $buf)
+      (insert (format "## == Test R == \n\n"))
+      (funcall test-mode2)
+      (setq buffer-offer-save t)
+      $buf
+      ))
+
+  (global-set-key (kbd "C-c x") 'test-r-buffer)
 #+END_SRC
+
 ** Flycheck-julia
 Periksa kode di ESS. Diambil dari [[https://github.com/gdkrmr/flycheck-julia][GitHub]]
 #+BEGIN_SRC emacs-lisp
