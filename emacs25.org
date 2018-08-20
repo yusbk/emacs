@@ -5084,16 +5084,26 @@ Fail =deployApp.R= harus menggandungi kode ini:
 #+END_EXAMPLE
 
 #+BEGIN_SRC emacs-lisp
+  ;; mesti ada fail ini di app-folder
   (setq deploy-file "deployApp.R")
 
-  (defun run-app ()
-    "run shiny"
-    (interactive)
-    (setq app-path
-          (expand-file-name deploy-file (file-name-directory (buffer-file-name))))
-    (shell-command-to-string (format "Rscript  %s" app-path)))
+  ;; (defun run-app ()
+  ;;   "run shiny"
+  ;;   (interactive)
+  ;;   (setq app-path
+  ;;         (expand-file-name deploy-file (file-name-directory (buffer-file-name))))
+  ;;   (shell-command-to-string (format "Rscript  %s" app-path)))
 
-  (global-set-key (kbd "C-c s") 'run-app)
+  (defun run-shiny-app ()
+    "Run app from any opened app files."
+    (interactive)
+    (let* (shiny-app)
+      (setq shiny-app
+            (expand-file-name deploy-file (file-name-directory (buffer-file-name))))
+      (shell-command-to-string (format "Rscript %s" shiny-app))))
+
+  ;; (global-set-key (kbd "C-c s") 'run-shiny-app)
+  (global-set-key (kbd "<f9>") 'run-shiny-app)
 #+END_SRC
 
 ** Debug
