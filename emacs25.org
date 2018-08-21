@@ -86,6 +86,27 @@ Sesuai bila banyak mukasurat
 #+END_SRC
 
 * Kekunci
+** Ringkasan kekunci
+Senarai kekunci yang dipakai
+
+|---------+----------------------|
+| Kekunci | Fungsi               |
+|---------+----------------------|
+| jm      | Menu utama           |
+| jt      | Terminal             |
+| jw      | Penulisan/Word       |
+| js      | Knitr/Sweave         |
+| jx      | Debug code           |
+| jj      | Movement             |
+| jc      | Programming          |
+| jf      | Find file            |
+| jg      | Git                  |
+| jl      | Launch Shiny App     |
+|         |                      |
+| qq      | Todo                 |
+| qw      | Browse URL at browse |
+|         |                      |
+
 ** Key chord
 Untuk membuat kekunci singkatan dengan hanya dua huruf. Rujukan [[http://www.emacswiki.org/emacs/key-chord.el][Key Chord Mode]]
 #+BEGIN_SRC emacs-lisp
@@ -171,7 +192,7 @@ Setup a personal keymap. I'll bind various things to this later on:
 
 ** Prog keymap [F12]
 Setup utk keymap berkaitan dengan programming
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (bind-keys :prefix "<f12>"
              :prefix-map ybk/prog-map)
 
@@ -179,7 +200,7 @@ Setup utk keymap berkaitan dengan programming
 #+END_SRC
 ** Move keymap [F2]
 Keymap utk pergerakkan
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (bind-keys :prefix "<f2>"
              :prefix-map ybk/move-map)
 
@@ -188,7 +209,7 @@ Keymap utk pergerakkan
 
 ** Org keymap [F10]
 Keymap utk berkaitan dengan Org-mode
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (bind-keys :prefix "<f10>"
              :prefix-map ybk/org-map )
 
@@ -197,7 +218,7 @@ Keymap utk berkaitan dengan Org-mode
 
 ** R keymap [F9]
 Keymap untuk penggunaan berkaitan ESS-R. Cuma aktiv di =ess-mode=
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (bind-keys :prefix "<f9>"
              :prefix-map ybk/r-map )
 
@@ -206,7 +227,7 @@ Keymap untuk penggunaan berkaitan ESS-R. Cuma aktiv di =ess-mode=
 #+END_SRC
 ** Misc keymap [F5]
 Fungsi lain yang berguna dan perlukan singkatan
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (bind-keys :prefix "<f5>"
              :prefix-map ybk/misc-map)
 
@@ -5104,13 +5125,13 @@ Fail =deployApp.R= harus menggandungi kode ini:
       (shell-command-to-string (format "Rscript %s" shiny-app))))
 
   ;; (global-set-key (kbd "C-c s") 'run-shiny-app)
-  (global-set-key (kbd "<f9>") 'run-shiny-app)
+  (key-seq-define-global "jl" #'run-shiny-app)
 #+END_SRC
 
 ** Debug
 =ess-tracebug= aktiv secara automatik dan untuk mematikan boleh tetapkan =(setq
 ess-use-tracebug nil)=. Untuk penggunaan debug guna kekuci =C-c C-t= [ess-dev-map]
-untuk dapatkan semua kekunci. Hydra utk ess-debug pakai =jk= atau =F9=
+untuk dapatkan semua kekunci. Hydra utk ess-debug pakai =jx= atau =F9=
 
 Untuk penerangan mendalam baca di [[https://code.google.com/archive/p/ess-tracebug/][ess-tracedebug]]
 
@@ -5119,7 +5140,7 @@ Bila debugging, kekuci ini boleh dipakai
 |------------+---------------------------|
 | Kekuci     | Fungsi                    |
 |------------+---------------------------|
-| F9 atau jk | hydra-r-debug             |
+| F9 atau jx | hydra-r-debug             |
 | M-C        | Teruskan (continue)       |
 | M-C-C      | Teruskan pelbagai (multi) |
 | M-C-N      | Next step multi           |
@@ -5173,7 +5194,7 @@ Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
 
   (defhydra hydra-ybk-r-debug (:hint nil)
     "
-     ^ESS R-debug  'C-c C-t' r-dev-map. F9 or 'jk'^
+     ^ESS R-debug  'C-c C-t' r-dev-map. F9 or 'jb'^
 
      ^Misc          ^Package^             ^^Break point^
      ^--------------^-----------------------^-----------------------
@@ -5199,7 +5220,7 @@ Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
 
 
   ;;== key-binding
-  (key-seq-define-global "jk" 'hydra-ybk-r-debug/body)
+  (key-seq-define-global "jx" 'hydra-ybk-r-debug/body)
   (global-set-key (kbd "<f9>") 'hydra-ybk-r-debug/body)
 #+END_SRC
 ** Test R buffer
@@ -6933,12 +6954,12 @@ Beberapa situasi yang pernah dialami dan beberikan masalah
 Sekiranya kekunci dari F2 ke F12 tidak berfungsi dan hanya menunjukkan XF86New, XF86Open,
 XF86Close dan sebagainya ini menandakan yang button ~LOCK~ diaktifkan.
 * My personal hydra keymaps
-** General keymap [jy]
+** General keymap [jm]
 Hydra untuk fungsi awam
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-ybk-general (:hint nil)
     "
-     ^General keymap [F6] or jy^
+     ^General keymap [F6] or jm^
      ^-------------------------------
      _y_: ybk-init  _g_: highlight        _s_: stackOverflow  _w_: swap-windows       _e_: musics (emms)   _x_: save buffers & exit
      _h_: heading   _l_: warna highlight  _r_: rss            _n_: file explore [F4]  _u_: weather (metno) _c_: key-chord-mode
@@ -6969,7 +6990,7 @@ Hydra untuk fungsi awam
     ("c" key-chord-mode)
     ("q" (message "KELUAR") :exit t))
 
-  (key-chord-define-global "jy" #'hydra-ybk-general/body)
+  (key-chord-define-global "jm" #'hydra-ybk-general/body)
   (global-set-key (kbd "<f6>") 'hydra-ybk-general/body)
 #+END_SRC
 ** Move keymap [jj]
