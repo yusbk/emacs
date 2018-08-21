@@ -136,7 +136,7 @@ Dua fungsi yang boleh dipakai iaitu:
     :after key-chord)
 #+END_SRC
 
-* Keymaps
+* Personalised keymaps
 Untuk lihat fungsi kekunci terdapat pelbagai cara:
 1. =M-x describe-key= atau =F1-k= / =C-h k= untuk dapatkan fungsi bagi kekunci.
 2. =M-x describe-bindings= atau =C-h b= untuk tunjukkan semua kekunci kombinasi.
@@ -171,7 +171,7 @@ Setup a personal keymap. I'll bind various things to this later on:
 
 ** Prog keymap [F12]
 Setup utk keymap berkaitan dengan programming
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (bind-keys :prefix "<f12>"
              :prefix-map ybk/prog-map)
 
@@ -179,7 +179,7 @@ Setup utk keymap berkaitan dengan programming
 #+END_SRC
 ** Move keymap [F2]
 Keymap utk pergerakkan
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (bind-keys :prefix "<f2>"
              :prefix-map ybk/move-map)
 
@@ -188,7 +188,7 @@ Keymap utk pergerakkan
 
 ** Org keymap [F10]
 Keymap utk berkaitan dengan Org-mode
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (bind-keys :prefix "<f10>"
              :prefix-map ybk/org-map )
 
@@ -206,7 +206,7 @@ Keymap untuk penggunaan berkaitan ESS-R. Cuma aktiv di =ess-mode=
 #+END_SRC
 ** Misc keymap [F5]
 Fungsi lain yang berguna dan perlukan singkatan
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (bind-keys :prefix "<f5>"
              :prefix-map ybk/misc-map)
 
@@ -5171,7 +5171,6 @@ Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
   ;;      (key-seq-define inferior-ess-mode-map "jk" #'hydra-ybk-r-debug/body)
   ;;      ))
 
-
   (defhydra hydra-ybk-r-debug (:hint nil)
     "
      ^ESS R-debug  'C-c C-t' r-dev-map. F9 or 'jk'^
@@ -5202,7 +5201,7 @@ Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
   ;;== key-binding
   (key-seq-define-global "jk" 'hydra-ybk-r-debug/body)
   (global-set-key (kbd "<f9>") 'hydra-ybk-r-debug/body)
-#+END_SRC\n
+#+END_SRC
 ** Test R buffer
 Buka buffer untuk test fungsi R dll guna =R-mode=. Fungsi ini dimodifikasikan dari
 [[http://ergoemacs.org/emacs/emacs_new_empty_buffer.html][ErgoEmacs]].
