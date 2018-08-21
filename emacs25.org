@@ -2067,6 +2067,7 @@ git clone https://github.com/mattfidler/yasnippet-ess-mode.git
 
 ** Aturcara yasnippet
 Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Yasnippet][EmacsWiki]] untuk [[https://github.com/joaotavora/yasnippet][Yasnippet]]. Untuk buat snippets boleh baca di [[https://joaotavora.github.io/yasnippet/snippet-development.html][sini]].
+Keychord =jy= untuk /company-yasnippet/.
 
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
@@ -2109,6 +2110,8 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
                 (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
                 (define-key yas-keymap [tab] 'yas/next-field)))
 
+    (key-seq-define-global "jy" 'company-yasnippet)
+
     ;;Masukkan snippet sekiranya ada else masukkan blank line (open-line)
     ;;https://emacs.stackexchange.com/questions/7908/how-to-make-yasnippet-and-company-work-nicer
 
@@ -2130,6 +2133,9 @@ Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Y
 
     ;;   (global-set-key (kbd "C-x y") 'aya-open-line)
     )
+
+
+
 #+END_SRC
 * Parentheses
 ** Smartparens
@@ -7103,7 +7109,7 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     ^---------------------------------------------------------------------------------------------------
     _P_: Projectile    _a_: start exp    _k_: kill other buffers  _g_: Magit            _r_: knitr (js)
     _p_: find project  _e_: end exp      _y_: Yasnippet           _d_: Ediff            _R_: debug R (jk)
-    _o_: Origami       _u_: unwrap exp   _-_: del unuse yas.      _f_: diff-walker
+    _o_: Origami       _u_: unwrap exp   _-_: del unuse yas.      _f_: diff-walker      _S_: smartparens ON/OFF
     _s_: scratch       _x_: kill exp     _w_: send2browser        _c_: cleanup/tabbify  _q_: KELUAR
     "
 
@@ -7127,6 +7133,7 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     ("d" ediff)
     ("f" backup-walker-start)
 
+    ("S" smartparens-mode)
     ("r" hydra-ybk-poly/body :exit t)
     ("R" hydra-ybk-r-debug/body :exit t)
 
