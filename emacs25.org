@@ -5139,7 +5139,9 @@ Fail =deployApp.R= harus menggandungi kode ini:
 ess-use-tracebug nil)=. Untuk penggunaan debug guna kekuci =C-c C-t= [ess-dev-map]
 untuk dapatkan semua kekunci. Hydra utk ess-debug pakai =jx= atau =F9=
 
-Untuk penerangan mendalam baca di [[https://code.google.com/archive/p/ess-tracebug/][ess-tracedebug]]
+Untuk penerangan mendalam baca di [[https://code.google.com/archive/p/ess-tracebug/][ess-tracedebug]]. Untuk keluar dari browser pakai
+=c + Return= dan fungsi akan diteruskan. Untuk matikan debugging dan kembali ke
+console pakai =Q + Return=.
 
 Bila debugging, kekuci ini boleh dipakai
 
