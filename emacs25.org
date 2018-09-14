@@ -2927,6 +2927,7 @@ sila sediakan.
     ;; Allow _ and ^ characters to sub/super-script strings but only when
     ;; string is wrapped in braces
     (setq org-use-sub-superscripts '{}) ; in-buffer rendering
+    (setq org-export-with-sub-superscripts nil)
 
     ;; Number of empty lines needed to keep an empty line between collapsed trees.
     ;; If you leave an empty line between the end of a subtree and the following
