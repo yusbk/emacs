@@ -5279,11 +5279,11 @@ semula ke R gunakan kekunci =C-x q=
 Mode ini dipakai untuk membuat dokumen yang menggunakan program R.
 ** Aturcara
 
-|-----+--------------------|
-| key | fungsi             |
-|-----+--------------------|
-| js  | hydra-Rmd (Sweave) |
-|     |                    |
+|-----+-------------------|
+| key | fungsi            |
+|-----+-------------------|
+| xk  | hydra-Rmd (knitr) |
+|     |                   |
 
 Polymode is a (relatively new) way of working with multiple major modes. This is
 especially helpful if we want to use latex or markdown together with R code. The
@@ -5329,11 +5329,11 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
     ;; Hydra
     (defhydra hydra-ybk-poly (:hint nil)
       "
-     ^Polymode^                   ^Markdown^
+     ^Polymode^                        ^Markdown^
      ^----------------------------------------------------------------------------------
-     _n_: next      _e_: evaluate   _c_: insert chk     _f_: Fold chk      _d_: Create html
-     _p_: previous  _w_: weave      _t_: eval. buffer   _a_: Fold all chk
-     _k_: kill                    ^^_r_: eval. chk      _u_: Unfold chk    _q_: KELUAR
+     _n_: next      _e_: evaluate      _c_: insert chk     _f_: Fold chk      _d_: Create html
+     _p_: previous  _w_: weave         _t_: eval. buffer   _a_: Fold all chk
+     _k_: kill      _E_: set exporter  _r_: eval. chk      _u_: Unfold chk    _q_: KELUAR
 
      Rnw guna '<' utk masukkan chunck baru
      "
@@ -5343,6 +5343,7 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
 
       ("e" polymode-export)
       ("w" polymode-weave)
+      ("E" polymode-set-exporter)
 
       ("c" rmd-insert-r-chunk)
       ("r" rmd-eval-chunk)
@@ -5358,7 +5359,7 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
       )
 
     ;;==key ikut urutan
-    (key-seq-define-global "js" 'hydra-ybk-poly/body)
+    (key-seq-define-global "xk" 'hydra-ybk-poly/body)
     ;;(key-seq-define ess-mode-map "js" 'hydra-ybk-poly/body)
 
     ;; (bind-key "<f7>" #'hydra-ybk-poly/body)
@@ -5554,16 +5555,15 @@ AuCTeX is better than the built in tex mode; let's use it. It's good out of the
 box, but I like to use latexmk so that I don't have to remember to rerun the file X
 times to get references right.
 
-Untuk memproses fail =.Rnw= atau =.Rmd= ke PDF harus memasang *TeX-Live*. Cara ini
-ialah untuk memasang TeX Live 2016 di Ubuntu 16.04. Diambil dari [[http://chrisstrelioff.ws/sandbox/2016/10/31/install_tex_live_2016_on_ubuntu_16_04.html][Chris blog]] dan rujuk
-blog sekiranya ada masalah terutama bila pasang versi TeX Live sebelumnya.
+Untuk memproses fail =.Rnw= atau =.Rmd= ke PDF harus memasang *TeX-Live*. Cara untuk
+pasang di Ubuntu 18.04 Bionic Beaver boleh baca di [[https://linuxconfig.org/how-to-install-latex-on-ubuntu-18-04-bionic-beaver-linux][sini]].
 
 #+BEGIN_EXAMPLE
-  $ sudo add-apt-repository ppa:jonathonf/texlive-2016
   $ sudo apt update
-  $ sudo apt install texlive-full
+  $ sudo apt install texlive
 #+END_EXAMPLE
 
+Atau pasang =texlive-latex-extra= dan size file 404 MB.
 
 Pastikan fail-fail ini dipasang sebelum melarikan fail =.Rnw= di *ESS*
 
