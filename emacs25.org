@@ -5102,8 +5102,12 @@ memakai fungsi ini.
     (setq r-autorays-expand-package-functions-only nil))
 #+END_SRC
 ** Deploy shiny app
+
+|----+-----------|
+| xs | run shiny |
+
 Untuk buka Shiny app. Fail "deployApp.R" harus disediakan dan diletakkan di dalam
-app-folder. Untuk larikan fungsi ini menggunakan =C-c s= mesti berada di app-folder.
+app-folder. Untuk larikan fungsi ini menggunakan =C-c s= atau =xs= mesti berada di app-folder.
 
 Fail =deployApp.R= harus menggandungi kode ini:
 
@@ -5116,13 +5120,6 @@ Fail =deployApp.R= harus menggandungi kode ini:
   ;; mesti ada fail ini di app-folder
   (setq deploy-file "deployApp.R")
 
-  ;; (defun run-app ()
-  ;;   "run shiny"
-  ;;   (interactive)
-  ;;   (setq app-path
-  ;;         (expand-file-name deploy-file (file-name-directory (buffer-file-name))))
-  ;;   (shell-command-to-string (format "Rscript  %s" app-path)))
-
   (defun run-shiny-app ()
     "Run app from any opened app files."
     (interactive)
@@ -5131,8 +5128,7 @@ Fail =deployApp.R= harus menggandungi kode ini:
             (expand-file-name deploy-file (file-name-directory (buffer-file-name))))
       (shell-command-to-string (format "Rscript %s" shiny-app))))
 
-  ;; (global-set-key (kbd "C-c s") 'run-shiny-app)
-  (key-seq-define-global "jl" #'run-shiny-app)
+  (key-seq-define-global "xs" #'run-shiny-app)
 #+END_SRC
 
 ** Debug
@@ -5551,9 +5547,10 @@ Of course, markdown contains a yaml header, so we need yaml-mode as well:
 #+END_SRC
 
 * LaTeX
-AuCTeX is better than the built in tex mode; let's use it. It's good out of the
-box, but I like to use latexmk so that I don't have to remember to rerun the file X
-times to get references right.
+AuCTeX diguna sebab ia lebih bagus dari yang tersedia (build in) tex mode. Penggunaan
+yang tersedia di AuCTeX diubahsuai dan menggunakan =latexmk= untuk tukarkan fail ke
+pdf tanpa perlu melarikan fail banyak kali untuk tetapkan rujukan-rujukan secara
+betul. Tapi latexmk harus dipasang dan cara senang ialah menggunakan Synaptic.
 
 Untuk memproses fail =.Rnw= atau =.Rmd= ke PDF harus memasang *TeX-Live*. Cara untuk
 pasang di Ubuntu 18.04 Bionic Beaver boleh baca di [[https://linuxconfig.org/how-to-install-latex-on-ubuntu-18-04-bionic-beaver-linux][sini]].
