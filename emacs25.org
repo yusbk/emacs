@@ -1932,9 +1932,10 @@ tunggu 1 saat. Untuk masalah di =eshall= bila pakai estrisk (*) boleh pakai quot
     (bind-key [remap completion-at-point] #'company-complete company-mode-map)
 
     (setq company-tooltip-align-annotations t   ; align
+          company-tooltip-limit 6               ; list to show
+          company-tooltip-flip-when-above t
           company-show-numbers t                ; Easy navigation to candidates with M-<n>
           company-idle-delay .2                 ; delay before autocomplete popup
-          company-tooltip-limit 6               ; list to show
           company-minimum-prefix-length 4       ; 4 prefix sebelum tunjukkan cadangan (default)
           company-abort-manual-when-too-short t ; tanpa company sekiranya prefix pendek dari 'minimum-prefix-length'
           )
@@ -2157,8 +2158,10 @@ Pasangan utk parentheses
     (setq sp-show-pair-from-inside t)
 
     ;;program mode
-    (add-hook 'org-src-mode-hook #'smartparens-strict-mode)
-    (add-hook 'inferior-ess-mode-hook #'smartparens-strict-mode)
+    ;; (add-hook 'org-src-mode-hook #'smartparens-strict-mode)
+    ;; (add-hook 'inferior-ess-mode-hook #'smartparens-strict-mode)
+    (add-hook 'org-src-mode-hook #'smartparens-mode)
+    (add-hook 'inferior-ess-mode-hook #'smartparens-mode)
     (add-hook 'LaTeX-mode-hook #'smartparens-mode)
     (add-hook 'markdown-mode-hook #'smartparens-mode)
 
@@ -4982,6 +4985,22 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
       (make-directory ybk/r-dir t))
 
     :config
+    ;; ess-company
+    ;; https://stackoverflow.com/questions/49232454/emacs-ess-how-to-auto-complete-library-function
+    (defun my-ess-hook ()
+      ;; ensure company-R-library is in ESS backends
+      (make-local-variable 'company-backends)
+      (cl-delete-if (lambda (x) (and (eq (car-safe x) 'company-R-args))) company-backends)
+      (push (list 'company-R-args 'company-R-objects 'company-R-library :separate)
+            company-backends))
+
+    (add-hook 'ess-mode-hook 'my-ess-hook)
+
+    ;; (with-eval-after-load 'ess
+    ;;   (setq ess-use-company t))
+    (setq ess-use-company t)
+
+    ;; whitespace
     (setq ess-nuke-trailing-whitespace-p t)
 
     (add-hook 'ess-mode-hook
