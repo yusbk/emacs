@@ -4942,9 +4942,10 @@ Electric operator will turn ~a=10*5+2~ into ~a = 10 * 5 + 2~, so let's enable it
     )
 #+END_SRC
 
-* ESS with R
+* ESS
+** R
 Aturcara dan ESS snippet
-** Aturcara ESS
+*** Aturcara ESS
 Untuk guna R. Kekunci yang berguna antaranya:
 - =C-c C-d=   Pelbagai aturcara lain
 - =C-c C-d e= ESSdescribe-object-at-point
@@ -5003,9 +5004,11 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     ;; whitespace
     (setq ess-nuke-trailing-whitespace-p t)
 
-    (add-hook 'ess-mode-hook
-              (lambda ()
-                (ess-set-style 'RStudio)))
+    ;; pakai indentation cara RStudio
+    (setq ess-default-style 'RStudio-)
+    ;; (add-hook 'ess-mode-hook
+    ;;           (lambda ()
+    ;;             (ess-set-style 'RStudio)))
 
     (setq ess-eval-visibly 'nowait) ; don't hog Emacs
     (setq ess-ask-for-ess-directory nil) ; don't ask for dir when starting a process
@@ -5095,7 +5098,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     ;; (global-set-key (kbd "\C-cp") 'ess-readline)
     )
 #+END_SRC
-** ESS snippet
+*** ESS snippet
 Diambil dari [[https://github.com/mattfidler/r-autoyas.el][GitHub]]. Pakai =TAB= untuk buka snippet. =Yasnippet= perlu dipasang untuk
 memakai fungsi ini.
 
@@ -5120,7 +5123,7 @@ memakai fungsi ini.
     ;; Masukkan personal function
     (setq r-autorays-expand-package-functions-only nil))
 #+END_SRC
-** Deploy shiny app
+*** Deploy shiny app
 
 |----+-----------|
 | xs | run shiny |
@@ -5150,7 +5153,7 @@ Fail =deployApp.R= harus menggandungi kode ini:
   (key-seq-define-global "xs" #'run-shiny-app)
 #+END_SRC
 
-** Debug
+*** Debug
 =ess-tracebug= aktiv secara automatik dan untuk mematikan boleh tetapkan =(setq
 ess-use-tracebug nil)=. Untuk penggunaan debug guna kekuci =C-c C-t= [ess-dev-map]
 untuk dapatkan semua kekunci. Hydra utk ess-debug pakai =jx= atau =F9=
@@ -5247,7 +5250,7 @@ Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
   (key-seq-define-global "jx" 'hydra-ybk-r-debug/body)
   (global-set-key (kbd "<f9>") 'hydra-ybk-r-debug/body)
 #+END_SRC
-** Test R buffer
+*** Test R buffer
 Buka buffer untuk test fungsi R dll guna =R-mode=. Fungsi ini dimodifikasikan dari
 [[http://ergoemacs.org/emacs/emacs_new_empty_buffer.html][ErgoEmacs]].
 
@@ -5267,7 +5270,7 @@ Buka buffer untuk test fungsi R dll guna =R-mode=. Fungsi ini dimodifikasikan da
   (global-set-key (kbd "C-c x") 'test-r-buffer)
 #+END_SRC
 
-** Flycheck-julia
+*** Flycheck-julia
 Periksa kode di ESS. Diambil dari [[https://github.com/gdkrmr/flycheck-julia][GitHub]]
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-julia
@@ -5281,8 +5284,8 @@ Periksa kode di ESS. Diambil dari [[https://github.com/gdkrmr/flycheck-julia][Gi
     (flycheck-julia-setup))
 #+END_SRC
 
-** Buka data.frame
-*** ESS-view
+*** Buka data.frame
+**** ESS-view
 Untuk view data.frame di speadsheet software seperti Excel atau Calc. Untuk lihat
 dataframe pakai kekunci =C-x w=. Untuk buka dataframe dan edit kemudian dimasukkan
 semula ke R gunakan kekunci =C-x q=
@@ -5290,6 +5293,35 @@ semula ke R gunakan kekunci =C-x q=
   (use-package ess-view
     :ensure t)
 #+END_SRC
+** Stata
+Untuk guna Stata di ESS
+*** Tetapkan dimana Stata dipasang
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ess-site
+    :ensure ess
+    :mode (("\\.do" . stata-mode)
+           ("\\.ado" . stata-mode))
+
+    :init
+    (setenv "PATH" (concat (getenv "PATH") ":/usr/local/stata"))
+    (setq exec-path (append exec-path '("/usr/local/stata")))
+
+    :config
+    (require 'ess-stata-mode)
+    )
+#+END_SRC
+*** Stata guna Ado-mode
+Download =ado-mode= dari Github atau di [[https://www.louabill.org/Stata/ado-mode_install.html][sini]]
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package ado-mode
+    :load-path "~/Dropbox/lisp/ado-mode/lisp"
+    :init
+    (setq auto-mode-alist (append (list '("\\\\.ado\\\\'" . ado-mode)
+                                        '("\\.do\\'" . ado-mode))
+                                  auto-mode-alist))
+    )
+#+END_SRC
+
 * Polymode (for knitr)
 Mode ini dipakai untuk membuat dokumen yang menggunakan program R.
 ** Aturcara
@@ -5982,14 +6014,59 @@ email.
     :bind ("C-c w m" . w3m-browse-url))
 
 #+END_SRC
+** mu4e
+Email cara =mu4e= diambil dari [[https://www.reddit.com/r/emacs/comments/8q84dl/tip_how_to_easily_manage_your_emails_with_mu4e/][sini]]. Boleh juga lihat di [[https://www.youtube.com/watch?time_continue=179&v=newRHXKm4H4][YouTube]].
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package mu4e
+    :load-path "~/Dropbox/lisp/mu/mu4e"
+    :custom
+    (mu4e-attachment-dir "~/Downloads")
+    (mu4e-compose-signature-auto-include nil)
+    (mu4e-drafts-folder "/gmail/Drafts")
+    (mu4e-get-mail-command "mbsync -a ~/.emacs.d/.mbsyncrc")
+    (mu4e-maildir "~/Maildir")
+    (mu4e-refile-folder "/gmail/Archive")
+    (mu4e-sent-folder "/gmail/Sent Mail")
+    (mu4e-maildir-shortcuts
+     '(("/gmail/INBOX" . ?i)
+       ("/gmail/All Mail" . ?a)
+       ("/gmail/Deleted Items" . ?d)
+       ("/gmail/Drafts" . ?D)
+       ("/gmail/Important" . ?i)
+       ("/gmail/Sent Mail" . ?s)
+       ("/gmail/Starred" . ?S)))
+    (mu4e-trash-folder "/gmail/Trash")
+    (mu4e-update-interval 300)
+    (mu4e-use-fancy-chars t)
+    (mu4e-view-show-addresses t)
+    (mu4e-view-show-images t)
+    :config
+    ;; show images
+    (setq mu4e-show-images t)
 
-** Aturcara
+    ;; use imagemagick, if available
+    (when (fboundp 'imagemagick-register-types)
+      (imagemagick-register-types))
+    )
+#+END_SRC
+** mu4e notification
+#+BEGIN_SRC emacs-lisp
+  (use-package mu4e-alert
+    :ensure t
+    :after mu4e
+    :hook ((after-init . mu4e-alert-enable-mode-line-display)
+           (after-init . mu4e-alert-enable-notifications))
+    :config (mu4e-alert-set-default-style 'libnotify))
+#+END_SRC
+
+** Gnus
+OBS! dimatikan sebab pakai mu4e
 Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
 
 1. Aktifkan [[https://support.google.com/mail/answer/7126229?visit_id=1-636364795330765405-1977413898&rd=2#cantsignin][IMAP]]
 2. Aktifkan [[https://support.google.com/mail/answer/7126229?visit_id=1-636364795330765405-1977413898&rd=2#cantsignin][less secure apps]]
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package gnus
     :bind (:map ybk/mail-map
                 ("e" . gnus)
@@ -6261,8 +6338,9 @@ Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
     )
 #+END_SRC
 ** SMTP
+*** Utk Gnus
 Untuk menghantar email. Rujukan di [[https://www.emacswiki.org/emacs/SendingMail][Wiki]].
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package smtpmail
     :ensure t
     :config
@@ -6277,6 +6355,32 @@ Untuk menghantar email. Rujukan di [[https://www.emacswiki.org/emacs/SendingMail
           gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
     )
 #+END_SRC
+*** Ukt mu4e
+Aturcara utk pakai dengan =mu4e=. Guna TLS untuk pakai Gmail
+
+#+BEGIN_EXAMPLE
+  sudo apt-get install gnutls-bin
+#+END_EXAMPLE
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package starttls
+    :ensure t
+    :config
+    (setq starttls-use-gnutls t))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package smtpmail
+    :config
+    (setq send-mail-function            'smtpmail-send-it
+          message-send-mail-function    'smtpmail-send-it
+          smtpmail-auth-credentials     (expand-file-name "~/Dropbox/authentic/mbsync/.authinfo.gpg")
+          ;; smtpmail-stream-type          'tls
+          smtpmail-smtp-server          "smtp.gmail.com"
+          smtpmail-smtp-service         25)
+    )
+#+END_SRC
+
 ** Address database
 Email address database. Contoh aturcara di [[https://github.com/redguardtoo/emacs.d/blob/master/lisp/init-bbdb.el][sini]].
 *** BBDB
