@@ -3140,7 +3140,7 @@ Mencatikkan *bullet* di Org-mode
     ;; make available "org-bullet-face" such that I can control the font size individually
     (setq org-bullets-face-name (quote org-bullet-face))
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-    (setq org-bullets-bullet-list '("◎""◉""⚫""⚪""▶""○""◯"))
+    (setq org-bullets-bullet-list '("◎""◉""▶""○""⚫""⚪""◯"))
     ;; org ellipsis options, other than the default Go to Node...
     ;; not supported in common font, but supported in Symbola (my fall-back font) ⬎, ⤷, ⤵
     ;; (setq org-ellipsis " ⤵") ;; ⤵ ≫
@@ -6383,6 +6383,91 @@ Aturcara untuk Gnus. Untuk akaun =Gmail= perlu tukar aturcara di web client:
 
     )
 #+END_SRC
+*** Hydra email
+Kekunci email gunakan hydra untuk Gnus.
+#+BEGIN_SRC emacs-lisp :tangle no
+  (eval-after-load 'message
+    '(progn
+       (defhydra ybk-hydra-message (:hint nil)
+         "
+               ^E-mailing^
+               ^--^----------^--^----------
+               _e_: email     _c_: check   _v_: vedlegg  _k_: contact     _s_: send
+               _a_: show all  _w_: compose _x_: keep     _o_: insert old  _q_: KELUAR
+              "
+         ("e" gnus)
+         ("k" counsel-bbdb-complete-mail)
+         ("a" ybk/gnus-list-all)
+
+         ("c" xsteve-show-nnmail-split-history) ;show latest received mails
+         ("w" compose-mail)
+
+         ("x" keep-mail)
+         ("v" mml-attach-file) ;C-c C-a
+
+         ("o" gnus-summary-insert-old-articles)
+         ("s" message-send-and-exit) ;C-c C-c
+
+         ("q" (message "KELUAR") :exit t)
+         )
+
+       (global-set-key (kbd "<f8>") 'ybk-hydra-message/body)))
+#+END_SRC
+
+*** Summary view
+Bagaimana cara untuk ditujukkan di summary utk Gnus
+#+BEGIN_SRC emacs-lisp :tangle no
+  ;; Summary
+  ;; line Format
+  ;; (setq gnus-summary-line-format "%O%U%R%z%d %B%(%[%4L: %-22,22f%]%) %s\n")
+  ;; (setq gnus-summary-mode-line-format "Gnus: %p [%A / Sc:%4z] %Z")
+  (use-package rs-gnus-summary
+    :load-path "~/Dropbox/lisp/"
+    :config
+    (rs-gnus-summary-line-initialize)
+
+    ;; ;; size function
+    ;; (defalias 'gnus-user-format-function-size
+    ;;   'rs-gnus-summary-line-message-size)
+    ;; content-type function
+    (defalias 'gnus-user-format-function-ct
+      'rs-gnus-summary-line-content-type)
+    ;; Balloon face
+    (setq gnus-balloon-face-0 'rs-gnus-balloon-0)
+    (setq gnus-balloon-face-1 'rs-gnus-balloon-1)
+
+    ;; (rs-gnus-summary-tree-lines-rs) ;choose the line ie. mt, rs, 01 and test
+    )
+
+#+END_SRC
+
+*** Notify
+Diambil dari [[https://www.emacswiki.org/emacs/GnusNotify][EmacsWiki]]. Notification di modeline. Utk guna, pakai =G-p= di group buffer
+dan masukkan =(modeline-notify t)= di list. Boleh klik di modeline utk buka email baru
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package gnus-notify
+    :load-path "~/Dropbox/lisp/elisp/")
+#+END_SRC
+
+Notify+ untuk notification di desktop. Tapi ada error ~gnus-group-get-new-news~
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package gnus-notify+
+    :load-path "~/Dropbox/lisp/elisp/"
+    :config
+    (add-hook 'gnus-summary-exit-hook 'gnus-notify+)
+    (add-hook 'gnus-group-catchup-group-hook 'gnus-notify+)
+    (add-hook 'mail-notify-pre-hook 'gnus-notify+))
+#+END_SRC
+
+Notification boleh guna [[https://www.gnu.org/software/emacs/manual/html_node/gnus/Daemons.html][Gnus Daemons]] tapi belum dipelajari caranya. Ini cara utk 5
+minit scan di aplikasi
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (gnus-demon-add-handler 'gnus-demon-scan-mail 5 t)
+#+END_SRC
+
 ** SMTP
 *** Utk Gnus
 Untuk menghantar email. Rujukan di [[https://www.emacswiki.org/emacs/SendingMail][Wiki]].
@@ -6417,7 +6502,7 @@ Aturcara utk pakai dengan =mu4e=. Guna TLS untuk pakai Gmail
 
 #+BEGIN_SRC emacs-lisp
   (use-package smtpmail
-    :config
+    :init
     (setq message-send-mail-function 'smtpmail-send-it
           starttls-use-gnutls t
           smtpmail-starttls-credentials
@@ -6483,90 +6568,6 @@ Sila rujuk ke [[https://github.com/redguardtoo/gmail2bbdb][Github]]
     )
 #+END_SRC
 
-** Hydra email
-Kekunci email gunakan hydra
-#+BEGIN_SRC emacs-lisp
-  (eval-after-load 'message
-    '(progn
-       (defhydra ybk-hydra-message (:hint nil)
-         "
-               ^E-mailing^
-               ^--^----------^--^----------
-               _e_: email     _c_: check   _v_: vedlegg  _k_: contact     _s_: send
-               _a_: show all  _w_: compose _x_: keep     _o_: insert old  _q_: KELUAR
-              "
-         ("e" gnus)
-         ("k" counsel-bbdb-complete-mail)
-         ("a" ybk/gnus-list-all)
-
-         ("c" xsteve-show-nnmail-split-history) ;show latest received mails
-         ("w" compose-mail)
-
-         ("x" keep-mail)
-         ("v" mml-attach-file) ;C-c C-a
-
-         ("o" gnus-summary-insert-old-articles)
-         ("s" message-send-and-exit) ;C-c C-c
-
-         ("q" (message "KELUAR") :exit t)
-         )
-
-       (global-set-key (kbd "<f8>") 'ybk-hydra-message/body)))
-#+END_SRC
-
-** Summary view
-Bagaimana cara untuk ditujukkan di summary
-#+BEGIN_SRC emacs-lisp
-  ;; Summary
-  ;; line Format
-  ;; (setq gnus-summary-line-format "%O%U%R%z%d %B%(%[%4L: %-22,22f%]%) %s\n")
-  ;; (setq gnus-summary-mode-line-format "Gnus: %p [%A / Sc:%4z] %Z")
-  (use-package rs-gnus-summary
-    :load-path "~/Dropbox/lisp/"
-    :config
-    (rs-gnus-summary-line-initialize)
-
-    ;; ;; size function
-    ;; (defalias 'gnus-user-format-function-size
-    ;;   'rs-gnus-summary-line-message-size)
-    ;; content-type function
-    (defalias 'gnus-user-format-function-ct
-      'rs-gnus-summary-line-content-type)
-    ;; Balloon face
-    (setq gnus-balloon-face-0 'rs-gnus-balloon-0)
-    (setq gnus-balloon-face-1 'rs-gnus-balloon-1)
-
-    ;; (rs-gnus-summary-tree-lines-rs) ;choose the line ie. mt, rs, 01 and test
-    )
-
-#+END_SRC
-
-** Notify
-Diambil dari [[https://www.emacswiki.org/emacs/GnusNotify][EmacsWiki]]. Notification di modeline. Utk guna, pakai =G-p= di group buffer
-dan masukkan =(modeline-notify t)= di list. Boleh klik di modeline utk buka email baru
-
-#+BEGIN_SRC emacs-lisp
-  (use-package gnus-notify
-    :load-path "~/Dropbox/lisp/elisp/")
-#+END_SRC
-
-Notify+ untuk notification di desktop. Tapi ada error ~gnus-group-get-new-news~
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package gnus-notify+
-    :load-path "~/Dropbox/lisp/elisp/"
-    :config
-    (add-hook 'gnus-summary-exit-hook 'gnus-notify+)
-    (add-hook 'gnus-group-catchup-group-hook 'gnus-notify+)
-    (add-hook 'mail-notify-pre-hook 'gnus-notify+))
-#+END_SRC
-
-Notification boleh guna [[https://www.gnu.org/software/emacs/manual/html_node/gnus/Daemons.html][Gnus Daemons]] tapi belum dipelajari caranya. Ini cara utk 5
-minit scan di aplikasi
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (gnus-demon-add-handler 'gnus-demon-scan-mail 5 t)
-#+END_SRC
 
 * Neotree
 |---------+---------|
