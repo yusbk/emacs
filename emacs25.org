@@ -6036,7 +6036,7 @@ Email cara =mu4e= diambil dari [[https://www.reddit.com/r/emacs/comments/8q84dl/
        ("/gmail/Sent Mail" . ?s)
        ("/gmail/Starred" . ?S)))
     (mu4e-trash-folder "/gmail/Trash")
-    (mu4e-update-interval 300)
+    (mu4e-update-interval 300) ;oppdatere hver 5 min
     (mu4e-use-fancy-chars t)
     (mu4e-view-show-addresses t)
     (mu4e-view-show-images t)
@@ -6056,11 +6056,6 @@ Email cara =mu4e= diambil dari [[https://www.reddit.com/r/emacs/comments/8q84dl/
     (when (fboundp 'imagemagick-register-types)
       (imagemagick-register-types))
 
-    ;; render HTML email
-    (require 'mu4e-contrib)
-    (setq mu4e-html2text-command 'mu4e-shr2text)
-    ;;guna pandoc (pasang dulu apt install pandoc) untuk html2text seperti di atas
-    ;; (setq mu4e-html2text-command "iconv -c -t utf-8 | pandoc -f html -t plain")
     ;; guna browser bila ada table
     (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser))
 
@@ -6081,6 +6076,29 @@ Email cara =mu4e= diambil dari [[https://www.reddit.com/r/emacs/comments/8q84dl/
     (setq mu4e-headers-show-threads nil) ; Use "P" to toggle threading
     )
 #+END_SRC
+
+Utk buka html2text
+
+#+BEGIN_SRC emacs-lisp
+  (use-package mu4e-contrib
+    :load-path "~/Dropbox/lisp/mu/mu4e"
+    :config
+    (setq mu4e-html2text-command 'mu4e-shr2text)
+
+    ;; Cara lain utk buka html2text
+    ;; ;;guna pandoc (pasang dulu apt install pandoc) untuk html2text seperti di atas
+    ;; (setq mu4e-html2text-command "iconv -c -t utf-8 | pandoc -f html -t plain")
+
+    )
+
+  ;; render HTML email
+  ;; (require 'mu4e-contrib)
+  ;; (setq mu4e-html2text-command 'mu4e-shr2text)
+  ;; ;; ;;guna pandoc (pasang dulu apt install pandoc) untuk html2text seperti di atas
+  ;; (setq mu4e-html2text-command "iconv -c -t utf-8 | pandoc -f html -t plain")
+
+#+END_SRC
+
 
 Guna org-mode untuk tulis email
 
@@ -6567,7 +6585,6 @@ Sila rujuk ke [[https://github.com/redguardtoo/gmail2bbdb][Github]]
     (setq gmail2bbdb-bbdb-file "~/Dropbox/address/.bbdb")
     )
 #+END_SRC
-
 
 * Neotree
 |---------+---------|
