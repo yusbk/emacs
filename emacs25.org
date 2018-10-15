@@ -45,7 +45,7 @@ Format UTF-8. Tapi =org-mode= bullet jadi kecil itulah dimatikan
     :ensure t
     :config
     (progn
-      ;; (setq hydra-lv nil)
+      (setq hydra-lv nil) ;guna echo area
       ;; (set-face-attribute 'hydra-face-red      nil :foreground "Red"        :bold t)
       ;; (set-face-attribute 'hydra-face-blue     nil :foreground "RoyalBlue3" :bold t)
       ;; (set-face-attribute 'hydra-face-amaranth nil :foreground "#e52b50"    :bold t)
@@ -269,6 +269,7 @@ It's nice to have a function to find this file quickly. Here's one:
 
   ;; (bind-key "y" #'ybk/emacs-file 'ybk/map)
 #+END_SRC
+
 * Other settings
 ** Encypting file
 Guna Linux =gpg= untuk encyption. Bila buka sebarang =gpg= fail akan meng-encrypt fail
@@ -651,15 +652,21 @@ Buang menu bar dan sekiranya perlu tekan =F10-m= atau =M-x toggle-menu-bar-mode-
 
 ** Powerline
 Untuk modeline
-*** Cara Powerlie
-Beza warna bila buffer aktif atau tidak
+*** Cara Powerline
+Beza warna bila buffer aktif atau tidak. Antara powerline yang boleh dipakai:
+- powerline-default-theme
+- powerline-center-theme
+- powerline-center-evil-theme
+- powerline-vim-theme
+- powerline-nano-theme
 
-Aktifkan sekiranya pakai =moe-theme=
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package powerline
     :ensure t
+    :init (setq powerline-default-separator 'wave)
     :config
-    (powerline-default-theme))
+    (powerline-default-theme)
+    )
 #+END_SRC
 *** Cara diambil dari GitHug
 Diambil di [[https://github.com/sandhu/emacs.d/blob/master/config/008-ui-config.el][sini]]
@@ -1002,6 +1009,132 @@ Untuk aturcara boleh baca di [[https://github.com/kuanyui/moe-theme.el][GitHub]]
     ;; pakai powerline mode selepas diaktifkan sebelum pasang moe-theme
     (powerline-moe-theme))
 #+END_SRC
+*** Pelbagai theme
+Diambil dari [[https://www.greghendershott.com/2017/02/emacs-themes.html][sini]].
+**** Matikan semua theme
+Buat fungsi untuk matikan semua theme.
+#+BEGIN_SRC emacs-lisp :tangle no
+  (defun gh/disable-all-themes ()
+    (interactive)
+    (mapc #'disable-theme custom-enabled-themes))
+#+END_SRC
+**** Theme hook
+Buat theme hook supaya boleh pakai =M-x load-theme=
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  ;;; Theme hooks
+
+  (defvar gh/theme-hooks nil
+    "((theme-id . function) ...)")
+
+  (defun gh/add-theme-hook (theme-id hook-func)
+    (add-to-list 'gh/theme-hooks (cons theme-id hook-func)))
+
+  (defun gh/load-theme-advice (f theme-id &optional no-confirm no-enable &rest args)
+    "Enhances `load-theme' in two ways:
+  1. Disables enabled themes for a clean slate.
+  2. Calls functions registered using `gh/add-theme-hook'."
+    (unless no-enable
+      (gh/disable-all-themes))
+    (prog1
+        (apply f theme-id no-confirm no-enable args)
+      (unless no-enable
+        (pcase (assq theme-id gh/theme-hooks)
+          (`(,_ . ,f) (funcall f))))))
+
+  (advice-add 'load-theme
+              :around
+              #'gh/load-theme-advice)
+#+END_SRC
+**** Nord-theme
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package nord-theme
+    :ensure t
+    :defer t
+    :init
+    (defun gh/nord-theme-hook ()
+      (set-face-attribute 'which-key-key-face nil :foreground
+                          (face-attribute 'error :foreground))
+      (gh/add-theme-hook 'nord       #'gh/nord-theme-hook))
+    :config
+    (setq nord-comment-brightness 15)
+    )
+#+END_SRC
+
+**** Material-theme
+Pasang meterial-theme
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package material-theme
+    :ensure t
+    :defer t
+    :init
+    (defun gh/material-theme-hook ()
+      (set-face-attribute 'which-key-key-face nil :foreground
+                          (face-attribute 'error :foreground))
+      (loop for n from 1 to 8
+            do (set-face-attribute (intern-soft (format "org-level-%s" n))
+                                   nil
+                                   :height     'unspecified
+                                   :background 'unspecified
+                                   :box        'unspecified)))
+    (gh/add-theme-hook 'material       #'gh/material-theme-hook)
+    (gh/add-theme-hook 'material-light #'gh/material-theme-hook))
+#+END_SRC
+
+**** Solarize theme
+Pasang Solarize theme
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package solarized
+    :ensure solarized-theme
+    :defer t
+    :init
+    (defun gh/solarized-theme-hook ()
+      (set-face-attribute 'font-lock-constant-face nil :weight 'normal)
+      (set-face-attribute 'font-lock-function-name-face nil :weight 'bold)
+      (set-face-attribute 'which-key-key-face nil :foreground
+                          (face-attribute 'error :foreground)))
+    (gh/add-theme-hook 'solarized-dark  #'gh/solarized-theme-hook)
+    (gh/add-theme-hook 'solarized-light #'gh/solarized-theme-hook)
+    :config
+    (setq solarized-use-variable-pitch nil
+          solarized-use-less-bold t
+          solarized-use-more-italic nil
+          solarized-distinct-doc-face t
+          solarized-high-contrast-mode-line t
+          ;; I find different font sizes irritating.
+          solarized-height-minus-1 1.0
+          solarized-height-plus-1 1.0
+          solarized-height-plus-2 1.0
+          solarized-height-plus-3 1.0
+          solarized-height-plus-4 1.0))
+#+END_SRC
+
+**** Hydra utk load-theme
+Pakai hydra untuk guna theme yang diingini
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (defhydra gh/themes-hydra (:hint nil :color pink)
+    "
+  Themes
+
+  ^Solarized^   ^Material^   ^Other^
+  ----------------------------------------------------
+  _s_: Dark     _m_: Dark    _z_: Leuven  _DEL_: none
+  _S_: Light    _M_: Light   _n_: Nord
+  "
+    ("s" (load-theme 'solarized-dark  t))
+    ("S" (load-theme 'solarized-light t))
+    ("m" (load-theme 'material        t))
+    ("M" (load-theme 'material-light  t))
+    ("z" (load-theme 'leuven          t))
+    ("n" (load-theme 'nord            t))
+    ("DEL" (gh/disable-all-themes))
+    ("RET" nil "done" :color blue))
+
+  (bind-keys ("C-9"  . gh/themes-hydra/body))
+#+END_SRC
 
 ** Highlight line
 Bila mahu aktifkan pakai =yy-g= dari *ybk/map*
@@ -1286,6 +1419,7 @@ ditetapkan di =Ivy= atau =C-x C-r= dari [[https://www.emacswiki.org/emacs/Recent
     ;; Kekerapan utk simpan file
     (run-at-time nil (* 10 60) 'recentf-save-list))
 #+END_SRC
+
 * Backup and auto-save files
 Aturcara berkenaan dengan backup
 ** Backup settings
@@ -1456,6 +1590,7 @@ Seperti =C-x 2= atau =C-x 3= cuma lebih baik
   (bind-keys ("C-x 2" . ybk/vsplit-last-buffer)
              ("C-x 3" . ybk/hsplit-last-buffer))
 #+END_SRC
+
 ** Tukar size windows
 *** Resize pakej
 Aktifkan dengan =f2 += kemudian pakai anak panah.
@@ -1588,6 +1723,7 @@ Lompat dari window ke window dengan menggunakan =M= kemudian nombor window
     :config
     (winum-mode))
 #+END_SRC
+
 ** Transposing - perkataan dan window
 Untuk tukarkan window layout
 #+BEGIN_SRC emacs-lisp
@@ -1605,6 +1741,7 @@ Untuk tukarkan window layout
              ("s" . transpose-sentences)
              ("x" . transpose-sexps))
 #+END_SRC
+
 * Buffers
 Aturcare berkaitan dengan buffer
 ** Pindahkan buffer
@@ -2046,6 +2183,7 @@ Tambah fuzzy matching ke Company
     :config
     (company-flx-mode +1))
 #+END_SRC
+
 * Yasnippet
 ** Koleksi snippet
 Koleksi rasmi snippet. Kemaskinikan package dengan =M-x package-refresh-contents=
@@ -2138,6 +2276,7 @@ Keychord =jy= untuk /company-yasnippet/.
 
 
 #+END_SRC
+
 * Parentheses
 ** Smartparens
 Pasangan utk parentheses
@@ -2172,6 +2311,7 @@ Pasangan utk parentheses
     :diminish (smartparens-mode . ""))
 
 #+END_SRC
+
 ** Rainbow-delimited
 Warna untuk setiap pasangan parentheses
 #+BEGIN_SRC emacs-lisp
@@ -2186,6 +2326,7 @@ Warna untuk setiap pasangan parentheses
     (add-hook 'ess-mode-hook #'rainbow-delimiters-mode)
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
+
 * Origami
 Untuk sembunyikan tekst yang panjang. Rujukan di [[https://github.com/gregsexton/origami.el][GitHub]]
 #+BEGIN_SRC emacs-lisp
