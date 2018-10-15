@@ -6182,6 +6182,18 @@ Email cara =mu4e= diambil dari [[https://www.reddit.com/r/emacs/comments/8q84dl/
     (mu4e-view-show-addresses t)
     (mu4e-view-show-images t)
 
+    :bind (:map ybk/mail-map
+                ("e" . mu4e)
+                ("w" . compose-mail)
+                ("a" . mml-attach-file) ;C-c C-a
+                ("s" . message-send-and-exit) ;C-c C-c
+                )
+    :init
+    ;; make mail-map
+    (bind-keys :prefix "C-c e"
+               :prefix-map ybk/mail-map)
+    (bind-key "q" #'keluar 'ybk/mail-map)
+
     :config
     ;; don't save message to Sent Messages, GMail/IMAP will take care of this
     (setq mu4e-sent-messages-behavior 'delete)
