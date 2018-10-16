@@ -660,14 +660,15 @@ Beza warna bila buffer aktif atau tidak. Antara powerline yang boleh dipakai:
 - powerline-vim-theme
 - powerline-nano-theme
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package powerline
     :ensure t
-    :init (setq powerline-default-separator 'wave)
+    ;; :init (setq powerline-default-separator 'arrow)  ;contour, butt, wave, arrow, arrow-fade etc
     :config
     (powerline-default-theme)
-    )
+    (setq powerline-default-separator 'arrow))
 #+END_SRC
+
 *** Cara diambil dari GitHug
 Diambil di [[https://github.com/sandhu/emacs.d/blob/master/config/008-ui-config.el][sini]]
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -735,7 +736,7 @@ Diambil di [[https://github.com/sandhu/emacs.d/blob/master/config/008-ui-config.
 *** Powerline aturcara sendiri
 
 Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package powerline
     :ensure t
     :init (setq powerline-default-separator 'wave) ;contour, butt, wave, arrow, arrow-fade etc
@@ -762,31 +763,6 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
       '((t (:background "grey20" :inherit mode-line-buffer-id)))
       "Powerline mode-line face"
       :group 'powerline)
-
-
-    ;; ;; ybk-theme
-    ;; (defface ml-aktif1 '((t (:background "#273f87" :inherit mode-line)))
-    ;;   "Powerline muka 1."
-    ;;   :group 'powerline)
-    ;; (defface ml-aktif2 '((t (:background "#cfe" :inherit mode-line)))
-    ;;   "Powerline muka 2."
-    ;;   :group 'powerline)
-    ;; (defface ml-tidak-aktif1 '((t (:background "#ffe" :inherit mode-line-inactive)))
-    ;;   "Powerline muka 1."
-    ;;   :group 'powerline)
-    ;; (defface ml-tidak-aktif2 '((t (:background "#69f" :inherit mode-line-inactive)))
-    ;;   "Powerline muka 2."
-    ;;   :group 'powerline)'
-    ;; (defface ml-hujung '((t (:background "#273f87" :inherit mode-line)))
-    ;;   "Powerline muka 1."
-    ;;   :group 'powerline)
-    ;; (defface ml-buffer-id-tidak-aktif
-    ;;   '((t (:inherit mode-line-buffer-id)))
-    ;;   "Powerline mode-line face"
-    ;;   :group 'powerline)
-
-    ;;untuk display
-
     (defun ml-yus-theme ()
       "Setup utk ml-yus-theme."
       (interactive)
@@ -861,61 +837,6 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
 
                        ))))
 
-    ;; (defun powerline-ybk-theme ()
-    ;;   "Setup the ybk-mode-line."
-    ;;   (interactive)
-    ;;   (setq-default mode-line-format
-    ;;                 '("%e"
-    ;;                   (:eval
-    ;;                    (let* ((active (powerline-selected-window-active))
-    ;;                           (mode-line-buffer-id (if active 'mode-line-buffer-id 'ml-buffer-id-tidak-aktif))
-    ;;                           (mode-line (if active 'mode-line 'mode-line-inactive))
-    ;;                           (muka1 (if active 'ml-aktif1 'ml-tidak-aktif1))
-    ;;                           (muka2 (if active 'ml-aktif2 'ml-tidak-aktif2))
-    ;;                           (separator-left (intern (format "powerline-%s-%s"
-    ;;                                                           (powerline-current-separator)
-    ;;                                                           (car powerline-default-separator-dir))))
-    ;;                           (separator-right (intern (format "powerline-%s-%s"
-    ;;                                                            (powerline-current-separator)
-    ;;                                                            (cdr powerline-default-separator-dir))))
-    ;;                           (lhs (list (powerline-raw "%*" mode-line 'l)
-    ;;                                      (when powerline-display-buffer-size
-    ;;                                        (powerline-buffer-size mode-line 'l))
-    ;;                                      (when powerline-display-mule-info
-    ;;                                        (powerline-raw mode-line-mule-info mode-line 'l))
-    ;;                                      (powerline-buffer-id mode-line-buffer-id 'l)
-    ;;                                      (when (and (boundp 'which-func-mode) which-func-mode)
-    ;;                                        (powerline-raw which-func-format nil 'l))
-    ;;                                      (powerline-raw " ")
-    ;;                                      (funcall separator-left mode-line muka1)
-    ;;                                      (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
-    ;;                                        (powerline-raw erc-modified-channels-object muka1 'l))
-    ;;                                      (powerline-major-mode muka1 'l)
-    ;;                                      (powerline-process muka1)
-    ;;                                      (powerline-minor-modes muka1 'l)
-    ;;                                      (powerline-narrow muka1 'l)
-    ;;                                      (powerline-raw " " muka1)
-    ;;                                      (funcall separator-left muka1 muka2)
-    ;;                                      (powerline-vc muka2 'r)
-    ;;                                      (when (bound-and-true-p nyan-mode)
-    ;;                                        (powerline-raw (list (nyan-create)) muka2 'l))))
-    ;;                           (rhs (list (powerline-raw global-mode-string muka2 'r)
-    ;;                                      (funcall separator-right muka2 muka1)
-    ;;                                      (unless window-system
-    ;;                                        (powerline-raw (char-to-string #xe0a1) muka1 'l))
-    ;;                                      (powerline-raw "%4l" muka1 'l)
-    ;;                                      (powerline-raw ":" muka1 'l)
-    ;;                                      (powerline-raw "%3c" muka1 'r)
-    ;;                                      (funcall separator-right muka1 mode-line)
-    ;;                                      (powerline-raw " ")
-    ;;                                      (powerline-raw "%6p" mode-line 'r)
-    ;;                                      (when powerline-display-hud
-    ;;                                        (powerline-hud muka2 muka1)))))
-    ;;                      (concat (powerline-render lhs)
-    ;;                              (powerline-fill muka2 (powerline-width rhs))
-    ;;                              (powerline-render rhs)))))))
-
-    ;; aktivkan theme yang ingin dipakai
     (ml-yus-theme)
     )
 #+END_SRC
@@ -1018,11 +939,12 @@ Buat fungsi untuk matikan semua theme.
     (interactive)
     (mapc #'disable-theme custom-enabled-themes))
 #+END_SRC
+
 **** Theme hook
 Buat theme hook supaya boleh pakai =M-x load-theme=
 
 #+BEGIN_SRC emacs-lisp :tangle no
-  ;;; Theme hooks
+ ;;; Theme hooks
 
   (defvar gh/theme-hooks nil
     "((theme-id . function) ...)")
@@ -1046,7 +968,9 @@ Buat theme hook supaya boleh pakai =M-x load-theme=
               :around
               #'gh/load-theme-advice)
 #+END_SRC
+
 **** Nord-theme
+
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package nord-theme
     :ensure t
@@ -1057,7 +981,20 @@ Buat theme hook supaya boleh pakai =M-x load-theme=
                           (face-attribute 'error :foreground))
       (gh/add-theme-hook 'nord       #'gh/nord-theme-hook))
     :config
-    (setq nord-comment-brightness 15)
+    (setq nord-comment-brightness 20)
+    )
+#+END_SRC
+
+**** Sanityinc-tomorrow
+Utk di pakai di theme-hook
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package color-theme-sanityinc-tomorrow
+    :ensure t
+    :init
+    (defun gh/sanityinc-theme-hook ()
+      (set-face-attribute 'which-key-key-face nil :foreground
+                          (face-attribute 'error :foreground))
+      (gh/add-theme-hook 'sanityinc-tomorrow-blue  #'gh/sanityinc-theme-hook))
     )
 #+END_SRC
 
@@ -1121,15 +1058,15 @@ Pakai hydra untuk guna theme yang diingini
 
   ^Solarized^   ^Material^   ^Other^
   ----------------------------------------------------
-  _s_: Dark     _m_: Dark    _z_: Leuven  _DEL_: none
+  _s_: Dark     _m_: Dark    _z_: Sanityinc  _DEL_: none
   _S_: Light    _M_: Light   _n_: Nord
   "
-    ("s" (load-theme 'solarized-dark  t))
-    ("S" (load-theme 'solarized-light t))
-    ("m" (load-theme 'material        t))
-    ("M" (load-theme 'material-light  t))
-    ("z" (load-theme 'leuven          t))
-    ("n" (load-theme 'nord            t))
+    ("s" (load-theme 'solarized-dark           t))
+    ("S" (load-theme 'solarized-light          t))
+    ("m" (load-theme 'material                 t))
+    ("M" (load-theme 'material-light           t))
+    ("z" (load-theme 'sanityinc-tomorrow-blue  t))
+    ("n" (load-theme 'nord                     t))
     ("DEL" (gh/disable-all-themes))
     ("RET" nil "done" :color blue))
 
