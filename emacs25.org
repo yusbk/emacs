@@ -660,13 +660,14 @@ Beza warna bila buffer aktif atau tidak. Antara powerline yang boleh dipakai:
 - powerline-vim-theme
 - powerline-nano-theme
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package powerline
     :ensure t
     ;; :init (setq powerline-default-separator 'arrow)  ;contour, butt, wave, arrow, arrow-fade etc
     :config
     (powerline-default-theme)
-    (setq powerline-default-separator 'arrow))
+    (setq powerline-default-separator 'arrow) ;contour, butt, wave, arrow, arrow-fade etc
+    )
 #+END_SRC
 
 *** Cara diambil dari GitHug
@@ -736,15 +737,15 @@ Diambil di [[https://github.com/sandhu/emacs.d/blob/master/config/008-ui-config.
 *** Powerline aturcara sendiri
 
 Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package powerline
     :ensure t
-    :init (setq powerline-default-separator 'wave) ;contour, butt, wave, arrow, arrow-fade etc
+    :init (setq powerline-default-separator 'arrow) ;contour, butt, wave, arrow, arrow-fade etc
     :config
     (add-hook 'desktop-after-read-hook 'powerline-reset)
 
     ;; yus-theme
-    (defface yus-aktif1 '((t (:background "#3a11ff" :inherit mode-line))) ;#a2e #2a5289 #4c52ee #179 #cfdfff #00d9ff #19a
+    (defface yus-aktif1 '((t (:background "#a25fff" :inherit mode-line))) ;#a2e #2a5289 #4c52ee #179 #cfdfff #00d9ff #19a
       "Powerline muka 1."
       :group 'powerline)
     (defface yus-aktif2 '((t (:background "#4c56aa" :inherit mode-line))) ;#2c5197 #a25ec3 #a19 #8b008b #369 #3a11ff #28a #a669ef
