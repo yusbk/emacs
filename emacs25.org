@@ -891,6 +891,8 @@ jumpa cara lain.
     (global-set-key (kbd "C-9") 'cycle-my-theme)
     ;; (bind-key "t" #'cycle-my-theme 'ybk/map)
     )
+
+
 #+END_SRC
 *** Moe-theme
 Untuk aturcara boleh baca di [[https://github.com/kuanyui/moe-theme.el][GitHub]]
@@ -3120,6 +3122,21 @@ by default):
   (bind-keys :map ybk/org-map
              ("<up>" . org-previous-visible-heading) ;belakang
              ("<down>" . org-next-visible-heading)) ;depan
+#+END_SRC
+*** Premable size
+Tetapkan premable size walaupun tukar theme. Diambil di [[https://emacs.stackexchange.com/questions/22584/disable-enlarged-org-mode-header-appearance][sini]].
+
+#+BEGIN_SRC emacs-lisp
+  (defun ybk/org-mode-hook ()
+    "Stop the org-level headers from increasing in height relative to the other text."
+    (dolist (face '(org-level-1
+                    org-level-2
+                    org-level-3
+                    org-level-4
+                    org-level-5))
+      (set-face-attribute face nil :weight 'semi-bold :height 1.0)))
+
+  (add-hook 'org-mode-hook 'ybk/org-mode-hook)
 #+END_SRC
 
 ** Worf
