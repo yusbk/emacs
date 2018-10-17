@@ -245,6 +245,7 @@ Fungsi lain yang berguna dan perlukan singkatan
        (when (file-exists-p private-file)
          (load-file private-file)))))
 #+END_SRC
+
 ** Personal elisp
 Semua pakej yang dimuatkan sendiri. Sekiranya perlu boleh compile semua file dengan
 melarikan komando ini:
@@ -436,12 +437,12 @@ Diambil dari [[http://whattheemacsd.com/key-bindings.el-02.html][What the emacs.
   (global-set-key (kbd "C-S-n")
                   (lambda ()
                     (interactive)
-                    (ignore-errors (next-line 5))))
+                    (ignore-errors (next-line 10))))
 
   (global-set-key (kbd "C-S-p")
                   (lambda ()
                     (interactive)
-                    (ignore-errors (previous-line 5))))
+                    (ignore-errors (previous-line 10))))
 
   (global-set-key (kbd "C-S-f")
                   (lambda ()
@@ -609,8 +610,6 @@ Cara untuk menyalin file path di buffer yang sedang digunakan.
 
   (global-set-key (kbd "C-c d") 'xah-copy-file-path)
 #+END_SRC
-** Test buffer utk R
-Pindah ke test buffer bila ingin cuba fungsi di R.
 
 * Kill-ring
 Dari [[https://github.com/browse-kill-ring/browse-kill-ring][GitHub]]
@@ -5263,7 +5262,40 @@ Fail =deployApp.R= harus menggandungi kode ini:
   (key-seq-define-global "xs" #'run-shiny-app)
 #+END_SRC
 
-*** Debug
+*** Test R buffer
+Buka buffer untuk test fungsi R dll guna =R-mode=. Fungsi ini dimodifikasikan dari
+[[http://ergoemacs.org/emacs/emacs_new_empty_buffer.html][ErgoEmacs]].
+
+#+BEGIN_SRC emacs-lisp
+  (defun test-R-buffer ()
+    "Create a new empty buffer with R-mode."
+    (interactive)
+    (let (($buf (generate-new-buffer "*r-test*"))
+          (test-mode2 (quote R-mode)))
+      (switch-to-buffer $buf)
+      (insert (format "## == Test %s == \n\n" "R script"))
+      (funcall test-mode2)
+      (setq buffer-offer-save t)
+      $buf
+      ))
+
+  (global-set-key (kbd "C-c x") 'test-R-buffer)
+#+END_SRC
+*** Log file
+Untuk buka log file secara langsung. Log file harus diletakkan di folder =doc=.
+
+#+BEGIN_SRC emacs-lisp
+  (setq R-log-file "log.org")
+
+  (defun ybk/log-file ()
+    "Buka log file di folder doc"
+    (interactive)
+    (find-file (expand-file-name R-log-file
+                                 (file-name-directory (buffer-file-name)))))
+
+#+END_SRC
+
+*** Debug keys
 =ess-tracebug= aktiv secara automatik dan untuk mematikan boleh tetapkan =(setq
 ess-use-tracebug nil)=. Untuk penggunaan debug guna kekuci =C-c C-t= [ess-dev-map]
 untuk dapatkan semua kekunci. Hydra utk ess-debug pakai =jx= atau =F9=
@@ -5289,54 +5321,14 @@ Bila debugging, kekuci ini boleh dipakai
 Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
 
 #+BEGIN_SRC emacs-lisp
-
-  ;; ;; Cobaan untuk guna hydra cuma belum selesai
-  ;; (eval-after-load 'ess-mode
-  ;;   '(progn
-  ;;      (defhydra hydra-ybk-r-debug (:color teal :hint nil)
-  ;;        "
-  ;;        ^ESS R-debug  'C-c C-t' r-dev-map. F9 or 'jk'^
-
-  ;;        ^Misc          ^Package^             ^^Break point^           ^^^Exit [_q_]
-  ;;        ^--------------^-----------------------^-----------------------
-  ;;        _o_: object     _l_: load  _t_: test    _b_: set    _k_: kill
-  ;;        _a_: devtools   _d_: doc   _c_: check   _n_: next   _K_: kill all
-  ;;        _e_: traceback                      ^^^^_p_: prev
-  ;;        "
-  ;;        ("o" ess-describe-object-at-point)
-  ;;        ("b" ess-bp-set)
-  ;;        ("k" ess-bp-kill)
-  ;;        ("K" ess-bp-kill-all)
-
-  ;;        ("n" ess-bp-next)
-  ;;        ("p" ess-bp-previous)
-  ;;        ("a" ess-r-devtools-ask)
-  ;;        ("l" ess-r-devtools-load-package)
-  ;;        ("c" ess-r-devtools-check-package)
-
-  ;;        ("e" ess-show-traceback)
-  ;;        ("d" ess-r-devtools-document-package)
-  ;;        ("t" ess-r-devtools-test-package)
-  ;;        ("q" (message "KELUAR") :exit t))
-
-  ;;      ;;== key-binding
-  ;;      (define-key ess-mode-map [f9] 'hydra-ybk-r-debug/body)
-  ;;      (define-key inferior-ess-mode-map[ f9] 'hydra-ybk-r-debug/body)
-  ;;      ;;(bind-key "<f9>" #'hydra-ybk-r-debug/body)
-
-  ;;      ;;(key-chord-define-global "jv" #'hydra-ybk-r-debug/body)
-  ;;      (key-seq-define ess-mode-map "jk" #'hydra-ybk-r-debug/body)
-  ;;      (key-seq-define inferior-ess-mode-map "jk" #'hydra-ybk-r-debug/body)
-  ;;      ))
-
   (defhydra hydra-ybk-r-debug (:hint nil)
     "
-     ^ESS R-debug  'C-c C-t' r-dev-map. F9 or 'jb'^
+     ^ESS R-debug  'C-c C-t' r-dev-map. F9 or 'jx'^
 
-     ^Misc          ^Package^             ^^Break point^
-     ^--------------^-----------------------^-----------------------
-     _o_: object     _l_: load  _t_: test    _b_: set    _k_: kill
-     _a_: devtools   _d_: doc   _c_: check   _n_: next   _K_: kill all
+     ^Debug         ^Package^             ^^Break point^                 ^Misc
+     ^--------------^-----------------------^---------------------------^--------------
+     _o_: object     _l_: load  _t_: test    _b_: set    _k_: kill       _r_: test-fun
+     _a_: devtools   _d_: doc   _c_: check   _n_: next   _K_: kill all   _g_: log-file
      _e_: traceback                      ^^^^_p_: prev   _q_: KELUAR
     "
     ("o" ess-describe-object-at-point)
@@ -5353,31 +5345,15 @@ Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
     ("e" ess-show-traceback)
     ("d" ess-r-devtools-document-package)
     ("t" ess-r-devtools-test-package)
+
+    ("r" test-R-buffer)
+    ("g" ybk/log-file)
     ("q" (message "KELUAR") :exit t))
 
 
   ;;== key-binding
   (key-seq-define-global "jx" 'hydra-ybk-r-debug/body)
   (global-set-key (kbd "<f9>") 'hydra-ybk-r-debug/body)
-#+END_SRC
-*** Test R buffer
-Buka buffer untuk test fungsi R dll guna =R-mode=. Fungsi ini dimodifikasikan dari
-[[http://ergoemacs.org/emacs/emacs_new_empty_buffer.html][ErgoEmacs]].
-
-#+BEGIN_SRC emacs-lisp
-  (defun test-r-buffer ()
-    "Create a new empty buffer with R-mode."
-    (interactive)
-    (let (($buf (generate-new-buffer "*r-test*"))
-          (test-mode2 (quote R-mode)))
-      (switch-to-buffer $buf)
-      (insert (format "## == Test %s == \n\n" "R script"))
-      (funcall test-mode2)
-      (setq buffer-offer-save t)
-      $buf
-      ))
-
-  (global-set-key (kbd "C-c x") 'test-r-buffer)
 #+END_SRC
 
 *** Flycheck-julia
