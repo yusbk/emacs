@@ -308,7 +308,7 @@ Save buffer and exit
 #+BEGIN_SRC emacs-lisp :tangle no
   (bind-key "9" #'save-buffers-kill-emacs 'ybk/map )
 #+END_SRC
-** Scratch
+** Scratch buffer
 Untuk buka ~scratch~ boleh dicapai melalui [[*General keymap][General keymap]] atau [[*Personal keymap %5BF10%5D][Personal keymap]]
 #+BEGIN_SRC emacs-lisp
   (defun ybk/get-scratch ()
@@ -317,12 +317,63 @@ Untuk buka ~scratch~ boleh dicapai melalui [[*General keymap][General keymap]] a
     (switch-to-buffer "*scratch*"))
   ;; (bind-key "o" #'ybk/get-scratch 'ybk/map)
 #+END_SRC
+
+** Buffer baru tanpa nama
+Buka buffer baru tanpa perlu tetapkan nama. Akan dinamakan "noname". Diambil dari
+[[http://ergoemacs.org/emacs/emacs_new_empty_buffer.html][Ergoemacs]].
+
+#+BEGIN_SRC emacs-lisp
+  (defun ybk/noname-buffer ()
+    "Create a new empty buffer.
+  New buffer will be named “noname” or “noname<2>”, “noname<3>”, etc.
+
+  It returns the buffer (for elisp programing).
+
+  URL `http://ergoemacs.org/emacs/emacs_new_empty_buffer.html'
+  Version 2017-11-01"
+    (interactive)
+    (let (($buf (generate-new-buffer "noname")))
+      (switch-to-buffer $buf)
+      (funcall initial-major-mode)
+      (setq buffer-offer-save t)
+      $buf
+      ))
+#+END_SRC
+
 ** Cancel
 Buat [ESC] key utk batal proses sama seperti =C-g=. Diambil dari [[https://www.emacswiki.org/emacs/CancelingInEmacs][EmacsWiki]]
 #+BEGIN_SRC emacs-lisp
   (define-key isearch-mode-map [escape] 'isearch-abort)   ;; isearch
   (define-key isearch-mode-map "\e" 'isearch-abort)   ;; \e seems to work better for terminals
   (global-set-key [escape] 'keyboard-escape-quit)         ;; everywhere else
+#+END_SRC
+
+** Face attribute
+Tetapkan face attribute terutama untuk premable di org-mode. Diambil di [[https://emacs.stackexchange.com/questions/22584/disable-enlarged-org-mode-header-appearance][sini]].
+
+#+BEGIN_SRC emacs-lisp
+  ;;== Title font size size biasa
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(org-document-title ((t (:foreground "#FFB266" :weight bold :height 1.0)))) ;;#ffc58f
+   )
+
+  ;; ;; === size utk header
+  ;; (defun ybk/org-level ()
+  ;;   "Stop the org-level headers from increasing in height relative to the other text."
+  ;;   (dolist (face '(org-level-1
+  ;;                   org-level-2
+  ;;                   org-level-3
+  ;;                   org-level-4
+  ;;                   org-level-5))
+  ;;     (set-face-attribute face nil :weight bold :height 1.0)))
+
+  ;; (add-hook 'org-mode-hook 'ybk/org-level)
+  ;; (add-hook 'org-mode-hook 'ybk/org-title)
+
 #+END_SRC
 
 ** Font
@@ -362,7 +413,7 @@ Hanya pakai 'y' atau 'n' untuk 'Yes' dan 'No'
 #+BEGIN_SRC emacs-lisp
   (defalias 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
-** Lisp dan message permulaan
+** Elisp test dan message permulaan
 Mulakan tanpa startup message
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-message t)
@@ -372,6 +423,7 @@ Mulakan tanpa startup message
   ;; Untuk evaluasi lisp seperti C-x C-e
   (define-key lisp-interaction-mode-map (kbd "<C-return>") 'eval-last-sexp)
 #+END_SRC
+
 ** Start maximized
 #+BEGIN_SRC emacs-lisp :tangle yes
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -3124,32 +3176,6 @@ by default):
   (bind-keys :map ybk/org-map
              ("<up>" . org-previous-visible-heading) ;belakang
              ("<down>" . org-next-visible-heading)) ;depan
-#+END_SRC
-*** Premable dan header font size
-Tetapkan premable size walaupun tukar theme. Diambil di [[https://emacs.stackexchange.com/questions/22584/disable-enlarged-org-mode-header-appearance][sini]].
-
-#+BEGIN_SRC emacs-lisp
-
-  ;;== Title font size size biasa
-  (custom-set-faces
-   ;; custom-set-faces was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(org-document-title ((t (:foreground "#ffc58f" :weight semi-bold :height 1.0))))
-   )
-
-  ;; === size utk header
-  (defun ybk/org-mode-hook ()
-    "Stop the org-level headers from increasing in height relative to the other text."
-    (dolist (face '(org-level-1
-                    org-level-2
-                    org-level-3
-                    org-level-4
-                    org-level-5))
-      (set-face-attribute face nil :weight semi-bold :height 1.0)))
-
-  (add-hook 'org-mode-hook 'ybk/org-mode-hook)
 #+END_SRC
 
 ** Worf
@@ -7264,7 +7290,7 @@ Hydra untuk fungsi awam
      ^-------------------------------
      _y_: ybk-init  _g_: highlight        _s_: stackOverflow  _w_: swap-windows       _e_: musics (emms)   _x_: save buffers & exit
      _h_: heading   _l_: warna highlight  _r_: rss            _n_: file explore [F4]  _u_: weather (metno) _c_: key-chord-mode
-     _t_: theme     _m_: menu bar         _o_: scratch        _k_: delete file/buffer _U_: weather update  _q_: KELUAR
+     _t_: theme     _m_: menu bar         _o_: scratch        _k_: delete file/buffer _U_: weather update  _b_: buffer baru
     "
 
     ("y" ybk/emacs-file)
@@ -7289,7 +7315,9 @@ Hydra untuk fungsi awam
 
     ("x" save-buffers-kill-emacs)
     ("c" key-chord-mode)
-    ("q" (message "KELUAR") :exit t))
+    ("b" ybk/noname-buffer)
+
+    ("q" nil "KELUAR"))
 
   (key-chord-define-global "jm" #'hydra-ybk-general/body)
   (global-set-key (kbd "<f6>") 'hydra-ybk-general/body)
