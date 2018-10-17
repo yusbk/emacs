@@ -663,6 +663,14 @@ Cara untuk menyalin file path di buffer yang sedang digunakan.
   (global-set-key (kbd "C-c d") 'xah-copy-file-path)
 #+END_SRC
 
+* Winner mode
+
+Gunakan =C-c <left>= and =C-c <right>= untuk kembali ke buffer sebelumnya
+
+#+BEGIN_SRC emacs-lisp
+  (winner-mode t)
+#+END_SRC
+
 * Kill-ring
 Dari [[https://github.com/browse-kill-ring/browse-kill-ring][GitHub]]
 #+BEGIN_SRC emacs-lisp
@@ -2375,14 +2383,6 @@ Untuk sembunyikan tekst yang panjang. Rujukan di [[https://github.com/gregsexton
 
       ("q" (message "KELUAR") :exit t))
     )
-#+END_SRC
-
-* Winner mode
-
-Gunakan =C-c <left>= and =C-c <right>= untuk kembali ke buffer sebelumnya
-
-#+BEGIN_SRC emacs-lisp
-  (winner-mode t)
 #+END_SRC
 
 * Rainbow mode
@@ -6153,17 +6153,17 @@ Email cara =mu4e= diambil dari [[https://www.reddit.com/r/emacs/comments/8q84dl/
     (mu4e-view-show-addresses t)
     (mu4e-view-show-images t)
 
-    :bind (:map ybk/mail-map
-                ("e" . mu4e)
-                ("w" . compose-mail)
-                ("a" . mml-attach-file) ;C-c C-a
-                ("s" . message-send-and-exit) ;C-c C-c
-                )
+    :bind ("C-c e" . ybk-mu4e-opt/body)
+
     :init
-    ;; make mail-map
-    (bind-keys :prefix "C-c e"
-               :prefix-map ybk/mail-map)
-    (bind-key "q" #'keluar 'ybk/mail-map)
+    (defhydra ybk-mu4e-opt (:color blue)
+      "Email"
+      ("e" mu4e "buka")
+      ("w" compose-mail "tulis")
+      ("a" mml-attach-file "lampiran")
+      ("s" message-send-and-exit "hantar")
+      ("q" nil "keluar")
+      )
 
     :config
     ;; don't save message to Sent Messages, GMail/IMAP will take care of this
