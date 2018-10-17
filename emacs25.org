@@ -4162,6 +4162,7 @@ Untuk meletakkan SCHEDULED =C-c C-s= dan DEADLINE =C-c C-d=
   (setq org-default-notes-file (concat org-directory "refile.org"))
   (defconst my/org-inbox (concat org-directory "refile.org"))
   (defconst my/org-notes (concat org-directory "notes.org"))
+  ;; (defconst my/org-mail (concat org-directory "mail.org"))
 
   (setq org-capture-templates
         (quote (("a" "Appointment" entry (file  "~/Dropbox/org/gcal.org" )
@@ -4170,6 +4171,10 @@ Untuk meletakkan SCHEDULED =C-c C-s= dan DEADLINE =C-c C-d=
                  "* TODO %?\n %a\n %i\n %U\n ")
                 ("t" "task" entry (file  my/org-inbox)
                  "* TODO %? \n %i\n ")
+                ("m" "mail" entry (file my/org-inbox)
+                 "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
+                ;; ("m" "mail" entry (file+headline my/org-mail "Email")
+                ;;  "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
                 ("n" "note" entry (file my/org-notes)
                  "* %?\n %i")
                 ("b" "bib" entry (file+headline my/org-inbox "Bibliography")
@@ -6224,7 +6229,7 @@ Utk buka html2text
 #+END_SRC
 
 
-Guna org-mode untuk tulis email
+Guna org-mode untuk tulis email. Guna utk boleh masukkan ke TODO diambil dari [[http://pragmaticemacs.com/emacs/master-your-inbox-with-mu4e-and-org-mode/][sini]].
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-mu4e
@@ -6234,6 +6239,9 @@ Guna org-mode untuk tulis email
     :config
     ;; when composing an email, switch on the special mu4e/orgmode mode
     (define-key mu4e-compose-mode-map (kbd "C-c o") 'org~mu4e-mime-switch-headers-or-body)
+
+    ;;store link to message if in header view, not to header query
+    (setq org-mu4e-link-query-in-headers-mode nil)
     )
 #+END_SRC
 
