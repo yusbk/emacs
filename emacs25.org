@@ -865,10 +865,10 @@ jumpa cara lain.
     :config
     ;; utk tukar tema f10-t
     (setq my-themes '(
-                      ;; sanityinc-tomorrow-eighties
-                      ;; sanityinc-tomorrow-bright
-                      sanityinc-tomorrow-blue
+                      ;;sanityinc-tomorrow-eighties
                       sanityinc-tomorrow-night
+                      sanityinc-tomorrow-blue
+                      sanityinc-tomorrow-bright
                       sanityinc-tomorrow-day
                       ))
 
@@ -890,10 +890,13 @@ jumpa cara lain.
     ;; Bind this to C-9
     (global-set-key (kbd "C-9") 'cycle-my-theme)
     ;; (bind-key "t" #'cycle-my-theme 'ybk/map)
+
+    ;; Tukar warna utk comments
+    (set-face-foreground 'font-lock-string-face "#008899")
+    (set-face-foreground 'font-lock-comment-face "dark green")
     )
-
-
 #+END_SRC
+
 *** Moe-theme
 Untuk aturcara boleh baca di [[https://github.com/kuanyui/moe-theme.el][GitHub]]
 
@@ -3123,10 +3126,21 @@ by default):
              ("<up>" . org-previous-visible-heading) ;belakang
              ("<down>" . org-next-visible-heading)) ;depan
 #+END_SRC
-*** Premable size
+*** Premable dan header font size
 Tetapkan premable size walaupun tukar theme. Diambil di [[https://emacs.stackexchange.com/questions/22584/disable-enlarged-org-mode-header-appearance][sini]].
 
 #+BEGIN_SRC emacs-lisp
+
+  ;;== Title font size size biasa
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(org-document-title ((t (:foreground "#ffc58f" :weight semi-bold :height 1.0))))
+   )
+
+  ;; === size utk header
   (defun ybk/org-mode-hook ()
     "Stop the org-level headers from increasing in height relative to the other text."
     (dolist (face '(org-level-1
@@ -3134,7 +3148,7 @@ Tetapkan premable size walaupun tukar theme. Diambil di [[https://emacs.stackexc
                     org-level-3
                     org-level-4
                     org-level-5))
-      (set-face-attribute face nil :weight 'semi-bold :height 1.0)))
+      (set-face-attribute face nil :weight semi-bold :height 1.0)))
 
   (add-hook 'org-mode-hook 'ybk/org-mode-hook)
 #+END_SRC
