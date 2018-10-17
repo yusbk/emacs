@@ -5318,12 +5318,10 @@ Untuk buka log file secara langsung. Log file harus diletakkan di folder =doc=.
 #+BEGIN_SRC emacs-lisp
   (setq R-log-file "log.org")
 
-  (defun ybk/log-file ()
-    "Buka log file di folder doc"
+  (defun ybk-log-file ()
+    "buka log file"
     (interactive)
-    (find-file (expand-file-name R-log-file
-                                 (file-name-directory (buffer-file-name)))))
-
+    (find-file (expand-file-name R-log-file "./documents/")))
 #+END_SRC
 
 *** Debug keys
@@ -5356,11 +5354,11 @@ Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
     "
      ^ESS R-debug  'C-c C-t' r-dev-map. F9 or 'jx'^
 
-     ^Debug         ^Package^             ^^Break point^                 ^Misc
-     ^--------------^-----------------------^---------------------------^--------------
-     _o_: object     _l_: load  _t_: test    _b_: set    _k_: kill       _r_: test-fun
+     ^Debug         ^Package^             ^^Break point^               ^Misc
+     ^--------------^-----------------------^---------------------------^----------------
+     _o_: object     _l_: load  _t_: test    _b_: set    _k_: kill       _r_: test-function
      _a_: devtools   _d_: doc   _c_: check   _n_: next   _K_: kill all   _g_: log-file
-     _e_: traceback                      ^^^^_p_: prev   _q_: KELUAR
+     _e_: traceback                      ^^^^_p_: prev
     "
     ("o" ess-describe-object-at-point)
     ("b" ess-bp-set)
@@ -5378,8 +5376,9 @@ Guna =F9= *hydra-ybk-r-debug* bila di ess-mode untuk dapatkan kekuci di bawah:
     ("t" ess-r-devtools-test-package)
 
     ("r" test-R-buffer)
-    ("g" ybk/log-file)
-    ("q" (message "KELUAR") :exit t))
+    ("g" ybk-log-file)
+
+    ("q" nil "KELUAR"))
 
 
   ;;== key-binding
