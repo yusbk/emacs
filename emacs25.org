@@ -6164,7 +6164,7 @@ Email cara =mu4e= diambil dari [[https://www.reddit.com/r/emacs/comments/8q84dl/
       "Email"
       ("e" mu4e "buka")
       ("w" compose-mail "tulis")
-      ("a" mml-attach-file "lampiran")
+      ("a" mail-add-attachment "lampiran") ;mml-attach-file
       ("s" message-send-and-exit "hantar")
       ("q" nil "keluar")
       )
