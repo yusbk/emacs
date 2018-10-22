@@ -6241,6 +6241,28 @@ Guna org-mode untuk tulis email. Guna utk boleh masukkan ke TODO diambil dari [[
 
     ;;store link to message if in header view, not to header query
     (setq org-mu4e-link-query-in-headers-mode nil)
+
+    ;; ;; Copied from here:
+    ;; ;; https://matt.hackinghistory.ca/2016/11/18/sending-html-mail-with-mu4e/
+    ;; (defun htmlize-and-send ()
+    ;;   "When in an org-mu4e-compose-org-mode message, htmlize and send it."
+    ;;   (interactive)
+    ;;   (when (member 'org~mu4e-mime-switch-headers-or-body post-command-hook)
+    ;;     (org-mime-htmlize)
+    ;;     (org-mu4e-compose-org-mode)
+    ;;     (mu4e-compose-mode)
+    ;;     (message-send-and-exit)))
+
+    ;; ;; This overloads the amazing C-c C-c commands in org-mode with one more function
+    ;; ;; namely the htmlize-and-send, above.
+    ;; (add-hook 'org-ctrl-c-ctrl-c-hook 'htmlize-and-send t)
+
+    ;; ;; Originally, I set the `mu4e-compose-mode-hook' here, but
+    ;; ;; this new hook works much, much better for me.
+    ;; (add-hook 'mu4e-compose-post-hook
+    ;;           (defun do-compose-stuff ()
+    ;;             "My settings for message composition."
+    ;;             (org-mu4e-compose-org-mode)))
     )
 #+END_SRC
 
