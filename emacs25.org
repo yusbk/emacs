@@ -590,11 +590,6 @@ Pakai mouse =C-Scroll=
   (global-set-key [C-mouse-5] 'text-scale-decrease)
 #+END_SRC
 
-** Menu bar
-Capaian ke menu bar. Biasanya hany pakai ~f6~ tetapi ~f6~ dipakai untuk =ybk/map=
-#+BEGIN_SRC emacs-lisp :tangle no
-  (bind-key "m" #'menu-bar-open 'ybk/map)
-#+END_SRC
 ** Line number
 Tunjukkan line number
 #+BEGIN_SRC emacs-lisp
@@ -702,7 +697,9 @@ Save a few misc files in the =.cache= directory:
 
 * Estetik
 ** Menu bar
-Buang menu bar dan sekiranya perlu tekan =F10-m= atau =M-x toggle-menu-bar-mode-from-frame=
+Buang menu bar dan sekiranya perlu tekan =F10-m= atau =M-x
+toggle-menu-bar-mode-from-frame= atau =menu-bar-open=. Capaian ke menu bar. Biasanya hany pakai ~f6~
+tetapi ~f6~ dipakai untuk =ybk/map=
 #+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1) ;sembunyikan tool-bar
   (menu-bar-mode -1)
@@ -900,6 +897,27 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
     (ml-yus-theme)
     )
 #+END_SRC
+*** Tukar powerline-separator
+Untuk tukar separator terutama bila tukar tema. Diambil di [[https://github.com/aaronbieber/dotfiles/blob/master/configs/emacs.d/lisp/init-global-functions.el][sini]]. Antara separator
+yang boleh dipakai ialah contour, butt, wave, arrow, arrow-fade etc
+
+#+BEGIN_SRC emacs-lisp
+  (defun cycle-powerline-separators (&optional reverse)
+    "Set Powerline separators in turn.  If REVERSE is not nil, go backwards."
+    (interactive)
+    (let* ((fn (if reverse 'reverse 'identity))
+           (separators (funcall fn '("arrow" "arrow-fade" "slant"
+                                     "chamfer" "wave" "brace" "roundstub" "zigzag"
+                                     "butt" "rounded" "contour" "curve")))
+           (found nil))
+      (while (not found)
+        (progn (setq separators (append (cdr separators) (list (car separators))))
+               (when (string= (car separators) powerline-default-separator)
+                 (progn (setq powerline-default-separator (cadr separators))
+                        (setq found t)
+                        (redraw-display)))))))
+#+END_SRC
+
 ** Tema utk paparan
 Utk tukar tema paparan yang lain tekan =yy-t=. Dua themes boleh di pakai:
 
@@ -2188,12 +2206,16 @@ Tambah fuzzy matching ke Company
 
 * Yasnippet
 ** Koleksi snippet
-Koleksi rasmi snippet. Kemaskinikan package dengan =M-x package-refresh-contents=
-sekiranya snippets tidak dapat dipasang. Snippet persendirian di simpan di
-=Dropbox/snippet=. Bila buat snippet persendirian extention nama fail harus pakai =.yas=
-supaya snippet mode diaktifkan secara automatik.
+Koleksi rasmi snippet boleh dimuat turun di [[https://github.com/AndreaCrotti/yasnippet-snippets][GitHub]] atau pakai =use-package
+yasnippet-snippets=. Kemaskinikan package dengan =M-x package-refresh-contents=
+sekiranya snippets tidak dapat dipasang.
 
-#+BEGIN_SRC emacs-lisp
+Snippet persendirian di simpan di =Dropbox/snippets=. Bila buat snippet persendirian
+extention nama fail harus pakai =.yas= supaya snippet mode diaktifkan secara
+automatik. Folder harus dinamakan mengikut mode contohnya =latex-mode= atau
+=org-mode=. Sekiranya ingin buat snippet sendiri boleh baca di [[http://pragmaticemacs.com/emacs/smart-text-templates-with-yasnippet/][sini]].
+
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package yasnippet-snippets
     :ensure t
     ;;:pin melpa
@@ -2207,10 +2229,11 @@ git clone https://github.com/mattfidler/yasnippet-ess-mode.git
 #+END_EXAMPLE
 
 ** Aturcara yasnippet
+*** Cara 1
 Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Yasnippet][EmacsWiki]] untuk [[https://github.com/joaotavora/yasnippet][Yasnippet]]. Untuk buat snippets boleh baca di [[https://joaotavora.github.io/yasnippet/snippet-development.html][sini]].
 Keychord =jy= untuk /company-yasnippet/.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package yasnippet
     :ensure t
     :commands (yas-minor-mode) ;autoload 'yasnippet' when 'yas-minor-mode' is called
@@ -2274,9 +2297,82 @@ Keychord =jy= untuk /company-yasnippet/.
 
     ;;   (global-set-key (kbd "C-x y") 'aya-open-line)
     )
+#+END_SRC
 
+*** Cara 2
+Cara ini diambil dari [[https://github.com/magnars/.emacs.d/blob/master/settings/setup-yasnippet.el][GitHub]]. Untuk pakai, tuliskan =key= yang ditetapkan di definasi
+yasnippet, kemudian pakai fungsi ~yas-ido-expand~ seperti yang telah ditetapkan
+dengan =Ctrl-TAB= utk buka snippet.
 
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :ensure t
 
+    :init
+    ;; Guna snippet sendiri (bukan bundled punya)
+    (setq yas-snippet-dirs '("~/Dropbox/snippets"))
+    (yas-global-mode 1)
+
+    :config
+
+    ;; Jump to end of snippet definition
+    (define-key yas-keymap (kbd "<return>") 'yas-exit-all-snippets)
+
+    ;; Inter-field navigation
+    (defun yas/goto-end-of-active-field ()
+      (interactive)
+      (let* ((snippet (car (yas--snippets-at-point)))
+             (position (yas--field-end (yas--snippet-active-field snippet))))
+        (if (= (point) position)
+            (move-end-of-line 1)
+          (goto-char position))))
+
+    (defun yas/goto-start-of-active-field ()
+      (interactive)
+      (let* ((snippet (car (yas--snippets-at-point)))
+             (position (yas--field-start (yas--snippet-active-field snippet))))
+        (if (= (point) position)
+            (move-beginning-of-line 1)
+          (goto-char position))))
+
+    (define-key yas-keymap (kbd "C-e") 'yas/goto-end-of-active-field)
+    (define-key yas-keymap (kbd "C-a") 'yas/goto-start-of-active-field)
+
+    ;; No dropdowns please, yas
+    (setq yas-prompt-functions '(yas-ido-prompt yas-completing-prompt))
+
+    ;; No need to be so verbose
+    (setq yas-verbosity 1)
+
+    ;; Wrap around region
+    (setq yas-wrap-around-region t)
+
+    ;; Completing point by some yasnippet key
+    ;; https://www.emacswiki.org/emacs/Yasnippet
+    (defun yas-ido-expand ()
+      "Lets you select (and expand) a yasnippet key"
+      (interactive)
+      (let ((original-point (point)))
+        (while (and
+                (not (= (point) (point-min) ))
+                (not
+                 (string-match "[[:space:]\n]" (char-to-string (char-before)))))
+          (backward-word 1))
+        (let* ((init-word (point))
+               (word (buffer-substring init-word original-point))
+               (list (yas-active-keys)))
+          (goto-char original-point)
+          (let ((key (remove-if-not
+                      (lambda (s) (string-match (concat "^" word) s)) list)))
+            (if (= (length key) 1)
+                (setq key (pop key))
+              (setq key (ido-completing-read "key: " list nil nil word)))
+            (delete-char (- init-word original-point))
+            (insert key)
+            (yas-expand)))))
+
+    (define-key yas-minor-mode-map (kbd "<C-tab>")     'yas-ido-expand)
+    )
 #+END_SRC
 
 * Parentheses
@@ -7317,7 +7413,7 @@ Hydra untuk fungsi awam
     "
      ^General keymap [F6] or jm^
      ^-------------------------------
-     _y_: ybk-init  _g_: highlight        _s_: stackOverflow  _w_: swap-windows       _e_: musics (emms)   _x_: save buffers & exit
+     _y_: ybk-init  _g_: highlight        _s_: stackOverflow  _w_: swap-windows       _e_: musics (emms)   _x_: save buffers & exit  _p_: powerline separator
      _h_: heading   _l_: warna highlight  _r_: rss            _n_: file explore [F4]  _u_: weather (metno) _c_: key-chord-mode
      _t_: theme     _m_: menu bar         _o_: scratch        _k_: delete file/buffer _U_: weather update  _b_: buffer baru
     "
@@ -7345,6 +7441,8 @@ Hydra untuk fungsi awam
     ("x" save-buffers-kill-emacs)
     ("c" key-chord-mode)
     ("b" ybk/noname-buffer)
+
+    ("p" cycle-powerline-separators)
 
     ("q" nil "KELUAR"))
 
