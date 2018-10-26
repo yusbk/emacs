@@ -3360,7 +3360,8 @@ Dapatkan Google kalender ke org-agenda. Cara ini boleh di baca di [[https://gith
 #+END_SRC
 
 ** Nice bulleted lists
-Mencatikkan *bullet* di Org-mode
+Mencatikkan *bullet* di Org-mode. Untuk dapatkan bullet lain boleh periksa guna =C-x 8 RET=
+kemudian tulis symbol yang diingini cth. ~check mark~ atau ~star~.
 #+begin_src emacs-lisp
   ;; Sembunyi leading star
   (setq org-hide-leading-stars  t)
@@ -3371,7 +3372,7 @@ Mencatikkan *bullet* di Org-mode
     ;; make available "org-bullet-face" such that I can control the font size individually
     (setq org-bullets-face-name (quote org-bullet-face))
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-    (setq org-bullets-bullet-list '("◎""◉""▶""○""⚫""⚪""◯"))
+    (setq org-bullets-bullet-list '("⚫""⭐""⚪""◉""◎""▶""◯"))
     ;; org ellipsis options, other than the default Go to Node...
     ;; not supported in common font, but supported in Symbola (my fall-back font) ⬎, ⤷, ⤵
     ;; (setq org-ellipsis " ⤵") ;; ⤵ ≫
