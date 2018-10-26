@@ -1962,6 +1962,7 @@ actions bila di Ivy minibuffer. Atau =C-o= utk Counsel commands
     (("M-x" . counsel-M-x)
      ("C-x C-f" . counsel-find-file)
      ("C-x C-r" . counsel-recentf)
+     ("<f1> k" . counsel-descbinds)
      ("<f1> f" . counsel-describe-function)
      ("<f1> v" . counsel-describe-variable)
      ("<f2> m" . counsel-imenu)
@@ -7178,7 +7179,7 @@ Cara utk memuatpasang repo baru ke =Github= ialah:
   cth. README.md sebelum =push=. Fail yg sama nama di =master= harus dibuang
 + =M-x p= utk muatpasang atau =push= *master* ke *origin* di repo baru.
 
-** Tips
+** Tips and tricks
 Beberapa tips utk membantu memudahkan penggunaan =Magit=
 
 + "Branch manager" =magit-show-refs-popup= kekunci ialah =y=.
@@ -7400,9 +7401,8 @@ Untuk dengar lagu-lagu diambil dari [[https://www.gnu.org/software/emms/index.ht
     )
 #+END_SRC
 
-* Just in case
-Beberapa situasi yang pernah dialami dan beberikan masalah
-
+* Troubleshooting
+Beberapa situasi yang pernah dialami dan beberikan masalah. Cara penyelesaian:
 ** XF86 keys
 Sekiranya kekunci dari F2 ke F12 tidak berfungsi dan hanya menunjukkan XF86New, XF86Open,
 XF86Close dan sebagainya ini menandakan yang button ~LOCK~ diaktifkan.
