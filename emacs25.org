@@ -2082,7 +2082,12 @@ tunggu 1 saat. Untuk masalah di =eshall= bila pakai estrisk (*) boleh pakai quot
   (use-package company
     :ensure t
     :bind (:map ybk/prog-map
-                ("m" . company-begin-backend))
+                ("m" . company-begin-backend)
+                :map company-active-map
+                ("C-n" . company-select-next)
+                ("C-p" . company-select-previous)
+                ("C-d" . company-show-doc-buffer)
+                ("<tab>" . company-complete))
     :init
     (add-hook 'after-init-hook 'global-company-mode) ;aktifkan disemua buffer
     :config
@@ -2134,14 +2139,18 @@ tunggu 1 saat. Untuk masalah di =eshall= bila pakai estrisk (*) boleh pakai quot
 
     (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
 
+    ;; Company appears to override the above keymap based on company-auto-complete-chars.
+    ;; Turning it off ensures we have full control.
+    (setq company-auto-complete-chars nil)
+
     ;; ;; Matikan di mode tertentu
     ;; (setq company-global-modes '(not org-mode)) ;org-mode
 
-    (bind-keys :map company-active-map
-               ("C-n" . company-select-next)
-               ("C-p" . company-select-previous)
-               ("C-d" . company-show-doc-buffer)
-               ("<tab>" . company-complete))
+    ;; (bind-keys :map company-active-map
+    ;;            ("C-n" . company-select-next)
+    ;;            ("C-p" . company-select-previous)
+    ;;            ("C-d" . company-show-doc-buffer)
+    ;;            ("<tab>" . company-complete))
     :diminish
     (company-mode . " "))
 
@@ -2303,18 +2312,22 @@ Keychord =jy= untuk /company-yasnippet/.
 *** Cara 2
 Cara ini diambil dari [[https://github.com/magnars/.emacs.d/blob/master/settings/setup-yasnippet.el][GitHub]]. Untuk pakai, tuliskan =key= yang ditetapkan di definasi
 yasnippet, kemudian pakai fungsi ~yas-ido-expand~ seperti yang telah ditetapkan
-dengan =Ctrl-TAB= utk buka snippet.
+dengan =Ctrl-TAB= utk buka snippet. Untuk next atau previous pakai =Shift-TAB=
 
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
-
     :init
     ;; Guna snippet sendiri (bukan bundled punya)
     (setq yas-snippet-dirs '("~/Dropbox/snippets"))
     (yas-global-mode 1)
 
     :config
+    ;; ;; Matikan TAB
+    ;; (eval-after-load 'yasnippet
+    ;;   '(progn
+    ;;      (define-key yas-keymap (kbd "TAB") nil)
+    ;;      (define-key yas-keymap (kbd "C-<") 'yas-next-field-or-maybe-expand)))
 
     ;; Jump to end of snippet definition
     (define-key yas-keymap (kbd "<return>") 'yas-exit-all-snippets)
@@ -2372,7 +2385,8 @@ dengan =Ctrl-TAB= utk buka snippet.
             (insert key)
             (yas-expand)))))
 
-    (define-key yas-minor-mode-map (kbd "<C-tab>")     'yas-ido-expand)
+    (define-key yas-minor-mode-map (kbd "<C-tab>") 'yas-ido-expand)
+
     )
 #+END_SRC
 
@@ -2542,7 +2556,9 @@ aktiv hanya taip 'ns' untuk dapatkan 'Nama Saya'
 #+END_SRC
 
 ** Predictive abbreviation
-Penerangan boleh baca di [[https://www.emacswiki.org/emacs/PredictiveAbbreviation][Wiki]]
+Penerangan boleh baca di [[https://www.emacswiki.org/emacs/PredictiveAbbreviation][Wiki]]. Fungsi ini memakai perkataan2 yang telah dipakai di
+buffer untuk mempercepatkan penulisan, hampir seperti =company=.
+
 #+BEGIN_SRC emacs-lisp
   (use-package pabbrev
     :ensure t
@@ -2556,6 +2572,7 @@ Penerangan boleh baca di [[https://www.emacswiki.org/emacs/PredictiveAbbreviatio
     (setq pabbrev-idle-timer-verbose nil
           pabbrev-read-only-error nil
           pabbrev-scavenge-on-large-move nil)
+    :bind ("C-i" . pabbrev-expand-maybe)
     :config
     (put 'yas-expand 'pabbrev-expand-after-command t)
 
@@ -2564,7 +2581,8 @@ Penerangan boleh baca di [[https://www.emacswiki.org/emacs/PredictiveAbbreviatio
 
     ;; Fix for pabbrev not working in org mode
     ;; http://lists.gnu.org/archive/html/emacs-orgmode/2016-02/msg00311.html
-    (define-key pabbrev-mode-map [tab] 'pabbrev-expand-maybe)
+    (define-key pabbrev-mode-map (kbd "C-i") 'pabbrev-expand-maybe)
+    ;; (define-key pabbrev-mode-map [tab] 'pabbrev-expand-maybe)
 
     ;; kill all possible overlay from current view
     (setq pabbrev-debug-erase-all-overlays t)
@@ -7556,12 +7574,12 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
     "
     ^Programming keymap: [F12] or jc^
 
-    ^Project^          ^expr^            ^misc^                   ^kode^                ^extra^
+    ^Project^          ^expr^            ^misc^                           ^kode^                ^extra^
     ^---------------------------------------------------------------------------------------------------
-    _P_: Projectile    _a_: start exp    _k_: kill other buffers  _g_: Magit            _r_: knitr (js)
-    _p_: find project  _e_: end exp      _y_: Yasnippet           _d_: Ediff            _R_: debug R (jk)
-    _o_: Origami       _u_: unwrap exp   _-_: del unuse yas.      _f_: diff-walker      _S_: smartparens ON/OFF
-    _s_: scratch       _x_: kill exp     _w_: send2browser        _c_: cleanup/tabbify  _q_: KELUAR
+    _P_: Projectile    _a_: start exp    _k_: kill other buffers [C-c k]  _g_: Magit            _r_: knitr (js)
+    _p_: find project  _e_: end exp      _y_: Yasnippet                   _d_: Ediff            _R_: debug R (jk)
+    _o_: Origami       _u_: unwrap exp   _-_: del unuse yas.              _f_: diff-walker      _S_: smartparens ON/OFF
+    _s_: scratch       _x_: kill exp     _w_: send2browser                _c_: cleanup/tabbify  _q_: KELUAR
     "
 
     ("P" hydra-projectile/body :exit t)
