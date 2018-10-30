@@ -7454,9 +7454,10 @@ Hydra untuk fungsi awam
     "
      ^General keymap [F6] or jm^
      ^-------------------------------
-     _y_: ybk-init  _g_: highlight        _s_: stackOverflow  _w_: swap-windows       _e_: musics (emms)   _x_: save buffers & exit  _p_: powerline separator
+     _y_: ybk-init  _g_: highlight        _s_: stackOverflow  _w_: swap-windows       _e_: musics (emms)   _x_: save buffers & exit
      _h_: heading   _l_: warna highlight  _r_: rss            _n_: file explore [F4]  _u_: weather (metno) _c_: key-chord-mode
      _t_: theme     _m_: menu bar         _o_: scratch        _k_: delete file/buffer _U_: weather update  _b_: buffer baru
+     _p_: powerline separator
     "
 
     ("y" ybk/emacs-file)
