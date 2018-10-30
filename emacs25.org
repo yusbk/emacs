@@ -6304,7 +6304,7 @@ attachment pakai =e= atau tunjuk attachment file dan tekan =S-RET=.
           (lambda (fname mtype)
             (cond
              ;; docfiles go to ~/Documents
-             ((and fname (string-match "\\.doc$" fname))  "~/Documents")
+             ((and fname (string-match "\\.docx$" fname))  "~/Documents")
              ;; ... other cases  ...
              (t "~/Downloads")))) ;; everything else
 
