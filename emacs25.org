@@ -2057,6 +2057,15 @@ Guna seperti =ace-jump-mode= untuk mencari perkataan kemudian taip
     ;;(key-chord-define-global "qg" #'hydra-avy-goto/body)
     )
 #+END_SRC
+* Amx
+Cara alternatif utk pemakaian =M-x=. Boleh dibaca di [[https://github.com/DarwinAwardWinner/amx/][GitHub]]. Untuk matikan pakai =M-x amx-mode=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package amx
+    :ensure t
+    :config
+    (amx-mode))
+#+END_SRC
 
 * Company
 
