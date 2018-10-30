@@ -5837,6 +5837,15 @@ Of course, markdown contains a yaml header, so we need yaml-mode as well:
     :ensure t
     :mode (("\\.yml\\'" . yaml-mode)))
 #+END_SRC
+* Pandoc
+Guna =pandoc-mode=. Untuk rujukkan boleh baca di [[http://joostkremers.github.io/pandoc-mode/][manual]]. Dapatkan menu dengan key
+=C-c /=. Pandoc dipakai terutama utk tukar fail .docx
+
+#+BEGIN_SRC emacs-lisp
+  (use-package pandoc-mode
+    :ensure t
+    )
+#+END_SRC
 
 * LaTeX
 AuCTeX diguna sebab ia lebih bagus dari yang tersedia (build in) tex mode. Penggunaan
