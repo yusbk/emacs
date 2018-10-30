@@ -6256,12 +6256,14 @@ email.
 
 #+END_SRC
 ** mu4e
-Email cara =mu4e= diambil dari [[https://www.reddit.com/r/emacs/comments/8q84dl/tip_how_to_easily_manage_your_emails_with_mu4e/][sini]]. Boleh juga lihat di [[https://www.youtube.com/watch?time_continue=179&v=newRHXKm4H4][YouTube]].
+Email cara =mu4e= diambil dari [[https://www.reddit.com/r/emacs/comments/8q84dl/tip_how_to_easily_manage_your_emails_with_mu4e/][sini]]. Boleh juga lihat di [[https://www.youtube.com/watch?time_continue=179&v=newRHXKm4H4][YouTube]]. Untuk simpan
+attachment pakai =e= atau tunjuk attachment file dan tekan =S-RET=.
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package mu4e
     :load-path "~/Dropbox/lisp/mu/mu4e"
     :custom
-    (mu4e-attachment-dir "~/Downloads")
+    ;; (mu4e-attachment-dir "~/Downloads")
     (mu4e-compose-signature-auto-include nil)
     (mu4e-drafts-folder "/gmail/Drafts")
     (mu4e-get-mail-command "mbsync -a ~/.emacs.d/.mbsyncrc")
@@ -6282,19 +6284,30 @@ Email cara =mu4e= diambil dari [[https://www.reddit.com/r/emacs/comments/8q84dl/
     (mu4e-view-show-addresses t)
     (mu4e-view-show-images t)
 
-    :bind ("C-c e" . ybk-mu4e-opt/body)
+    :bind (("C-c e" . ybk-mu4e-opt/body)
+           ("C-c s" . mu4e))
 
     :init
     (defhydra ybk-mu4e-opt (:color blue)
       "Email"
       ("e" mu4e "buka")
-      ("w" compose-mail "tulis")
+      ("m" compose-mail "tulis")
       ("a" mail-add-attachment "lampiran") ;mml-attach-file
       ("s" message-send-and-exit "hantar")
       ("q" nil "keluar")
       )
 
     :config
+    ;; Tetapkan folder untuk simpan attachment
+    ;; http://djcbsoftware.nl/code/mu/mu4e/Opening-and-saving-attachments.html
+    (setq mu4e-attachment-dir
+          (lambda (fname mtype)
+            (cond
+             ;; docfiles go to ~/Documents
+             ((and fname (string-match "\\.doc$" fname))  "~/Documents")
+             ;; ... other cases  ...
+             (t "~/Downloads")))) ;; everything else
+
     ;; don't save message to Sent Messages, GMail/IMAP will take care of this
     (setq mu4e-sent-messages-behavior 'delete)
 
