@@ -5563,6 +5563,38 @@ Download =ado-mode= dari Github atau di [[https://www.louabill.org/Stata/ado-mod
     )
 #+END_SRC
 
+* Markdown
+Markdown mode for Markdown editing! Guna =Pandoc= utk view. Pandoc harus di install
+terlebih dahulu.
+
+ESS mode harus diaktifkan utk aktifkan =ess-company=
+
+#+BEGIN_EXAMPLE
+sudo apt install pandoc
+#+END_EXAMPLE
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package markdown-mode
+    :ensure t
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown")
+    :config
+    ;;(setq markdown-enable-math t)
+
+    ;;Guna Pandoc utk view
+    (custom-set-variables '(markdown-command "pandoc")))
+#+END_SRC
+
+Of course, markdown contains a yaml header, so we need yaml-mode as well:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yaml-mode
+    :ensure t
+    :mode (("\\.yml\\'" . yaml-mode)))
+#+END_SRC
 * Polymode (for knitr)
 Mode ini dipakai untuk membuat dokumen yang menggunakan program R.
 ** Aturcara
@@ -5592,6 +5624,12 @@ Default key to access polymode is =M-n=. Markdown atau Pandoc diperlukan utk pro
 NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-chuck mesti buka R-prog di background dulu
 
 #+BEGIN_SRC emacs-lisp
+  (use-package poly-markdown
+    :ensure t)
+
+  (use-package poly-R
+    :ensure t)
+
   (use-package polymode
     :ensure t
     :mode
@@ -5805,38 +5843,6 @@ tetapi diproses dengan menggunakan kekunci standard polymode =M-n e=
   ;; (bind-key "d" #'ess-rmarkdown ybk/prog-map)
 #+END_SRC
 
-* Markdown
-Markdown mode for Markdown editing! Guna =Pandoc= utk view. Pandoc harus di install
-terlebih dahulu.
-
-ESS mode harus diaktifkan utk aktifkan =ess-company=
-
-#+BEGIN_EXAMPLE
-sudo apt install pandoc
-#+END_EXAMPLE
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package markdown-mode
-    :ensure t
-    :commands (markdown-mode gfm-mode)
-    :mode (("README\\.md\\'" . gfm-mode)
-           ("\\.md\\'" . markdown-mode)
-           ("\\.markdown\\'" . markdown-mode))
-    :init (setq markdown-command "multimarkdown")
-    :config
-    ;;(setq markdown-enable-math t)
-
-    ;;Guna Pandoc utk view
-    (custom-set-variables '(markdown-command "pandoc")))
-#+END_SRC
-
-Of course, markdown contains a yaml header, so we need yaml-mode as well:
-
-#+BEGIN_SRC emacs-lisp
-  (use-package yaml-mode
-    :ensure t
-    :mode (("\\.yml\\'" . yaml-mode)))
-#+END_SRC
 * Pandoc
 Guna =pandoc-mode=. Untuk rujukkan boleh baca di [[http://joostkremers.github.io/pandoc-mode/][manual]]. Dapatkan menu dengan key
 =C-c /=. Pandoc dipakai terutama utk tukar fail .docx
