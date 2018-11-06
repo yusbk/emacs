@@ -953,7 +953,7 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
 Untuk tukar separator terutama bila tukar tema. Diambil di [[https://github.com/aaronbieber/dotfiles/blob/master/configs/emacs.d/lisp/init-global-functions.el][sini]]. Antara separator
 yang boleh dipakai ialah contour, butt, wave, arrow, arrow-fade etc
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun cycle-powerline-separators (&optional reverse)
     "Set Powerline separators in turn.  If REVERSE is not nil, go backwards."
     (interactive)
