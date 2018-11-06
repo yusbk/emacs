@@ -482,6 +482,7 @@ diambil dari [[  (global-set-key (kbd "M-'") 'comment-or-uncomment-region)][Stac
 #+END_SRC
 
 ** Scrolling
+*** Cursor move 10 lines
 Diambil dari [[http://whattheemacsd.com/key-bindings.el-02.html][What the emacs.d]]
 
 #+BEGIN_SRC emacs-lisp
@@ -513,6 +514,53 @@ Insert newline if point at the end of the buffer
   (setq next-line-add-newlines t)
 #+END_SRC
 
+*** Cursor ke baris awal
+Cursor move first line or block. Diambil di [[http://ergoemacs.org/emacs/emacs_keybinding_design_beginning-of-line-or-block.html][Ergoemacs]].
+
+#+BEGIN_SRC emacs-lisp
+  (defun xah-beginning-of-line-or-block ()
+    "Move cursor to beginning of line or previous paragraph.
+
+  • When called first time, move cursor to beginning of char in current line. (if already, move to beginning of line.)
+  • When called again, move cursor backward by jumping over any sequence of whitespaces containing 2 blank lines.
+
+  URL `http://ergoemacs.org/emacs/emacs_keybinding_design_beginning-of-line-or-block.html'
+  Version 2017-05-13"
+    (interactive)
+    (let (($p (point)))
+      (if (or (equal (point) (line-beginning-position))
+              (equal last-command this-command ))
+          (if (re-search-backward "\n[\t\n ]*\n+" nil "NOERROR")
+              (progn
+                (skip-chars-backward "\n\t ")
+                (forward-char ))
+            (goto-char (point-min)))
+        (progn
+          (back-to-indentation)
+          (when (eq $p (point))
+            (beginning-of-line))))))
+
+  (defun xah-end-of-line-or-block ()
+    "Move cursor to end of line or next paragraph.
+
+  • When called first time, move cursor to end of line.
+  • When called again, move cursor forward by jumping over any sequence of whitespaces containing 2 blank lines.
+
+  URL `http://ergoemacs.org/emacs/emacs_keybinding_design_beginning-of-line-or-block.html'
+  Version 2017-05-30"
+    (interactive)
+    (if (or (equal (point) (line-end-position))
+            (equal last-command this-command ))
+        (progn
+          (re-search-forward "\n[\t\n ]*\n+" nil "NOERROR" ))
+      (end-of-line)))
+
+  (global-set-key (kbd "C-a") 'xah-beginning-of-line-or-block)
+  (global-set-key (kbd "C-e") 'xah-end-of-line-or-block)
+#+END_SRC
+
+
+*** Scroll sahaja
 Scrolling tanpa menggerakkan tetikus/pointer tetapi kedua-dua kekunci mesti ditekan
 contohnya utk bergerak ke bawah F2-n mesti ditekan utk setiap pergerakkan
 
@@ -1575,17 +1623,12 @@ Kompilasi pelbagi fungsi untuk Emacs. [[https://github.com/bbatsov/crux#keybindi
   (use-package crux
     :ensure t
     :bind(
-          ("C-a" . crux-move-beginning-of-line)
+          ;; ("C-a" . crux-move-beginning-of-line) ;matikan sebab pakai xah-beginning-of-line-or-block
           ("C-k" . crux-smart-kill-line) ;first kill end of line then kill whole line
           ("C-<backspace>" . crux-kill-line-backwards)
           ("C-c r" . crux-rename-file-and-buffer) ;rename current buffer
           ("C-c k" . crux-kill-other-buffers) ;kill all open buffers but not this
-          ;; :map ybk/map
-          ;; ("w" . crux-swap-windows)
-          ;; ([?\\] . crux-swap-windows) ;swap between 2 windows
-          ;; ("k" . crux-delete-file-and-buffer)
-          ;; :map ybk/prog-map
-          ;; ("b" . crux-cleanup-buffer-or-region) ;Whitespace-cleanup
+          ("M-n c" . crux-cleanup-buffer-or-region) ;Whitespace-cleanup
           )
     :config
     ;;make a command acting normally on a region to operate on entire buffer
@@ -5228,7 +5271,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     :bind
     (:map ess-mode-map ;ESS
           ("C-c s" . run-shiny-app)
-          ("C-a" . crux-move-beginning-of-line)
+          ("C-a" . xah-beginning-of-line-or-block) ;cara lain boleh pakai crux-move-beginning-of-line
           ("M--" . ess-insert-assign) ; assign <-
           ("_"   . self-insert-command)
           ("M-+" . my/dt-update)
