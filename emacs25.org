@@ -527,6 +527,9 @@ contohnya utk bergerak ke bawah F2-n mesti ditekan utk setiap pergerakkan
     (interactive)
     (scroll-down 10))
 
+  (global-set-key (kbd "C-<prior>") 'ybk-scroll-up)
+  (global-set-key (kbd "C-<next>") 'ybk-scroll-down)
+
   (defhydra hydra-sc (global-map "<f2>")
     "Scroll screen"
     ("<down>" ybk-scroll-up "↑")
@@ -543,6 +546,7 @@ Aturcara bagaimana =TAB= berfunksi
   (setq-default indent-tabs-mode nil)
 #+END_SRC
 ** Cursor
+*** Blink
 Tidak blink
 #+BEGIN_SRC emacs-lisp
   (when (functionp 'blink-cursor-mode)
