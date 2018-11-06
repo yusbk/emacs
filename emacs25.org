@@ -848,7 +848,7 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package powerline
     :ensure t
-    :init (setq powerline-default-separator 'arrow) ;contour, butt, wave, arrow, arrow-fade etc
+    :init (setq powerline-default-separator 'slant) ;contour, butt, wave, arrow, arrow-fade etc
     :config
     (add-hook 'desktop-after-read-hook 'powerline-reset)
 
