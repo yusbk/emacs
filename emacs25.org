@@ -853,16 +853,16 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
     (add-hook 'desktop-after-read-hook 'powerline-reset)
 
     ;; yus-theme
-    (defface yus-aktif1 '((t (:background "#a25fff" :inherit mode-line))) ;#a2e #2a5289 #4c52ee #179 #cfdfff #00d9ff #19a
+    (defface yus-aktif1 '((t (:background "#900" :inherit mode-line))) ;#a2e #2a5289 #4c52ee #179 #cfdfff #00d9ff #19a
       "Powerline muka 1."
       :group 'powerline)
-    (defface yus-aktif2 '((t (:background "#4c56aa" :inherit mode-line))) ;#2c5197 #a25ec3 #a19 #8b008b #369 #3a11ff #28a #a669ef
+    (defface yus-aktif2 '((t (:background "#586e75" :inherit mode-line))) ;#2c5197 #a25ec3 #a19 #8b008b #369 #3a11ff #28a #a669ef #4c56aa
       "Powerline muka 2."
       :group 'powerline)
-    (defface yus-tidak-aktif1 '((t (:background "gray10" :inherit mode-line-inactive))) ;#1a5aee #35f #a25fff #586e75
+    (defface yus-tidak-aktif1 '((t (:background "#012" :inherit mode-line-inactive))) ;#1a5aee #35f #a25fff #586e75
       "Powerline muka 1."
       :group 'powerline)
-    (defface yus-tidak-aktif2 '((t (:background "gray30" :inherit mode-line-inactive))) ;#273f87 #5478e4 #93a1a1
+    (defface yus-tidak-aktif2 '((t (:background "gray30" :inherit mode-line-inactive))) ;#273f87 #5478e4 #93a1a1 #900
       "Powerline muka 2."
       :group 'powerline)
     (defface yus-hujung '((t (:background "#5478e4" :inherit mode-line)))
@@ -953,7 +953,7 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
 Untuk tukar separator terutama bila tukar tema. Diambil di [[https://github.com/aaronbieber/dotfiles/blob/master/configs/emacs.d/lisp/init-global-functions.el][sini]]. Antara separator
 yang boleh dipakai ialah contour, butt, wave, arrow, arrow-fade etc
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (defun cycle-powerline-separators (&optional reverse)
     "Set Powerline separators in turn.  If REVERSE is not nil, go backwards."
     (interactive)
