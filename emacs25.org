@@ -1898,7 +1898,7 @@ Fungsi berguna bila di minibuffer =M-o=
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
     :ensure t
-    :bind (("C-b" . ivy-switch-buffer)
+    :bind (("C-x b" . ivy-switch-buffer)
            ("C-d" . ivy-dired-recent-dirs)
            ("C-r" . ivy-resume) ;sambung cari bila pakai C-s "swiper"
            ;; :map ybk/map
