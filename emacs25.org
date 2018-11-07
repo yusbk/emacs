@@ -1,6 +1,6 @@
 #+AUTHOR: Yusman Kamaleri
 #+TITLE: Aturcare Emacs versi 25.2
-#+DATE: 08 Mars 2018
+#+DATE: 07 Nov 2018
 #+OPTIONS: toc:nil
 #+PROPERTY: header-args :comments org :catch yes :results silent :tangle yes
 
