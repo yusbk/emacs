@@ -1898,11 +1898,11 @@ Fungsi berguna bila di minibuffer =M-o=
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
     :ensure t
-    :bind (("C-x b" . ivy-switch-buffer)
+    :diminish ivy-mode
+    :bind (
+           ;; ("C-x b" . ivy-switch-buffer) :bruke 'jl' key-chord istedenfor
            ("C-d" . ivy-dired-recent-dirs)
            ("C-r" . ivy-resume) ;sambung cari bila pakai C-s "swiper"
-           ;; :map ybk/map
-           ;; ("'" . ivy-resume)
            )
     :config
     (ivy-mode 1)
@@ -1974,8 +1974,11 @@ Fungsi berguna bila di minibuffer =M-o=
     (ivy-add-actions t
                      '(("f" (lambda (x) (with-ivy-window (insert (file-relative-name x)))) "file name")))
 
-    :diminish ivy-mode)
+    ;; Key-chord
+    (key-chord-define-global "jl" #'ivy-switch-buffer)
+    )
 #+END_SRC
+
 ** Ivy-hydra
 #+BEGIN_SRC emacs-lisp
   (use-package ivy-hydra
