@@ -407,6 +407,12 @@ Bergantung dengan =hostname=. Dynamik size font diambil dari [[https://coderwall
   ;; ;; Fontify any future frames
   ;; (push 'fontify-frame after-make-frame-functions)
 #+END_SRC
+** Font-lock
+Minor mode untuk highlight ("fontify") menggunakan pelbagai /faces/. Hidupkan
+globally sekiranya mode yang dipakai support fontify.
+#+BEGIN_SRC emacs-lisp
+  (global-font-lock-mode 1)
+#+END_SRC
 
 ** Yes/No
 Hanya pakai 'y' atau 'n' untuk 'Yes' dan 'No'
@@ -5679,18 +5685,8 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
 
 #+BEGIN_SRC emacs-lisp
   (use-package poly-markdown
-    :ensure t)
-
-  (use-package poly-R
-    :ensure t)
-
-  (use-package polymode
     :ensure t
-    :mode
-    ("\\.Snw" . poly-noweb+r-mode)
-    ("\\.[rR]nw" . poly-noweb+r-mode)
-    ;; ("\\.[rR]md" . Rmd-mode)
-    ("\\.[rR]md" . poly-markdown+r-mode)
+    :pin melpa-stable
     :bind (:map ybk/prog-map
                 ("c" . rmd-insert-r-chunk)
                 ("r" . rmd-eval-chunk)
@@ -5698,15 +5694,6 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
                 ("d" . poly-ess-rmarkdown)
                 )
     :init
-    (progn
-      (defun Rmd-mode ()
-        "ESS Markdown mode for Rmd files"
-        (interactive)
-        (require 'poly-R)
-        (require 'poly-markdown)
-        (R-mode)
-        (poly-markdown+r-mode)))
-
     ;; Hydra
     (defhydra hydra-ybk-poly (:hint nil)
       "
@@ -5740,11 +5727,16 @@ NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-c
       )
 
     ;;==key ikut urutan
-    (key-seq-define-global "xk" 'hydra-ybk-poly/body)
-    ;;(key-seq-define ess-mode-map "js" 'hydra-ybk-poly/body)
+    (key-seq-define-global "xk" 'hydra-ybk-poly/body))
 
-    ;; (bind-key "<f7>" #'hydra-ybk-poly/body)
-    )
+  (use-package poly-R
+    :ensure t)
+
+  (use-package poly-noweb
+    :ensure t)
+
+  ;; (use-package poly-markdown
+  ;;   :ensure t)
 #+END_SRC
 
 ** Masukkan chunk
