@@ -609,12 +609,15 @@ Tidak blink
 #+END_SRC
 
 ** Indent
-[[https://github.com/Malabarba/aggressive-indent-mode][Agrressive indent]] keep code align even after rearranging stuff
-#+BEGIN_SRC emacs-lisp
+[[https://github.com/Malabarba/aggressive-indent-mode][Agrressive indent]] keep code align even after rearranging stuff. Dimatikan globally sebab
+confict dengan ~Polymode~ code chuck.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package aggressive-indent
     :ensure t
     :config
-    (global-aggressive-indent-mode)
+    (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+    (add-hook 'css-mode-hook #'aggressive-indent-mode)
     )
 #+END_SRC
 ** Find-file
