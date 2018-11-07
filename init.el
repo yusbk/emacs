@@ -20,8 +20,8 @@
         ("org"          . "http://orgmode.org/elpa/")
         ("gnu"          . "https://elpa.gnu.org/packages/"))
       package-archive-priorities
-      '(("melpa-stable" . 8)
-        ("melpa"        . 10)
+      '(("melpa-stable" . 10)
+        ("melpa"        . 8)
         ("org"          . 0)
         ("gnu"          . 5)))
 (package-initialize)
