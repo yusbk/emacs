@@ -515,9 +515,10 @@ Insert newline if point at the end of the buffer
 #+END_SRC
 
 *** Cursor ke baris awal
-Cursor move first line or block. Diambil di [[http://ergoemacs.org/emacs/emacs_keybinding_design_beginning-of-line-or-block.html][Ergoemacs]].
+Cursor move first line or block. Diambil di [[http://ergoemacs.org/emacs/emacs_keybinding_design_beginning-of-line-or-block.html][Ergoemacs]]. Dimatikan sebab bila di kode
+chunck cursor akan terus keluar chunck kalau tidak di 'save'.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (defun xah-beginning-of-line-or-block ()
     "Move cursor to beginning of line or previous paragraph.
 
@@ -1623,7 +1624,7 @@ Kompilasi pelbagi fungsi untuk Emacs. [[https://github.com/bbatsov/crux#keybindi
   (use-package crux
     :ensure t
     :bind(
-          ;; ("C-a" . crux-move-beginning-of-line) ;matikan sebab pakai xah-beginning-of-line-or-block
+          ("C-a" . crux-move-beginning-of-line)
           ("C-k" . crux-smart-kill-line) ;first kill end of line then kill whole line
           ("C-<backspace>" . crux-kill-line-backwards)
           ("C-c r" . crux-rename-file-and-buffer) ;rename current buffer
@@ -2274,31 +2275,6 @@ Tambah fuzzy matching ke Company
 #+END_SRC
 
 * Yasnippet
-** Koleksi snippet
-Koleksi rasmi snippet boleh dimuat turun di [[https://github.com/AndreaCrotti/yasnippet-snippets][GitHub]] atau pakai =use-package
-yasnippet-snippets=. Kemaskinikan package dengan =M-x package-refresh-contents=
-sekiranya snippets tidak dapat dipasang.
-
-Snippet persendirian di simpan di =Dropbox/snippets=. Bila buat snippet persendirian
-extention nama fail harus pakai =.yas= supaya snippet mode diaktifkan secara
-automatik. Folder harus dinamakan mengikut mode contohnya =latex-mode= atau
-=org-mode=. Sekiranya ingin buat snippet sendiri boleh baca di [[http://pragmaticemacs.com/emacs/smart-text-templates-with-yasnippet/][sini]].
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package yasnippet-snippets
-    :ensure t
-    :pin melpa
-    ;; Snippets diletak di sini
-    ;; ~/.emacs.d/elpa/yasnippet-snippets-20181020.1423/snippets
-    )
-#+END_SRC
-
-Untuk ESS-snippet boleh muat turun di [[https://github.com/mattfidler/yasnippet-ess-mode.git][GitHub]].
-
-#+BEGIN_EXAMPLE
-git clone https://github.com/mattfidler/yasnippet-ess-mode.git
-#+END_EXAMPLE
-
 ** Aturcara yasnippet
 *** Cara 1
 Untuk dapatkan templete di Emacs. Sila rujuk [[https://www.emacswiki.org/emacs/Yasnippet][EmacsWiki]] untuk [[https://github.com/joaotavora/yasnippet][Yasnippet]]. Untuk buat snippets boleh baca di [[https://joaotavora.github.io/yasnippet/snippet-development.html][sini]].
@@ -2380,9 +2356,10 @@ dengan =Ctrl-TAB= utk buka snippet. Untuk next atau previous pakai =Shift-TAB=
     :ensure t
     :init
     ;; Guna snippet sendiri (bukan bundled punya)
-    (setq yas-snippet-dirs '("~/Dropbox/snippets"))
+    (setq yas-snippet-dirs '("~/Dropbox/snippets"
+                             "~/Dropbox/snippets-test"))
     (yas-global-mode 1)
-
+    :mode ("\\.yas" . snippet-mode) ;aktifkan mode bila ada fail dengan .yas
     :config
     ;; ;; Matikan TAB
     ;; (eval-after-load 'yasnippet
@@ -2450,6 +2427,31 @@ dengan =Ctrl-TAB= utk buka snippet. Untuk next atau previous pakai =Shift-TAB=
 
     )
 #+END_SRC
+
+** Koleksi snippet
+Koleksi rasmi snippet boleh dimuat turun di [[https://github.com/AndreaCrotti/yasnippet-snippets][GitHub]] atau pakai =use-package
+yasnippet-snippets=. Kemaskinikan package dengan =M-x package-refresh-contents=
+sekiranya snippets tidak dapat dipasang.
+
+Snippet persendirian di simpan di =Dropbox/snippets=. Bila buat snippet persendirian
+extention nama fail harus pakai =.yas= supaya snippet mode diaktifkan secara
+automatik. Folder harus dinamakan mengikut mode contohnya =latex-mode= atau
+=org-mode=. Sekiranya ingin buat snippet sendiri boleh baca di [[http://pragmaticemacs.com/emacs/smart-text-templates-with-yasnippet/][sini]].
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package yasnippet-snippets
+    :ensure t
+    :pin melpa
+    ;; Snippets diletak di sini
+    ;; ~/.emacs.d/elpa/yasnippet-snippets-20181020.1423/snippets
+    )
+#+END_SRC
+
+Untuk ESS-snippet boleh muat turun di [[https://github.com/mattfidler/yasnippet-ess-mode.git][GitHub]].
+
+#+BEGIN_EXAMPLE
+git clone https://github.com/mattfidler/yasnippet-ess-mode.git
+#+END_EXAMPLE
 
 * Parentheses
 ** Smartparens
@@ -5276,7 +5278,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     :bind
     (:map ess-mode-map ;ESS
           ("C-c s" . run-shiny-app)
-          ("C-a" . xah-beginning-of-line-or-block) ;cara lain boleh pakai crux-move-beginning-of-line
+          ("C-a" . crux-move-beginning-of-line)
           ("M--" . ess-insert-assign) ; assign <-
           ("_"   . self-insert-command)
           ("M-+" . my/dt-update)
