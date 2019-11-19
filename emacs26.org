@@ -1,6 +1,6 @@
 #+AUTHOR: Yusman Kamaleri
-#+TITLE: Aturcare Emacs versi 25.2
-#+DATE: 07 Nov 2018
+#+TITLE: Aturcare Emacs versi 26.1
+#+DATE: 05 Jan 2019
 #+OPTIONS: toc:nil
 #+PROPERTY: header-args :comments org :catch yes :results silent :tangle yes
 
@@ -40,8 +40,6 @@ Format UTF-8. Tapi =org-mode= bullet jadi kecil itulah dimatikan
 #+END_SRC
 
 * Hydra
-Hydra guna terus melalui =use-package=.
-
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package hydra
     :ensure t
@@ -54,13 +52,6 @@ Hydra guna terus melalui =use-package=.
       ;; (set-face-attribute 'hydra-face-pink     nil :foreground "HotPink1"   :bold t)
       ;; (set-face-attribute 'hydra-face-teal     nil :foreground "#367588"    :bold t)
       (hydra-add-font-lock)))
-#+END_SRC
-
-Pakai =use-pakcage-hydra=
-
-#+BEGIN_SRC emacs-lisp
-  (use-package use-package-hydra
-    :ensure t)
 #+END_SRC
 
 Fungsi-fungsi di bawah diambil dari [[https://github.com/abo-abo/hydra/wiki/Emacs][Hydra Wiki]]
@@ -117,9 +108,8 @@ Senarai kekunci yang dipakai
 |         |                      |
 
 ** Key chord
-Untuk membuat kekunci singkatan dengan hanya dua huruf. Rujukan [[http://www.emacswiki.org/emacs/key-chord.el][Key Chord Mode]]. Sudah
-dihentikan dan dimasukkan sebagai sebahagian dari =use-package=.
-#+BEGIN_SRC emacs-lisp :tangle no
+Untuk membuat kekunci singkatan dengan hanya dua huruf. Rujukan [[http://www.emacswiki.org/emacs/key-chord.el][Key Chord Mode]]
+#+BEGIN_SRC emacs-lisp
   (use-package key-chord
     :ensure t
     :config
@@ -132,15 +122,6 @@ dihentikan dan dimasukkan sebagai sebahagian dari =use-package=.
     (setq key-chord-one-key-delay 0.3) ; default 0.2
     )
 #+END_SRC
-
-Dapatkan pakej dan penggunaannya ialah menggunakan =:chords= seperti meggunakan =:bind=.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package use-package-chords
-    :ensure t
-    :config (key-chord-mode 1))
-#+END_SRC
-
 
 John Cook's post http://www.johndcook.com/blog/2015/02/01/rare-bigrams/
 provides a list of rare bi-grams that would work great for key-chords.
@@ -190,6 +171,7 @@ Namakan fungsi =keluar=.
     (interactive)
     (setq quit t))
 #+END_SRC
+
 ** Saiz kolom
 Saiz untuk sebaris atau kolom ialah 85 =(fill-column)= tetapi sekiranya ingin menukarkan ke saiz
 lain, boleh pakai =set-fill-column= menggunakan =C-:= (asal kekunci ialah C-x f tapi
@@ -217,6 +199,7 @@ Setup utk keymap berkaitan dengan programming
 
   (bind-key "q" #'keluar 'ybk/prog-map)
 #+END_SRC
+
 ** Move keymap [F2]
 Keymap utk pergerakkan
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -244,6 +227,7 @@ Keymap untuk penggunaan berkaitan ESS-R. Cuma aktiv di =ess-mode=
   (bind-key "q" #'keluar 'ybk/r-map)
 
 #+END_SRC
+
 ** Misc keymap [F5]
 Fungsi lain yang berguna dan perlukan singkatan
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -252,13 +236,16 @@ Fungsi lain yang berguna dan perlukan singkatan
 
   (bind-key "q" #'keluar 'ybk/misc-map)
 #+END_SRC
+
 ** Search keymap C-s
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   (bind-keys :prefix "C-s"
              :prefix-map ybk/search-map)
 
   ;; (bind-key "q" #'keluar 'ybk/search-map)
 #+END_SRC
+
 * Directory sendiri
 ** Customize file
 #+BEGIN_SRC emacs-lisp
@@ -291,7 +278,7 @@ It's nice to have a function to find this file quickly. Here's one:
   (defun ybk/emacs-file ()
     "Open my emacs org file"
     (interactive)
-    (find-file (concat user-emacs-directory "emacs25.org")))
+    (find-file (concat user-emacs-directory "emacs26.org")))
 
   ;; (bind-key "y" #'ybk/emacs-file 'ybk/map)
 #+END_SRC
@@ -334,7 +321,7 @@ Save buffer and exit
   (bind-key "9" #'save-buffers-kill-emacs 'ybk/map )
 #+END_SRC
 ** Scratch buffer
-Untuk buka ~scratch~ boleh dicapai melalui [[*General keymap][General keymap]] atau [[*Personal keymap %5BF10%5D][Personal keymap]]
+Untuk buka ~scratch~ boleh dicapai melalui [[*General keymap %5Bjm%5D][General keymap]] atau [[*My personal hydra keymaps][personal hydra keymaps]].
 #+BEGIN_SRC emacs-lisp
   (defun ybk/get-scratch ()
     "Switch to scratch buffer."
@@ -484,13 +471,8 @@ Sembunyikan tetikus masa menaip
   (mouse-avoidance-mode 'banish)
 #+END_SRC
 ** Komen region
-Komen bahagian teks selepas di-highlight
-#+BEGIN_SRC emacs-lisp :tangle no
-  (global-set-key (kbd "M-'") 'comment-or-uncomment-region)
-#+END_SRC
-
 Kommen line tanpa perlu highlight seperti menggunakan
-=comment-or-uncommment-region=. Barisan yang ada kursor akan di komen. Cara ini
+~comment-or-uncommment-region~. Barisan yang ada kursor akan di komen. Cara ini
 diambil dari [[  (global-set-key (kbd "M-'") 'comment-or-uncomment-region)][StackOverflow]]
 
 #+BEGIN_SRC emacs-lisp
@@ -647,11 +629,7 @@ confict dengan ~Polymode~ code chuck.
 #+END_SRC
 ** Find-file
 Cari fail guna =C-x C-f= dan buat folder sekiranya belum tersedia seperti guna =mkdir
--p= di terminal. Di ambil dari [[https://superuser.com/questions/131538/can-i-create-directories-that-dont-exist-while-creating-a-new-file-in-emacs][StackOverflow]].
-
-#+BEGIN_EXAMPLE
-  ~/folder/baru/file.baru
-#+END_EXAMPLE
+-p= di terminal
 
 #+BEGIN_SRC emacs-lisp
   (defadvice find-file (before make-directory-maybe (filename &optional wildcards) activate)
@@ -683,14 +661,14 @@ Pakai mouse =C-Scroll=
 
 ** Line number
 Tunjukkan line number
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (defun ybk/line-nr ()
     "Tunjukkan nombor garisan."
     (linum-mode 1))
 
   ;;program mode
   (add-hook 'org-src-mode-hook #'ybk/line-nr)
-  (add-hook 'inferior-ess-mode-hook  #'ybk/line-nr)
+  ;; (add-hook 'inferior-ess-mode-hook  #'ybk/line-nr)
   (add-hook 'LaTeX-mode-hook  #'ybk/line-nr)
   (add-hook 'markdown-mode-hook  #'ybk/line-nr)
   (add-hook 'ess-mode-hook #'ybk/line-nr)
@@ -712,8 +690,23 @@ Ini adalah noise sahaja, untuk matikan amaran ini boleh baca dari [[https://andr
 #+BEGIN_SRC emacs-lisp
   (setq ad-redefinition-action 'accept)
 #+END_SRC
+** Suspend-frame
+Bila pakai =C-x C-z= akan menjadikan frame freeze. Kurang pasti bila fungsi ini
+diperlukan. Oleh sebab itu ia dimatikan:
+
+#+BEGIN_SRC emacs-lisp
+  (global-unset-key (kbd "C-x C-z"))
+#+END_SRC
+
+Sekiranya frame freeze boleh pakai terminal dan larikan komando ini:
+
+#+BEGIN_example
+  xkill -frame $emacs
+#+END_example
+
 ** Copy file path
 Cara untuk menyalin file path di buffer yang sedang digunakan.
+
 #+BEGIN_SRC emacs-lisp
   (defun xah-copy-file-path (&optional @dir-path-only-p)
     "Copy the current buffer's file path or dired path to `kill-ring'.
@@ -748,233 +741,7 @@ Cara untuk menyalin file path di buffer yang sedang digunakan.
 
   (global-set-key (kbd "C-c d") 'xah-copy-file-path)
 #+END_SRC
-** Change window
-#+BEGIN_SRC emacs-lisp
-  (defhydra hydra-other-window
-    (global-map "C-x"
-                :color red)
-    "other window"
-    ("<right>" other-window "→")
-    ("<left>" (lambda () (interactive) (other-window -1)) "←"))
 
-  ;; Don't show hint
-  (hydra-set-property 'hydra-other-window :verbosity 0)
-#+END_SRC
-
-* Version control
-
-| Kekunci | Fungsi           |
-|---------+------------------|
-| f12-g   | hydra-magit/body |
-| C-x g s | Magit-status     |
-| C-x g c | Magit-clone      |
-| C-x g p | Magit-pull       |
-
-
-| Git options | Fungsi                              |
-|-------------+-------------------------------------|
-| fetch --all | fetch semua                         |
-| branch -v   | Tunjuk last commit utk semua branch |
-| branch -vv  | Tunjuk tracking branches            |
-| branch -u   | Tetapkan upstream                   |
-
-** Git
-Untuk pakai git command line:
-- Utk periksa last commit. Boleh pakai salah satu
-#+BEGIN_EXAMPLE
-  git log -1 --stat
-  git show
-#+END_EXAMPLE
-** Magit
-Utk guna Github. Utk kali pertama perlu =git config= di
-terminal. Sekiranya masalah utk pasang dari *Melpa* coba =M-x
-package-refresh-contents=
-
-#+BEGIN_EXAMPLE
-  git config --global user.name "bla bla bla"
-  git config --global user.email "youremail@uremail.com"
-#+END_EXAMPLE
-
-#+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :ensure t
-    :commands magit-get-top-dir
-    ;;:pin melpa-stable
-    :bind (("C-x g s" . magit-status)
-           ("C-x g c" . magit-clone)
-           ("C-x g p" . magit-pull)
-           ("C-x g l" . magit-log-buffer-file)
-           ("C-x g b" . magit-blame)
-           ("C-x g m" . hydra/magit-body))
-    :init
-    (progn
-      ;; we no longer need vc-git
-      (delete 'Git vc-handled-backends)
-      ;; make magit status go full-screen but remember previous window
-      ;; settings
-      ;; from: http://whattheemacsd.com/setup-magit.el-01.html
-      (defadvice magit-status (around magit-fullscreen activate)
-        (window-configuration-to-register :magit-fullscreen)
-        ad-do-it
-        (delete-other-windows))
-
-      ;; Close popup when commiting - this stops the commit window
-      ;; hanging around
-      ;; From: http://git.io/rPBE0Q
-      (defadvice git-commit-commit (after delete-window activate)
-        (delete-window))
-
-      (defadvice git-commit-abort (after delete-window activate)
-        (delete-window))
-
-      ;; these two force a new line to be inserted into a commit window,
-      ;; which stops the invalid style showing up.
-      ;; From: http://git.io/rPBE0Q
-      (defun magit-commit-mode-init ()
-        (when (looking-at "\n")
-          (open-line 1)))
-
-      (add-hook 'git-commit-mode-hook 'magit-commit-mode-init)
-
-      ;;  ;;== Hydra magit ===
-      ;;  (defhydra hydra-magit (:color teal
-      ;;     :column 5)
-      ;; "Magit"
-      ;; ("s" magit-status "status")
-      ;; ("f" magit-fetch "fetch")
-      ;; ("d" magit-diff "diff")
-      ;; ("c" magit-clone "clone")
-      ;; ("p" magit-pull "pull")
-      ;; ("m" magit-merge "merge")
-      ;; ("o" magit-checkout "checkout")
-      ;; ("b" magit-branch-popup "branch manager")
-      ;; ("u" magit-branch-and-checkout "branch and checkout")
-      ;; ("l" magit-log "log")
-      ;; ("!" magit-git-command "command")
-      ;; ("$" magit-process "process")
-      ;; ("q" nil "quit" :color red))
-
-      (defhydra hydra-magit (:hint nil)
-
-        "
-   ^Kunci magit/GIT^
-   ^^^^^^^^----------------
-   _s_: status     _f_: fetch      _o_: checkout    _b_: branch manager        _k_: branch delete
-   _d_: diff       _c_: clone      _l_: log buffer  _u_: branch and checkout   _!_: command
-   _p_: pull       _m_: merge      _L_: log         _U_: branch orphan         _a_: blame          _q_: keluar
-
-        "
-        ("s" magit-status)
-        ("f" magit-fetch)
-        ("d" magit-diff)
-        ("c" magit-clone)
-        ("p" magit-pull )
-        ("m" magit-merge)
-        ("o" magit-checkout)
-        ("b" magit-branch-popup)
-        ("u" magit-branch-and-checkout)
-        ("U" magit-branch-orphan)
-        ("L" magit-log)
-        ("l" magit-log-buffer-file)
-        ("!" magit-git-command)
-        ("k" magit-branch-delete)
-        ("a" magit-blame-popup)
-        ("q" (message "Selesai") :exit t)
-        )
-
-      ;;(key-chord-define-global "jg" #'hydra-magit/body)
-      (key-seq-define-global "jg" #'hydra-magit/body)
-      (bind-key "g" #'hydra-magit/body 'ybk/prog-map)
-      )
-
-    :config
-    ;; restore previously hidden windows
-    (defadvice magit-quit-window (around magit-restore-screen activate)
-      (let ((current-mode major-mode))
-        ad-do-it
-        ;; we only want to jump to register when the last seen buffer
-        ;; was a magit-status buffer.
-        (when (eq 'magit-status-mode current-mode)
-          (jump-to-register :magit-fullscreen))))
-
-    (defun magit-maybe-commit (&optional show-options)
-      "Runs magit-commit unless prefix is passed"
-      (interactive "P")
-      (if show-options
-          (magit-key-mode-popup-committing)
-        (magit-commit)))
-
-    ;;  ;; major mode for editing `git rebase -i` files
-    ;;  (use-package rebase-mode
-    ;; :defer 2)
-
-    (define-key magit-mode-map "c" 'magit-maybe-commit)
-
-    ;; magit settings
-    (setq
-     ;; use ivy to look for branches
-     magit-completing-read-function 'ivy-completing-read
-     ;; don't put "origin-" in front of new branch names by default
-     magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
-     ;; open magit status in same window as current buffer
-     magit-status-buffer-switch-function 'switch-to-buffer
-     ;; highlight word/letter changes in hunk diffs
-     magit-diff-refine-hunk t
-     ;; ask me if I want to include a revision when rewriting
-     magit-rewrite-inclusive 'ask
-     ;; ask me to save buffers
-     magit-save-some-buffers t
-     ;; pop the process buffer if we're taking a while to complete
-     magit-process-popup-time 30
-     ;; ask me if I want a tracking upstream
-     magit-set-upstream-on-push 'askifnotset
-     ))
-#+END_SRC
-
-#+RESULTS:
-** Diff highlights
-Menanda secara langsung pertukaran di dokument. Rujuk [[https://github.com/nonsequitur/git-gutter-plus][Github]].
-"+" menandakan tambahan dan "¤" menandakan pertukaran
-
-#+BEGIN_SRC emacs-lisp
-  (use-package git-gutter+
-    :ensure t
-    :diminish git-gutter+-mode
-    :init
-    (global-git-gutter+-mode)
-    :bind (("s-g" . git-gutter+-mode)
-           :map git-gutter+-mode
-           ("C-x c" . git-gutter+-commit)
-           ("C-x C" . git-gutter+-stage-and-commit)) ;on/off current-buffer
-    :config
-    (setq git-gutter+-modified-sign "¤"))
-#+END_SRC
-
-** Cara pakai repo baru
-Cara utk memuatpasang repo baru ke =Github= ialah:
-+ Buat Repo baru di [[https://github.com][Github]] samada [[https://github.com/yusbk][Personal]] atau [[https://github.com/ybkamaleri][Work]]
-+ =M-x magit-init= utk branch repo baru
-+ Sahkan repo baru di =Github=
-+ Pilih fails utk dimasukkan ke =stage= dgn menekan kekunci =s=
-+ =Commit= dengan menekan kekunci =c= dan tulis maklumat utk =commit=
-+ =C-c C-c= utk =commit=
-+ =M-x magit-remote-add= utk menetapkan =remote add origin= seperti menggunakkan
-  komando di =git=
-+ Berikan =remote name= cth. aimPlot
-+ Berikan =remote URL= cth. https://github.com/yusbk/InitEmacs.git atau pakai kekunci
-  =SSH= sekiranya sudah dipasang. Utk alamat url yg betul boleh dikopi dari Github
-+ =M-x f= utk tarikturun (=fetch/pull=) sebarang fail yg terdapat di repo
-  cth. README.md sebelum =push=. Fail yg sama nama di =master= harus dibuang
-+ =M-x p= utk muatpasang atau =push= *master* ke *origin* di repo baru.
-
-** Tips and tricks
-Beberapa tips utk membantu memudahkan penggunaan =Magit=
-
-+ "Branch manager" =magit-show-refs-popup= kekunci ialah =y=.
-+ Buang commit di 'remote' boleh pakai force push =P -fp= utk push-remote atau =P
-  -fu= utk upstream.
-+ Utk ambil repo baru pakai =M-x magit-clone=
-  https://github.com/<pengguna>/<repo.git>
 * Winner mode
 
 Gunakan =C-c <left>= and =C-c <right>= untuk kembali ke buffer sebelumnya
@@ -1121,7 +888,7 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
     (defface yus-aktif1 '((t (:background "#900" :inherit mode-line))) ;#a2e #2a5289 #4c52ee #179 #cfdfff #00d9ff #19a
       "Powerline muka 1."
       :group 'powerline)
-    (defface yus-aktif2 '((t (:background "#586e75" :inherit mode-line))) ;#2c5197 #a25ec3 #a19 #8b008b #369 #3a11ff #28a #a669ef #4c56aa
+    (defface yus-aktif2 '((t (:background "#35f" :inherit mode-line))) ;#2c5197 #a25ec3 #a19 #8b008b #369 #3a11ff #28a #a669ef #4c56aa
       "Powerline muka 2."
       :group 'powerline)
     (defface yus-tidak-aktif1 '((t (:background "#012" :inherit mode-line-inactive))) ;#1a5aee #35f #a25fff #586e75
@@ -1130,7 +897,7 @@ Sekiranya =moe-theme= dipakai maka matikan source-code di bawah.
     (defface yus-tidak-aktif2 '((t (:background "gray30" :inherit mode-line-inactive))) ;#273f87 #5478e4 #93a1a1 #900
       "Powerline muka 2."
       :group 'powerline)
-    (defface yus-hujung '((t (:background "#5478e4" :inherit mode-line)))
+    (defface yus-hujung '((t (:background "grey25" :inherit mode-line)))
       "Powerline muka 1."
       :group 'powerline)
     (defface yus-buffer-id-tidak-aktif
@@ -1259,11 +1026,11 @@ jumpa cara lain.
     :config
     ;; utk tukar tema f10-t
     (setq my-themes '(
-                      ;;sanityinc-tomorrow-eighties
                       sanityinc-tomorrow-night
+                      sanityinc-tomorrow-eighties
                       sanityinc-tomorrow-blue
                       sanityinc-tomorrow-bright
-                      sanityinc-tomorrow-day
+                      ;; sanityinc-tomorrow-day
                       ))
 
 
@@ -1660,8 +1427,7 @@ Boleh di lihat di [[https://github.com/xuchunyang/eshell-git-prompt][sini]]
   (use-package eshell-git-prompt
     :ensure t
     :config
-    (eshell-git-prompt-use-theme 'powerline)
-    )
+    (eshell-git-prompt-use-theme 'powerline))
 #+END_SRC
 *** Eshell-git-extras
 Boleh lihat di [[https://github.com/kaihaosw/eshell-prompt-extras][sini]]. Tema samada ~epe-theme-lambda~ atau ~epe-theme-dakrone~
@@ -1676,66 +1442,6 @@ Boleh lihat di [[https://github.com/kaihaosw/eshell-prompt-extras][sini]]. Tema 
             eshell-prompt-function 'epe-theme-dakrone))
     )
 #+END_SRC
-*** Manually settings
-**** TODO Diambil dari [[https://www.reddit.com/r/emacs/comments/6f0rkz/my_fancy_eshell_prompt/][Reddit]].
-Company tidak berfungsi disini ~backend company-capf~
-#+BEGIN_SRC emacs-lisp :tangle no
-  (defun git-prompt-branch-name ()
-    "Get current git branch name"
-    (let ((args '("symbolic-ref" "HEAD" "--short")))
-      (with-temp-buffer
-        (apply #'process-file "git" nil (list t nil) nil args)
-        (unless (bobp)
-          (goto-char (point-min))
-          (buffer-substring-no-properties (point) (line-end-position))))))
-
-  (setq eshell-prompt-function
-        (lambda ()
-          (concat
-           (propertize "┌─[" 'face `(:foreground "green"))
-           (propertize (user-login-name) 'face `(:foreground "red"))
-           (propertize "@" 'face `(:foreground "green"))
-           (propertize (system-name) 'face `(:foreground "blue"))
-           (propertize "]──[" 'face `(:foreground "green"))
-           (propertize (format-time-string "%H:%M" (current-time)) 'face `(:foreground "yellow"))
-           (propertize "]──[" 'face `(:foreground "green"))
-           (propertize (concat (eshell/pwd)) 'face `(:foreground "white"))
-           (propertize "]-[" 'face `(:foreground "green"))
-           (propertize (git-prompt-branch-name) 'face `(:foreground "orange"))
-           (propertize "]\n" 'face `(:foreground "green"))
-           (propertize "└─>" 'face `(:foreground "green"))
-           (propertize (if (= (user-uid) 0) " # " " $ ") 'face `(:foreground "green"))
-           ))
-        eshell-prompt-regexp  "^$ "
-        )
-#+END_SRC
-
-**** Pembahagi warna putih [[https://www.emacswiki.org/emacs/EshellPrompt][EmacsWiki]].
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (defmacro with-face (str &rest properties)
-    `(propertize ,str 'face (list ,@properties)))
-
-  (defun shk-eshell-prompt ()
-    (let ((header-bg "#fff"))
-      (concat
-       (with-face (concat (eshell/pwd) " ") :background header-bg)
-       (with-face (format-time-string "(%Y-%m-%d %H:%M) " (current-time)) :background header-bg :foreground "#888")
-       (with-face
-        (or (ignore-errors (format "(%s)" (vc-responsible-backend default-directory))) "")
-        :background header-bg)
-       (with-face "\n" :background header-bg)
-       (with-face user-login-name :foreground "blue")
-       "@"
-       (with-face "localhost" :foreground "green")
-       (if (= (user-uid) 0)
-           (with-face " #" :foreground "red")
-         " $")
-       " ")))
-  (setq eshell-prompt-function 'shk-eshell-prompt)
-  (setq eshell-highlight-prompt nil)
-#+END_SRC
-
 ** Shell pop
 Boleh guna key-chort =-t= untuk pakai selain dari =C-x t=
 
@@ -1796,17 +1502,6 @@ Setting lain termasuk proses di inferior =R= yang dipakai oleh =ESS=
   (setq comint-scroll-to-bottom-on-output t)
   (setq comint-move-point-for-output t)
 #+END_SRC
-** Tips
-Pelbagai tips dan cara guna linux komando
-*** Buat fail ke folder baru
-Bila kopi fail ke distinasi baru dan ingin buat folder baru di distinasi guna ~rsync~
-
-#+BEGIN_EXAMPLE
-  rsync --recursive nama.fail ~/Distinasi/folder/baru/
-  rsync --recursive isi.folder/ ~/Distinasi/folder/baru/
-#+END_EXAMPLE
-
-Bila ingin kopi semua isi kandungan di folder pakai cara yang ke dua dengan pemakaian ~/~.
 
 * Recent files
 Utk tetapkan kekerapan menyimpan =recentf= supaya "recent file" tidak hilang kalau
@@ -1828,6 +1523,7 @@ ditetapkan di =Ivy= atau =C-x C-r= dari [[https://www.emacswiki.org/emacs/Recent
     ;; Kekerapan utk simpan file
     (run-at-time nil (* 10 60) 'recentf-save-list))
 #+END_SRC
+
 * Find or replace text
 Untuk cari atau cari dan tukar teks di direktori. Diambil dari [[https://github.com/xahlee/xah-find][GitHub]]. Antara fungsi
 yang boleh dipakai:
@@ -2356,6 +2052,34 @@ Diambil dari [[https://www.emacswiki.org/emacs/InsertFileName][Wiki]]. Cari fail
                               (insert (file-name-nondirectory (replace-regexp-in-string "/\\'" "" x)))))
                       "insert file name without any directory information")))
 #+END_SRC
+** Ivy-extra
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy-rich :ensure
+    :config
+    (ivy-rich-mode 1)
+
+    ;; To abbreviate paths using abbreviate-file-name (e.g. replace “/home/username” with “~”
+    (setq ivy-rich-path-style 'abbrev)
+
+    (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+    )
+#+END_SRC
+
+* Swiper
+Untuk memudahkan pencarian di buffer. Untuk fungsi =cari & tukar= (search & replace)
+mula dengan cari =C-s= dan kemudian =M-q= utk perkataan yang ingin ditukarkan. Kemudian
+=SPC= atau "Y" utk laksanakan pertukaran
+
+#+BEGIN_SRC emacs-lisp
+  (use-package swiper
+    :ensure t
+    :bind (("C-s s" . swiper)
+           ;; ("C-r" . swiper) ;C-r pakai utk ivy-resume
+           ("C-c m" . woman) ;manual
+           ("C-c u" . swiper-all))
+    :diminish ivy-mode)
+#+END_SRC
 
 * Counsel
 A collection of Ivy-enhanced versions of common Emacs commands. Pakai =M-o= utk buka
@@ -2392,21 +2116,6 @@ actions bila di Ivy minibuffer. Atau =C-o= utk Counsel commands
            "\\(?:\\`[#.]\\)"
            ;; File names ending with # or ~
            "\\|\\(?:\\`.+?[#~]\\'\\)")))
-#+END_SRC
-
-* Swiper
-Untuk memudahkan pencarian di buffer. Untuk fungsi =cari & tukar= (search & replace)
-mula dengan cari =C-s= dan kemudian =M-q= utk perkataan yang ingin ditukarkan. Kemudian
-=SPC= atau "Y" utk laksanakan pertukaran
-
-#+BEGIN_SRC emacs-lisp
-  (use-package swiper
-    :ensure t
-    :bind (("C-s s" . swiper)
-           ;; ("C-r" . swiper) ;C-r pakai utk ivy-resume
-           ("C-c m" . woman) ;manual
-           ("C-c u" . swiper-all))
-    :diminish ivy-mode)
 #+END_SRC
 
 * Avy-goto
@@ -2463,6 +2172,7 @@ Guna seperti =ace-jump-mode= untuk mencari perkataan kemudian taip
     ;;(key-chord-define-global "qg" #'hydra-avy-goto/body)
     )
 #+END_SRC
+
 * Amx
 Cara alternatif utk pemakaian =M-x=. Boleh dibaca di [[https://github.com/DarwinAwardWinner/amx/][GitHub]]. Untuk matikan pakai =M-x amx-mode=.
 
@@ -2504,8 +2214,10 @@ tunggu 1 saat. Untuk masalah di =eshall= bila pakai estrisk (*) boleh pakai quot
                 ("C-d" . company-show-doc-buffer)
                 ("<tab>" . company-complete))
     :init
-    (add-hook 'after-init-hook 'global-company-mode) ;aktifkan disemua buffer
+    ;; (add-hook 'after-init-hook 'global-company-mode) ;aktifkan disemua buffer
     :config
+    (global-company-mode t) ;aktifkan disemua buffer
+
     ;; Use Company for completion
     (bind-key [remap completion-at-point] #'company-complete company-mode-map)
 
@@ -2627,6 +2339,16 @@ Tambah fuzzy matching ke Company
     :ensure t
     :config
     (company-flx-mode +1))
+#+END_SRC
+*** Completing
+Sumber dari [[https://github.com/company-mode/company-statistics][sini]]. Buat log completion yang dipakai dan akan disusun mengikut
+kekerapan.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-statistics
+    :ensure t
+    :after company
+    :hook (after-init . company-statistics-mode))
 #+END_SRC
 
 * Yasnippet
@@ -3016,13 +2738,41 @@ buffer untuk mempercepatkan penulisan, hampir seperti =company=.
     )
 #+END_SRC
 
-* Register dan bookmark
+* Navigation
+Untuk memudahkan pergerakkan di dokument yang sedang dibuka.
 
 | Kekunci | Fungsi            |
 |---------+-------------------|
 | C-f2    | bm-toggle         |
 | M-home  | save point        |
 | M-end   | restore point     |
+
+** Mark
+Cara asas untuk pergerakkan boleh guna fungsi [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Mark.html][mark document]]. Caranya:
+- =C-SPC= set mark dan aktifkan di region
+- =C-SPC C-SPC= set mark (aktifkan dan mematikan)
+- =C-x C-x= berkaitan dengan ~exchange-point-and-mark~
+- =C-u C-SPC= pindah ke mark sebelumnya (utk pergerakkan)
+Selanjutnya boleh dibaca di [[http://ergoemacs.org/emacs/emacs_jump_to_previous_position.html][sini]].
+** Goto Change
+Fungsi [[https://www.emacswiki.org/emacs/GotoChg][Goto Chg]] dipakai untuk kembali ke tempat pertukaran sebelumnya.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package goto-chg
+    :ensure t
+    :bind (("C-x C-<left>" . goto-last-change)
+           ("C-x C-<right>" . goto-last-change-reverse)))
+#+END_SRC
+
+** Goto Last Change
+Fungsi [[https://www.emacswiki.org/emacs/GotoLastChange][Goto Last Change]] hampir sama dengan *Goto Chg* diatas dipakai untuk kembali
+tempat pertukaran sebelumnya.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package goto-last-change
+    :ensure t
+    :bind ("C-x C-\\" . goto-last-change))
+#+END_SRC
 
 ** Register
 Untuk simpan sementara (transient storage) dan hilang bila matikan Emacs. Caranya:
@@ -3189,6 +2939,30 @@ Cara lain untuk pakai bookmark diambil dari [[https://github.com/joodland/bm][Gi
 #+END_SRC
 
 * Projectile
+
+Projek yang diletakkan di github akan mudah dilawati dengan menggunakan =projectile=.
+** Tags
+Utk buat project etags atau gtags. Pertama pasangkan =ctags=.
+
+#+BEGIN_SRC sh
+  sudo apt install ctags
+#+END_SRC
+
+Kemudian pasang =gtags= dari [[https://github.com/leoliu/ggtags][Melpa]].
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ggtags
+    :ensure t
+    :config
+    (add-hook 'c-mode-common-hook
+              (lambda ()
+                (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'ess-r-mode)
+                  (ggtags-mode 1))))
+    )
+#+END_SRC
+
+** Aturcara seterusnya
+
 Utk masukkan projek ke [[http://projectile.readthedocs.io/en/latest/][Projectile]], buka projek fail dan hidupkan =projectile-mode=
 di buffer tersebut. Untuk menggunakan =Projectile= di projek directory, gunakan komman
 =M-x projectile-discover-projects-in-directory= atau kekunci =C-c M-p D=
@@ -3457,6 +3231,7 @@ Utk =quick-preview= sebarang fail menggunakan external tool seperti GNOME Sushi,
     :config
     (define-key dired-mode-map (kbd "Q") 'quick-preview-at-point))
 #+END_SRC
+
 * Graphics
 ** PlantUML
 Major mode untuk edit [[http://plantuml.com/][PlantUML]]. Untuk memastikan plantuml befungsi, pastikan =java=
@@ -3650,7 +3425,7 @@ sila sediakan.
 *** Toggle display
 Untuk tunjukkan sumber link atau kode tersembunyi boleh gunakan =font-lock-mode=
 diaktivkan atau matikan. Cara lain ialah dengan menggunakan fungsi ini yang diambil
-dari [[https://emacs.stackexchange.com/questions/5387/show-org-mode-hyperlink-as-plain-text][StackExchange]]. Shortcut di menu ~jw~.
+dari [[https://emacs.stackexchange.com/questions/5387/show-org-mode-hyperlink-as-plain-text][StackExchange]]
 
 #+BEGIN_SRC emacs-lisp
   (defun org-toggle-link-display ()
@@ -4112,7 +3887,7 @@ Bole lihat di [[https://www.youtube.com/watch?v=2t925KRBbFc][video]]
     :ensure t
     :demand t ; make sure this gets loaded since I use it all the time
     :bind*
-    (("<f5> i" . org-ref-ivy-insert-cite-link)
+    (("<f5> i" . org-ref-helm-insert-cite-link)
      :map bibtex-mode-map
      ;;utk gantikan singkatan nama journal seperti di add-to-journal-list
      ("C-c C-c" . org-ref-clean-bibtex-entry)
@@ -4138,8 +3913,8 @@ Bole lihat di [[https://www.youtube.com/watch?v=2t925KRBbFc][video]]
 
     (bind-key "c" #'hydra-ybk-bibtex/body 'ybk/org-map)
 
-    ;; (setq org-ref-completion-library 'org-ref-helm-bibtex)
-    (setq org-ref-completion-library 'org-ref-ivy-cite) ;pakai ivy utk completion
+    (setq org-ref-completion-library 'org-ref-helm-bibtex)
+    ;; (setq org-ref-completion-library 'org-ref-ivy-cite) ;pakai ivy utk completion
 
     (setq org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
           org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib")
@@ -4150,15 +3925,15 @@ Bole lihat di [[https://www.youtube.com/watch?v=2t925KRBbFc][video]]
     ;; utk masukkan reference list bila eksport ke PDF
     ;; dilarikan beberapa kali utk memastikan cross-references dimasukkan dgn betul
 
-    ;; ;; Default value utk org-latex-pdf-process
-    ;; (setq org-latex-pdf-process
-    ;;       '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %b"
-    ;;         "bibtex %b"
-    ;;         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %b"
-    ;;         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %b"))
+    ;; Default value utk org-latex-pdf-process
+    (setq org-latex-pdf-process
+          '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %b"
+            "bibtex %b"
+            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %b"
+            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %b"))
 
-    ;;pakai latexmk utk prosess - sama seperti fungsi di atas
-    (setq org-latex-to-pdf-process (list "latexmk -pdf %f"))
+    ;;pakai latexmk utk prosess - sama seperti fungsi di atas tapi tidak berhasil proses reference list
+    ;; (setq org-latex-to-pdf-process (list "latexmk -pdf %f"))
 
 
     (defvar my/notes-template
@@ -4310,7 +4085,7 @@ utk sync fail-fail di Orgzly dan komputer lain. Lock to current file =C-u C-c C-
 Selepas pasang versi org-mode 9.1.2, masalah untuk tukar stail
 =org-agenda-time-grid=. Hydra dipakai di =org-agenda-view-mode= dan diambil dari [[http://oremacs.com/2016/04/04/hydra-doc-syntax/][sini]]
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package org-agenda
     :bind
     (("C-c a" . org-agenda)
@@ -5313,6 +5088,7 @@ Untuk menggendali fail csv
     (setq csv-separators '(";"))
     )
 #+END_SRC
+
 * Periksa ejaan (spelling)
 Untuk periksa enjaan
 ** Kerja
@@ -5575,6 +5351,7 @@ dimatikan sebab crash dengan BM
     (add-hook 'markdown-mode-hook 'ybk/auto-lang)
     )
 #+END_SRC
+
 * Periksa kode (flycheck)
 Untuk periksa kode
 ** Flycheck: periksa kode
@@ -5665,12 +5442,14 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
           ("M-." . ess-switch-process) ;sama dengan C-c C-s
           ("M-p" . my/add-pipe)
           ("C-|" . my/ess-eval-pipe-through-line)
+          ("C-M-<return>" . ess-eval-region-or-function-or-paragraph-and-step)
+          ("C-M--" . ess-eval-region-or-function-or-paragraph)
           :map inferior-ess-mode-map ;iESS
           ("M--" . ess-insert-assign)
           ("_"   . self-insert-command)
           ("M-+" . my/dt-update)
           ("M-m" . my/add-match)
-          ("M-<up>" . ess-readline);previous cmd from script
+          ("C-S-<up>" . ess-readline);previous cmd from script
           ;; :map ybk/r-map
           ;; ("." . ess-describe-object-at-point)
           ;; ("d" . ess-dev-map)
@@ -5699,6 +5478,9 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     ;;   (setq ess-use-company t))
     (setq ess-use-company t)
 
+    ;; Quick help
+    (define-key company-active-map (kbd "M-h") 'company-show-doc-buffer)
+
     ;; whitespace
     (setq ess-nuke-trailing-whitespace-p t)
 
@@ -5725,13 +5507,13 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
       "Adds a data.table update."
       (interactive)
       ;;(just-one-space 1) ;delete whitespace around cursor
-      (insert ":="))
+      (insert " := "))
 
     ;; Match
     (defun my/add-match ()
       "Adds match."
       (interactive)
-      (insert "%in%"))
+      (insert " %in% "))
 
     ;; pipe
     (defun my/add-pipe ()
@@ -5796,6 +5578,7 @@ Untuk tukar syntax highlight, boleh guna =menu= dan =Font-lock=
     ;; (global-set-key (kbd "\C-cp") 'ess-readline)
     )
 #+END_SRC
+
 *** ESS snippet
 Diambil dari [[https://github.com/mattfidler/r-autoyas.el][GitHub]]. Pakai =TAB= untuk buka snippet. =Yasnippet= perlu dipasang untuk
 memakai fungsi ini.
@@ -5821,38 +5604,6 @@ memakai fungsi ini.
     ;; Masukkan personal function
     (setq r-autorays-expand-package-functions-only nil))
 #+END_SRC
-*** Org template for R
-Masukkan template ke Org-mode bila ingin memakai ESS. Cara ini diambil dari [[https://orgmode.org/worg/org-contrib/babel/how-to-use-Org-Babel-for-R.html][sini.]]
-
-#+BEGIN_SRC emacs-lisp
-  (define-skeleton org-skeleton
-    "Header info for a emacs-org file."
-    "Title: "
-    "#+TITLE:" str " \n"
-    "#+AUTHOR: Yusman Kamaleri \n"
-    "#+email:  jobb@privat \n"
-    "#+INFOJS_OPT: \n"
-    "#+BABEL: :session *R* :cache yes :results output graphics :exports both :tangle yes \n"
-    "-----"
-    )
-  (global-set-key [C-S-f4] 'org-skeleton)
-#+END_SRC
-
-Penerangan:
-- The [[https://orgmode.org/org.html][#+INFOJS_OPT]] option will generat a HTML document that is foldable and follows
-  the style of GNU/INFO document. Example: #+INFOJS_OPT: view:info
-- The :session *R* option makes sure all the R code is run in the same session so
-  objects generated in one code block can be accessed from other code blocks.
-- the :cache yes option is used to avoid re-evaluating unchanged code blocks. This
-  can save significant time when you revise a document with a lot of R code
-  frequently.
-- The :results output graphics :exports both option will put both the R code and its
-  text and graphics output in the generated document.
-- The :tangle yes option allows the document to be "tangled" to generate pure code
-  file. The short-cut key for tangling is C-c C-v t, which generates a .R file with
-  all the R code extracted.
-- Note the "–—" string will generate a horizontal line in HTML file.
-
 *** Deploy shiny app
 
 |----+-----------|
@@ -6068,6 +5819,18 @@ semula ke R gunakan kekunci =C-x q=
   (use-package ess-view
     :ensure t)
 #+END_SRC
+*** Tips
+Beberapa tips yang boleh memudahkan kerja:
+
+1. data.table
+Bila pakai =data.table= untuk memmakai /autocomplete/ boleh guna =M-/=. Contohnya
+untuk dapatkan nama variable =Inn_konts= di DT, boleh taip =M-/= selepas =Inn=:
+
+#+BEGIN_EXAMPLE
+DT[Inn{M-/}]
+#+END_EXAMPLE
+
+
 ** Stata
 Untuk guna Stata di ESS
 *** Tetapkan dimana Stata dipasang
@@ -6129,6 +5892,11 @@ Of course, markdown contains a yaml header, so we need yaml-mode as well:
     :ensure t
     :mode (("\\.yml\\'" . yaml-mode)))
 #+END_SRC
+
+** Tips
+- Untuk tunjuk atau sembunyikan =heading= boleh pakai =Shift-Tab= bila cursor di
+  header.
+
 * Polymode (for knitr)
 Mode ini dipakai untuk membuat dokumen yang menggunakan program R.
 ** Aturcara
@@ -6158,117 +5926,76 @@ Default key to access polymode is =M-n=. Markdown atau Pandoc diperlukan utk pro
 
 NB! Utk aktifkan ~ess-company~ dan ~ElDoc~ utk bantuan function call args di R-chuck mesti buka R-prog di background dulu
 
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package polymode
+#+BEGIN_SRC emacs-lisp
+  ;; Code highlighting via polymode
+  (use-package markdown-mode
     :ensure t
-    :config
-    (defun insert-r-chunk ()
-      (interactive)
-      (insert "```{r}
-
-                ``` ")))
-
-  (use-package poly-R
-    :ensure t)
-
-  (use-package poly-noweb
-    :ensure t)
-
-
-  (use-package poly-markdown
-    :ensure t
-    :pin melpa
-    :after hydra
-    :bind (:map ybk/prog-map
-                ("c" . rmd-insert-r-chunk)
-                ("r" . rmd-eval-chunk)
-                ("t" . rmd-eval-buffer)
-                ("d" . poly-ess-rmarkdown)
-                )
+    :mode
+    (("README\\.md\\'" . gfm-mode)
+     ("\\.md\\'" . markdown-mode)
+     ("\\.markdown\\'" . markdown-mode))
     :init
-    ;; Hydra
-    (defhydra hydra-ybk-poly (:hint nil)
-      "
-     ^Polymode^                        ^Markdown^
-     ^----------------------------------------------------------------------------------
-     _n_: next      _e_: evaluate      _c_: insert chk     _f_: Fold chk      _d_: Create html
-     _p_: previous  _w_: weave         _t_: eval. buffer   _a_: Fold all chk
-     _k_: kill      _E_: set exporter  _r_: eval. chk      _u_: Unfold chk    _q_: KELUAR
+    (setq markdown-command "markdown")
+    )
 
-     Rnw guna '<' utk masukkan chunck baru
-     "
-      ("n" polymode-next-chunk-same-type)
-      ("p" polymode-previous-chunk-same-type)
-      ("k" polymode-kill-chunk)
-
-      ("e" polymode-export)
-      ("w" polymode-weave)
-      ("E" polymode-set-exporter)
-
-      ("c" rmd-insert-r-chunk)
-      ("r" rmd-eval-chunk)
-      ("t" rmd-eval-buffer)
-
-      ("f" rmd-fold-block)
-      ("a" rmd-fold-all-blocks)
-      ("u" fold-this-unfold-all)
-
-      ("d" poly-ess-rmarkdown)
-      ;; ("q" nil "keluar" :color red)
-      ("q" (message "Selesai") :exit t)
-      )
-
-    ;;==key ikut urutan
-    (key-seq-define-global "js" 'hydra-ybk-poly/body))
-
-
-  ;; (use-package poly-markdown
-  ;;   :ensure t)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp :tangle no
   (use-package polymode
+    :ensure markdown-mode
+    :ensure poly-R
+    :ensure poly-noweb
     :config
-    (defun insert-r-chunk ()
-      (interactive)
-      (insert "```{r}
+    ;; R/tex polymodes
+    (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
+    (add-to-list 'auto-mode-alist '("\\.rnw" . poly-noweb+r-mode))
+    (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+    ;; org-mode poly (not working at the moment)
+    ;; (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode))
+    ;; Make sure r-mode is loaded
+    ;; (autoload 'r-mode "ess-site.el" "Major mode for editing R source." t)
 
-              ``` ")))
+    ;; Add a chunk for rmarkdown
+    ;; Need to add a keyboard shortcut
+    ;; https://emacs.stackexchange.com/questions/27405/insert-code-chunk-in-r-markdown-with-yasnippet-and-polymode
+    ;; (defun insert-r-chunk (header)
+    ;;   "Insert an r-chunk in markdown mode. Necessary due to interactions between polymode and yas snippet"
+    ;;   (interactive "sHeader: ")
+    ;;   (insert (concat "```{r " header "}\n\n\n```"))
+    ;;   (forward-line -2))
+    ;; (define-key poly-markdown+r-mode-map (kbd "M-c") #'insert-r-chunk)
+    )
 
-  (use-package poly-R)
   (use-package poly-markdown
-    :ensure t)
+    :ensure polymode
+    :defer t
+    :config
+    ;; Wrap lines at column limit, but don't put hard returns in
+    (add-hook 'markdown-mode-hook (lambda () (visual-line-mode 1)))
+    ;; Flyspell on
+    (add-hook 'markdown-mode-hook (lambda () (flyspell-mode 1)))
+    )
 
-  (defun ess-rmarkdown ()
-    "Compile R markdown (.Rmd). Should work for any output type."
-    (interactive)
-    (when (bound-and-true-p poly-markdown+r-mode)
-      (save-buffer-if-visiting-file)
-                                          ; Check if attached R-session
-      (condition-case nil
-          (ess-get-process)
-        ((error ""  ARGS)
-         (ess-switch-process)))
-      (let* ((rmd-buf (current-buffer)))
+  ;; poly-R
+  (use-package poly-R
+    :ensure polymode
+    :ensure poly-markdown
+    :ensure poly-noweb
+    :defer t
+    :config
+    ;; Add a chunk for rmarkdown
+    ;; Need to add a keyboard shortcut
+    ;; https://emacs.stackexchange.com/questions/27405/insert-code-chunk-in-r-markdown-with-yasnippet-and-polymode
+    ;; (defun insert-r-chunk (header)
+    ;;   "Insert an r-chunk in markdown mode. Necessary due to interactions between polymode and yas snippet"
+    ;;   (interactive "sHeader: ")
+    ;;   (insert (concat "```{r " header "}\n\n\n```"))
+    ;;   (forward-line -2))
+    ;; (define-key poly-markdown+r-mode-map (kbd "M-c") #'insert-r-chunk)
+    )
 
-        (save-excursion
-          (let* ((sprocess (ess-get-process ess-current-process-name))
-                 (sbuffer (process-buffer sprocess))
-                 (buf-coding (symbol-name buffer-file-coding-system))
-                 (R-cmd
-                  (format "library(rmarkdown); rmarkdown::render(\"%s\")"
-                          buffer-file-name)))
-            (message "Running rmarkdown on %s" buffer-file-name)
-            (ess-execute R-cmd 'buffer nil nil)
-            (switch-to-buffer rmd-buf)
-            (ess-show-buffer (buffer-name sbuffer) nil))))))
-
-
-  (bind-key  "C-c C-r"  'ess-rmarkdown  polymode-mode-map)
-                                          ;      (bind-key  "C-c C-i"  'insert-r-chunk  polymode-mode-map)
-
+  ;; Add yaml to markdown an .yml files
+  (use-package yaml-mode
+    :ensure t
+    :mode (("\\.yml\\'" . yaml-mode)))
 #+END_SRC
-
 
 ** Masukkan chunk
 Untuk memasukkan =r-chunck= di polymode.
@@ -6420,96 +6147,6 @@ tetapi diproses dengan menggunakan kekunci standard polymode =M-n e=
   ;; (define-key polymode-mode-map "\M-ns" 'ess-rmarkdown)
   ;; (bind-key "d" #'ess-rmarkdown ybk/prog-map)
 #+END_SRC
-* Python
-Setting ikut cara di [[https://github.com/anschwa/emacs.d][sini]] dan di [[http://rakan.me/emacs/python-dev-with-emacs-and-pyenv/][sini]].
-
-Auto-complete utk python
-#+BEGIN_SRC emacs-lisp
-  ;; Standard Jedi.el setting
-  (add-hook 'python-mode-hook 'jedi:setup)
-  (setq jedi:complete-on-dot t)
-
-  ;; Use Company for auto-completion interface.
-  (defun my/python-mode-hook ()
-    (add-to-list 'company-backends 'company-jedi))
-
-  (use-package company-jedi
-    :ensure t
-    :init
-    (add-hook 'python-mode-hook 'my/python-mode-hook))
-#+END_SRC
-
-Guna pemasangan senang dengan [[https://github.com/jorgenschaefer/elpy][Elpy]]
-
-#+BEGIN_SRC emacs-lisp
-  (use-package elpy
-    :ensure t
-    :defer 2
-    :config
-    (progn
-      ;; Use Flycheck instead of Flymake
-      (when (require 'flycheck nil t)
-        (remove-hook 'elpy-modules 'elpy-module-flymake)
-        (remove-hook 'elpy-modules 'elpy-module-yasnippet)
-        (remove-hook 'elpy-mode-hook 'elpy-module-highlight-indentation)
-        (add-hook 'elpy-mode-hook 'flycheck-mode))
-      (elpy-enable)
-      ;; jedi is great
-      (setq elpy-rpc-backend "jedi")))
-#+END_SRC
-
-python mode
-
-#+BEGIN_SRC emacs-lisp
-
-  (use-package python
-    :mode ("\\.py" . python-mode)
-    :config
-    (setq python-indent-offset 4)
-    (elpy-enable))
-
-#+END_SRC
-
-
-Emacs kenalpasti ~virtualenv~. Pasang [[https://github.com/pyenv/pyenv][pyenv]] ikut cara2 yang di tetapkan.
-
-#+BEGIN_SRC emacs-lisp
-
-  (use-package pyenv-mode
-    :init
-    (add-to-list 'exec-path "~/.pyenv/shims")
-    (setenv "WORKON_HOME" "~/.pyenv/versions/")
-    :config
-    (pyenv-mode)
-    :bind
-    ("C-x p e" . pyenv-activate-current-project))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (defun pyenv-activate-current-project ()
-    "Automatically activates pyenv version if .python-version file exists."
-    (interactive)
-    (f-traverse-upwards
-     (lambda (path)
-       (message path)
-       (let ((pyenv-version-path (f-expand ".python-version" path)))
-         (if (f-exists? pyenv-version-path)
-             (let ((pyenv-current-version (s-trim (f-read-text pyenv-version-path 'utf-8))))
-               (pyenv-mode-set pyenv-current-version)
-               (message (concat "Setting virtualenv to " pyenv-current-version))))))))
-
-
-  ;; (defvar pyenv-current-version nil nil)
-
-  ;; (defun pyenv-init()
-  ;;   "Initialize pyenv's current version to the global one."
-  ;;   (let ((global-pyenv (replace-regexp-in-string "\n" "" (shell-command-to-string "pyenv global"))))
-  ;;     (message (concat "Setting pyenv version to " global-pyenv))
-  ;;     (pyenv-mode-set global-pyenv)
-  ;;     (setq pyenv-current-version global-pyenv)))
-
-  ;; (add-hook 'after-init-hook 'pyenv-init)
-#+END_SRC
 
 * Pandoc
 Guna =pandoc-mode=. Untuk rujukkan boleh baca di [[http://joostkremers.github.io/pandoc-mode/][manual]]. Dapatkan menu dengan key
@@ -6535,7 +6172,8 @@ pasang di Ubuntu 18.04 Bionic Beaver boleh baca di [[https://linuxconfig.org/how
   $ sudo apt install texlive
 #+END_EXAMPLE
 
-Atau pasang =texlive-latex-extra= dan size file 404 MB.
+Atau pasang =texlive-latex-extra= dan =texlive-science= sebab =texlive-full= bersize
+besar. File =texlive-science= untuk dapatkan pakej ~siunitx.sty~.
 
 Pastikan fail-fail ini dipasang sebelum melarikan fail =.Rnw= di *ESS*
 
@@ -6592,7 +6230,9 @@ apt install libssl-dev libcurl4-openssl-dev libxml2-dev libmagick++-dev
             ("M-n" . outline-next-visible-heading))))
 #+END_SRC
 
-Finally, sometimes we want wordcounts. If I just want a quick snippet, I can run the following command. If I want more information, I can drop into a shell with ~C-c M-e~ (~shell-pop~) and run ~texcount my-file.tex~:
+Finally, sometimes we want wordcounts. If I just want a quick snippet, I can run the
+following command. If I want more information, I can drop into a shell with ~C-c M-e~
+(~shell-pop~) and run ~texcount my-file.tex~:
 
 #+BEGIN_SRC emacs-lisp
   (defun latex-word-count ()
@@ -6607,7 +6247,8 @@ Finally, sometimes we want wordcounts. If I just want a quick snippet, I can run
 #+END_SRC
 
 ** Reftex
-I use =helm-bibtex= to manage my references, but ReFTeX is still great to have around for cross-references in latex files.
+I use =helm-bibtex= to manage my references, but ReFTeX is still great to have around
+for cross-references in latex files.
 
 You will need to change ~reftex-default-bibliography~ to wherever you keep your main .bib file.
 
@@ -6748,6 +6389,34 @@ Untuk menukarkan file atau buffer ke kod HTML dan CSS. Untuk maklumat selajutnya
 #+END_SRC
 
 * RSS Feed reader
+** Elfeed-org
+Untuk simpan semua langanan RSS. Masukkan alamat RSS di fail ~ybk-elfeed.org~ di
+Dropbox. Utk update RSS list =S-g=. Kekunci berguna:
+
+- Bila di rss list pakai =S-s= untuk filter apa yang ingin di lihat, cth utk tapis hanya
+  list minggu lepas RSS Norge yang belum dibaca
+  #+BEGIN_EXAMPLE
+    @1-week-ago +Norge +unread
+  #+END_EXAMPLE
+- Utk buang ~tags~ pakai minus (-) dan tambah pakai plus (+)
+
+Untuk tambah topik baru di =bookmark-jump=:
+- masukkan alamat RSS ke list di Dropbox
+- Bagi Tags dan tajuk di list
+- Defun elfeed-show.. dengan topic baru
+- Buka RSS all =F10-r= atau =yy-r=
+- Filter dengan (huruf besar S) =S-s= kemudian tambah +<topic>
+- Bookmark topic dengan =C-x r m=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elfeed-org
+    :ensure t
+    :init
+    (setq rmh-elfeed-org-files (list "~/Dropbox/rss/ybk-elfeed.org"))
+    :config
+    (elfeed-org))
+#+END_SRC
+
 ** Elfeed
 #+BEGIN_SRC emacs-lisp
   (use-package elfeed
@@ -6762,8 +6431,7 @@ Untuk menukarkan file atau buffer ke kod HTML dan CSS. Untuk maklumat selajutnya
           ("i" . bjm/elfeed-show-inter)
           ("f" . bjm/elfeed-show-fun) ;tidak berfungsi sekiranya lebih dari 6
           ("q" . bjm/elfeed-save-db-and-bury))
-
-    :config
+    :init
     ;; thanks - http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
     ;; though slightly modified
     ;; functions to support syncing .elfeed between machines
@@ -6781,6 +6449,7 @@ Untuk menukarkan file atau buffer ke kod HTML dan CSS. Untuk maklumat selajutnya
       (interactive)
       (elfeed-db-save)
       (quit-window))
+    :config
 
     ;;
     ;; elfeed feed reader
@@ -6829,33 +6498,6 @@ Untuk menukarkan file atau buffer ke kod HTML dan CSS. Untuk maklumat selajutnya
       ;; no ensure, since it comes with elfeed
       ))
 #+END_SRC
-** Elfeed-org
-Untuk simpan semua langanan RSS. Masukkan alamat RSS di fail ~ybk-elfeed.org~ di
-Dropbox. Utk update RSS list =S-g=. Kekunci berguna:
-
-- Bila di rss list pakai =S-s= untuk filter apa yang ingin di lihat, cth utk tapis hanya
-  list minggu lepas RSS Norge yang belum dibaca
-  #+BEGIN_EXAMPLE
-    @1-week-ago +Norge +unread
-  #+END_EXAMPLE
-- Utk buang ~tags~ pakai minus (-) dan tambah pakai plus (+)
-
-Untuk tambah topik baru di =bookmark-jump=:
-- masukkan alamat RSS ke list di Dropbox
-- Bagi Tags dan tajuk di list
-- Defun elfeed-show.. dengan topic baru
-- Buka RSS all =ym-r=
-- Filter dengan (huruf besar S) =S-s= kemudian tambah +<topic>
-- Bookmark topic dengan =C-x r m=
-
-#+BEGIN_SRC emacs-lisp
-  (use-package elfeed-org
-    :ensure t
-    :init
-    (setq rmh-elfeed-org-files (list "~/Dropbox/rss/ybk-elfeed.org"))
-    :config
-    (elfeed-org))
-#+END_SRC
 
 * Email
 [[https://www.emacswiki.org/emacs/GnusTutorial][Gnus]] digunakan untuk membaca email. Tetapi ~Gmail web~ juga digunakan dari masa ke
@@ -6864,8 +6506,6 @@ semasa terutama bila ada lampiran. Aturcara di ambil di [[https://github.com/red
 Aturcara di *~/.mailcap* menentukan aplikasi sesuai untuk membuka lampiran di
 email. Guna =M-x mailcap-parse-mailcaps= untuk pasang data di fail ~/.mailcap ke
 =mailcap-mime-data= tanpa perlu tweak =mailcap-mime-data=
-
-Buka email di web, pakai =a= (action) dan pilih =v=. Untuk balas (reply) email pakai =R=.
 
 Fail =.authinfo.gpg= diperlukan untuk mendapatkan username dan password kedua-dua akaun
 email. Fail ini akan di-encrypted oleh Linux secara automatik bila pakai extention
@@ -7678,6 +7318,7 @@ Untuk navigasi di directory. Rujukkan di [[https://github.com/jaypei/emacs-neotr
        ("h"          . neotree-hidden-file-toggle)
        ("f"          . neotree-refresh))))
 #+END_SRC
+
 * Tunjuk beza (ediff)
 ** Ediff
 Untuk melihat perbezaan antara dua fail menggunakan =ediff=. Aturcara ini diambil dari =[[https://oremacs.com/2015/01/17/setting-up-ediff/][Oremacs]]=
@@ -7714,6 +7355,239 @@ Untuk menunjukkan =diff= file semasa dan file sebelumnya sekiranya fail ada di
     :ensure t
     :bind ("C-c w s" . backup-walker-start))
 #+END_SRC
+
+* Version control
+
+| Kekunci | Fungsi           |
+|---------+------------------|
+| f12-g   | hydra-magit/body |
+| C-x g s | Magit-status     |
+| C-x g c | Magit-clone      |
+| C-x g p | Magit-pull       |
+
+
+| Git options | Fungsi                              |
+|-------------+-------------------------------------|
+| fetch --all | fetch semua                         |
+| branch -v   | Tunjuk last commit utk semua branch |
+| branch -vv  | Tunjuk tracking branches            |
+| branch -u   | Tetapkan upstream                   |
+
+** Git
+Untuk pakai git command line:
+- Utk periksa last commit. Boleh pakai salah satu
+#+BEGIN_EXAMPLE
+  git log -1 --stat
+  git show
+#+END_EXAMPLE
+** Magit
+Utk guna Github. Utk kali pertama perlu =git config= di
+terminal. Sekiranya masalah utk pasang dari *Melpa* coba =M-x
+package-refresh-contents=
+
+#+BEGIN_EXAMPLE
+  git config --global user.name "bla bla bla"
+  git config --global user.email "youremail@uremail.com"
+#+END_EXAMPLE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :commands magit-get-top-dir
+    ;;:pin melpa-stable
+    :bind (("C-x g s" . magit-status)
+           ("C-x g c" . magit-clone)
+           ("C-x g p" . magit-pull)
+           ("C-x g l" . magit-log-buffer-file)
+           ("C-x g b" . magit-blame)
+           ("C-x g m" . hydra/magit-body))
+    :init
+    (progn
+      ;; we no longer need vc-git
+      (delete 'Git vc-handled-backends)
+      ;; make magit status go full-screen but remember previous window
+      ;; settings
+      ;; from: http://whattheemacsd.com/setup-magit.el-01.html
+      (defadvice magit-status (around magit-fullscreen activate)
+        (window-configuration-to-register :magit-fullscreen)
+        ad-do-it
+        (delete-other-windows))
+
+      ;; Close popup when commiting - this stops the commit window
+      ;; hanging around
+      ;; From: http://git.io/rPBE0Q
+      (defadvice git-commit-commit (after delete-window activate)
+        (delete-window))
+
+      (defadvice git-commit-abort (after delete-window activate)
+        (delete-window))
+
+      ;; these two force a new line to be inserted into a commit window,
+      ;; which stops the invalid style showing up.
+      ;; From: http://git.io/rPBE0Q
+      (defun magit-commit-mode-init ()
+        (when (looking-at "\n")
+          (open-line 1)))
+
+      (add-hook 'git-commit-mode-hook 'magit-commit-mode-init)
+
+      ;;  ;;== Hydra magit ===
+      ;;  (defhydra hydra-magit (:color teal
+      ;;     :column 5)
+      ;; "Magit"
+      ;; ("s" magit-status "status")
+      ;; ("f" magit-fetch "fetch")
+      ;; ("d" magit-diff "diff")
+      ;; ("c" magit-clone "clone")
+      ;; ("p" magit-pull "pull")
+      ;; ("m" magit-merge "merge")
+      ;; ("o" magit-checkout "checkout")
+      ;; ("b" magit-branch-popup "branch manager")
+      ;; ("u" magit-branch-and-checkout "branch and checkout")
+      ;; ("l" magit-log "log")
+      ;; ("!" magit-git-command "command")
+      ;; ("$" magit-process "process")
+      ;; ("q" nil "quit" :color red))
+
+      (defhydra hydra-magit (:hint nil)
+
+        "
+   ^Kunci magit/GIT^
+   ^^^^^^^^----------------
+   _s_: status     _f_: fetch      _o_: checkout    _b_: branch manager        _k_: branch delete
+   _d_: diff       _c_: clone      _l_: log buffer  _u_: branch and checkout   _!_: command
+   _p_: pull       _m_: merge      _L_: log         _U_: branch orphan         _a_: blame          _q_: keluar
+
+        "
+        ("s" magit-status)
+        ("f" magit-fetch)
+        ("d" magit-diff)
+        ("c" magit-clone)
+        ("p" magit-pull )
+        ("m" magit-merge)
+        ("o" magit-checkout)
+        ("b" magit-branch-popup)
+        ("u" magit-branch-and-checkout)
+        ("U" magit-branch-orphan)
+        ("L" magit-log)
+        ("l" magit-log-buffer-file)
+        ("!" magit-git-command)
+        ("k" magit-branch-delete)
+        ("a" magit-blame-popup)
+        ("q" (message "Selesai") :exit t)
+        )
+
+      ;;(key-chord-define-global "jg" #'hydra-magit/body)
+      (key-seq-define-global "jg" #'hydra-magit/body)
+      (bind-key "g" #'hydra-magit/body 'ybk/prog-map)
+      )
+
+    :config
+    ;; restore previously hidden windows
+    (defadvice magit-quit-window (around magit-restore-screen activate)
+      (let ((current-mode major-mode))
+        ad-do-it
+        ;; we only want to jump to register when the last seen buffer
+        ;; was a magit-status buffer.
+        (when (eq 'magit-status-mode current-mode)
+          (jump-to-register :magit-fullscreen))))
+
+    (defun magit-maybe-commit (&optional show-options)
+      "Runs magit-commit unless prefix is passed"
+      (interactive "P")
+      (if show-options
+          (magit-key-mode-popup-committing)
+        (magit-commit)))
+
+    ;;  ;; major mode for editing `git rebase -i` files
+    ;;  (use-package rebase-mode
+    ;; :defer 2)
+
+    (define-key magit-mode-map "c" 'magit-maybe-commit)
+
+    ;; magit settings
+    (setq
+     ;; use ivy to look for branches
+     magit-completing-read-function 'ivy-completing-read
+     ;; don't put "origin-" in front of new branch names by default
+     magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
+     ;; open magit status in same window as current buffer
+     magit-status-buffer-switch-function 'switch-to-buffer
+     ;; highlight word/letter changes in hunk diffs
+     magit-diff-refine-hunk t
+     ;; ask me if I want to include a revision when rewriting
+     magit-rewrite-inclusive 'ask
+     ;; ask me to save buffers
+     magit-save-some-buffers t
+     ;; pop the process buffer if we're taking a while to complete
+     magit-process-popup-time 30
+     ;; ask me if I want a tracking upstream
+     magit-set-upstream-on-push 'askifnotset
+     ))
+#+END_SRC
+
+#+RESULTS:
+** Diff highlights
+Menanda secara langsung pertukaran di dokument. Rujuk [[https://github.com/nonsequitur/git-gutter-plus][Github]].
+"+" menandakan tambahan dan "¤" menandakan pertukaran
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter+
+    :ensure t
+    ;; :diminish git-gutter+-mode
+    ;; :init
+    ;; (global-git-gutter+-mode)
+
+    :bind (("s-g" . git-gutter+-mode) ;super-g
+           :map git-gutter+-mode
+           ;; Jump between hunks
+           ("C-x n" . git-gutter+-next-hunk)
+           ("C-x p" . git-gutter+-previous-hunk)
+           ;; Act on hunks
+           ("C-x v =" . git-gutter+-show-hunk)
+           ;; Stage hunk at point
+           ("C-x c" . git-gutter+-commit)
+           ("C-x C" . git-gutter+-stage-and-commit);on/off current-buffer
+           ("C-x U" . git-gutter+-unstage-whole-buffer))
+    :config
+    (setq git-gutter+-modified-sign "#")
+
+    (defface git-gutter+-modified
+      '((t (:foreground "orange" :weight bold)))
+      "Face for modified lines"
+      :group 'git-gutter+)
+
+    ;; Aktivere i ESS og markdown
+    (add-hook 'ess-mode-hook #'git-gutter+-mode)
+    (add-hook 'markdown-mode-hook #'git-gutter+-mode)
+    )
+#+END_SRC
+
+** Cara pakai repo baru
+Cara utk memuatpasang repo baru ke =Github= ialah:
++ Buat Repo baru di [[https://github.com][Github]] samada [[https://github.com/yusbk][Personal]] atau [[https://github.com/ybkamaleri][Work]]
++ =M-x magit-init= utk branch repo baru
++ Sahkan repo baru di =Github=
++ Pilih fails utk dimasukkan ke =stage= dgn menekan kekunci =s=
++ =Commit= dengan menekan kekunci =c= dan tulis maklumat utk =commit=
++ =C-c C-c= utk =commit=
++ =M-x magit-remote-add= utk menetapkan =remote add origin= seperti menggunakkan
+  komando di =git=
++ Berikan =remote name= cth. aimPlot
++ Berikan =remote URL= cth. https://github.com/yusbk/InitEmacs.git atau pakai kekunci
+  =SSH= sekiranya sudah dipasang. Utk alamat url yg betul boleh dikopi dari Github
++ =M-x f= utk tarikturun (=fetch/pull=) sebarang fail yg terdapat di repo
+  cth. README.md sebelum =push=. Fail yg sama nama di =master= harus dibuang
++ =M-x p= utk muatpasang atau =push= *master* ke *origin* di repo baru.
+
+** Tips and tricks
+Beberapa tips utk membantu memudahkan penggunaan =Magit=
+
++ "Branch manager" =magit-show-refs-popup= kekunci ialah =y=.
++ Buang commit di 'remote' boleh pakai force push =P -fp= utk push-remote atau =P
+  -fu= utk upstream.
++ Utk ambil repo baru pakai =M-x magit-clone=
+  https://github.com/<pengguna>/<repo.git>
 * Weather
 Cuaca semasa dari [[https://www.met.no/][Meteorologisk institutt]]. Aturcara boleh di lihat di [[https://github.com/ruediger/weather-metno-el][GitHub]]. Untuk
 lihat cuaca tempat lain boleh pakai =M-x weather-metno-forecast-location= atau =F10-b=
@@ -7732,6 +7606,7 @@ lihat cuaca tempat lain boleh pakai =M-x weather-metno-forecast-location= atau =
     (setq weather-metno-get-image-props '(:ascent center))
     )
 #+END_SRC
+
 * Google-translate
 Untuk pakai fungsi =Google Translate= di GNU Emacs. Sila lihat sumber di[[https://github.com/atykhonov/google-translate][sini]]. Sekiranya
 bahasa untuk terjemahan tidak seperti yang sedia ada, boleh cari bahasa dengan
@@ -7815,6 +7690,14 @@ Electric operator akan menjarakkan ~y=1*3+2~ ke ~y = 1 * 3 + 2~
     (add-hook 'ess-mode-hook #'electric-operator-mode)
     (add-hook 'python-mode-hook #'electric-operator-mode))
 #+END_SRC
+
+** Whitespace shows
+Tunjukkan whitespace.
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<f8>") 'whitespace-mode)
+#+END_SRC
+
 ** Whitespace-cleanup
 Akan memakai "whitespace-cleanup" sebelum buffer disimpan (save) smartly sumber
 https://github.com/jabranham/emacs/blob/master/emacs.org
@@ -7825,6 +7708,7 @@ https://github.com/jabranham/emacs/blob/master/emacs.org
     (ws-butler-global-mode)
     :diminish (ws-butler-mode . ""))
 #+END_SRC
+
 ** smart-newline
 Guna =RET= untuk newline bila buat kode
 #+BEGIN_SRC emacs-lisp
@@ -7841,6 +7725,7 @@ Guna =RET= untuk newline bila buat kode
     )
 
 #+END_SRC
+
 * StackExchange
 Stack Exchange mode for Emacs from [[https://github.com/vermiculus/sx.el][GitHub]]
 #+BEGIN_SRC emacs-lisp
@@ -7910,6 +7795,7 @@ Untuk coba pakej sebelum dipakai. Install di tmp
     :ensure t
     :commands (try))
 #+END_SRC
+
 * Music
 Untuk dengar lagu-lagu diambil dari [[https://www.gnu.org/software/emms/index.html][EMMS]]
 
@@ -7928,11 +7814,28 @@ Untuk dengar lagu-lagu diambil dari [[https://www.gnu.org/software/emms/index.ht
     )
 #+END_SRC
 
-* Troubleshooting
+* Selesaikan masalah
 Beberapa situasi yang pernah dialami dan beberikan masalah. Cara penyelesaian:
 ** XF86 keys
 Sekiranya kekunci dari F2 ke F12 tidak berfungsi dan hanya menunjukkan XF86New, XF86Open,
 XF86Close dan sebagainya ini menandakan yang button ~LOCK~ diaktifkan.
+** Suspend-frame
+Emacs freez bila tekan =C-x C-z= atau =C-z=. Kekunci ini boleh dimatikan dengan
+meletakkan di aturcara emacs:
+#+BEGIN_EXAMPLE
+(global-unset-key (kbd "C-x C-z"))
+#+END_EXAMPLE
+
+Sekiranya kekunci ini tidak dimatikan, bila frame freeze boleh gunakan komando ini di
+terminal:
+
+#+BEGIN_EXAMPLE
+xkill -frame $emacs_pid
+xkill -frame $emacs
+#+END_EXAMPLE
+
+Kemudian mouse-click Emacs frame.
+
 * My personal hydra keymaps
 ** General keymap [jm]
 Hydra untuk fungsi awam
@@ -7976,6 +7879,7 @@ Hydra untuk fungsi awam
   (key-chord-define-global "jm" #'hydra-ybk-general/body)
   (global-set-key (kbd "<f6>") 'hydra-ybk-general/body)
 #+END_SRC
+
 ** Move keymap [jj]
 Hydra move keymap seperti =F2=. Singkatan =j= sebagai *Jalan*
 
@@ -8026,6 +7930,7 @@ Hydra move keymap seperti =F2=. Singkatan =j= sebagai *Jalan*
   ;; ;; tanpa ikut urutan huruf
   ;; (key-chord-define-global "jj" #'ybk-map-move/body)
 #+END_SRC
+
 ** Org keymap [jw]
 Hydra keymap untuk =org=. Singkatan =w= sebagai *Word*
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -8076,6 +7981,7 @@ Hydra keymap untuk =org=. Singkatan =w= sebagai *Word*
   ;; ;; tanpa ikut urutan huruf
   ;; (key-chord-define-global "zd" #'ybk-keymap-org/body)
 #+END_SRC
+
 ** Prog keymap [jc]
 Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= sebagai *Code*.
 #+BEGIN_SRC emacs-lisp
@@ -8120,4 +8026,52 @@ Hydra keymap untuk program seperti penggunaan =[F12]= cuma lebih ringkas. =c= se
 
   ;; ikut urutan huruf
   (key-seq-define-global "jc" 'hydra-ybk-prog/body)
+#+END_SRC
+
+** Sweave keymap [js]
+Hydra untuk polymode guna masa knitr.
+
+#+BEGIN_SRC emacs-lisp
+  ;; Hydra
+  (defhydra hydra-ybk-poly (:hint nil)
+    "
+       ^Chunk^                        ^Evaluate^          ^Knit^
+       ^----------------------------------------------------------------------------------
+       _i_: insert      _f_: Fold      _r_: chunk/region   _E_: set exporter   _q_: KELUAR
+       _c_: insert arg  _a_: Fold all  _s_: to point       _e_: export
+       _k_: kill        _u_: Unfold    _z_: from point     _w_: weave
+       _n_: next                     _b_: buffer         _d_: Create html
+       _p_: previous
+
+       Rnw guna '<' utk masukkan chunck baru
+       "
+    ("i" polymode-insert-new-chunk)
+    ("n" polymode-next-chunk-same-type)
+    ("p" polymode-previous-chunk-same-type)
+    ("k" polymode-kill-chunk)
+    ("s" polymode-eval-buffer-from-beg-to-point)
+    ("z" polymode-eval-buffer-from-point-to-end)
+
+    ("e" polymode-export)
+    ("w" polymode-weave)
+    ("E" polymode-set-exporter)
+
+    ("c" rmd-insert-r-chunk)
+    ;; ("r" rmd-eval-chunk)
+    ;; ("b" rmd-eval-buffer)
+    ("b" polymode-eval-buffer)
+    ("r" polymode-eval-region-or-chunk)
+
+    ("f" rmd-fold-block)
+    ("a" rmd-fold-all-blocks)
+    ("u" fold-this-unfold-all)
+
+    ("d" poly-ess-rmarkdown)
+    ;; ("q" nil "keluar" :color red)
+    ("q" (message "Selesai") :exit t)
+    )
+
+  ;;==key ikut urutan
+  (key-seq-define-global "js" 'hydra-ybk-poly/body)
+  ;; (key-chord-define-global "js" #'hydra-ybk-poly/body)
 #+END_SRC
