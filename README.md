@@ -1,3 +1,3 @@
-# Aturcara Emacs
+# Simpanan Aturcara Emacs
 
-Aturcara untuk pemakaian Emacs
+Pelbagai Aturcara untuk pemakaian Emacs yang telah dipakai. Disimpan sebagai rujukan.
