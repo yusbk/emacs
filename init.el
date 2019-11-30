@@ -573,8 +573,8 @@ Otherwise, call `delete-blank-lines'."
          ("C-c C-r" . ivy-resume)
          ("<f6>"    . ivy-resume)
          ("C-h V"   . counsel-set-variable)
-         ("C-h l"   . counsel-find-library)
-         ("C-h u"   . counsel-unicode-char)
+         ("C-s l"   . counsel-find-library)
+         ("C-s u"   . counsel-unicode-char)
          ("C-c j"   . counsel-git-grep)
          ("C-s p"   . counsel-git-grep)
          ("C-c i"   . counsel-imenu)
@@ -1155,6 +1155,7 @@ horizontal mode."
          ("C-p" . company-select-previous)
          ("C-d" . company-show-doc-buffer)
          ("<tab>" . company-complete)
+         ("C-i" . company-complete-selection)
          )
   :config
   (global-company-mode t)
@@ -1221,7 +1222,7 @@ In that case, insert the number."
          ("C-M-/" . dabbrev-completion))
   :config
   ;; Activate globally
-  (global-set-key (kbd "C-i") 'hippie-expand)
+  ;; (global-set-key (kbd "") 'hippie-expand)
   
   ;; Don't case-fold when expanding with hippe
   (defun hippie-expand-no-case-fold ()
