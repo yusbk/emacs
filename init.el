@@ -4,28 +4,7 @@
 ;; My personal config. Use `outshine-cycle-buffer' (<S-Tab>) to navigate through sections, and `counsel-imenu' (C-c i)
 ;; to locate individual use-package definition.
 
-
-(progn ;startup 
-  (defvar before-user-init-time (current-time)
-    "Value of `current-time' when Emacs begins loading `user-init-file'.")
-  (message "Loading Emacs...done (%.3fs)"
-           (float-time (time-subtract before-user-init-time
-                                      before-init-time)))
-  (setq user-init-file (or load-file-name buffer-file-name))
-  (setq user-emacs-directory (file-name-directory user-init-file))
-  (message "Loading %s..." user-init-file))
-
-
-;; Speed up bootstrapping
-(setq gc-cons-threshold 402653184
-      gc-cons-percentage 0.6)
-(add-hook 'after-init-hook `(lambda ()
-                              (setq gc-cons-threshold 800000
-                                    gc-cons-percentage 0.1)
-                              (garbage-collect)) t)
-
-
-;;; Bootstrap `straight.el'
+;;; Bootstrap
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -57,10 +36,6 @@
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
-
-
-;; newer than byte-compiled file issues
-(setq load-prefer-newer t)
 
 
 ;; Always follow symlinks. init files are normally stowed/symlinked.
@@ -157,7 +132,7 @@
  )
 
 ;; Misc
-(set-frame-name "ybka:emacs")
+(set-frame-name "emacs")
 (delete-selection-mode 1)
 ;; enable y/n answers
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -288,7 +263,7 @@
 
 (use-package aggressive-indent
   ;; Aggressive indent mode
-  :hook ((emacs-lisp-mode ess-mode-hook org-src-mode-hook) . aggressive-indent-mode)
+  :hook (emacs-lisp-mode . aggressive-indent-mode)
   )
 
 (use-package ibuffer
@@ -342,8 +317,6 @@
          ("C-x C-k"       . 'crux-delete-buffer-and-file)
          ("C-c n"         . 'crux-cleanup-buffer-or-region)
          ("s-<return>"    . 'crux-cleanup-buffer-or-region)
-         (:map my-assist-map
-               ("<backspace>" . crux-kill-line-backwards))
          )
   :init
   (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
@@ -883,41 +856,13 @@ horizontal mode."
   (setq nswbuff-display-intermediate-buffers t)
   )
 
-
-(use-package golden-ratio
-  ;; Resize windows with ratio https://github.com/roman/golden-ratio.el
-  :straight t
-  :defer 5
-  :bind* (:map my-assist-map
-               ("g" . golden-ratio-mode))
-  :diminish golden-ratio-mode
-  :init
-  (golden-ratio-mode 1)
-  (setq golden-ratio-auto-scale t))
-
-
-(use-package transpose-frame
-  :straight t
-  :defer 5
-  :commands (transpose-frame))
-;;Transpose utk perkataan guna M-t
-(bind-keys :prefix "C-t"
-           :prefix-map transpose-map
-           ("f" . transpose-frame)
-           ("c" . transpose-chars)
-           ("w" . transpose-words)
-           ("l" . transpose-lines)
-           ("p" . transpose-paragraphs)
-           ("s" . transpose-sentences)
-           ("x" . transpose-sexps))
-
-
 ;;; Navigation
+
 ;;;; Register
 (use-package register
   :straight nil
   :bind* (:map my-assist-map
-               ("<SPC>" . point-to-register)
+               ("m" . point-to-register)
                ("j" . jump-to-register)))
 
 ;;;; Avy
@@ -1114,10 +1059,6 @@ horizontal mode."
             groovy-mode
             scala-mode)
     (add-hook it 'turn-on-smartparens-strict-mode))
-
-  (add-hook 'inferior-ess-mode-hook #'smartparens-mode)
-  (add-hook 'LaTeX-mode-hook #'smartparens-mode)
-  (add-hook 'markdown-mode-hook #'smartparens-mode)
   )
 
 
@@ -1220,9 +1161,6 @@ In that case, insert the number."
   :bind (("M-/"   . hippie-expand-no-case-fold)
          ("C-M-/" . dabbrev-completion))
   :config
-  ;; Activate globally
-  (global-set-key (kbd "C-i") 'hippie-expand)
-  
   ;; Don't case-fold when expanding with hippe
   (defun hippie-expand-no-case-fold ()
     (interactive)
@@ -1239,7 +1177,9 @@ In that case, insert the number."
                                            try-expand-list
                                            try-expand-line
                                            try-complete-lisp-symbol-partially
-                                           try-complete-lisp-symbol)))
+                                           try-complete-lisp-symbol))
+
+  )
 
 (use-package abbrev
   :straight nil
@@ -1261,17 +1201,13 @@ In that case, insert the number."
   :straight nil
   :defines eshell-prompt-function
   :functions eshell/alias
-  :bind (:map my-assist-map
-              ("x" . eshell))
   :hook (eshell-mode . (lambda ()
                          (bind-key "C-l" 'eshell/clear eshell-mode-map)
                          (eshell/alias "f" "find-file $1")
                          (eshell/alias "fo" "find-file-other-window $1")
                          (eshell/alias "d" "dired $1")
                          (eshell/alias "ll" "ls -l")
-                         (eshell/alias "la" "ls -al")
-                         (eshell/alias "gw" "cd ~/Git-work")
-                         (eshell/alias "gp" "cd ~/Git-personal")))
+                         (eshell/alias "la" "ls -al")))
   :config
   (with-no-warnings
     (unless (fboundp #'flatten-tree)
@@ -1349,9 +1285,8 @@ In that case, insert the number."
     :init (setq eshell-highlight-prompt nil
                 eshell-prompt-function 'epe-theme-lambda))
 
+  ;; Fish-like history autosuggestions
   (use-package esh-autosuggest
-    ;; Fish-like history autosuggestions https://github.com/dieggsy/esh-autosuggest
-    ;; C-f select suggestion and M-f select next word in suggestion
     :defines ivy-display-functions-alist
     :preface
     (defun setup-eshell-ivy-completion ()
@@ -1373,23 +1308,6 @@ In that case, insert the number."
            .
            (lambda () (require 'eshell-z)))))
 
-
-(use-package eshell-git-prompt
-  ;; show git status and branch
-  :straight t
-  :config
-  (eshell-git-prompt-use-theme 'powerline)
-  )
-
-;; ;; Disable company-mode for eshell, falling back to pcomplete,
-;; ;; which feels more natural for a shell.
-;; (add-hook 'eshell-mode-hook
-;;           (lambda ()
-;;             (company-mode 0)))
-
-;; ;; When completing with multiple options, complete only as much as
-;; ;; possible and wait for further input.
-;; (setq eshell-cmpl-cycle-completions nil)
 
 ;;;; Shell
 (use-package shell
@@ -1493,11 +1411,11 @@ In that case, insert the number."
 (use-package shell-pop
   :straight t
   :defer 2
-  :bind ([f9] . shell-pop)
+  :bind (([f9] . shell-pop))
   :config
-  (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
-  (setq shell-pop-term-shell "/bin/bash")
-  ;; (setq shell-pop-universal-key "C-t") ;use for eshell keybind
+  ;; (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
+  ;; (setq shell-pop-term-shell "/bin/bash")
+  ;; (setq shell-pop-universal-key "C-t")
 
   ;; need to do this manually or not picked up by `shell-pop'
   (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type)
