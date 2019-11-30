@@ -4,7 +4,28 @@
 ;; My personal config. Use `outshine-cycle-buffer' (<S-Tab>) to navigate through sections, and `counsel-imenu' (C-c i)
 ;; to locate individual use-package definition.
 
-;;; Bootstrap
+
+(progn ;startup 
+  (defvar before-user-init-time (current-time)
+    "Value of `current-time' when Emacs begins loading `user-init-file'.")
+  (message "Loading Emacs...done (%.3fs)"
+           (float-time (time-subtract before-user-init-time
+                                      before-init-time)))
+  (setq user-init-file (or load-file-name buffer-file-name))
+  (setq user-emacs-directory (file-name-directory user-init-file))
+  (message "Loading %s..." user-init-file))
+
+
+;; Speed up bootstrapping
+(setq gc-cons-threshold 402653184
+      gc-cons-percentage 0.6)
+(add-hook 'after-init-hook `(lambda ()
+                              (setq gc-cons-threshold 800000
+                                    gc-cons-percentage 0.1)
+                              (garbage-collect)) t)
+
+
+;;; Bootstrap `straight.el'
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -28,14 +49,18 @@
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 ;; Early load Org from Git version instead of Emacs built-in version
-(straight-use-package 'org-plus-contrib)
-
+;; (straight-use-package 'org-plus-contrib)
+(straight-use-package '(org :local-repo nil))
 
 ;;;;  package.el
 ;;; so package-list-packages includes them
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
+
+
+;; newer than byte-compiled file issues
+(setq load-prefer-newer t)
 
 
 ;; Always follow symlinks. init files are normally stowed/symlinked.
@@ -132,7 +157,7 @@
  )
 
 ;; Misc
-(set-frame-name "emacs")
+(set-frame-name "ybka:emacs")
 (delete-selection-mode 1)
 ;; enable y/n answers
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -263,7 +288,7 @@
 
 (use-package aggressive-indent
   ;; Aggressive indent mode
-  :hook (emacs-lisp-mode . aggressive-indent-mode)
+  :hook ((emacs-lisp-mode ess-mode-hook org-src-mode-hook) . aggressive-indent-mode)
   )
 
 (use-package ibuffer
@@ -317,6 +342,8 @@
          ("C-x C-k"       . 'crux-delete-buffer-and-file)
          ("C-c n"         . 'crux-cleanup-buffer-or-region)
          ("s-<return>"    . 'crux-cleanup-buffer-or-region)
+         (:map my-assist-map
+               ("<backspace>" . crux-kill-line-backwards))
          )
   :init
   (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
@@ -856,13 +883,41 @@ horizontal mode."
   (setq nswbuff-display-intermediate-buffers t)
   )
 
-;;; Navigation
 
+(use-package golden-ratio
+  ;; Resize windows with ratio https://github.com/roman/golden-ratio.el
+  :straight t
+  :defer 5
+  :bind* (:map my-assist-map
+               ("g" . golden-ratio-mode))
+  :diminish golden-ratio-mode
+  :init
+  (golden-ratio-mode 1)
+  (setq golden-ratio-auto-scale t))
+
+
+(use-package transpose-frame
+  :straight t
+  :defer 5
+  :commands (transpose-frame))
+;;Transpose utk perkataan guna M-t
+(bind-keys :prefix "C-t"
+           :prefix-map transpose-map
+           ("f" . transpose-frame)
+           ("c" . transpose-chars)
+           ("w" . transpose-words)
+           ("l" . transpose-lines)
+           ("p" . transpose-paragraphs)
+           ("s" . transpose-sentences)
+           ("x" . transpose-sexps))
+
+
+;;; Navigation
 ;;;; Register
 (use-package register
   :straight nil
   :bind* (:map my-assist-map
-               ("m" . point-to-register)
+               ("<SPC>" . point-to-register)
                ("j" . jump-to-register)))
 
 ;;;; Avy
@@ -1059,6 +1114,10 @@ horizontal mode."
             groovy-mode
             scala-mode)
     (add-hook it 'turn-on-smartparens-strict-mode))
+
+  (add-hook 'inferior-ess-mode-hook #'smartparens-mode)
+  (add-hook 'LaTeX-mode-hook #'smartparens-mode)
+  (add-hook 'markdown-mode-hook #'smartparens-mode)
   )
 
 
@@ -1161,6 +1220,9 @@ In that case, insert the number."
   :bind (("M-/"   . hippie-expand-no-case-fold)
          ("C-M-/" . dabbrev-completion))
   :config
+  ;; Activate globally
+  (global-set-key (kbd "C-i") 'hippie-expand)
+  
   ;; Don't case-fold when expanding with hippe
   (defun hippie-expand-no-case-fold ()
     (interactive)
@@ -1177,9 +1239,7 @@ In that case, insert the number."
                                            try-expand-list
                                            try-expand-line
                                            try-complete-lisp-symbol-partially
-                                           try-complete-lisp-symbol))
-
-  )
+                                           try-complete-lisp-symbol)))
 
 (use-package abbrev
   :straight nil
@@ -1201,14 +1261,20 @@ In that case, insert the number."
   :straight nil
   :defines eshell-prompt-function
   :functions eshell/alias
+  :bind (:map my-assist-map
+              ("x" . eshell))
   :hook (eshell-mode . (lambda ()
                          (bind-key "C-l" 'eshell/clear eshell-mode-map)
                          (eshell/alias "f" "find-file $1")
                          (eshell/alias "fo" "find-file-other-window $1")
                          (eshell/alias "d" "dired $1")
                          (eshell/alias "ll" "ls -l")
-                         (eshell/alias "la" "ls -al")))
+                         (eshell/alias "la" "ls -al")
+                         (eshell/alias "gw" "cd ~/Git-work")
+                         (eshell/alias "gp" "cd ~/Git-personal")))
   :config
+  (setq eshell-list-files-after-cd t) ;ls after cd
+
   (with-no-warnings
     (unless (fboundp #'flatten-tree)
       (defalias #'flatten-tree #'eshell-flatten-list))
@@ -1285,8 +1351,9 @@ In that case, insert the number."
     :init (setq eshell-highlight-prompt nil
                 eshell-prompt-function 'epe-theme-lambda))
 
-  ;; Fish-like history autosuggestions
   (use-package esh-autosuggest
+    ;; Fish-like history autosuggestions https://github.com/dieggsy/esh-autosuggest
+    ;; C-f select suggestion and M-f select next word in suggestion
     :defines ivy-display-functions-alist
     :preface
     (defun setup-eshell-ivy-completion ()
@@ -1308,6 +1375,23 @@ In that case, insert the number."
            .
            (lambda () (require 'eshell-z)))))
 
+
+(use-package eshell-git-prompt
+  ;; show git status and branch
+  :straight t
+  :config
+  (eshell-git-prompt-use-theme 'powerline)
+  )
+
+;; ;; Disable company-mode for eshell, falling back to pcomplete,
+;; ;; which feels more natural for a shell.
+;; (add-hook 'eshell-mode-hook
+;;           (lambda ()
+;;             (company-mode 0)))
+
+;; ;; When completing with multiple options, complete only as much as
+;; ;; possible and wait for further input.
+;; (setq eshell-cmpl-cycle-completions nil)
 
 ;;;; Shell
 (use-package shell
@@ -1411,11 +1495,11 @@ In that case, insert the number."
 (use-package shell-pop
   :straight t
   :defer 2
-  :bind (([f9] . shell-pop))
+  :bind ([f9] . shell-pop)
   :config
-  ;; (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
-  ;; (setq shell-pop-term-shell "/bin/bash")
-  ;; (setq shell-pop-universal-key "C-t")
+  (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
+  (setq shell-pop-term-shell "/bin/bash")
+  ;; (setq shell-pop-universal-key "C-t") ;use for eshell keybind
 
   ;; need to do this manually or not picked up by `shell-pop'
   (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type)
@@ -1723,9 +1807,48 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
 ;;   :config
 ;;   (bind-key "C-c C-w" nil inferior-ess-mode-map))
 
+
 ;;; Appearance
-(use-package naysayer-theme)
-(load-theme 'naysayer t)
+;; (use-package naysayer-theme)
+;; (load-theme 'naysayer t)
+
+(use-package doom-themes
+  :straight t
+  :init
+  ;; need to load at init for cyclye theme to work
+  (load-theme 'doom-one t)
+  :bind ("C-9" . cycle-my-theme)
+  :config
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config)
+
+  ;; utk tukar tema f10-t
+  (setq my-themes '(
+                    doom-vibrant
+                    doom-nord-light
+                    doom-fairy-floss
+                    doom-oceanic-next
+                    doom-Iosvkem ;bold has bigger font
+                    ))
+
+  (setq my-cur-theme nil)
+  (defun cycle-my-theme ()
+    "Cycle through a list of themes, my-themes"
+    (interactive)
+    (when my-cur-theme
+      (disable-theme my-cur-theme)
+      (setq my-themes (append my-themes (list my-cur-theme))))
+    (setq my-cur-theme (pop my-themes))
+    (load-theme my-cur-theme :no-confirm)
+    (message "Tema dipakai: %s" my-cur-theme))
+
+  ;; Switch to the first theme in the list above
+  (cycle-my-theme)
+
+  )
 
 (use-package solaire-mode
   ;; visually distinguish file-visiting windows from other types of windows (like popups or sidebars) by giving them a
@@ -1736,10 +1859,110 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
   (minibuffer-setup . solaire-mode-in-minibuffer)
   :config
   (solaire-mode-swap-bg)
-  (solaire-global-mode 1))
+  (solaire-global-mode +1))
 
-;; (use-package doom-themes
-;;   :straight t
-;;   :config
-;;   (load-theme 'doom-one t))
 
+;; Adjust for time display in modeline
+(defface egoge-display-time
+  '((((type x w32 mac))
+     ;; #006655 is the background colour of my default face.
+     (:foreground "#006655" :inherit bold))
+    (((type tty))
+     (:foreground "blue")))
+  "Face used to display the time in the mode line.")
+
+
+;; This causes the current time in the mode line to be displayed in
+;; `egoge-display-time-face' to make it stand out visually.
+(setq display-time-string-forms
+      '((propertize (concat " " 24-hours ":" minutes " ")
+ 		    'face 'egoge-display-time)))
+
+;; display time
+(display-time-mode 1)
+
+;; from https://dev.to/gonsie/beautifying-the-mode-line-3k10
+(setq-default mode-line-format
+              (list
+               ;; day and time
+               '(:eval (propertize (format-time-string " %b %d %H:%M ")
+                                   'face 'font-lock-builtin-face))
+
+
+               '(:eval (propertize (substring vc-mode 5)
+                                   'face 'font-lock-comment-face))
+
+               ;; the buffer name; the file name as a tool tip
+               '(:eval (propertize " %b "
+                                   'face
+                                   (let ((face (buffer-modified-p)))
+                                     (if face 'font-lock-warning-face
+                                       'font-lock-type-face))
+                                   'help-echo (buffer-file-name)))
+
+               ;; line and column
+               " (" ;; '%02' to set to 2 chars at least; prevents flickering
+               (propertize "%02l" 'face 'font-lock-keyword-face) ","
+               (propertize "%02c" 'face 'font-lock-keyword-face)
+               ") "
+
+               ;; relative position, size of file
+               " ["
+               (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
+               "/"
+               (propertize "%I" 'face 'font-lock-constant-face) ;; size
+               "] "
+
+               ;; spaces to align right
+               '(:eval (propertize
+                        " " 'display
+                        `((space :align-to (- (+ right right-fringe right-margin)
+                                              ,(+ 3 (string-width mode-name)))))))
+
+               ;; the current major mode
+               (propertize " %m " 'face 'font-lock-string-face)
+               ;;minor-mode-alist
+               ))
+
+
+(use-package all-the-icons
+  ;; needed to display icon correctly in doom-modeline
+  :straight t)
+
+(use-package doom-modeline
+  ;; Run M-x all-the-icons-install-fonts to install all-the-icons
+  :straight t
+  :custom
+  (doom-modeline-buffer-file-name-style 'truncate-with-project)
+  (doom-modeline-icon t)
+  (doom-modeline-major-mode-icon nil)
+  (doom-modeline-minor-modes nil)
+  :hook
+  (after-init . doom-modeline-mode)
+  :config
+  (set-face-attribute 'mode-line nil
+                      :background "#353644"
+                      :foreground "white"
+                      :box '(:line-width 6 :color "#353644")
+                      :overline nil
+                      :underline nil)
+
+  (set-face-attribute 'mode-line-inactive nil
+                      :background "#565063"
+                      :foreground "white"
+                      :box '(:line-width 6 :color "#565063")
+                      :overline nil
+                      :underline nil)
+
+  )
+
+;; Show hexadecimal color in the background they represent
+(use-package rainbow-mode
+  :straight t
+  :hook
+  ((prog-mode
+    inferior-ess-mode
+    ess-mode text-mode
+    markdown-mode
+    LaTeX-mode) . rainbow-mode)
+  :diminish (rainbow-mode . ""))
