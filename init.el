@@ -58,6 +58,7 @@
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
 
+(package-initialize)
 
 ;; newer than byte-compiled file issues
 (setq load-prefer-newer t)
@@ -162,7 +163,7 @@
 ;; enable y/n answers
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; Set paste system
-(set-clipboard-coding-system 'utf-16le-dos)
+;; (set-clipboard-coding-system 'utf-16le-dos)
 ;; Set paste error under linux
 (set-selection-coding-system 'utf-8)
 ;; Allow pasting selection outside of Emacs
@@ -1645,12 +1646,10 @@ In that case, insert the number."
 ;; (use-package treemacs
 ;;   :commands treemacs)
 
-
 ;;; ESS
 (use-package ess-site
-  :straight ess
-  :defer 5
-  ;;:pin melpa-stable
+  :disabled nil
+  :straight ess  
   :bind
   (:map ess-mode-map ;ESS
         ("C-c s" . run-shiny-app)
@@ -1799,6 +1798,11 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
   ;; (global-set-key (kbd "\C-cp") 'ess-readline)
   )
 
+(use-package ess-R-data-view
+  ;; Use M-x ess-R-dv-ctable or ess-R-dv-pprint
+  :requires ess
+  :straight t)
+
 ;; (use-package ess-site
 ;;   :straight ess
 ;;   :commands (inferior-ess-mode ess-help-mode)
@@ -1807,6 +1811,34 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
 
 ;;   :config
 ;;   (bind-key "C-c C-w" nil inferior-ess-mode-map))
+
+;; (straight-use-package 'ess)
+;;(require 'ess-site)
+;; (require 'ess-r-mode)
+;; (when (not (boundp 'ess-r-mode-hook))
+;;   (setq ess-r-mode-hook nil ))
+;; (defun emacsmate-turn-on-ess-eldoc ()
+;;   (require 'ess-eldoc))
+;; (add-hook 'ess-r-mode-hook 'emacsmate-turn-on-ess-eldoc)
+;; (autoload 'R-mode "ess-site" "ESS" 't)
+
+;; (add-to-list 'auto-mode-alist '("\\.[rR]\\'" . ess-r-mode))
+
+;; (defun gtrun/add-company-backend-ess ()
+;;   (pop company-backends)
+;;   (setq-local company-backends
+;;               (append '((company-R-args company-R-objects company-R-library
+;;                                         company-tabnine))
+;;                       company-backends)))
+
+;; (add-hook 'ess-r-mode-hook 'gtrun/add-company-backend-ess)
+
+;; (require 'ess-r-mode)
+;; (straight-use-package 'ess)
+;; (require 'ess)
+;; (straight-use-package 'ess-R-data-view)
+;; (require 'ess-R-data-view)
+
 
 
 ;;; Appearance
@@ -1830,7 +1862,7 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
   (setq my-themes '(
                     doom-vibrant
                     doom-nord-light
-                    doom-fairy-floss
+                    doom-dracula
                     doom-oceanic-next
                     doom-Iosvkem ;bold has bigger font
                     ))
