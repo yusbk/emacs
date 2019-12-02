@@ -74,11 +74,37 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+;;; Personal keybindings 
+;; Personal map activate as early as possible
+(bind-keys :prefix "<f12>"
+           :prefix-map my-personal-map)
+
+(bind-keys :prefix "C-c c"
+           :prefix-map my-code-map)
+
+
+;; Early unbind keys for customization
+(unbind-key "C-s") ; Reserve for search related commands
+(bind-keys :prefix "C-s"
+           :prefix-map my-search-map)
+
+(unbind-key "C-z") ;; Reserve for hydra related commands
+(bind-keys :prefix "C-z"
+           :prefix-map my-assist-map)
+
+
+
 ;;; Symbolic link and folders
-(defun my-init-file ()
-  "Open my emacs init.el file"
-  (interactive)
-  (find-file (concat user-emacs-directory "init.el")))
+(use-package my-init
+  :straight nil
+  :bind (:map my-personal-map
+              ("y" . my-init-file))
+  :init
+  (defun my-init-file ()
+    "Open my emacs init.el file"
+    (interactive)
+    (find-file (concat user-emacs-directory "init.el")))
+  )
 
 ;; Emacs configuration, along with many other journals, are synchronized across machines
 (setq my-sync-directory "~/Dropbox")
@@ -205,24 +231,6 @@
     (cd "/sudo::/")
     (async-shell-command command)))
 
-;;; Keybindings 
-;; Personal map
-(bind-keys :prefix "<f12>"
-           :prefix-map my-personal-map)
-
-(bind-keys :prefix "C-c c"
-           :prefix-map my-code-map)
-
-
-;; Early unbind keys for customization
-(unbind-key "C-s") ; Reserve for search related commands
-(bind-keys :prefix "C-s"
-           :prefix-map my-search-map)
-
-(unbind-key "C-z") ;; Reserve for hydra related commands
-(bind-keys :prefix "C-z"
-           :prefix-map my-assist-map)
-
 
 ;;; General purpose packages
 ;; Hide and show the content in this file by pressing S-tab
@@ -249,24 +257,6 @@
   (beacon-mode 1))
 
 
-(use-package hungry-delete
-  :defer 3
-  :config
-  (global-hungry-delete-mode))
-
-(use-package autorevert
-  ;; revert buffers when files on disk change
-  :defer 3
-  :config
-  (setq
-   ;; Also auto refresh dired, but be quiet about it
-   global-auto-revert-non-file-buffers t
-   auto-revert-verbose nil
-   ;; Revert pdf without asking
-   revert-without-query '("\\.pdf"))
-  (global-auto-revert-mode 1) ;; work with auto-save with Org files in Dropbox
-  )
-
 ;;; Cache related
 ;;;; Things that use the catche folder
 (use-package recentf
@@ -286,7 +276,7 @@
   (recentf-mode +1)
   )
 
-
+;;; Misc
 (use-package aggressive-indent
   ;; Aggressive indent mode
   :hook ((emacs-lisp-mode ess-mode-hook org-src-mode-hook) . aggressive-indent-mode)
@@ -306,6 +296,27 @@
               (ibuffer-do-sort-by-alphabetic)))
   )
 
+
+(use-package autorevert
+  ;; revert buffers when files on disk change
+  :defer 3
+  :config
+  (setq
+   ;; Also auto refresh dired, but be quiet about it
+   global-auto-revert-non-file-buffers t
+   auto-revert-verbose nil
+   ;; Revert pdf without asking
+   revert-without-query '("\\.pdf"))
+  (global-auto-revert-mode 1) ;; work with auto-save with Org files in Dropbox
+  )
+
+
+(use-package hungry-delete
+  :defer 3
+  :config
+  (global-hungry-delete-mode))
+
+
 (use-package which-key
   :defer 3
   :config
@@ -313,11 +324,12 @@
   (which-key-mode)
   )
 
+
 (use-package whole-line-or-region
-  ;; If no region is active, C-w M-w will act on current line
+  ;; If no region is active, C-w and M-w will act on current line
   :defer 5
-  ;; Right click to paste: I don't use the popup menu a lot.
-  :bind ("<mouse-3>" . whole-line-or-region-yank)
+  ;; Right click to paste: I don't use the popup  
+  ;; :bind ("<mouse-3>" . whole-line-or-region-
   :bind (:map whole-line-or-region-local-mode-map 
               ("C-w" . kill-region-or-backward-word)) ;; Reserve for backward-kill-word
   :init
@@ -330,6 +342,7 @@
   :config
   (whole-line-or-region-global-mode)
   )
+
 
 (use-package crux
   ;; A handful of useful functions
@@ -360,6 +373,7 @@
   :straight nil
   :defer 5
   :hook ((prog-mode) . auto-fill-mode)
+  ;; resize buffer accordingly
   :bind (("<f8>" . (lambda () (interactive) (progn (visual-line-mode)
                                               (follow-mode))))
          ;; M-backspace to backward-delete-word
@@ -421,6 +435,7 @@ Otherwise, call `delete-blank-lines'."
   (setq-default visual-fill-column-width 119
                 visual-fill-column-center-text nil)
   )
+
 
 
 (use-package expand-region
@@ -486,6 +501,7 @@ Otherwise, call `delete-blank-lines'."
 
 (use-package multiple-cursors
   ;; Read https://github.com/magnars/multiple-cursors.el for common use cases
+  :straight t
   :defer 10
   :commands (mc/mark-next-like-this)
   :bind
@@ -515,6 +531,8 @@ Otherwise, call `delete-blank-lines'."
 (bind-key "C-x u " #'undo)
 
 (use-package undo-tree
+  :straight t
+  :diminish undo-tree-mode
   :bind (:map my-assist-map
               ("u" . undo-tree-visualize)
               ("r" . redo))
@@ -557,8 +575,7 @@ Otherwise, call `delete-blank-lines'."
   ;; Aktifkan
   (global-undo-tree-mode 1)
 
-  :diminish (undo-tree-mode . " "))
-
+ )
 
 
 ;;; Completion Framework: Ivy / Swiper / Counsel
@@ -697,6 +714,7 @@ output file. %i path(s) are relative, while %o is absolute.")
   :straight magit-todos
   :straight ediff
   :straight magit-diff-flycheck
+  ;; use M-x v for vc-prefix-map
   :bind (:map vc-prefix-map
               ("s" . 'git-gutter:stage-hunk)
               ("c" . 'magit-clone))
@@ -859,6 +877,7 @@ horizontal mode."
             (if this-win-2nd (other-window 1))))))
   )
 
+
 (use-package ace-window
   :defer 3
   :bind (("<C-return>" . ace-window))
@@ -875,6 +894,7 @@ horizontal mode."
   :defer 1
   :config
   (winner-mode 1))
+
 
 (use-package nswbuff
   ;; Quickly switching buffers. Quite useful!
@@ -979,6 +999,7 @@ horizontal mode."
         eyebrowse-new-workspace t)
   (eyebrowse-mode)
   )
+
 
 ;;; Programming
 
@@ -1115,16 +1136,17 @@ horizontal mode."
             groovy-mode
             scala-mode)
     (add-hook it 'turn-on-smartparens-strict-mode))
-
-  (add-hook 'inferior-ess-mode-hook #'smartparens-mode)
-  (add-hook 'LaTeX-mode-hook #'smartparens-mode)
-  (add-hook 'markdown-mode-hook #'smartparens-mode)
+  :hook ((ess-mode 
+          inferior-ess-mode 
+          markdown-mode 
+          prog-mode) . smartparens-mode)
+  ;; (add-hook 'inferior-ess-mode-hook #'smartparens-mode)
+  ;; (add-hook 'LaTeX-mode-hook #'smartparens-mode)
+  ;; (add-hook 'markdown-mode-hook #'smartparens-mode)
   )
 
 
-
 ;;; Commenting
-
 (defun comment-eclipse ()
   (interactive)
   (let ((start (line-beginning-position))
@@ -1244,6 +1266,7 @@ In that case, insert the number."
                                            try-complete-lisp-symbol)))
 
 (use-package abbrev
+  ;;M-x a
   :straight nil
   :defer 5
   :hook ((text-mode prog-mode erc-mode LaTeX-mode) . abbrev-mode)
@@ -1253,6 +1276,7 @@ In that case, insert the number."
   (setq-default abbrev-file-name (expand-file-name "abbrev_defs" my-private-conf-directory))
   (if (file-exists-p abbrev-file-name)
       (quietly-read-abbrev-file)))
+
 
 
 ;;; Terminal
@@ -1538,6 +1562,7 @@ In that case, insert the number."
     ("a" origami-toggle-all-nodes))
   )
 
+
 ;;; Documentation
 
 (use-package eldoc
@@ -1642,9 +1667,6 @@ In that case, insert the number."
      ("h"          . neotree-hidden-file-toggle)
      ("f"          . neotree-refresh))))
 
-
-;; (use-package treemacs
-;;   :commands treemacs)
 
 ;;; ESS
 (use-package ess-site
@@ -1803,42 +1825,6 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
   :requires ess
   :straight t)
 
-;; (use-package ess-site
-;;   :straight ess
-;;   :commands (inferior-ess-mode ess-help-mode)
-;;   :init
-;;   (setq inferior-R-args "--quiet")
-
-;;   :config
-;;   (bind-key "C-c C-w" nil inferior-ess-mode-map))
-
-;; (straight-use-package 'ess)
-;;(require 'ess-site)
-;; (require 'ess-r-mode)
-;; (when (not (boundp 'ess-r-mode-hook))
-;;   (setq ess-r-mode-hook nil ))
-;; (defun emacsmate-turn-on-ess-eldoc ()
-;;   (require 'ess-eldoc))
-;; (add-hook 'ess-r-mode-hook 'emacsmate-turn-on-ess-eldoc)
-;; (autoload 'R-mode "ess-site" "ESS" 't)
-
-;; (add-to-list 'auto-mode-alist '("\\.[rR]\\'" . ess-r-mode))
-
-;; (defun gtrun/add-company-backend-ess ()
-;;   (pop company-backends)
-;;   (setq-local company-backends
-;;               (append '((company-R-args company-R-objects company-R-library
-;;                                         company-tabnine))
-;;                       company-backends)))
-
-;; (add-hook 'ess-r-mode-hook 'gtrun/add-company-backend-ess)
-
-;; (require 'ess-r-mode)
-;; (straight-use-package 'ess)
-;; (require 'ess)
-;; (straight-use-package 'ess-R-data-view)
-;; (require 'ess-R-data-view)
-
 
 
 ;;; Appearance
@@ -1992,10 +1978,11 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
 ;; Show hexadecimal color in the background they represent
 (use-package rainbow-mode
   :straight t
+  :diminish rainbow-mode
   :hook
   ((prog-mode
     inferior-ess-mode
     ess-mode text-mode
     markdown-mode
     LaTeX-mode) . rainbow-mode)
-  :diminish (rainbow-mode . ""))
+  )
