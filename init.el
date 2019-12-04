@@ -2000,6 +2000,7 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
     LaTeX-mode) . rainbow-mode)
   )
 
+  )
 
 ;;; Org
 ;; Remove footer html export
