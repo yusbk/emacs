@@ -5,7 +5,7 @@
 ;; to locate individual use-package definition.
 
 
-(progn ;startup 
+(progn ;startup
   (defvar before-user-init-time (current-time)
     "Value of `current-time' when Emacs begins loading `user-init-file'.")
   (message "Loading Emacs...done (%.3fs)"
@@ -75,7 +75,7 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-;;; Personal keybindings 
+;;; Personal keybindings
 ;; Personal map activate as early as possible
 (bind-keys :prefix "<f12>"
            :prefix-map my-personal-map)
@@ -329,9 +329,9 @@
 (use-package whole-line-or-region
   ;; If no region is active, C-w and M-w will act on current line
   :defer 5
-  ;; Right click to paste: I don't use the popup  
+  ;; Right click to paste: I don't use the popup
   ;; :bind ("<mouse-3>" . whole-line-or-region-
-  :bind (:map whole-line-or-region-local-mode-map 
+  :bind (:map whole-line-or-region-local-mode-map
               ("C-w" . kill-region-or-backward-word)) ;; Reserve for backward-kill-word
   :init
   (defun kill-region-or-backward-word ()
@@ -431,6 +431,7 @@ Otherwise, call `delete-blank-lines'."
       (message time-duration)
       (run-at-time time-duration nil #'alert msg-to-show)))
 
+  (use-package visual-fill-column)
   ;; Activate `visual-fill-column-mode' in every buffer that uses `visual-line-mode'
   (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
   (setq-default visual-fill-column-width 119
@@ -576,7 +577,7 @@ Otherwise, call `delete-blank-lines'."
   ;; Aktifkan
   (global-undo-tree-mode 1)
 
- )
+  )
 
 
 ;;; Completion Framework: Ivy / Swiper / Counsel
@@ -881,7 +882,7 @@ horizontal mode."
 
 (use-package ace-window
   :defer 3
-  :bind (("<C-return>" . ace-window))
+  :bind ([S-return] . ace-window)
   :custom-face (aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
   :config
   (setq
@@ -1137,9 +1138,9 @@ horizontal mode."
             groovy-mode
             scala-mode)
     (add-hook it 'turn-on-smartparens-strict-mode))
-  :hook ((ess-mode 
-          inferior-ess-mode 
-          markdown-mode 
+  :hook ((ess-mode
+          inferior-ess-mode
+          markdown-mode
           prog-mode) . smartparens-mode)
   ;; (add-hook 'inferior-ess-mode-hook #'smartparens-mode)
   ;; (add-hook 'LaTeX-mode-hook #'smartparens-mode)
@@ -1247,7 +1248,7 @@ In that case, insert the number."
   :config
   ;; Activate globally
   ;; (global-set-key (kbd "") 'hippie-expand)
-  
+
   ;; Don't case-fold when expanding with hippe
   (defun hippie-expand-no-case-fold ()
     (interactive)
@@ -1526,15 +1527,18 @@ In that case, insert the number."
   :straight t
   :defer 2
   :bind ([f9] . shell-pop)
+  :custom
+  (shell-pop-full-span t)
+  (shell-pop-shell-type '("eshell" "*eshell" (lambda nil (eshell))))
   :config
-  (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
-  (setq shell-pop-term-shell "/bin/bash")
+  ;; ;;shell terminal
+  ;; (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
+  ;; (setq shell-pop-term-shell "/bin/bash")
   ;; (setq shell-pop-universal-key "C-t") ;use for eshell keybind
 
   ;; need to do this manually or not picked up by `shell-pop'
   (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type)
   )
-
 
 
 ;;; Code folding
@@ -1583,7 +1587,7 @@ In that case, insert the number."
 (use-package neotree
   :straight t
   :defer 3
-  :bind (("<f4>" . neotree-toggle))
+  :bind ("<f4>" . neotree-toggle)
   :init
   (progn
     (setq-default neo-smart-open t) ;  every time when the neotree window is
@@ -1673,34 +1677,11 @@ In that case, insert the number."
 
 
 ;;; ESS
+;; C-c general keymap for ESS
+;; C-c C-t for debugging
 (use-package ess-site
-  :disabled nil
-  :straight ess  
-  :bind
-  (:map ess-mode-map ;ESS
-        ("C-c s" . run-shiny-app)
-        ("C-c C-g" . ess-describe-object-at-point)
-        ("C-a" . crux-move-beginning-of-line)
-        ("M--" . ess-insert-assign) ; assign <-
-        ("_"   . self-insert-command)
-        ("M-+" . my/dt-update)
-        ("M-m" . my/add-match)
-        ("M-." . ess-switch-process) ;sama dengan C-c C-s
-        ("M-p" . my/add-pipe)
-        ("C-|" . my/ess-eval-pipe-through-line)
-        ("C-M-<return>" . ess-eval-region-or-function-or-paragraph-and-step)
-        ("C-M--" . ess-eval-region-or-function-or-paragraph)
-        :map inferior-ess-mode-map ;iESS
-        ("M--" . ess-insert-assign)
-        ("_"   . self-insert-command)
-        ("M-+" . my/dt-update)
-        ("M-m" . my/add-match)
-        ("C-S-<up>" . ess-readline);previous cmd from script
-        ;; :map ybk/r-map
-        ;; ("." . ess-describe-object-at-point)
-        ;; ("d" . ess-dev-map)
-        ;; ("r" . ess-r-package-dev-map)
-        )
+  :straight ess
+  :mode ("\\.r[R]\\'" . ess-r-mode)
   :init
   ;; Tetapkan Rsetting folder
   (defvar ybk/r-dir "~/Rsetting/") ;definere hvor epost skal være
@@ -1708,103 +1689,33 @@ In that case, insert the number."
   (unless (file-exists-p ybk/r-dir)
     (make-directory ybk/r-dir t))
 
-  :config
-  ;; ess-company
-  ;; https://stackoverflow.com/questions/49232454/emacs-ess-how-to-auto-complete-library-function
-  (defun my-ess-hook ()
-    ;; ensure company-R-library is in ESS backends
-    (make-local-variable 'company-backends)
-    (cl-delete-if (lambda (x) (and (eq (car-safe x) 'company-R-args))) company-backends)
-    (push (list 'company-R-args 'company-R-objects 'company-R-library :separate)
-          company-backends))
-
-  (add-hook 'ess-mode-hook 'my-ess-hook)
-
-  ;; (with-eval-after-load 'ess
-  ;;   (setq ess-use-company t))
-  (setq ess-use-company t)
-
-  ;; Quick help
-  (define-key company-active-map (kbd "M-h") 'company-show-doc-buffer)
-
-  ;; whitespace
-  (setq ess-nuke-trailing-whitespace-p t)
-
-  ;; pakai indentation cara RStudio
-  (setq ess-default-style 'RStudio-)
-  ;; (add-hook 'ess-mode-hook
-  ;;           (lambda ()
-  ;;             (ess-set-style 'RStudio)))
-
-  (setq ess-eval-visibly 'nowait) ; don't hog Emacs
-  (setq ess-ask-for-ess-directory nil) ; don't ask for dir when starting a process
-  (setq ess-eldoc-show-on-symbol t) ; show eldoc on symbol instead of only inside of parens
-  (setq ess-use-ido nil) ; rely on ivy instead of ido
-
-  ;; History
-  (setq ess-history-directory ybk/r-dir) ;tetapkan folder utk history
-  (setq ess-history-file t) ;nil if not saving .Rhistory
-  ;; (setq inferior-R-args "--no-restore-history --no-save") ;utk R comman not to restore and save Rhistory
-  (setq inferior-R-args "--no-restore-history --vanilla") ; guna vanilla sebagai default utk reproducibility
-  (setq ess-pdf-viewer-pref "emacsclient") ; guna pdf-tools
-
   ;; data.table update
-  (defun my/dt-update ()
+  (defun my-dt-update ()
     "Adds a data.table update."
     (interactive)
     ;;(just-one-space 1) ;delete whitespace around cursor
     (insert " := "))
 
   ;; Match
-  (defun my/add-match ()
+  (defun my-add-match ()
     "Adds match."
     (interactive)
     (insert " %in% "))
 
   ;; pipe
-  (defun my/add-pipe ()
+  (defun my-add-pipe ()
     "Adds a pipe operator %>% with one space to the left and then
-starts a newline with proper indentation"
+  starts a newline with proper indentation"
     (interactive)
     (just-one-space 1)
     (insert "%>%")
     (ess-newline-and-indent))
 
-  ;; I sometimes want to evaluate just part of a piped sequence. The
-  ;; following lets me do so without needing to insert blank lines or
-  ;; something:
-  (defun my/ess-beginning-of-pipe-or-end-of-line ()
-    "Find point position of end of line or beginning of pipe %>%"
-    (if (search-forward "%>%" (line-end-position) t)
-        (let ((pos (progn
-                     (beginning-of-line)
-                     (search-forward "%>%" (line-end-position))
-                     (backward-char 3)
-                     (point))))
-          (goto-char pos))
-      (end-of-line)))
-
-  (defun my/ess-eval-pipe-through-line (vis)
-    "Like `ess-eval-paragraph' but only evaluates up to the pipe on this line.
-
-If no pipe, evaluate paragraph through the end of current line.
-
-Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
-    (interactive "P")
-    (save-excursion
-      (let ((end (progn
-                   (my/ess-beginning-of-pipe-or-end-of-line)
-                   (point)))
-            (beg (progn (backward-paragraph)
-                        (ess-skip-blanks-forward 'multiline)
-                        (point))))
-        (ess-eval-region beg end vis))))
-
   ;; Get commands run from script or console
   ;; https://stackoverflow.com/questions/27307757/ess-retrieving-command-history-from-commands-entered-in-essr-inferior-mode-or
   (defun ess-readline ()
     "Move to previous command entered from script *or* R-process and copy
-   to prompt for execution or editing"
+     to prompt for execution or editing"
     (interactive)
     ;; See how many times function was called
     (if (eq last-command 'ess-readline)
@@ -1821,13 +1732,92 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
     (setq this-command 'ess-readline)
     )
 
-  ;; (global-set-key (kbd "\C-cp") 'ess-readline)
+  ;; I sometimes want to evaluate just part of a piped sequence. The
+  ;; following lets me do so without needing to insert blank lines or
+  ;; something:
+  (defun my/ess-beginning-of-pipe-or-end-of-line ()
+    "Find point position of end of line or beginning of pipe %>%"
+    (if (search-forward "%>%" (line-end-position) t)
+        (let ((pos (progn
+                     (beginning-of-line)
+                     (search-forward "%>%" (line-end-position))
+                     (backward-char 3)
+                     (point))))
+          (goto-char pos))
+      (end-of-line)))
+
+  (defun my-ess-eval-pipe-through-line (vis)
+    "Like `ess-eval-paragraph' but only evaluates up to the pipe on this line.
+ If no pipe, evaluate paragraph through the end of current line.
+ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
+    (interactive "P")
+    (save-excursion
+      (let ((end (progn
+                   (my/ess-beginning-of-pipe-or-end-of-line)
+                   (point)))
+            (beg (progn (backward-paragraph)
+                        (ess-skip-blanks-forward 'multiline)
+                        (point))))
+        (ess-eval-region beg end vis))))
+
+  :bind* (("C-c -" . ess-insert-assign)
+          ("C-c +" . my-dt-update)
+          ("C-c ," . my-add-match)
+          ("C-c \\" . my-add-pipe)
+          ("M-|" . my-ess-eval-pipe-through-line)
+          ("M-<" . ess-readline)
+          )
+  :config
+  ;; the alist
+  (setq ess-R-object-tooltip-alist
+        '((numeric    . "summary")
+          (factor     . "table")
+          (integer    . "summary")
+          (lm         . "summary")
+          (data.frame . "summary")
+          (other      . "str")))
+
+  (defun ess-R-object-tooltip ()
+    "Get info for object at point, and display it in a tooltip."
+    (interactive)
+    (let ((objname (current-word))
+          (curbuf (current-buffer))
+          (tmpbuf (get-buffer-create "**ess-R-object-tooltip**")))
+      (if objname
+          (progn
+            (ess-command (concat "class(" objname ")\n")  tmpbuf )
+            (set-buffer tmpbuf)
+            (let ((bs (buffer-string)))
+              (if (not(string-match "\(object .* not found\)\|unexpected" bs))
+                  (let* ((objcls (buffer-substring
+                                  (+ 2 (string-match "\".*\"" bs))
+                                  (- (point-max) 2)))
+                         (myfun (cdr(assoc-string objcls
+                                                  ess-R-object-tooltip-alist))))
+                    (progn
+                      (if (eq myfun nil)
+                          (setq myfun
+                                (cdr(assoc-string "other"
+                                                  ess-R-object-tooltip-alist))))
+                      (ess-command (concat myfun "(" objname ")\n") tmpbuf)
+                      (let ((bs (buffer-string)))
+                        (progn
+                          (set-buffer curbuf)
+                          (tooltip-show-at-point bs 0 30)))))))))
+      (kill-buffer tmpbuf)))
+
+  ;; default key map
+  (defun emacsmate-add-tooltip-key ()
+    (local-set-key "\C-ct" 'ess-R-object-tooltip))
+  (add-hook 'ess-mode-hook 'emacsmate-add-tooltip-key)
+  (provide 'ess-R-object-tooltip)
   )
+
 
 (use-package ess-R-data-view
   ;; Use M-x ess-R-dv-ctable or ess-R-dv-pprint
-  :requires ess
-  :straight t)
+  ;; :disabled
+  :after ess)
 
 
 
@@ -1908,7 +1898,7 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
 ;; `egoge-display-time-face' to make it stand out visually.
 (setq display-time-string-forms
       '((propertize (concat " " 24-hours ":" minutes " ")
- 		    'face 'egoge-display-time)))
+                    'face 'egoge-display-time)))
 
 ;; display time
 (display-time-mode 1)
@@ -2000,7 +1990,6 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
     LaTeX-mode) . rainbow-mode)
   )
 
-  )
 
 ;;; Org
 ;; Remove footer html export
