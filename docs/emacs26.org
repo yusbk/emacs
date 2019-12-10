@@ -4,6 +4,12 @@
 #+OPTIONS: toc:nil
 #+PROPERTY: header-args :comments org :catch yes :results silent :tangle yes
 
+# #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
+# #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-light.min.css" />
+
+#+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
+
 Kandungan =PROPERTY= di atas ~:comments org~ ialah untuk memasukkan komen ke ~emacs25.el~
 
 * Sumbangan
@@ -475,8 +481,8 @@ Sembunyikan tetikus masa menaip
 #+END_SRC
 ** Komen region
 Kommen line tanpa perlu highlight seperti menggunakan
-~comment-or-uncommment-region~. Barisan yang ada kursor akan di komen. Cara ini
-diambil dari [[  (global-set-key (kbd "M-'") 'comment-or-uncomment-region)][StackOverflow]]
+=comment-or-uncommment-region=. Barisan yang ada kursor akan di komen. Cara ini
+diambil dari Stackoverflow.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (defun comment-eclipse ()
@@ -3808,7 +3814,7 @@ To convert to Rnw or Rmd. The ox-ravel.org file should be tangle =M-x
 org-babel-tangle=
 
 Cara guna:
-- Rujuk ke [[ESS and R]]
+- Rujuk
 - =C-c C-e l r= utk buat fail .Rnw
 - Buka fail .Rnw dan tekan =kk= utk buat fail .tex
 - Buka fail .tex dan tekan =C-c C-c= utk buat PDF atau lihat fail PDF
@@ -4432,7 +4438,7 @@ Rujukkan di [[https://github.com/Malabarba/org-agenda-property][Malabarba
 
 ** Capture
 I use org-capture to create short notes about all kinds of things. I can capture
-emails to remember for later, quick thoughts for later, RSS feeds (see [[Feed reader]]),
+emails to remember for later, quick thoughts for later, RSS feeds (see =Feed reader=),
 really anything.
 
 #+BEGIN_SRC emacs-lisp
