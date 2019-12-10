@@ -80,8 +80,8 @@
 (bind-keys :prefix "<f12>"
            :prefix-map my-personal-map)
 
-(bind-keys :prefix "C-c c"
-           :prefix-map my-code-map)
+;; (bind-keys :prefix "C-c c"
+;;            :prefix-map my-code-map)
 
 
 ;; Early unbind keys for customization
@@ -443,8 +443,8 @@ Otherwise, call `delete-blank-lines'."
 (use-package expand-region
   ;; Incrementally select a region
   ;; :after org ;; When using straight, er should byte-compiled with the latest Org
-  :bind (("C-'" . er/expand-region)
-         ("C-M-'" . er/contract-region))
+  :bind (("C--" . er/expand-region)
+         ("C-M--" . er/contract-region))
   :config
   (defun org-table-mark-field ()
     "Mark the current table field."
@@ -593,22 +593,18 @@ Otherwise, call `delete-blank-lines'."
          ("C-c C-r" . ivy-resume)
          ("<f6>"    . ivy-resume)
          ("C-h V"   . counsel-set-variable)
-         ("C-s l"   . counsel-find-library)
          ("C-s u"   . counsel-unicode-char)
          ("C-c j"   . counsel-git-grep)
-         ("C-s p"   . counsel-git-grep)
-         ("C-c i"   . counsel-imenu)
-         ("C-x l"   . counsel-locate)
-         ("C-x C-r" . counsel-recentf)
-         ;; Search-replace with ag and rg:
-         ;; C-u prefix to choose search directory
-         ;; C-c C-o opens an occur buffer
-         ;; e to toggle writable state
-         ("C-s C-s" . counsel-ag)
-         ("C-s r"   . counsel-rg)
-         ("C-s f"   . counsel-file-jump) ;; Jump to a file below the current directory.
-         ("C-s j"   . counsel-dired-jump);; Jump to directory under current directory
-         )
+         :map my-search-map
+         ("d" . counsel-file-jump)
+         ("f" . counsel-find-file)
+         ("j" . counsel-dired-jump)
+         ("s" . counsel-locate)
+         ("r" . counsel-recentf)
+         ("i" . counsel-imenu)
+         ("l" . counsel-find-library)
+         ("p" . counsel-git-grep)
+         ("C-s" . counsel-ag))
   :init
   (setq ivy-rich--display-transformers-list
         '(ivy-switch-buffer
@@ -1008,6 +1004,7 @@ horizontal mode."
 ;; General conventions on keybindings:
 ;; Use C-c C-z to switch to inferior process
 ;; Use C-c C-c to execute current paragraph of code
+
 
 ;;;; General settings: prog-mode, whitespaces, symbol-prettifying, highlighting
 (use-package prog-mode
@@ -1679,6 +1676,7 @@ In that case, insert the number."
 ;;; ESS
 ;; C-c general keymap for ESS
 ;; C-c C-t for debugging
+;; C-c C-d explore object
 (use-package ess-site
   :straight ess
   :mode ("\\.r[R]\\'" . ess-r-mode)
@@ -1849,11 +1847,13 @@ In that case, insert the number."
 
   ;; utk tukar tema f10-t
   (setq my-themes '(
-                    doom-vibrant
-                    doom-nord-light
                     doom-dracula
-                    doom-oceanic-next
-                    doom-Iosvkem ;bold has bigger font
+                    doom-vibrant
+                    doom-acario-light
+                    doom-peacock
+                    doom-tomorrow-day
+                    ;; doom-oceanic-next
+                    ;; doom-Iosvkem ;bold has bigger font
                     ))
 
   (setq my-cur-theme nil)
