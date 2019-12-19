@@ -3,6 +3,7 @@
 ;;; Commentary:
 ;; My personal config. Use `outshine-cycle-buffer' (<S-Tab>) to navigate through sections, and `counsel-imenu' (C-c i)
 ;; to locate individual use-package definition.
+;; M-x describe-personal-keybindings to see all personally defined keybindings
 
 
 (progn ;startup
@@ -352,13 +353,14 @@
          ("C-x t"         . 'crux-swap-windows)
          ("C-c b"         . 'crux-create-scratch-buffer)
          ("C-x o"         . 'crux-open-with)
-         ("C-x f"         . 'crux-recentf-find-file)
-         ("C-x 4 t"       . 'crux-transpose-windows)
+         ;; ("C-x f"         . 'crux-recentf-find-file) ;C-s f counsel-recent-file
+         ;; ("C-x 4 t"       . 'crux-transpose-windows)
          ("C-x C-k"       . 'crux-delete-buffer-and-file)
          ("C-c n"         . 'crux-cleanup-buffer-or-region)
          ("s-<return>"    . 'crux-cleanup-buffer-or-region)
          (:map my-assist-map
-               ("<backspace>" . crux-kill-line-backwards))
+               ("<backspace>" . crux-kill-line-backwards)
+               ("t" . crux-transpose-windows))
          )
   :init
   (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
@@ -580,126 +582,234 @@ Otherwise, call `delete-blank-lines'."
   )
 
 
-;;; Completion Framework: Ivy / Swiper / Counsel
-(use-package counsel
-  ;; specifying counsel will bring ivy and swiper as dependencies
-  :demand t
-  :straight ivy-hydra
-  :straight ivy-rich
-  :straight counsel-projectile
-  :straight ivy-posframe
-  :straight smex
-  :bind (("M-s"     . swiper)
-         ("C-c C-r" . ivy-resume)
-         ("<f6>"    . ivy-resume)
-         ("C-h V"   . counsel-set-variable)
-         ("C-s u"   . counsel-unicode-char)
-         ("C-c j"   . counsel-git-grep)
-         :map my-search-map
-         ("d" . counsel-file-jump)
-         ("f" . counsel-find-file)
-         ("j" . counsel-dired-jump)
-         ("s" . counsel-locate)
-         ("r" . counsel-recentf)
-         ("i" . counsel-imenu)
-         ("l" . counsel-find-library)
-         ("p" . counsel-git-grep)
-         ("C-s" . counsel-ag))
-  :init
-  (setq ivy-rich--display-transformers-list
-        '(ivy-switch-buffer
-          (:columns
-           ((ivy-rich-candidate (:width 50))  ; return the candidate itself
-            (ivy-rich-switch-buffer-size (:width 7))  ; return the buffer size
-            (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right)); return the buffer indicators
-            (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))          ; return the major mode info
-            (ivy-rich-switch-buffer-project (:width 15 :face success))             ; return project name using `projectile'
-            (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))  ; return file path relative to project root or `default-directory' if project is nil
-           :predicate
-           (lambda (cand) (get-buffer cand)))
-          counsel-M-x
-          (:columns
-           ((counsel-M-x-transformer (:width 40))  ; thr original transformer
-            (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))  ; return the docstring of the command
-          counsel-describe-function
-          (:columns
-           ((counsel-describe-function-transformer (:width 40))  ; the original transformer
-            (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))  ; return the docstring of the function
-          counsel-describe-variable
-          (:columns
-           ((counsel-describe-variable-transformer (:width 40))  ; the original transformer
-            (ivy-rich-counsel-variable-docstring (:face font-lock-doc-face))))  ; return the docstring of the variable
-          counsel-recentf
-          (:columns
-           ((ivy-rich-candidate (:width 0.8)) ; return the candidate itself
-            (ivy-rich-file-last-modified-time (:face font-lock-comment-face)))))) ; return the last modified time of the file
+;;; Completion
+;;;; Auto-completion with Company
+(use-package company
+  :defer 3
+  :straight company-quickhelp ; Show short documentation at point
+  :straight company-shell
+  ;; :bind* ("C-i" . company-complete) ;activate globally doesn't work in Swiper
+  :bind (
+         :map company-active-map
+         ("C-c ?" . company-quickhelp-manual-begin)
+         ("C-n" . company-select-next)
+         ("C-p" . company-select-previous)
+         ("C-d" . company-show-doc-buffer)
+         ("<tab>" . company-complete)
+         ("C-i" . company-complete-common)
+         ;; :map my-search-map
+         ;; ("c" . company-complete-selection)
+         ;; ("c" . company-complete-common)
+         )
   :config
-  (ivy-mode 1)
-  (ivy-rich-mode 1)
-  (counsel-mode 1)
-  (minibuffer-depth-indicate-mode 1)
-  (counsel-projectile-mode 1)
-  (setq smex-save-file (expand-file-name "smex-items" my-private-conf-directory))
-  (setq ivy-height 10
-        ivy-fixed-height-minibuffer t
-        ivy-use-virtual-buffers t ;; show recent files as buffers in C-x b
-        ivy-use-selectable-prompt t ;; C-M-j to rename similar filenames
-        enable-recursive-minibuffers t
-        ivy-re-builders-alist '((t . ivy--regex-plus))
-        ivy-count-format "(%d/%d) "
-        ;; Useful settings for long action lists
-        ;; See https://github.com/tmalsburg/helm-bibtex/issues/275#issuecomment-452572909
-        max-mini-window-height 0.30
-        ;; Don't parse remote files
-        ivy-rich-parse-remote-buffer 'nil
-        )
-  (defvar dired-compress-files-alist
-    '(("\\.tar\\.gz\\'" . "tar -c %i | gzip -c9 > %o")
-      ("\\.zip\\'" . "zip %o -r --filesync %i"))
-    "Control the compression shell command for `dired-do-compress-to'.
-Each element is (REGEXP . CMD), where REGEXP is the name of the
-archive to which you want to compress, and CMD the the
-corresponding command.
-Within CMD, %i denotes the input file(s), and %o denotes the
-output file. %i path(s) are relative, while %o is absolute.")
+  (global-company-mode t)
 
-  ;; Offer to create parent directories if they do not exist
-  ;; http://iqbalansari.github.io/blog/2014/12/07/automatically-create-parent-directories-on-visiting-a-new-file-in-emacs/
-  (defun my-create-non-existent-directory ()
-    (let ((parent-directory (file-name-directory buffer-file-name)))
-      (when (and (not (file-exists-p parent-directory))
-                 (y-or-n-p (format "Directory `%s' does not exist! Create it?" parent-directory)))
-        (make-directory parent-directory t))))
-  (add-to-list 'find-file-not-found-functions 'my-create-non-existent-directory)
+  (setq company-show-numbers t
+        ;; invert the navigation direction if the the completion
+        ;; popup-isearch-match is displayed on top (happens near the bottom of
+        ;; windows)
+        company-tooltip-flip-when-above t)
 
-  ;; Kill virtual buffer too
-  ;; https://emacs.stackexchange.com/questions/36836/how-to-remove-files-from-recentf-ivy-virtual-buffers
-  (defun my-ivy-kill-buffer (buf)
+  ;; Directly press [1..9] to insert candidates
+  ;; See http://oremacs.com/2017/12/27/company-numbers/
+  (defun ora-company-number ()
+    "Forward to `company-complete-number'.
+Unless the number is potentially part of the candidate.
+In that case, insert the number."
     (interactive)
-    (if (get-buffer buf)
-        (kill-buffer buf)
-      (setq recentf-list (delete (cdr (assoc buf ivy--virtual-buffers)) recentf-list))))
+    (let* ((k (this-command-keys))
+           (re (concat "^" company-prefix k)))
+      (if (or (cl-find-if (lambda (s) (string-match re s))
+                          company-candidates)
+              (> (string-to-number k)
+                 (length company-candidates)))
+          (self-insert-command 1)
+        (company-complete-number
+         (if (equal k "0")
+             10
+           (string-to-number k))))))
 
-  (ivy-set-actions 'ivy-switch-buffer
-                   '(("k" (lambda (x)
-                            (my-ivy-kill-buffer x)
-                            (ivy--reset-state ivy-last))  "kill")
-                     ("j" switch-to-buffer-other-window "other window")
-                     ("x" browse-file-directory "open externally")
-                     ))
+  (let ((map company-active-map))
+    (mapc (lambda (x) (define-key map (format "%d" x) 'ora-company-number))
+          (number-sequence 0 9))
+    (define-key map " " (lambda ()
+                          (interactive)
+                          (company-abort)
+                          (self-insert-command 1)))
+    (define-key map (kbd "<return>") nil))
 
-  (ivy-set-actions 'counsel-find-file
-                   '(("j" find-file-other-window "other window")
-                     ("b" counsel-find-file-cd-bookmark-action "cd bookmark")
-                     ("x" counsel-find-file-extern "open externally")
-                     ("k" delete-file "delete")
-                     ("g" magit-status-internal "magit status")
-                     ("r" counsel-find-file-as-root "open as root")))
-  ;; display at `ivy-posframe-style'
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-point)))
-  ;; (ivy-posframe-mode 1)
+  ;; company-shell
+  (add-to-list 'company-backends 'company-shell)
+
+  ;; aktifkan di org-mode selepas pastikan company-capf di company-backends
+  ;; https://github.com/company-mode/company-mode/issues/50
+  (defun add-pcomplete-to-capf ()
+    (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
+  (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
+
+  (setq company-tooltip-align-annotations t   ; align
+        company-tooltip-limit 6               ; list to show
+        company-tooltip-flip-when-above t
+        company-show-numbers t                ; Easy navigation to candidates with M-<n>
+        company-idle-delay .2                 ; delay before autocomplete popup
+        company-minimum-prefix-length 4       ; 4 prefix sebelum tunjukkan cadangan (default)
+        company-abort-manual-when-too-short t ; tanpa company sekiranya prefix pendek dari 'minimum-prefix-length'
+        )
   )
 
+
+;;;; Text completion
+(use-package hippie-exp
+  :straight nil
+  :defer 3
+  :bind (("M-/"   . hippie-expand-no-case-fold)
+         ("C-M-/" . dabbrev-completion))
+  :config
+  ;; Activate globally
+  ;; (global-set-key (kbd "") 'hippie-expand)
+
+  ;; Don't case-fold when expanding with hippe
+  (defun hippie-expand-no-case-fold ()
+    (interactive)
+    (let ((case-fold-search nil))
+      (hippie-expand nil)))
+
+  ;; hippie expand is dabbrev expand on steroids
+  (setq hippie-expand-try-functions-list '(try-expand-dabbrev
+                                           try-expand-dabbrev-all-buffers
+                                           try-expand-dabbrev-from-kill
+                                           try-complete-file-name-partially
+                                           try-complete-file-name
+                                           try-expand-all-abbrevs
+                                           try-expand-list
+                                           try-expand-line
+                                           try-complete-lisp-symbol-partially
+                                           try-complete-lisp-symbol)))
+
+(use-package abbrev
+  ;;M-x a
+  :straight nil
+  :defer 5
+  :hook ((text-mode prog-mode erc-mode LaTeX-mode) . abbrev-mode)
+  :init
+  (setq save-abbrevs 'silently)
+  :config
+  (setq-default abbrev-file-name (expand-file-name "abbrev_defs" my-private-conf-directory))
+  (if (file-exists-p abbrev-file-name)
+      (quietly-read-abbrev-file)))
+
+
+(use-package pabbrev
+  :diminish pabbrev-mode
+  :hook ((org-mode
+          ess-mode
+          emacs-lisp-mode
+          text-mode). pabbrev-mode)
+
+  :init
+  (setq pabbrev-idle-timer-verbose nil
+        pabbrev-read-only-error nil
+        pabbrev-scavenge-on-large-move nil)
+  ;; :bind ("C-i" . pabbrev-expand-maybe)
+  :config
+  (put 'yas-expand 'pabbrev-expand-after-command t)
+
+  ;;aktifkan pabbrev
+  (global-pabbrev-mode)
+
+  ;; Fix for pabbrev not working in org mode
+  ;; http://lists.gnu.org/archive/html/emacs-orgmode/2016-02/msg00311.html
+  ;; (define-key pabbrev-mode-map (kbd "C-i") 'pabbrev-expand-maybe)
+  ;; (define-key pabbrev-mode-map [tab] 'pabbrev-expand-maybe) ;default
+
+  ;; kill all possible overlay from current view
+  (setq pabbrev-debug-erase-all-overlays t)
+
+  ;; ;; hook to text-mode-hook
+  ;; (add-hook 'text-mode-hook (lambda () (pabbrev-mode)))
+
+  ;; pretty print a hash
+  (setq pabbrev-debug-print-hash t)
+
+  ;;limit suggestions and sort
+  (setq pabbrev-suggestions-limit-alpha-sort 5)
+  )
+
+
+(use-package yasnippet
+  :straight t
+  :init
+  ;; Guna snippet sendiri (bukan bundled punya)
+  (setq yas-snippet-dirs '("~/Dropbox/snippets"
+                           "~/Dropbox/snippets-test"))
+  (yas-global-mode 1)
+  :mode ("\\.yas" . snippet-mode) ;aktifkan mode bila ada fail dengan .yas
+  :config
+  ;; ;; Matikan TAB
+  ;; (eval-after-load 'yasnippet
+  ;;   '(progn
+  ;;      (define-key yas-keymap (kbd "TAB") nil)
+  ;;      (define-key yas-keymap (kbd "C-<") 'yas-next-field-or-maybe-expand)))
+
+  ;; Jump to end of snippet definition
+  (define-key yas-keymap (kbd "<return>") 'yas-exit-all-snippets)
+
+  ;; Inter-field navigation
+  (defun yas/goto-end-of-active-field ()
+    (interactive)
+    (let* ((snippet (car (yas--snippets-at-point)))
+           (position (yas--field-end (yas--snippet-active-field snippet))))
+      (if (= (point) position)
+          (move-end-of-line 1)
+        (goto-char position))))
+
+  (defun yas/goto-start-of-active-field ()
+    (interactive)
+    (let* ((snippet (car (yas--snippets-at-point)))
+           (position (yas--field-start (yas--snippet-active-field snippet))))
+      (if (= (point) position)
+          (move-beginning-of-line 1)
+        (goto-char position))))
+
+  (define-key yas-keymap (kbd "C-e") 'yas/goto-end-of-active-field)
+  (define-key yas-keymap (kbd "C-a") 'yas/goto-start-of-active-field)
+
+  ;; No dropdowns please, yas
+  (setq yas-prompt-functions '(yas-ido-prompt yas-completing-prompt))
+
+  ;; No need to be so verbose
+  (setq yas-verbosity 1)
+
+  ;; Wrap around region
+  (setq yas-wrap-around-region t)
+
+  ;; Completing point by some yasnippet key
+  ;; https://www.emacswiki.org/emacs/Yasnippet
+  (defun yas-ido-expand ()
+    "Lets you select (and expand) a yasnippet key"
+    (interactive)
+    (let ((original-point (point)))
+      (while (and
+              (not (= (point) (point-min) ))
+              (not
+               (string-match "[[:space:]\n]" (char-to-string (char-before)))))
+        (backward-word 1))
+      (let* ((init-word (point))
+             (word (buffer-substring init-word original-point))
+             (list (yas-active-keys)))
+        (goto-char original-point)
+        (let ((key (remove-if-not
+                    (lambda (s) (string-match (concat "^" word) s)) list)))
+          (if (= (length key) 1)
+              (setq key (pop key))
+            (setq key (ido-completing-read "key: " list nil nil word)))
+          (delete-char (- init-word original-point))
+          (insert key)
+          (yas-expand)))))
+
+  (define-key yas-minor-mode-map (kbd "<C-tab>") 'yas-ido-expand)
+
+  )
 
 ;;; Version-control
 
@@ -932,6 +1042,127 @@ horizontal mode."
 
 
 ;;; Navigation
+;;;; Ivy / Swiper / Counsel
+(use-package counsel
+  ;; specifying counsel will bring ivy and swiper as dependencies
+  :demand t
+  :straight ivy-hydra
+  :straight ivy-rich
+  :straight counsel-projectile
+  :straight ivy-posframe
+  :straight smex
+  :bind (("M-s"     . swiper)
+         ("C-c C-r" . ivy-resume)
+         ("<f6>"    . ivy-resume)
+         ("C-h V"   . counsel-set-variable)
+         ("C-s u"   . counsel-unicode-char)
+         ("C-c j"   . counsel-git-grep)
+         :map my-search-map
+         ("d" . counsel-file-jump)
+         ("f" . counsel-find-file)
+         ("j" . counsel-dired-jump)
+         ("s" . counsel-locate)
+         ("r" . counsel-recentf)
+         ("i" . counsel-imenu)
+         ("l" . counsel-find-library)
+         ("p" . counsel-git-grep)
+         ("C-s" . counsel-ag))
+  :init
+  (setq ivy-rich--display-transformers-list
+        '(ivy-switch-buffer
+          (:columns
+           ((ivy-rich-candidate (:width 50))  ; return the candidate itself
+            (ivy-rich-switch-buffer-size (:width 7))  ; return the buffer size
+            (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right)); return the buffer indicators
+            (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))          ; return the major mode info
+            (ivy-rich-switch-buffer-project (:width 15 :face success))             ; return project name using `projectile'
+            (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))  ; return file path relative to project root or `default-directory' if project is nil
+           :predicate
+           (lambda (cand) (get-buffer cand)))
+          counsel-M-x
+          (:columns
+           ((counsel-M-x-transformer (:width 40))  ; thr original transformer
+            (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))  ; return the docstring of the command
+          counsel-describe-function
+          (:columns
+           ((counsel-describe-function-transformer (:width 40))  ; the original transformer
+            (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))  ; return the docstring of the function
+          counsel-describe-variable
+          (:columns
+           ((counsel-describe-variable-transformer (:width 40))  ; the original transformer
+            (ivy-rich-counsel-variable-docstring (:face font-lock-doc-face))))  ; return the docstring of the variable
+          counsel-recentf
+          (:columns
+           ((ivy-rich-candidate (:width 0.8)) ; return the candidate itself
+            (ivy-rich-file-last-modified-time (:face font-lock-comment-face)))))) ; return the last modified time of the file
+  :config
+  (ivy-mode 1)
+  (ivy-rich-mode 1)
+  (counsel-mode 1)
+  (minibuffer-depth-indicate-mode 1)
+  (counsel-projectile-mode 1)
+  (setq smex-save-file (expand-file-name "smex-items" my-private-conf-directory))
+  (setq ivy-height 10
+        ivy-fixed-height-minibuffer t
+        ivy-use-virtual-buffers t ;; show recent files as buffers in C-x b
+        ivy-use-selectable-prompt t ;; C-M-j to rename similar filenames
+        enable-recursive-minibuffers t
+        ivy-re-builders-alist '((t . ivy--regex-plus))
+        ivy-count-format "(%d/%d) "
+        ;; Useful settings for long action lists
+        ;; See https://github.com/tmalsburg/helm-bibtex/issues/275#issuecomment-452572909
+        max-mini-window-height 0.30
+        ;; Don't parse remote files
+        ivy-rich-parse-remote-buffer 'nil
+        )
+  (defvar dired-compress-files-alist
+    '(("\\.tar\\.gz\\'" . "tar -c %i | gzip -c9 > %o")
+      ("\\.zip\\'" . "zip %o -r --filesync %i"))
+    "Control the compression shell command for `dired-do-compress-to'.
+Each element is (REGEXP . CMD), where REGEXP is the name of the
+archive to which you want to compress, and CMD the the
+corresponding command.
+Within CMD, %i denotes the input file(s), and %o denotes the
+output file. %i path(s) are relative, while %o is absolute.")
+
+  ;; Offer to create parent directories if they do not exist
+  ;; http://iqbalansari.github.io/blog/2014/12/07/automatically-create-parent-directories-on-visiting-a-new-file-in-emacs/
+  (defun my-create-non-existent-directory ()
+    (let ((parent-directory (file-name-directory buffer-file-name)))
+      (when (and (not (file-exists-p parent-directory))
+                 (y-or-n-p (format "Directory `%s' does not exist! Create it?" parent-directory)))
+        (make-directory parent-directory t))))
+  (add-to-list 'find-file-not-found-functions 'my-create-non-existent-directory)
+
+  ;; Kill virtual buffer too
+  ;; https://emacs.stackexchange.com/questions/36836/how-to-remove-files-from-recentf-ivy-virtual-buffers
+  (defun my-ivy-kill-buffer (buf)
+    (interactive)
+    (if (get-buffer buf)
+        (kill-buffer buf)
+      (setq recentf-list (delete (cdr (assoc buf ivy--virtual-buffers)) recentf-list))))
+
+  (ivy-set-actions 'ivy-switch-buffer
+                   '(("k" (lambda (x)
+                            (my-ivy-kill-buffer x)
+                            (ivy--reset-state ivy-last))  "kill")
+                     ("j" switch-to-buffer-other-window "other window")
+                     ("x" browse-file-directory "open externally")
+                     ))
+
+  (ivy-set-actions 'counsel-find-file
+                   '(("j" find-file-other-window "other window")
+                     ("b" counsel-find-file-cd-bookmark-action "cd bookmark")
+                     ("x" counsel-find-file-extern "open externally")
+                     ("k" delete-file "delete")
+                     ("g" magit-status-internal "magit status")
+                     ("r" counsel-find-file-as-root "open as root")))
+  ;; display at `ivy-posframe-style'
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-point)))
+  ;; (ivy-posframe-mode 1)
+  )
+
+
 ;;;; Register
 (use-package register
   :straight nil
@@ -1164,118 +1395,24 @@ horizontal mode."
 (global-set-key (kbd "M-'") 'comment-eclipse)
 
 
-;;;; Auto-completion with Company
-
-(use-package company
-  :defer 3
-  :straight company-quickhelp ; Show short documentation at point
-  :straight company-shell
-  :bind (
-         :map company-active-map
-         ("C-c ?" . company-quickhelp-manual-begin)
-         ("C-n" . company-select-next)
-         ("C-p" . company-select-previous)
-         ("C-d" . company-show-doc-buffer)
-         ("<tab>" . company-complete)
-         ("C-i" . company-complete-selection)
-         )
-  :config
-  (global-company-mode t)
-
-  (setq company-show-numbers t
-        ;; invert the navigation direction if the the completion
-        ;; popup-isearch-match is displayed on top (happens near the bottom of
-        ;; windows)
-        company-tooltip-flip-when-above t)
-
-  ;; Directly press [1..9] to insert candidates
-  ;; See http://oremacs.com/2017/12/27/company-numbers/
-  (defun ora-company-number ()
-    "Forward to `company-complete-number'.
-Unless the number is potentially part of the candidate.
-In that case, insert the number."
-    (interactive)
-    (let* ((k (this-command-keys))
-           (re (concat "^" company-prefix k)))
-      (if (or (cl-find-if (lambda (s) (string-match re s))
-                          company-candidates)
-              (> (string-to-number k)
-                 (length company-candidates)))
-          (self-insert-command 1)
-        (company-complete-number
-         (if (equal k "0")
-             10
-           (string-to-number k))))))
-
-  (let ((map company-active-map))
-    (mapc (lambda (x) (define-key map (format "%d" x) 'ora-company-number))
-          (number-sequence 0 9))
-    (define-key map " " (lambda ()
-                          (interactive)
-                          (company-abort)
-                          (self-insert-command 1)))
-    (define-key map (kbd "<return>") nil))
-
-  ;; company-shell
-  (add-to-list 'company-backends 'company-shell)
-
-  ;; aktifkan di org-mode selepas pastikan company-capf di company-backends
-  ;; https://github.com/company-mode/company-mode/issues/50
-  (defun add-pcomplete-to-capf ()
-    (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
-  (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
-
-  (setq company-tooltip-align-annotations t   ; align
-        company-tooltip-limit 6               ; list to show
-        company-tooltip-flip-when-above t
-        company-show-numbers t                ; Easy navigation to candidates with M-<n>
-        company-idle-delay .2                 ; delay before autocomplete popup
-        company-minimum-prefix-length 4       ; 4 prefix sebelum tunjukkan cadangan (default)
-        company-abort-manual-when-too-short t ; tanpa company sekiranya prefix pendek dari 'minimum-prefix-length'
-        )
-  )
 
 
-;;;; Heuristic text completion: hippie expand + dabbrev
-(use-package hippie-exp
+;;; Display
+;;Activate with M-x display-ansi-colors
+(use-package ansi-color
   :straight nil
-  :defer 3
-  :bind (("M-/"   . hippie-expand-no-case-fold)
-         ("C-M-/" . dabbrev-completion))
-  :config
-  ;; Activate globally
-  ;; (global-set-key (kbd "") 'hippie-expand)
-
-  ;; Don't case-fold when expanding with hippe
-  (defun hippie-expand-no-case-fold ()
-    (interactive)
-    (let ((case-fold-search nil))
-      (hippie-expand nil)))
-
-  ;; hippie expand is dabbrev expand on steroids
-  (setq hippie-expand-try-functions-list '(try-expand-dabbrev
-                                           try-expand-dabbrev-all-buffers
-                                           try-expand-dabbrev-from-kill
-                                           try-complete-file-name-partially
-                                           try-complete-file-name
-                                           try-expand-all-abbrevs
-                                           try-expand-list
-                                           try-expand-line
-                                           try-complete-lisp-symbol-partially
-                                           try-complete-lisp-symbol)))
-
-(use-package abbrev
-  ;;M-x a
-  :straight nil
-  :defer 5
-  :hook ((text-mode prog-mode erc-mode LaTeX-mode) . abbrev-mode)
   :init
-  (setq save-abbrevs 'silently)
-  :config
-  (setq-default abbrev-file-name (expand-file-name "abbrev_defs" my-private-conf-directory))
-  (if (file-exists-p abbrev-file-name)
-      (quietly-read-abbrev-file)))
+  (setq ansi-color-faces-vector
+        [default bold shadow italic underline bold bold-italic bold])
 
+  :bind (:map my-assist-map
+              ("d" . display-ansi-col))
+  :hook ((ess-mode inferior-ess-mode) . display-ansi-col)
+  :config
+  (defun display-ansi-col ()
+    (interactive)
+    (ansi-color-apply-on-region (point-min) (point-max)))
+  )
 
 
 ;;; Terminal
@@ -1677,9 +1814,15 @@ In that case, insert the number."
 ;; C-c general keymap for ESS
 ;; C-c C-t for debugging
 ;; C-c C-d explore object
+;; Tooltips
+;; C-c C-d C-e ess-describe-object-at-point
+
 (use-package ess-site
   :straight ess
-  :mode ("\\.r[R]\\'" . ess-r-mode)
+  ;; :mode ("\\.r[R]\\'" . ess-r-mode)
+  :commands (R
+             R-mode
+             r-mode)
   :init
   ;; Tetapkan Rsetting folder
   (defvar ybk/r-dir "~/Rsetting/") ;definere hvor epost skal være
@@ -1758,63 +1901,80 @@ In that case, insert the number."
                         (point))))
         (ess-eval-region beg end vis))))
 
-  :bind* (("C-c -" . ess-insert-assign)
+  :bind* (("M--" . ess-insert-assign)
           ("C-c +" . my-dt-update)
           ("C-c ," . my-add-match)
           ("C-c \\" . my-add-pipe)
           ("M-|" . my-ess-eval-pipe-through-line)
-          ("M-<" . ess-readline)
+          ("C-S-<up>" . ess-readline) ;previous command from script
           )
+  :bind (:map ess-mode-map
+              ("C-=" . ess-insert-assign)
+              ("C-c C-e" . ess-eval-region-or-line-and-step)
+              ("C-c C-b" . ess-eval-buffer)
+              ("C-c C-h" . ess-eval-buffer-from-beg-to-here))
   :config
-  ;; the alist
-  (setq ess-R-object-tooltip-alist
-        '((numeric    . "summary")
-          (factor     . "table")
-          (integer    . "summary")
-          (lm         . "summary")
-          (data.frame . "summary")
-          (other      . "str")))
+  ;; ESS-company
+  (setq ess-use-company t)
 
-  (defun ess-R-object-tooltip ()
-    "Get info for object at point, and display it in a tooltip."
+  ;; Must-haves for ESS
+  ;; http://www.emacswiki.org/emacs/CategoryESS
+  (setq ess-eval-visibly 'nowait) ;print input without waiting the process to finish
+
+  ;; Auto-scrolling of R console to bottom and Shift key extension
+  ;; http://www.kieranhealy.org/blog/archives/2009/10/12/make-shift-enter-do-a-lot-in-ess/
+  ;; Adapted with one minor change from Felipe Salazar at
+  ;; http://www.emacswiki.org/emacs/ESSShiftEnter
+  (setq ess-local-process-name "R")
+  (setq ansi-color-for-comint-mode 'filter)
+  (setq comint-prompt-read-only t)
+  (setq comint-scroll-to-bottom-on-input t)
+  (setq comint-scroll-to-bottom-on-output t)
+  (setq comint-move-point-for-output t)
+
+  ;; ess-trace-bug.el
+  (setq ess-use-tracebug t) ; permanent activation
+  ;;
+  ;; Tooltip included in ESS
+  (setq ess-describe-at-point-method 'tooltip) ; 'tooltip or nil (buffer)
+
+  ;; Run ShinyApp
+  ;; Source  https://jcubic.wordpress.com/2018/07/02/run-shiny-r-application-from-emacs/
+  (defun shiny ()
+    "run shiny R application in new shell buffer
+if there is displayed buffer that have shell it will use that window"
     (interactive)
-    (let ((objname (current-word))
-          (curbuf (current-buffer))
-          (tmpbuf (get-buffer-create "**ess-R-object-tooltip**")))
-      (if objname
-          (progn
-            (ess-command (concat "class(" objname ")\n")  tmpbuf )
-            (set-buffer tmpbuf)
-            (let ((bs (buffer-string)))
-              (if (not(string-match "\(object .* not found\)\|unexpected" bs))
-                  (let* ((objcls (buffer-substring
-                                  (+ 2 (string-match "\".*\"" bs))
-                                  (- (point-max) 2)))
-                         (myfun (cdr(assoc-string objcls
-                                                  ess-R-object-tooltip-alist))))
-                    (progn
-                      (if (eq myfun nil)
-                          (setq myfun
-                                (cdr(assoc-string "other"
-                                                  ess-R-object-tooltip-alist))))
-                      (ess-command (concat myfun "(" objname ")\n") tmpbuf)
-                      (let ((bs (buffer-string)))
-                        (progn
-                          (set-buffer curbuf)
-                          (tooltip-show-at-point bs 0 30)))))))))
-      (kill-buffer tmpbuf)))
+    (let* ((R (concat "shiny::runApp('" default-directory "')"))
+           (name "*shiny*")
+           (new-buffer (get-buffer-create name))
+           (script-proc-buffer
+            (apply 'make-comint-in-buffer "script" new-buffer "R" nil `("-e" ,R)))
+           (window (get-window-with-mode '(comint-mode eshell-mode)))
+           (script-proc (get-buffer-process script-proc-buffer)))
+      (if window
+          (set-window-buffer window new-buffer)
+        (switch-to-buffer-other-window new-buffer))))
 
-  ;; default key map
-  (defun emacsmate-add-tooltip-key ()
-    (local-set-key "\C-ct" 'ess-R-object-tooltip))
-  (add-hook 'ess-mode-hook 'emacsmate-add-tooltip-key)
-  (provide 'ess-R-object-tooltip)
+  (defun search-window-buffer (fn)
+    "return first window for which given function return non nil value"
+    (let ((buffers (buffer-list))
+          (value))
+      (dolist (buffer buffers value)
+        (let ((window (get-buffer-window buffer)))
+          (if (and window (not value) (funcall fn buffer window))
+              (setq value window))))))
+
+  (defun get-window-with-mode (modes)
+    "return window with given major modes"
+    (search-window-buffer (lambda (buff window)
+                            ((let ((mode (with-current-buffer buffer major-mode)))
+                               (member mode modes))))))
+
   )
 
-
+;; View data like View()
 (use-package ess-R-data-view
   ;; Use M-x ess-R-dv-ctable or ess-R-dv-pprint
-  ;; :disabled
   :after ess)
 
 
