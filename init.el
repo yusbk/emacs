@@ -740,10 +740,12 @@ In that case, insert the number."
   :straight t
   :init
   ;; Guna snippet sendiri (bukan bundled punya)
-  (setq yas-snippet-dirs '("~/Dropbox/snippets"
-                           "~/Dropbox/snippets-test"))
+  (setq yas-snippet-dirs '("~/Dropbox/snippets"))
+
   (yas-global-mode 1)
   :mode ("\\.yas" . snippet-mode) ;aktifkan mode bila ada fail dengan .yas
+  :bind (:map my-search-map
+              ("y" . yas-ido-expand))
   :config
   ;; ;; Matikan TAB
   ;; (eval-after-load 'yasnippet
@@ -807,7 +809,7 @@ In that case, insert the number."
           (insert key)
           (yas-expand)))))
 
-  (define-key yas-minor-mode-map (kbd "<C-tab>") 'yas-ido-expand)
+  (define-key yas-minor-mode-map (kbd "C-c <tab>") 'yas-ido-expand)
 
   )
 
@@ -1414,6 +1416,32 @@ output file. %i path(s) are relative, while %o is absolute.")
     (ansi-color-apply-on-region (point-min) (point-max)))
   )
 
+(use-package battery
+  :straight nil
+  ;; :disabled t
+  :init
+  (display-battery-mode 1)
+  :config
+  (when (and battery-status-function
+             (not (string-match-p "N/A"
+                                  (battery-format "%B"
+                                                  (funcall battery-status-function)))))
+    )
+
+  )
+
+;; (require 'battery)
+;; (when (and battery-status-function
+;;            (not (string-match-p "N/A"
+;;                                 (battery-format "%B"
+;;                                                 (funcall battery-status-function)))))
+;;   (display-battery-mode 1))
+
+;; ;; If not on AC power line, then display battery status on the mode line
+;; (and (require 'battery nil t)
+;;      (functionp battery-status-function)
+;;      (or (equal (cdr (assoc ?L (funcall battery-status-function))) "on-line")
+;;          (display-battery-mode 1)))
 
 ;;; Terminal
 ;;;; Eshell
