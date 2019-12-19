@@ -1377,6 +1377,19 @@ output file. %i path(s) are relative, while %o is absolute.")
   ;; (add-hook 'markdown-mode-hook #'smartparens-mode)
   )
 
+;; gives spaces automatically
+(use-package electric-operator
+  :config
+  ;; edit rules for ESS mode
+  (electric-operator-add-rules-for-mode 'ess-mode
+                                        (cons ":=" " := ")
+                                        ;; (cons "%" "%")
+                                        (cons "%in%" " %in% ")
+                                        (cons "%>%" " %>% "))
+
+  (setq electric-operator-R-named-argument-style 'spaced) ;if unspaced will be f(foo=1)
+  (add-hook 'ess-mode-hook #'electric-operator-mode)
+  (add-hook 'python-mode-hook #'electric-operator-mode))
 
 ;;; Commenting
 (defun comment-eclipse ()
@@ -2076,7 +2089,7 @@ if there is displayed buffer that have shell it will use that window"
 (defface egoge-display-time
   '((((type x w32 mac))
      ;; #006655 is the background colour of my default face.
-     (:foreground "#006655" :inherit bold))
+     (:foreground "#00dd11" :inherit bold))
     (((type tty))
      (:foreground "blue")))
   "Face used to display the time in the mode line.")
@@ -2182,3 +2195,19 @@ if there is displayed buffer that have shell it will use that window"
 ;;; Org
 ;; Remove footer html export
 (setq org-export-html-postamble nil)
+;;; Extra
+;;;; Weather
+(use-package weather-metno
+  :straight t
+  :bind (:map my-personal-map
+              ("w" . weather-metno-forecast))
+  :config
+  (setq weather-metno-location-name "Oslo, Norge"
+        weather-metno-location-latitude 59
+        weather-metno-location-longitude 10)
+
+  ;; ;; change icon size
+  ;; (setq weather-metno-use-imagemagick t)
+  ;; (setq weather-metno-get-image-props '(:width 10 :height 10 :ascent center))
+  (setq weather-metno-get-image-props '(:ascent center))
+  )
