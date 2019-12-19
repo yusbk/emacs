@@ -597,9 +597,9 @@ Otherwise, call `delete-blank-lines'."
          ("C-d" . company-show-doc-buffer)
          ("<tab>" . company-complete)
          ("C-i" . company-complete-common)
-         ;; :map my-search-map
+         :map my-search-map
          ;; ("c" . company-complete-selection)
-         ;; ("c" . company-complete-common)
+         ("c" . company-complete-common)
          )
   :config
   (global-company-mode t)
