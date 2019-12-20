@@ -279,6 +279,9 @@
   )
 
 ;;; Misc
+;; unbind not used keybindings
+(global-unset-key (kbd "C-x C-z"))
+
 (use-package aggressive-indent
   ;; Aggressive indent mode
   :hook ((emacs-lisp-mode ess-mode-hook org-src-mode-hook) . aggressive-indent-mode)
@@ -1047,6 +1050,15 @@ horizontal mode."
 
 
 ;;; Navigation
+;;;; Find-replace
+(use-package xah-find
+  ;; find text from all files in a folder
+  :bind (("C-s w" . xah-find-text)
+         ("C-s o" . xah-find-replace-text)
+         ("C-s e" . xah-find-text-regex)
+         ("C-s k" . xah-find-count))
+  )
+
 ;;;; Ivy / Swiper / Counsel
 (use-package counsel
   ;; specifying counsel will bring ivy and swiper as dependencies
@@ -1174,6 +1186,59 @@ output file. %i path(s) are relative, while %o is absolute.")
   :bind* (:map my-assist-map
                ("<SPC>" . point-to-register)
                ("j" . jump-to-register)))
+
+;;;; Bookmark
+(use-package bookmark
+  :straight t
+  :init
+  (setq bookmark-default-file (concat my-emacs-cache "bookmarks") ;bookmarks dir
+        bookmark-save-flag 1) ;auto save when chnage else use "t" to autosave when emacs quits
+  :bind (:map my-personal-map
+              ("m" . bookmark-set)
+              ("j" . bookmark-jump)
+              ("l" . bookmark-bmenu-list))
+  :config
+  ;; bookmark+ harus di download di GitHub dan pasang di load-path
+  ;; http://blog.binchen.org/posts/hello-ivy-mode-bye-helm.html
+  (defun ivy-bookmark-goto ()
+    "Open ANY bookmark"
+    (interactive)
+    (let (bookmarks filename)
+      ;; load bookmarks
+      (unless (featurep 'bookmark)
+        (require 'bookmark))
+      (bookmark-maybe-load-default-file)
+      (setq bookmarks (and (boundp 'bookmark-alist) bookmark-alist))
+
+      ;; do the real thing
+      (ivy-read "bookmarks:"
+                (delq nil (mapcar (lambda (bookmark)
+                                    (let (key)
+                                      ;; build key which will be displayed
+                                      (cond
+                                       ((and (assoc 'filename bookmark) (cdr (assoc 'filename bookmark)))
+                                        (setq key (format "%s (%s)" (car bookmark) (cdr (assoc 'filename bookmark)))))
+                                       ((and (assoc 'location bookmark) (cdr (assoc 'location bookmark)))
+                                        ;; bmkp-jump-w3m is from bookmark+
+                                        (unless (featurep 'bookmark+)
+                                          (require 'bookmark+))
+                                        (setq key (format "%s (%s)" (car bookmark) (cdr (assoc 'location bookmark)))))
+                                       (t
+                                        (setq key (car bookmark))))
+                                      ;; re-shape the data so full bookmark be passed to ivy-read:action
+                                      (cons key bookmark)))
+                                  bookmarks))
+                :action (lambda (bookmark)
+                          (bookmark-jump bookmark)))
+      ))
+
+
+  ;; Last visited bookmark on top
+  (defadvice bookmark-jump (after bookmark-jump activate)
+    (let ((latest (bookmark-get-bookmark bookmark)))
+      (setq bookmark-alist (delq latest bookmark-alist))
+      (add-to-list 'bookmark-alist latest)))
+  )
 
 ;;;; Avy
 
@@ -2052,8 +2117,10 @@ if there is displayed buffer that have shell it will use that window"
 ;; View data like View()
 (use-package ess-R-data-view
   ;; Use M-x ess-R-dv-ctable or ess-R-dv-pprint
-  :after ess)
-
+  :after ess
+  :bind (:map my-personal-map
+              ("r" . ess-R-dev-ctable)
+              ("s" . ess-R-dev-pprint)))
 
 
 ;;; Graphics
