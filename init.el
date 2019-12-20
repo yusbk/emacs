@@ -663,7 +663,10 @@ In that case, insert the number."
   :straight nil
   :defer 3
   :bind (("M-/"   . hippie-expand-no-case-fold)
-         ("C-M-/" . dabbrev-completion))
+         ("C-M-/" . dabbrev-completion)
+         :map my-assist-map
+         ("h" . hippie-expand)
+         ([?\t] . dabbrev-completion))
   :config
   ;; Activate globally
   ;; (global-set-key (kbd "") 'hippie-expand)
@@ -710,7 +713,7 @@ In that case, insert the number."
   (setq pabbrev-idle-timer-verbose nil
         pabbrev-read-only-error nil
         pabbrev-scavenge-on-large-move nil)
-  ;; :bind ("C-i" . pabbrev-expand-maybe)
+  :bind (:map my-assist-map ("i" . pabbrev-expand-maybe))
   :config
   (put 'yas-expand 'pabbrev-expand-after-command t)
 
@@ -744,7 +747,7 @@ In that case, insert the number."
 
   (yas-global-mode 1)
   :mode ("\\.yas" . snippet-mode) ;aktifkan mode bila ada fail dengan .yas
-  :bind (:map my-search-map
+  :bind (:map my-assist-map
               ("y" . yas-ido-expand))
   :config
   ;; ;; Matikan TAB
@@ -1191,6 +1194,39 @@ output file. %i path(s) are relative, while %o is absolute.")
   :bind (("M-z" . avy-zap-to-char-dwim)
          ("M-Z" . avy-zap-up-to-char-dwim)))
 
+;;;; Copy file path
+(defun xah-copy-file-path (&optional @dir-path-only-p)
+  "Copy the current buffer's file path or dired path to `kill-ring'.
+Result is full path.
+If `universal-argument' is called first, copy only the dir path.
+
+If in dired, copy the file/dir cursor is on, or marked files.
+
+If a buffer is not file and not dired, copy value of `default-directory' (which is usually the “current” dir when that buffer was created)
+
+URL `http://ergoemacs.org/emacs/emacs_copy_file_path.html'
+Version 2017-09-01"
+  (interactive "P")
+  (let (($fpath
+         (if (string-equal major-mode 'dired-mode)
+             (progn
+               (let (($result (mapconcat 'identity (dired-get-marked-files) "\n")))
+                 (if (equal (length $result) 0)
+                     (progn default-directory )
+                   (progn $result))))
+           (if (buffer-file-name)
+               (buffer-file-name)
+             (expand-file-name default-directory)))))
+    (kill-new
+     (if @dir-path-only-p
+         (progn
+           (message "Directory path copied: 「%s」" (file-name-directory $fpath))
+           (file-name-directory $fpath))
+       (progn
+         (message "File path copied: 「%s」" $fpath)
+         $fpath )))))
+
+(global-set-key (kbd "C-c d") 'xah-copy-file-path)
 
 ;;; Workspace Mgmt: eyebrowse + projectile
 
@@ -2089,7 +2125,7 @@ if there is displayed buffer that have shell it will use that window"
 (defface egoge-display-time
   '((((type x w32 mac))
      ;; #006655 is the background colour of my default face.
-     (:foreground "#00dd11" :inherit bold))
+     (:foreground "#ee7711" :inherit bold))
     (((type tty))
      (:foreground "blue")))
   "Face used to display the time in the mode line.")
