@@ -1306,6 +1306,21 @@ Version 2017-09-01"
   (setq projectile-project-search-path '("~/projects")
         projectile-completion-system 'ivy)
   (projectile-mode +1)
+
+  ;; Different than projectile-switch-project coz this works globally
+  (defun counsel-switch-project ()
+    (interactive)
+    (ivy-read "Switch to project: "
+              projectile-known-projects
+              :sort t
+              :require-match t
+              :preselect (when (projectile-project-p) (abbreviate-file-name (projectile-project-root)))
+              :action '(1
+                        ("o" projectile-switch-project-by-name "goto")
+                        ("g" magit-status "magit")
+                        ("s" (lambda (a) (setq default-directory a) (counsel-git-grep)) "git grep"))
+              :caller 'counsel-switch-project))
+  (bind-key* "C-c p p" 'counsel-switch-project)
   )
 
 (use-package eyebrowse
@@ -1334,12 +1349,9 @@ Version 2017-09-01"
 
 
 ;;; Programming
-
 ;; General conventions on keybindings:
 ;; Use C-c C-z to switch to inferior process
 ;; Use C-c C-c to execute current paragraph of code
-
-
 ;;;; General settings: prog-mode, whitespaces, symbol-prettifying, highlighting
 (use-package prog-mode
   ;; Generic major mode for programming
@@ -1480,6 +1492,8 @@ Version 2017-09-01"
 
 ;; gives spaces automatically
 (use-package electric-operator
+  :straight t
+  :hook ((ess-mode python-mode) . electric-operator-mode)
   :config
   ;; edit rules for ESS mode
   (electric-operator-add-rules-for-mode 'ess-mode
@@ -1489,8 +1503,15 @@ Version 2017-09-01"
                                         (cons "%>%" " %>% "))
 
   (setq electric-operator-R-named-argument-style 'spaced) ;if unspaced will be f(foo=1)
-  (add-hook 'ess-mode-hook #'electric-operator-mode)
-  (add-hook 'python-mode-hook #'electric-operator-mode))
+  ;; (add-hook 'ess-mode-hook #'electric-operator-mode)
+  ;; (add-hook 'python-mode-hook #'electric-operator-mode)
+  )
+
+(use-package csv-mode
+  :mode "\\.csv$"
+  :init
+  (setq csv-separators '(";"))
+  )
 
 ;;; Commenting
 (defun comment-eclipse ()
@@ -2122,6 +2143,20 @@ if there is displayed buffer that have shell it will use that window"
               ("r" . ess-R-dev-ctable)
               ("s" . ess-R-dev-pprint)))
 
+;; Open buffer to test R code
+(defun test-R-buffer ()
+  "Create a new empty buffer with R-mode."
+  (interactive)
+  (let (($buf (generate-new-buffer "*r-test*"))
+        (test-mode2 (quote R-mode)))
+    (switch-to-buffer $buf)
+    (insert (format "## == Test %s == \n\n" "R script"))
+    (funcall test-mode2)
+    (setq buffer-offer-save t)
+    $buf
+    ))
+
+(global-set-key (kbd "<f12> r") 'test-R-buffer)
 
 ;;; Graphics
 (use-package graphviz-dot-mode
