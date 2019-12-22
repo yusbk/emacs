@@ -1069,21 +1069,20 @@ horizontal mode."
   :straight ivy-posframe
   :straight smex
   :bind (("M-s"     . swiper)
-         ("C-c C-r" . ivy-resume)
-         ("<f6>"    . ivy-resume)
-         ("C-h V"   . counsel-set-variable)
-         ("C-s u"   . counsel-unicode-char)
-         ("C-c j"   . counsel-git-grep)
+         ("<f6>"    . ivy-resume) ;C-s C-r
          :map my-search-map
-         ("d" . counsel-file-jump)
+         ("a" . counsel-ag)
+         ("d" . counsel-dired-jump)
          ("f" . counsel-find-file)
-         ("j" . counsel-dired-jump)
-         ("s" . counsel-locate)
-         ("r" . counsel-recentf)
+         ("g" . counsel-git-grep)
          ("i" . counsel-imenu)
+         ("j" . counsel-file-jump)
          ("l" . counsel-find-library)
-         ("p" . counsel-git-grep)
-         ("C-s" . counsel-ag))
+         ("r" . counsel-recentf)
+         ("s" . counsel-locate)
+         ("u" . counsel-unicode-char)
+         ("v" . counsel-set-variable)
+         ("C-r" . ivy-resume))
   :init
   (setq ivy-rich--display-transformers-list
         '(ivy-switch-buffer
@@ -1300,7 +1299,7 @@ Version 2017-09-01"
   :straight ripgrep ;; required by projectile-ripgrep
   :bind-keymap
   ("C-c p" . projectile-command-map)
-  :bind (("C-c o" . 'projectile-find-file))
+  :bind* (("C-c p f" . 'projectile-find-file))
   :config
   ;; Where my projects and clones are normally placed.
   (setq projectile-project-search-path '("~/projects")
