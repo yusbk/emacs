@@ -81,8 +81,8 @@
 (bind-keys :prefix "<f12>"
            :prefix-map my-personal-map)
 
-;; (bind-keys :prefix "C-c c"
-;;            :prefix-map my-code-map)
+(bind-keys :prefix "C-c o"
+           :prefix-map my-org-map)
 
 
 ;; Early unbind keys for customization
@@ -279,6 +279,9 @@
   )
 
 ;;; Misc
+;; unbind not used keybindings
+(global-unset-key (kbd "C-x C-z"))
+
 (use-package aggressive-indent
   ;; Aggressive indent mode
   :hook ((emacs-lisp-mode ess-mode-hook org-src-mode-hook) . aggressive-indent-mode)
@@ -663,7 +666,10 @@ In that case, insert the number."
   :straight nil
   :defer 3
   :bind (("M-/"   . hippie-expand-no-case-fold)
-         ("C-M-/" . dabbrev-completion))
+         ("C-M-/" . dabbrev-completion)
+         :map my-assist-map
+         ("h" . hippie-expand)
+         ([?\t] . dabbrev-completion))
   :config
   ;; Activate globally
   ;; (global-set-key (kbd "") 'hippie-expand)
@@ -702,7 +708,7 @@ In that case, insert the number."
 (use-package pabbrev
   :diminish pabbrev-mode
   :hook ((org-mode
-          ess-mode
+          ess-r-mode
           emacs-lisp-mode
           text-mode). pabbrev-mode)
 
@@ -710,7 +716,7 @@ In that case, insert the number."
   (setq pabbrev-idle-timer-verbose nil
         pabbrev-read-only-error nil
         pabbrev-scavenge-on-large-move nil)
-  ;; :bind ("C-i" . pabbrev-expand-maybe)
+  :bind (:map my-assist-map ("i" . pabbrev-expand-maybe))
   :config
   (put 'yas-expand 'pabbrev-expand-after-command t)
 
@@ -744,7 +750,7 @@ In that case, insert the number."
 
   (yas-global-mode 1)
   :mode ("\\.yas" . snippet-mode) ;aktifkan mode bila ada fail dengan .yas
-  :bind (:map my-search-map
+  :bind (:map my-assist-map
               ("y" . yas-ido-expand))
   :config
   ;; ;; Matikan TAB
@@ -1044,6 +1050,15 @@ horizontal mode."
 
 
 ;;; Navigation
+;;;; Find-replace
+(use-package xah-find
+  ;; find text from all files in a folder
+  :bind (("C-s w" . xah-find-text)
+         ("C-s o" . xah-find-replace-text)
+         ("C-s e" . xah-find-text-regex)
+         ("C-s k" . xah-find-count))
+  )
+
 ;;;; Ivy / Swiper / Counsel
 (use-package counsel
   ;; specifying counsel will bring ivy and swiper as dependencies
@@ -1054,21 +1069,20 @@ horizontal mode."
   :straight ivy-posframe
   :straight smex
   :bind (("M-s"     . swiper)
-         ("C-c C-r" . ivy-resume)
-         ("<f6>"    . ivy-resume)
-         ("C-h V"   . counsel-set-variable)
-         ("C-s u"   . counsel-unicode-char)
-         ("C-c j"   . counsel-git-grep)
+         ("<f6>"    . ivy-resume) ;C-s C-r
          :map my-search-map
-         ("d" . counsel-file-jump)
+         ("a" . counsel-ag)
+         ("d" . counsel-dired-jump)
          ("f" . counsel-find-file)
-         ("j" . counsel-dired-jump)
-         ("s" . counsel-locate)
-         ("r" . counsel-recentf)
+         ("g" . counsel-git-grep)
          ("i" . counsel-imenu)
+         ("j" . counsel-file-jump)
          ("l" . counsel-find-library)
-         ("p" . counsel-git-grep)
-         ("C-s" . counsel-ag))
+         ("r" . counsel-recentf)
+         ("s" . counsel-locate)
+         ("u" . counsel-unicode-char)
+         ("v" . counsel-set-variable)
+         ("C-r" . ivy-resume))
   :init
   (setq ivy-rich--display-transformers-list
         '(ivy-switch-buffer
@@ -1172,6 +1186,59 @@ output file. %i path(s) are relative, while %o is absolute.")
                ("<SPC>" . point-to-register)
                ("j" . jump-to-register)))
 
+;;;; Bookmark
+(use-package bookmark
+  :straight t
+  :init
+  (setq bookmark-default-file (concat my-emacs-cache "bookmarks") ;bookmarks dir
+        bookmark-save-flag 1) ;auto save when chnage else use "t" to autosave when emacs quits
+  :bind (:map my-personal-map
+              ("m" . bookmark-set)
+              ("j" . bookmark-jump)
+              ("l" . bookmark-bmenu-list))
+  :config
+  ;; bookmark+ harus di download di GitHub dan pasang di load-path
+  ;; http://blog.binchen.org/posts/hello-ivy-mode-bye-helm.html
+  (defun ivy-bookmark-goto ()
+    "Open ANY bookmark"
+    (interactive)
+    (let (bookmarks filename)
+      ;; load bookmarks
+      (unless (featurep 'bookmark)
+        (require 'bookmark))
+      (bookmark-maybe-load-default-file)
+      (setq bookmarks (and (boundp 'bookmark-alist) bookmark-alist))
+
+      ;; do the real thing
+      (ivy-read "bookmarks:"
+                (delq nil (mapcar (lambda (bookmark)
+                                    (let (key)
+                                      ;; build key which will be displayed
+                                      (cond
+                                       ((and (assoc 'filename bookmark) (cdr (assoc 'filename bookmark)))
+                                        (setq key (format "%s (%s)" (car bookmark) (cdr (assoc 'filename bookmark)))))
+                                       ((and (assoc 'location bookmark) (cdr (assoc 'location bookmark)))
+                                        ;; bmkp-jump-w3m is from bookmark+
+                                        (unless (featurep 'bookmark+)
+                                          (require 'bookmark+))
+                                        (setq key (format "%s (%s)" (car bookmark) (cdr (assoc 'location bookmark)))))
+                                       (t
+                                        (setq key (car bookmark))))
+                                      ;; re-shape the data so full bookmark be passed to ivy-read:action
+                                      (cons key bookmark)))
+                                  bookmarks))
+                :action (lambda (bookmark)
+                          (bookmark-jump bookmark)))
+      ))
+
+
+  ;; Last visited bookmark on top
+  (defadvice bookmark-jump (after bookmark-jump activate)
+    (let ((latest (bookmark-get-bookmark bookmark)))
+      (setq bookmark-alist (delq latest bookmark-alist))
+      (add-to-list 'bookmark-alist latest)))
+  )
+
 ;;;; Avy
 
 (global-set-key (kbd "M-p") 'backward-paragraph)
@@ -1191,6 +1258,39 @@ output file. %i path(s) are relative, while %o is absolute.")
   :bind (("M-z" . avy-zap-to-char-dwim)
          ("M-Z" . avy-zap-up-to-char-dwim)))
 
+;;;; Copy file path
+(defun xah-copy-file-path (&optional @dir-path-only-p)
+  "Copy the current buffer's file path or dired path to `kill-ring'.
+Result is full path.
+If `universal-argument' is called first, copy only the dir path.
+
+If in dired, copy the file/dir cursor is on, or marked files.
+
+If a buffer is not file and not dired, copy value of `default-directory' (which is usually the “current” dir when that buffer was created)
+
+URL `http://ergoemacs.org/emacs/emacs_copy_file_path.html'
+Version 2017-09-01"
+  (interactive "P")
+  (let (($fpath
+         (if (string-equal major-mode 'dired-mode)
+             (progn
+               (let (($result (mapconcat 'identity (dired-get-marked-files) "\n")))
+                 (if (equal (length $result) 0)
+                     (progn default-directory )
+                   (progn $result))))
+           (if (buffer-file-name)
+               (buffer-file-name)
+             (expand-file-name default-directory)))))
+    (kill-new
+     (if @dir-path-only-p
+         (progn
+           (message "Directory path copied: 「%s」" (file-name-directory $fpath))
+           (file-name-directory $fpath))
+       (progn
+         (message "File path copied: 「%s」" $fpath)
+         $fpath )))))
+
+(global-set-key (kbd "C-c d") 'xah-copy-file-path)
 
 ;;; Workspace Mgmt: eyebrowse + projectile
 
@@ -1199,12 +1299,27 @@ output file. %i path(s) are relative, while %o is absolute.")
   :straight ripgrep ;; required by projectile-ripgrep
   :bind-keymap
   ("C-c p" . projectile-command-map)
-  :bind (("C-c o" . 'projectile-find-file))
+  :bind* (("C-c p f" . 'projectile-find-file))
   :config
   ;; Where my projects and clones are normally placed.
   (setq projectile-project-search-path '("~/projects")
         projectile-completion-system 'ivy)
   (projectile-mode +1)
+
+  ;; Different than projectile-switch-project coz this works globally
+  (defun counsel-switch-project ()
+    (interactive)
+    (ivy-read "Switch to project: "
+              projectile-known-projects
+              :sort t
+              :require-match t
+              :preselect (when (projectile-project-p) (abbreviate-file-name (projectile-project-root)))
+              :action '(1
+                        ("o" projectile-switch-project-by-name "goto")
+                        ("g" magit-status "magit")
+                        ("s" (lambda (a) (setq default-directory a) (counsel-git-grep)) "git grep"))
+              :caller 'counsel-switch-project))
+  (bind-key* "C-c p p" 'counsel-switch-project)
   )
 
 (use-package eyebrowse
@@ -1233,12 +1348,9 @@ output file. %i path(s) are relative, while %o is absolute.")
 
 
 ;;; Programming
-
 ;; General conventions on keybindings:
 ;; Use C-c C-z to switch to inferior process
 ;; Use C-c C-c to execute current paragraph of code
-
-
 ;;;; General settings: prog-mode, whitespaces, symbol-prettifying, highlighting
 (use-package prog-mode
   ;; Generic major mode for programming
@@ -1368,8 +1480,8 @@ output file. %i path(s) are relative, while %o is absolute.")
             groovy-mode
             scala-mode)
     (add-hook it 'turn-on-smartparens-strict-mode))
-  :hook ((ess-mode
-          inferior-ess-mode
+  :hook ((ess-r-mode
+          inferior-ess-r-mode
           markdown-mode
           prog-mode) . smartparens-mode)
   ;; (add-hook 'inferior-ess-mode-hook #'smartparens-mode)
@@ -1379,17 +1491,26 @@ output file. %i path(s) are relative, while %o is absolute.")
 
 ;; gives spaces automatically
 (use-package electric-operator
+  :straight t
+  :hook ((ess-r-mode python-mode) . electric-operator-mode)
   :config
   ;; edit rules for ESS mode
-  (electric-operator-add-rules-for-mode 'ess-mode
+  (electric-operator-add-rules-for-mode 'ess-r-mode
                                         (cons ":=" " := ")
                                         ;; (cons "%" "%")
                                         (cons "%in%" " %in% ")
                                         (cons "%>%" " %>% "))
 
   (setq electric-operator-R-named-argument-style 'spaced) ;if unspaced will be f(foo=1)
-  (add-hook 'ess-mode-hook #'electric-operator-mode)
-  (add-hook 'python-mode-hook #'electric-operator-mode))
+  ;; (add-hook 'ess-r-mode-hook #'electric-operator-mode)
+  ;; (add-hook 'python-mode-hook #'electric-operator-mode)
+  )
+
+(use-package csv-mode
+  :mode "\\.csv$"
+  :init
+  (setq csv-separators '(";"))
+  )
 
 ;;; Commenting
 (defun comment-eclipse ()
@@ -1422,7 +1543,7 @@ output file. %i path(s) are relative, while %o is absolute.")
 
   :bind (:map my-assist-map
               ("d" . display-ansi-col))
-  :hook ((ess-mode inferior-ess-mode) . display-ansi-col)
+  :hook ((ess-r-mode inferior-ess-r-mode) . display-ansi-col)
   :config
   (defun display-ansi-col ()
     (interactive)
@@ -1857,13 +1978,22 @@ output file. %i path(s) are relative, while %o is absolute.")
 ;; C-c C-d explore object
 ;; Tooltips
 ;; C-c C-d C-e ess-describe-object-at-point
-
-(use-package ess-site
+(use-package ess-mode
   :straight ess
+  :bind
+  (:map inferior-ess-mode-map
+        ;; Usually I bind C-z to `undo', but I don't really use `undo' in
+        ;; inferior buffers. Use it to switch to the R script (like C-c
+        ;; C-z):
+        ("C-z ." . ess-switch-to-inferior-or-script-buffer))
+  )
+
+(use-package ess-r-mode
+  :straight nil
   ;; :mode ("\\.r[R]\\'" . ess-r-mode)
-  :commands (R
-             R-mode
-             r-mode)
+  ;; :commands (R
+  ;;            R-mode
+  ;;            r-mode)
   :init
   ;; Tetapkan Rsetting folder
   (defvar ybk/r-dir "~/Rsetting/") ;definere hvor epost skal være
@@ -1871,8 +2001,80 @@ output file. %i path(s) are relative, while %o is absolute.")
   (unless (file-exists-p ybk/r-dir)
     (make-directory ybk/r-dir t))
 
+  :bind (:map ess-r-mode-map
+              ("M--" . ess-cycle-assign)
+              ;; ("M--" . ess-insert-assign)
+              ("C-c +" . my-add-column)
+              ("C-c ," . my-add-match)
+              ("C-c \\" . my-add-pipe)
+              ("M-|" . my-ess-eval-pipe-through-line)
+              :map inferior-ess-r-mode-map
+              ("C-S-<up>" . ess-readline) ;previous command from script
+              ("M--" . ess-cycle-assign)
+              )
+
+  :custom
+  (ess-plain-first-buffername nil "Name first R process R:1")
+  (ess-tab-complete-in-script t "TAB should complete.")
+
+  :config
+  ;; ESS-company
+  (setq ess-use-company t)
+
+  ;; Must-haves for ESS
+  ;; http://www.emacswiki.org/emacs/CategoryESS
+  (setq ess-eval-visibly 'nowait) ;print input without waiting the process to finish
+
+  ;; Auto-scrolling of R console to bottom and Shift key extension
+  ;; http://www.kieranhealy.org/blog/archives/2009/10/12/make-shift-enter-do-a-lot-in-ess/
+  ;; Adapted with one minor change from Felipe Salazar at
+  ;; http://www.emacswiki.org/emacs/ESSShiftEnter
+  (setq ess-local-process-name "R")
+  (setq ansi-color-for-comint-mode 'filter)
+  (setq comint-prompt-read-only t)
+  (setq comint-scroll-to-bottom-on-input t)
+  (setq comint-scroll-to-bottom-on-output t)
+  (setq comint-move-point-for-output t)
+
+  ;; ess-trace-bug.el
+  (setq ess-use-tracebug t) ; permanent activation
+  ;;
+  ;; Tooltip included in ESS
+  (setq ess-describe-at-point-method 'tooltip) ; 'tooltip or nil (buffer)
+
+  (setq inferior-R-args "--no-save")
+  (setq ess-R-font-lock-keywords
+        '((ess-R-fl-keyword:modifiers . t)
+          (ess-R-fl-keyword:fun-defs . t)
+          (ess-R-fl-keyword:keywords . t)
+          (ess-R-fl-keyword:assign-ops . t)
+          (ess-R-fl-keyword:constants . t)
+          (ess-fl-keyword:fun-calls . nil)
+          (ess-fl-keyword:numbers . t)
+          (ess-fl-keyword:operators . t)
+          (ess-fl-keyword:delimiters . nil)
+          (ess-fl-keyword:= . t)
+          (ess-R-fl-keyword:F&T . t)
+          (ess-R-fl-keyword:%op% . t)))
+  (setq inferior-ess-r-font-lock-keywords
+        '((ess-S-fl-keyword:prompt . t)
+          (ess-R-fl-keyword:messages . t)
+          (ess-R-fl-keyword:modifiers . t)
+          (ess-R-fl-keyword:fun-defs . t)
+          (ess-R-fl-keyword:keywords . t)
+          (ess-R-fl-keyword:assign-ops . t)
+          (ess-R-fl-keyword:constants . t)
+          (ess-fl-keyword:matrix-labels . t)
+          (ess-fl-keyword:fun-calls . nil)
+          (ess-fl-keyword:numbers . nil)
+          (ess-fl-keyword:operators . nil)
+          (ess-fl-keyword:delimiters . nil)
+          (ess-fl-keyword:= . nil)
+          (ess-R-fl-keyword:F&T . nil)))
+
+
   ;; data.table update
-  (defun my-dt-update ()
+  (defun my-add-column ()
     "Adds a data.table update."
     (interactive)
     ;;(just-one-space 1) ;delete whitespace around cursor
@@ -1942,42 +2144,6 @@ output file. %i path(s) are relative, while %o is absolute.")
                         (point))))
         (ess-eval-region beg end vis))))
 
-  :bind* (("M--" . ess-insert-assign)
-          ("C-c +" . my-dt-update)
-          ("C-c ," . my-add-match)
-          ("C-c \\" . my-add-pipe)
-          ("M-|" . my-ess-eval-pipe-through-line)
-          ("C-S-<up>" . ess-readline) ;previous command from script
-          )
-  :bind (:map ess-mode-map
-              ("C-=" . ess-insert-assign)
-              ("C-c C-e" . ess-eval-region-or-line-and-step)
-              ("C-c C-b" . ess-eval-buffer)
-              ("C-c C-h" . ess-eval-buffer-from-beg-to-here))
-  :config
-  ;; ESS-company
-  (setq ess-use-company t)
-
-  ;; Must-haves for ESS
-  ;; http://www.emacswiki.org/emacs/CategoryESS
-  (setq ess-eval-visibly 'nowait) ;print input without waiting the process to finish
-
-  ;; Auto-scrolling of R console to bottom and Shift key extension
-  ;; http://www.kieranhealy.org/blog/archives/2009/10/12/make-shift-enter-do-a-lot-in-ess/
-  ;; Adapted with one minor change from Felipe Salazar at
-  ;; http://www.emacswiki.org/emacs/ESSShiftEnter
-  (setq ess-local-process-name "R")
-  (setq ansi-color-for-comint-mode 'filter)
-  (setq comint-prompt-read-only t)
-  (setq comint-scroll-to-bottom-on-input t)
-  (setq comint-scroll-to-bottom-on-output t)
-  (setq comint-move-point-for-output t)
-
-  ;; ess-trace-bug.el
-  (setq ess-use-tracebug t) ; permanent activation
-  ;;
-  ;; Tooltip included in ESS
-  (setq ess-describe-at-point-method 'tooltip) ; 'tooltip or nil (buffer)
 
   ;; Run ShinyApp
   ;; Source  https://jcubic.wordpress.com/2018/07/02/run-shiny-r-application-from-emacs/
@@ -2016,9 +2182,25 @@ if there is displayed buffer that have shell it will use that window"
 ;; View data like View()
 (use-package ess-R-data-view
   ;; Use M-x ess-R-dv-ctable or ess-R-dv-pprint
-  :after ess)
+  :after ess
+  :bind (:map my-personal-map
+              ("r" . ess-R-dev-ctable)
+              ("s" . ess-R-dev-pprint)))
 
+;; Open buffer to test R code
+(defun test-R-buffer ()
+  "Create a new empty buffer with R-mode."
+  (interactive)
+  (let (($buf (generate-new-buffer "*r-test*"))
+        (test-mode2 (quote R-mode)))
+    (switch-to-buffer $buf)
+    (insert (format "## == Test %s == \n\n" "R script"))
+    (funcall test-mode2)
+    (setq buffer-offer-save t)
+    $buf
+    ))
 
+(global-set-key (kbd "<f12> r") 'test-R-buffer)
 
 ;;; Graphics
 (use-package graphviz-dot-mode
@@ -2089,7 +2271,7 @@ if there is displayed buffer that have shell it will use that window"
 (defface egoge-display-time
   '((((type x w32 mac))
      ;; #006655 is the background colour of my default face.
-     (:foreground "#00dd11" :inherit bold))
+     (:foreground "#ee7711" :inherit bold))
     (((type tty))
      (:foreground "blue")))
   "Face used to display the time in the mode line.")
@@ -2193,8 +2375,77 @@ if there is displayed buffer that have shell it will use that window"
 
 
 ;;; Org
-;; Remove footer html export
-(setq org-export-html-postamble nil)
+(use-package org
+  :mode (("\\.txt$" . org-mode)
+         ("\\.org$" . org-mode))
+  :config
+  (setq org-directory "~/Dropbox/org/")
+
+  ;; use syntax highlighting in org-file code blocks dan guna org code block
+  ;; seperti guna di major-mode kode blok tersebut
+  (setq org-src-fontify-natively t)
+  (setq org-src-tab-acts-natively t) ; utk completion di src blocks
+
+  ;;== Render subscripts and superscripts in org buffers
+  (setq org-pretty-entities-include-sub-superscripts t)
+
+  ;; Allow _ and ^ characters to sub/super-script strings but only when
+  ;; string is wrapped in braces
+  (setq org-use-sub-superscripts '{}) ; in-buffer rendering
+  (setq org-export-with-sub-superscripts nil)
+
+  ;; Number of empty lines needed to keep an empty line between collapsed trees.
+  ;; If you leave an empty line between the end of a subtree and the following
+  ;; headline, this empty line is hidden when the subtree is folded.
+  ;; Org-mode will leave (exactly) one empty line visible if the number of
+  ;; empty lines is equal or larger to the number given in this variable.
+  (setq org-cycle-separator-lines 2) ; default = 2
+
+  ;; Prevent renumbering/sorting footnotes when a footnote is added/removed.
+  ;; Doing so would create a big diff in an org file containing lot of
+  ;; footnotes even if only one footnote was added/removed.
+  (setq org-footnote-auto-adjust t) ; `'sort' - only sort
+                                        ; `'renumber' - only renumber
+                                        ; `t' - sort and renumber
+                                        ; `nil' - do nothing (default)
+
+  ;; Make firefox the default web browser for applications like viewing
+  ;; an html file exported from org ( C-c C-e h o )
+  (when (executable-find "firefox")
+    (add-to-list 'org-file-apps '("\\.x?html\\'" . "firefox %s")))
+
+  ;; Do NOT try to auto-evaluate entered text as formula when I begin a field's
+  ;; content with "=" e.g. |=123=|. More often than not, I use the "=" to
+  ;; simply format that field text as verbatim. As now the below variable is
+  ;; set to nil, formula will not be automatically evaluated when hitting TAB.
+  ;; But you can still using ‘C-c =’ to evaluate it manually when needed.
+  (setq org-table-formula-evaluate-inline nil) ; default = t
+
+  ;; default with images open
+  (setq org-startup-with-inline-images "inlineimages")
+
+  ;; Prevent from editing things you can't seen
+  (setq org-catch-invisible-edits 'error)
+
+  ;; make words italic or bold, hide / and *
+  (setq org-hide-emphasis-markers nil)
+
+  ;; Masukkan image automatik ke file org
+  ;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+
+  ;; use font-lock-mode or this function
+  (defun org-toggle-link-display ()
+    "Toggle the literal or descriptive display of links."
+    (interactive)
+    (if org-descriptive-links
+        (progn (org-remove-from-invisibility-spec '(org-link))
+               (org-restart-font-lock)
+               (setq org-descriptive-links nil))
+      (progn (add-to-invisibility-spec '(org-link))
+             (org-restart-font-lock)
+             (setq org-descriptive-links t))))
+  )
+
 ;;; Extra
 ;;;; Weather
 (use-package weather-metno
