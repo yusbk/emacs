@@ -1150,6 +1150,16 @@ output file. %i path(s) are relative, while %o is absolute.")
         (make-directory parent-directory t))))
   (add-to-list 'find-file-not-found-functions 'my-create-non-existent-directory)
 
+  ;; search in current file directory
+  (setq counsel-find-file-at-point t)
+  ;; ignore . files or temporary files
+  (setq counsel-find-file-ignore-regexp
+        (concat
+         ;; File names beginning with # or .
+         "\\(?:\\`[#.]\\)"
+         ;; File names ending with # or ~
+         "\\|\\(?:\\`.+?[#~]\\'\\)"))
+
   ;; Kill virtual buffer too
   ;; https://emacs.stackexchange.com/questions/36836/how-to-remove-files-from-recentf-ivy-virtual-buffers
   (defun my-ivy-kill-buffer (buf)
@@ -1170,7 +1180,7 @@ output file. %i path(s) are relative, while %o is absolute.")
                    '(("j" find-file-other-window "other window")
                      ("b" counsel-find-file-cd-bookmark-action "cd bookmark")
                      ("x" counsel-find-file-extern "open externally")
-                     ("k" delete-file "delete")
+                     ("d" delete-file "delete")
                      ("g" magit-status-internal "magit status")
                      ("r" counsel-find-file-as-root "open as root")))
   ;; display at `ivy-posframe-style'
@@ -1492,11 +1502,7 @@ Version 2017-09-01"
 ;; gives spaces automatically
 (use-package electric-operator
   :straight t
-<<<<<<< HEAD
   :hook ((ess-r-mode python-mode) . electric-operator-mode)
-=======
-  :hook ((ess-mode python-mode) . electric-operator-mode)
->>>>>>> 72c86398df9318f2310b204efde1ae76a2cf8480
   :config
   ;; edit rules for ESS mode
   (electric-operator-add-rules-for-mode 'ess-r-mode
@@ -1506,11 +1512,7 @@ Version 2017-09-01"
                                         (cons "%>%" " %>% "))
 
   (setq electric-operator-R-named-argument-style 'spaced) ;if unspaced will be f(foo=1)
-<<<<<<< HEAD
   ;; (add-hook 'ess-r-mode-hook #'electric-operator-mode)
-=======
-  ;; (add-hook 'ess-mode-hook #'electric-operator-mode)
->>>>>>> 72c86398df9318f2310b204efde1ae76a2cf8480
   ;; (add-hook 'python-mode-hook #'electric-operator-mode)
   )
 
