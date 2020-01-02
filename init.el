@@ -1492,7 +1492,11 @@ Version 2017-09-01"
 ;; gives spaces automatically
 (use-package electric-operator
   :straight t
+<<<<<<< HEAD
   :hook ((ess-r-mode python-mode) . electric-operator-mode)
+=======
+  :hook ((ess-mode python-mode) . electric-operator-mode)
+>>>>>>> 72c86398df9318f2310b204efde1ae76a2cf8480
   :config
   ;; edit rules for ESS mode
   (electric-operator-add-rules-for-mode 'ess-r-mode
@@ -1502,7 +1506,11 @@ Version 2017-09-01"
                                         (cons "%>%" " %>% "))
 
   (setq electric-operator-R-named-argument-style 'spaced) ;if unspaced will be f(foo=1)
+<<<<<<< HEAD
   ;; (add-hook 'ess-r-mode-hook #'electric-operator-mode)
+=======
+  ;; (add-hook 'ess-mode-hook #'electric-operator-mode)
+>>>>>>> 72c86398df9318f2310b204efde1ae76a2cf8480
   ;; (add-hook 'python-mode-hook #'electric-operator-mode)
   )
 
