@@ -81,8 +81,8 @@
 (bind-keys :prefix "<f12>"
            :prefix-map my-personal-map)
 
-;; (bind-keys :prefix "C-c c"
-;;            :prefix-map my-code-map)
+(bind-keys :prefix "C-c o"
+           :prefix-map my-org-map)
 
 
 ;; Early unbind keys for customization
@@ -95,6 +95,10 @@
            :prefix-map my-assist-map)
 
 
+;; C-x C-c is originally bound to kill emacs. I accidentally type this
+;; from time to time which is super-frustrating.  Get rid of it:
+(unbind-key "C-x C-c")
+(bind-key "<f12> x" #'save-buffers-kill-emacs)
 
 ;;; Symbolic link and folders
 (use-package my-init
@@ -139,7 +143,7 @@
  ;; indentation width -- eg. c-basic-offset: use that to adjust your
  ;; personal indentation width, while maintaining the style (and
  ;; meaning) of any files you load.
- indent-tabs-mode nil ; don't use tabs to indent
+ indent-tabs-mode nil ; don't use tabs to indent, use spaces
  tab-width 8 ; but maintain correct appearance
  ;; Use one space as sentence end
  sentence-end-double-space 'nil
@@ -183,6 +187,7 @@
  mouse-wheel-progressive-speed nil ;; don't accelerate scrolling
  mouse-wheel-follow-mouse 't ;; scroll window under mouse
  scroll-step 1 ;; keyboard scroll one line at a time
+ scroll-preserve-screen-position 'always
  )
 
 ;; Misc
@@ -235,6 +240,12 @@
 
 
 ;;; General purpose packages
+;; Keep .emacs.d folder clean and save things in etc and var folders
+;; using no-littering-var-directory or no-littering-etc-directory
+;; (use-package no-littering
+;;   :demand t)
+
+
 ;; Hide and show the content in this file by pressing S-tab
 (use-package outshine
   ;; Easier navigation for source code files
@@ -708,7 +719,7 @@ In that case, insert the number."
 (use-package pabbrev
   :diminish pabbrev-mode
   :hook ((org-mode
-          ess-mode
+          ess-r-mode
           emacs-lisp-mode
           text-mode). pabbrev-mode)
 
@@ -850,6 +861,8 @@ In that case, insert the number."
     :commands (diff-hl-mode diff-hl-dired-mode)
     :hook (magit-post-refresh . diff-hl-magit-post-refresh)
     :hook (dired-mode . diff-hl-dired-mode)
+    :config
+    (global-diff-hl-mode)
     )
 
   ;; Provides stage hunk at buffer, more useful
@@ -900,6 +913,27 @@ In that case, insert the number."
   ;; Do everything in one frame
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
   )
+
+
+(use-package ediff
+  ;; Ediff is great, but I have to tell it to use one frame (since I start
+  ;; Emacs before X/wayland, it defaults to using two frames).
+  :defer t
+  :straight t
+  :custom
+  (ediff-window-setup-function #'ediff-setup-windows-plain)
+  :hook
+  (ediff-prepare-buffer . my/ediff-prepare-buffer)
+  :config
+  (defun my/ediff-prepare-buffer ()
+    "Function to prepare ediff buffers.
+
+Runs with `ediff-prepare-buffer-hook' so that it gets run on all
+three ediff buffers (A, B, and C)."
+    (when (memq major-mode '(org-mode emacs-lisp-mode))
+      ;; unfold org/elisp files
+      (outline-show-all))))
+
 
 ;;; Window and Buffer management
 (use-package windmove
@@ -1150,6 +1184,16 @@ output file. %i path(s) are relative, while %o is absolute.")
         (make-directory parent-directory t))))
   (add-to-list 'find-file-not-found-functions 'my-create-non-existent-directory)
 
+  ;; search in current file directory
+  (setq counsel-find-file-at-point t)
+  ;; ignore . files or temporary files
+  (setq counsel-find-file-ignore-regexp
+        (concat
+         ;; File names beginning with # or .
+         "\\(?:\\`[#.]\\)"
+         ;; File names ending with # or ~
+         "\\|\\(?:\\`.+?[#~]\\'\\)"))
+
   ;; Kill virtual buffer too
   ;; https://emacs.stackexchange.com/questions/36836/how-to-remove-files-from-recentf-ivy-virtual-buffers
   (defun my-ivy-kill-buffer (buf)
@@ -1170,7 +1214,7 @@ output file. %i path(s) are relative, while %o is absolute.")
                    '(("j" find-file-other-window "other window")
                      ("b" counsel-find-file-cd-bookmark-action "cd bookmark")
                      ("x" counsel-find-file-extern "open externally")
-                     ("k" delete-file "delete")
+                     ("d" delete-file "delete")
                      ("g" magit-status-internal "magit status")
                      ("r" counsel-find-file-as-root "open as root")))
   ;; display at `ivy-posframe-style'
@@ -1480,8 +1524,8 @@ Version 2017-09-01"
             groovy-mode
             scala-mode)
     (add-hook it 'turn-on-smartparens-strict-mode))
-  :hook ((ess-mode
-          inferior-ess-mode
+  :hook ((ess-r-mode
+          inferior-ess-r-mode
           markdown-mode
           prog-mode) . smartparens-mode)
   ;; (add-hook 'inferior-ess-mode-hook #'smartparens-mode)
@@ -1492,17 +1536,17 @@ Version 2017-09-01"
 ;; gives spaces automatically
 (use-package electric-operator
   :straight t
-  :hook ((ess-mode python-mode) . electric-operator-mode)
+  :hook ((ess-r-mode python-mode) . electric-operator-mode)
   :config
   ;; edit rules for ESS mode
-  (electric-operator-add-rules-for-mode 'ess-mode
+  (electric-operator-add-rules-for-mode 'ess-r-mode
                                         (cons ":=" " := ")
                                         ;; (cons "%" "%")
                                         (cons "%in%" " %in% ")
                                         (cons "%>%" " %>% "))
 
   (setq electric-operator-R-named-argument-style 'spaced) ;if unspaced will be f(foo=1)
-  ;; (add-hook 'ess-mode-hook #'electric-operator-mode)
+  ;; (add-hook 'ess-r-mode-hook #'electric-operator-mode)
   ;; (add-hook 'python-mode-hook #'electric-operator-mode)
   )
 
@@ -1511,6 +1555,17 @@ Version 2017-09-01"
   :init
   (setq csv-separators '(";"))
   )
+
+
+(use-package find-func
+  :defer
+  :bind (:map my-search-map
+              ("x f" . find-function)
+              ("x v" . find-variable)
+              ("x l" . find-library))
+  :hook
+  (find-function-after . reposition-window))
+
 
 ;;; Commenting
 (defun comment-eclipse ()
@@ -1543,7 +1598,7 @@ Version 2017-09-01"
 
   :bind (:map my-assist-map
               ("d" . display-ansi-col))
-  :hook ((ess-mode inferior-ess-mode) . display-ansi-col)
+  :hook ((ess-r-mode inferior-ess-r-mode) . display-ansi-col)
   :config
   (defun display-ansi-col ()
     (interactive)
@@ -1578,8 +1633,49 @@ Version 2017-09-01"
 ;;          (display-battery-mode 1)))
 
 ;;; Terminal
-;;;; Eshell
+;;;; Dired
+(use-package dired
+  ;; Emacs can act as your file finder/explorer.  Dired is the built-in way
+  ;; to do this.
+  :straight nil
+  :bind
+  (("C-x C-d" . dired) ; overrides list-directory, which I never use
+   :map  dired-mode-map
+   ("l" . dired-up-directory)) ; use l to go up in dired
+  :config
+  (setq dired-auto-revert-buffer t)
+  (setq dired-create-destination-dirs 'ask)
+  (setq dired-dwim-target t)
+  (setq dired-isearch-filenames 'dwim)
+  (setq dired-recursive-copies 'always)
+  (setq dired-recursive-deletes 'always)
+  ;; -l: long listing format REQUIRED in dired-listing-switches
+  ;; -a: show everything (including dotfiles)
+  ;; -h: human-readable file sizes
+  (setq dired-listing-switches "-alh --group-directories-first")
+  (defun my/dired-ediff-marked ()
+    "Run `ediff' on two marked files in a dired buffer."
+    (interactive)
+    (unless (eq 'dired-mode major-mode)
+      (error "For use in dired buffers only"))
+    (let ((files (dired-get-marked-files)))
+      (when (not (eq 2 (length files)))
+        (error "Two files not marked"))
+      (ediff (car files) (nth 1 files)))))
 
+(use-package dired-x
+  :straight nil
+  :hook
+  (dired-load . (lambda () (load "dired-x" nil t)))
+  :bind
+  ("C-x C-j" . dired-jump)
+  :custom
+  ;; By default, dired asks you if you want to delete the dired buffer if
+  ;; you delete the folder. I can't think of a reason I'd ever want to do
+  ;; that.
+  (dired-clean-confirm-killing-deleted-buffers nil))
+
+;;;; Eshell
 ;; Emacs command shell
 (use-package eshell
   :straight nil
@@ -1643,7 +1739,7 @@ Version 2017-09-01"
 
     (defun eshell-view-file (file)
       "View FILE.  A version of `view-file' which properly rets the eshell prompt."
-      (interactive "fView file: ")
+      (interactive "View file: ")
       (unless (file-exists-p file) (error "%s does not exist" file))
       (let ((buffer (find-file-noselect file)))
         (if (eq (get (buffer-local-value 'major-mode buffer) 'mode-class)
@@ -1822,7 +1918,9 @@ Version 2017-09-01"
 (use-package shell-pop
   :straight t
   :defer 2
-  :bind ([f9] . shell-pop)
+  ;; :bind ([f9] . shell-pop)
+  :bind (:map my-assist-map
+              ("z" . shell-pop))
   :custom
   (shell-pop-full-span t)
   (shell-pop-shell-type '("eshell" "*eshell" (lambda nil (eshell))))
@@ -1978,13 +2076,22 @@ Version 2017-09-01"
 ;; C-c C-d explore object
 ;; Tooltips
 ;; C-c C-d C-e ess-describe-object-at-point
-
-(use-package ess-site
+(use-package ess-mode
   :straight ess
+  :bind
+  (:map inferior-ess-mode-map
+        ;; Usually I bind C-z to `undo', but I don't really use `undo' in
+        ;; inferior buffers. Use it to switch to the R script (like C-c
+        ;; C-z):
+        ("C-z ." . ess-switch-to-inferior-or-script-buffer))
+  )
+
+(use-package ess-r-mode
+  :straight nil
   ;; :mode ("\\.r[R]\\'" . ess-r-mode)
-  :commands (R
-             R-mode
-             r-mode)
+  ;; :commands (R
+  ;;            R-mode
+  ;;            r-mode)
   :init
   ;; Tetapkan Rsetting folder
   (defvar ybk/r-dir "~/Rsetting/") ;definere hvor epost skal være
@@ -1992,8 +2099,80 @@ Version 2017-09-01"
   (unless (file-exists-p ybk/r-dir)
     (make-directory ybk/r-dir t))
 
+  :bind (:map ess-r-mode-map
+              ("M--" . ess-cycle-assign)
+              ;; ("M--" . ess-insert-assign)
+              ("C-c +" . my-add-column)
+              ("C-c ," . my-add-match)
+              ("C-c \\" . my-add-pipe)
+              ("M-|" . my-ess-eval-pipe-through-line)
+              :map inferior-ess-r-mode-map
+              ("C-S-<up>" . ess-readline) ;previous command from script
+              ("M--" . ess-cycle-assign)
+              )
+
+  :custom
+  (ess-plain-first-buffername nil "Name first R process R:1")
+  (ess-tab-complete-in-script t "TAB should complete.")
+
+  :config
+  ;; ESS-company
+  (setq ess-use-company t)
+
+  ;; Must-haves for ESS
+  ;; http://www.emacswiki.org/emacs/CategoryESS
+  (setq ess-eval-visibly 'nowait) ;print input without waiting the process to finish
+
+  ;; Auto-scrolling of R console to bottom and Shift key extension
+  ;; http://www.kieranhealy.org/blog/archives/2009/10/12/make-shift-enter-do-a-lot-in-ess/
+  ;; Adapted with one minor change from Felipe Salazar at
+  ;; http://www.emacswiki.org/emacs/ESSShiftEnter
+  (setq ess-local-process-name "R")
+  (setq ansi-color-for-comint-mode 'filter)
+  (setq comint-prompt-read-only t)
+  (setq comint-scroll-to-bottom-on-input t)
+  (setq comint-scroll-to-bottom-on-output t)
+  (setq comint-move-point-for-output t)
+
+  ;; ess-trace-bug.el
+  (setq ess-use-tracebug t) ; permanent activation
+  ;;
+  ;; Tooltip included in ESS
+  (setq ess-describe-at-point-method 'tooltip) ; 'tooltip or nil (buffer)
+
+  (setq inferior-R-args "--no-save")
+  (setq ess-R-font-lock-keywords
+        '((ess-R-fl-keyword:modifiers . t)
+          (ess-R-fl-keyword:fun-defs . t)
+          (ess-R-fl-keyword:keywords . t)
+          (ess-R-fl-keyword:assign-ops . t)
+          (ess-R-fl-keyword:constants . t)
+          (ess-fl-keyword:fun-calls . nil)
+          (ess-fl-keyword:numbers . t)
+          (ess-fl-keyword:operators . t)
+          (ess-fl-keyword:delimiters . nil)
+          (ess-fl-keyword:= . t)
+          (ess-R-fl-keyword:F&T . t)
+          (ess-R-fl-keyword:%op% . t)))
+  (setq inferior-ess-r-font-lock-keywords
+        '((ess-S-fl-keyword:prompt . t)
+          (ess-R-fl-keyword:messages . t)
+          (ess-R-fl-keyword:modifiers . t)
+          (ess-R-fl-keyword:fun-defs . t)
+          (ess-R-fl-keyword:keywords . t)
+          (ess-R-fl-keyword:assign-ops . t)
+          (ess-R-fl-keyword:constants . t)
+          (ess-fl-keyword:matrix-labels . t)
+          (ess-fl-keyword:fun-calls . nil)
+          (ess-fl-keyword:numbers . nil)
+          (ess-fl-keyword:operators . nil)
+          (ess-fl-keyword:delimiters . nil)
+          (ess-fl-keyword:= . nil)
+          (ess-R-fl-keyword:F&T . nil)))
+
+
   ;; data.table update
-  (defun my-dt-update ()
+  (defun my-add-column ()
     "Adds a data.table update."
     (interactive)
     ;;(just-one-space 1) ;delete whitespace around cursor
@@ -2063,42 +2242,6 @@ Version 2017-09-01"
                         (point))))
         (ess-eval-region beg end vis))))
 
-  :bind* (("M--" . ess-insert-assign)
-          ("C-c +" . my-dt-update)
-          ("C-c ," . my-add-match)
-          ("C-c \\" . my-add-pipe)
-          ("M-|" . my-ess-eval-pipe-through-line)
-          ("C-S-<up>" . ess-readline) ;previous command from script
-          )
-  :bind (:map ess-mode-map
-              ("C-=" . ess-insert-assign)
-              ("C-c C-e" . ess-eval-region-or-line-and-step)
-              ("C-c C-b" . ess-eval-buffer)
-              ("C-c C-h" . ess-eval-buffer-from-beg-to-here))
-  :config
-  ;; ESS-company
-  (setq ess-use-company t)
-
-  ;; Must-haves for ESS
-  ;; http://www.emacswiki.org/emacs/CategoryESS
-  (setq ess-eval-visibly 'nowait) ;print input without waiting the process to finish
-
-  ;; Auto-scrolling of R console to bottom and Shift key extension
-  ;; http://www.kieranhealy.org/blog/archives/2009/10/12/make-shift-enter-do-a-lot-in-ess/
-  ;; Adapted with one minor change from Felipe Salazar at
-  ;; http://www.emacswiki.org/emacs/ESSShiftEnter
-  (setq ess-local-process-name "R")
-  (setq ansi-color-for-comint-mode 'filter)
-  (setq comint-prompt-read-only t)
-  (setq comint-scroll-to-bottom-on-input t)
-  (setq comint-scroll-to-bottom-on-output t)
-  (setq comint-move-point-for-output t)
-
-  ;; ess-trace-bug.el
-  (setq ess-use-tracebug t) ; permanent activation
-  ;;
-  ;; Tooltip included in ESS
-  (setq ess-describe-at-point-method 'tooltip) ; 'tooltip or nil (buffer)
 
   ;; Run ShinyApp
   ;; Source  https://jcubic.wordpress.com/2018/07/02/run-shiny-r-application-from-emacs/
@@ -2330,8 +2473,77 @@ if there is displayed buffer that have shell it will use that window"
 
 
 ;;; Org
-;; Remove footer html export
-(setq org-export-html-postamble nil)
+(use-package org
+  :mode (("\\.txt$" . org-mode)
+         ("\\.org$" . org-mode))
+  :config
+  (setq org-directory "~/Dropbox/org/")
+
+  ;; use syntax highlighting in org-file code blocks dan guna org code block
+  ;; seperti guna di major-mode kode blok tersebut
+  (setq org-src-fontify-natively t)
+  (setq org-src-tab-acts-natively t) ; utk completion di src blocks
+
+  ;;== Render subscripts and superscripts in org buffers
+  (setq org-pretty-entities-include-sub-superscripts t)
+
+  ;; Allow _ and ^ characters to sub/super-script strings but only when
+  ;; string is wrapped in braces
+  (setq org-use-sub-superscripts '{}) ; in-buffer rendering
+  (setq org-export-with-sub-superscripts nil)
+
+  ;; Number of empty lines needed to keep an empty line between collapsed trees.
+  ;; If you leave an empty line between the end of a subtree and the following
+  ;; headline, this empty line is hidden when the subtree is folded.
+  ;; Org-mode will leave (exactly) one empty line visible if the number of
+  ;; empty lines is equal or larger to the number given in this variable.
+  (setq org-cycle-separator-lines 2) ; default = 2
+
+  ;; Prevent renumbering/sorting footnotes when a footnote is added/removed.
+  ;; Doing so would create a big diff in an org file containing lot of
+  ;; footnotes even if only one footnote was added/removed.
+  (setq org-footnote-auto-adjust t) ; `'sort' - only sort
+                                        ; `'renumber' - only renumber
+                                        ; `t' - sort and renumber
+                                        ; `nil' - do nothing (default)
+
+  ;; Make firefox the default web browser for applications like viewing
+  ;; an html file exported from org ( C-c C-e h o )
+  (when (executable-find "firefox")
+    (add-to-list 'org-file-apps '("\\.x?html\\'" . "firefox %s")))
+
+  ;; Do NOT try to auto-evaluate entered text as formula when I begin a field's
+  ;; content with "=" e.g. |=123=|. More often than not, I use the "=" to
+  ;; simply format that field text as verbatim. As now the below variable is
+  ;; set to nil, formula will not be automatically evaluated when hitting TAB.
+  ;; But you can still using ‘C-c =’ to evaluate it manually when needed.
+  (setq org-table-formula-evaluate-inline nil) ; default = t
+
+  ;; default with images open
+  (setq org-startup-with-inline-images "inlineimages")
+
+  ;; Prevent from editing things you can't seen
+  (setq org-catch-invisible-edits 'error)
+
+  ;; make words italic or bold, hide / and *
+  (setq org-hide-emphasis-markers nil)
+
+  ;; Masukkan image automatik ke file org
+  ;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+
+  ;; use font-lock-mode or this function
+  (defun org-toggle-link-display ()
+    "Toggle the literal or descriptive display of links."
+    (interactive)
+    (if org-descriptive-links
+        (progn (org-remove-from-invisibility-spec '(org-link))
+               (org-restart-font-lock)
+               (setq org-descriptive-links nil))
+      (progn (add-to-invisibility-spec '(org-link))
+             (org-restart-font-lock)
+             (setq org-descriptive-links t))))
+  )
+
 ;;; Extra
 ;;;; Weather
 (use-package weather-metno
