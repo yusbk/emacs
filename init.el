@@ -91,7 +91,7 @@
            :prefix-map my-search-map)
 
 (unbind-key "C-z") ;; Reserve for hydra related commands
-(bind-keys :prefix "C-z"
+(bind-keys :prefix "C-q"
            :prefix-map my-assist-map)
 
 
@@ -188,6 +188,8 @@
  mouse-wheel-follow-mouse 't ;; scroll window under mouse
  scroll-step 1 ;; keyboard scroll one line at a time
  scroll-preserve-screen-position 'always
+ ;; Hide warning redefinition
+ ad-redefinition-action 'accept
  )
 
 ;; Misc
@@ -1641,6 +1643,19 @@ Version 2017-09-01"
   :config
   (default-text-scale-mode))
 
+(use-package faces
+  ;; faces are how Emacs determines how to display characters (font, size,
+  ;; color, etc)
+  :straight nil
+  :defer t
+  :bind
+  ("C-h c" . describe-face) ; overrides describe-key-briefly from help.el
+  :custom-face
+  (help-argument-name ((t (:inherit font-lock-doc-face))))
+  :config
+  (add-to-list 'default-frame-alist
+               '(font . "monospace-12")))
+
 ;;; Terminal
 ;;;; Dired
 (use-package dired
@@ -1648,7 +1663,7 @@ Version 2017-09-01"
   ;; to do this.
   :straight nil
   :bind
-  (("C-x C-d" . dired) ; overrides list-directory, which I never use
+  (("C-x C-d" . dired) ; overrides list-directory
    :map  dired-mode-map
    ("l" . dired-up-directory)) ; use l to go up in dired
   :config
@@ -1956,13 +1971,14 @@ Version 2017-09-01"
   :after hydra
   :bind(
         ;; ("C-c f" . 'origami-toggle-node)
-        ("C-z o" . hydra-origami/body)
+        :map my-assist-map
+        ("o" . hydra-origami/body)
         )
   :config
   (global-origami-mode)
   (defhydra hydra-origami (:color red)
     "
-        _o_pen node    _n_ext fold       toggle _f_orward
+        _o_pen node    _n_ext fold       toggle _f_orward  _t_oggle node
         _c_lose node   _p_revious fold   toggle _a_ll
         "
     ("o" origami-open-node)
@@ -1970,7 +1986,9 @@ Version 2017-09-01"
     ("n" origami-next-fold)
     ("p" origami-previous-fold)
     ("f" origami-forward-toggle-node)
-    ("a" origami-toggle-all-nodes))
+    ("a" origami-toggle-all-nodes)
+    ("t" origami-toggle-node)
+    )
   )
 
 
@@ -2569,3 +2587,13 @@ if there is displayed buffer that have shell it will use that window"
   ;; (setq weather-metno-get-image-props '(:width 10 :height 10 :ascent center))
   (setq weather-metno-get-image-props '(:ascent center))
   )
+;;;; Calculator
+(use-package calc
+  :straight t
+  :defer t
+  :bind
+  ("<XF86Calculator>" . quick-calc)
+  ;; ("C-c =" . quick-calc)
+  (:map my-personal-map
+        ("c" . quick-calc)
+        ("C" . my/calc-eval-region)))
