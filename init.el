@@ -290,8 +290,10 @@
   )
 
 ;;; Misc
-;; unbind not used keybindings
-(global-unset-key (kbd "C-x C-z"))
+
+;; don't bind C-x C-z to suspend-frame:
+(unbind-key "C-x C-z")
+;; if frame freeze then use xkill -frame $emacs
 
 (use-package aggressive-indent
   ;; Aggressive indent mode
@@ -1631,6 +1633,13 @@ Version 2017-09-01"
 ;;      (functionp battery-status-function)
 ;;      (or (equal (cdr (assoc ?L (funcall battery-status-function))) "on-line")
 ;;          (display-battery-mode 1)))
+
+(use-package default-text-scale
+  :straight t
+  :bind (("M--" . default-text-scale-decrease)
+         ("M-+" . default-text-scale-increase))
+  :config
+  (default-text-scale-mode))
 
 ;;; Terminal
 ;;;; Dired
