@@ -90,8 +90,8 @@
 (bind-keys :prefix "C-s"
            :prefix-map my-search-map)
 
-(unbind-key "C-z") ;; Reserve for hydra related commands
-(bind-keys :prefix "C-q"
+(unbind-key "C-v") ;; Reserve for assist related commands
+(bind-keys :prefix "C-v"
            :prefix-map my-assist-map)
 
 
@@ -375,10 +375,12 @@
          ;; ("C-x 4 t"       . 'crux-transpose-windows)
          ("C-x C-k"       . 'crux-delete-buffer-and-file)
          ("C-c n"         . 'crux-cleanup-buffer-or-region)
-         ("s-<return>"    . 'crux-cleanup-buffer-or-region)
          (:map my-assist-map
-               ("<backspace>" . crux-kill-line-backwards)
-               ("t" . crux-transpose-windows))
+               ("<backspace>" . crux-kill-line-backwards) ;C-S-backspace sp-kill-whole-line
+               ;; ("t" . crux-transpose-windows)
+               )
+         (:map my-personal-map
+               ("<return>" . crux-cleanup-buffer-or-region))
          )
   :init
   (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
@@ -395,13 +397,25 @@
   :defer 5
   :hook ((prog-mode) . auto-fill-mode)
   ;; resize buffer accordingly
-  :bind (("<f8>" . (lambda () (interactive) (progn (visual-line-mode)
-                                              (follow-mode))))
-         ;; M-backspace to backward-delete-word
-         ("M-S-<backspace>" . backward-kill-sentence)
-         ("M-C-<backspace>" . backward-kill-paragraph)
-         ("C-x C-o"         . remove-extra-blank-lines)
-         )
+  :bind
+  ("<f8>" . (lambda () (interactive) (progn (visual-line-mode)
+                                       (follow-mode))))
+  ;; M-backspace to backward-delete-word
+  ;; C-S-backspace is used by sp-kill-whole-line
+  ("M-S-<backspace>" . backward-kill-sentence)
+  ("M-C-<backspace>" . backward-kill-paragraph)
+  ("C-x C-o"         . remove-extra-blank-lines)
+  ("C-z" . undo)
+  ;; The -dwim versions of these three commands are new in Emacs 26 and
+  ;; better than their non-dwim counterparts, so override those default
+  ;; bindings:
+  ("M-l" . downcase-dwim)
+  ("M-c" . capitalize-dwim)
+  ("M-u" . upcase-dwim)
+  ;; Super useful for "merging" lines together, overrides the much less
+  ;; useful tab-to-tab-stop:
+  ("M-i" . delete-indentation)
+
   :init
   ;; Move more quickly
   (global-set-key (kbd "C-S-n")
@@ -412,6 +426,7 @@
                   (lambda ()
                     (interactive)
                     (ignore-errors (previous-line 5))))
+
   ;; Show line num temporarily
   (defun goto-line-with-feedback ()
     "Show line numbers temporarily, while prompting for the line number input"
@@ -456,6 +471,8 @@ Otherwise, call `delete-blank-lines'."
   (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
   (setq-default visual-fill-column-width 119
                 visual-fill-column-center-text nil)
+  :config
+
   )
 
 
@@ -1073,18 +1090,61 @@ horizontal mode."
 
 (use-package transpose-frame
   :straight t
+  :init
+  (use-package crux)
+  (bind-keys :prefix "C-t"
+             :prefix-map transpose-map
+             ("t" . my/toggle-window-split)
+             ("f" . transpose-frame)
+             ("c" . transpose-chars)
+             ("w" . transpose-words) ;similar to M-t
+             ("l" . transpose-lines)
+             ("p" . transpose-paragraphs)
+             ("s" . transpose-sentences)
+             ("x" . transpose-sexps)
+             ("b" . crux-transpose-windows) ;transpose-buffer
+             )
+
+
   :defer 5
-  :commands (transpose-frame))
-;;Transpose utk perkataan guna M-t
-(bind-keys :prefix "C-t"
-           :prefix-map transpose-map
-           ("f" . transpose-frame)
-           ("c" . transpose-chars)
-           ("w" . transpose-words)
-           ("l" . transpose-lines)
-           ("p" . transpose-paragraphs)
-           ("s" . transpose-sentences)
-           ("x" . transpose-sexps))
+  :commands (transpose-frame)
+  :config
+  (defun my/toggle-window-split (&optional arg)
+    "Switch between 2 windows split horizontally or vertically.
+With ARG, swap them instead."
+    (interactive "P")
+    (unless (= (count-windows) 2)
+      (user-error "Not two windows"))
+    ;; Swap two windows
+    (if arg
+        (let ((this-win-buffer (window-buffer))
+              (next-win-buffer (window-buffer (next-window))))
+          (set-window-buffer (selected-window) next-win-buffer)
+          (set-window-buffer (next-window) this-win-buffer))
+      ;; Swap between horizontal and vertical splits
+      (let* ((this-win-buffer (window-buffer))
+             (next-win-buffer (window-buffer (next-window)))
+             (this-win-edges (window-edges (selected-window)))
+             (next-win-edges (window-edges (next-window)))
+             (this-win-2nd (not (and (<= (car this-win-edges)
+                                         (car next-win-edges))
+                                     (<= (cadr this-win-edges)
+                                         (cadr next-win-edges)))))
+             (splitter
+              (if (= (car this-win-edges)
+                     (car (window-edges (next-window))))
+                  'split-window-horizontally
+                'split-window-vertically)))
+        (delete-other-windows)
+        (let ((first-win (selected-window)))
+          (funcall splitter)
+          (if this-win-2nd (other-window 1))
+          (set-window-buffer (selected-window) this-win-buffer)
+          (set-window-buffer (next-window) next-win-buffer)
+          (select-window first-win)
+          (if this-win-2nd (other-window 1))))))
+  )
+
 
 
 ;;; Navigation
