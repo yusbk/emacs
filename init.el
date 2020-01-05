@@ -2560,66 +2560,144 @@ if there is displayed buffer that have shell it will use that window"
 
 
 ;;; Org
+;; All settings are mainly copied from https://gitlab.com/jabranham/emacs/blob/master/init.el
+;; Nice guides for org-mode options http://www.pangloss.com/wiki/Emacs
+(use-package ob-core
+  ;; ob is org-babel, which lets org know about code and code blocks
+  :straight nil
+  :defer t
+  :custom
+  ;; I know what I'm getting myself into.
+  (org-confirm-babel-evaluate nil "Don't ask to confirm evaluation."))
+
+
 (use-package org
-  :mode (("\\.txt$" . org-mode)
-         ("\\.org$" . org-mode))
+  ;; Org mode is a great thing. I use it for writing academic papers,
+  ;; managing my schedule, managing my references and notes, writing
+  ;; presentations, writing lecture slides, and pretty much anything
+  ;; else.
+  :bind
+  (("C-c l" . org-store-link)
+   ("C-'" . org-cycle-agenda-files) ; quickly access agenda files
+   :map org-mode-map
+   ("C-a" . org-beginning-of-line)
+   ("C-e" . org-end-of-line)
+   ;; Bind M-p and M-n to navigate heading more easily (these are bound to
+   ;; C-c C-p/n by default):
+   ("M-p" . my/org-previous-visible-heading)
+   ("M-n" . my/org-next-visible-heading)
+   ;; C-c C-t is bound to `org-todo' by default, but I want it
+   ;; bound to C-c t as well:
+   ("C-c t" . org-todo)
+   ;; Toggle link or use font-lock
+   ("M-L" . my/org-toggle-link-display)
+   )
+  :hook
+  (org-mode . my/setup-org-mode)
+  :custom
+  (org-directory "~/Dropbox/org/")
+  (org-blank-before-new-entry nil)
+  (org-cycle-separator-lines 0)
+  (org-pretty-entities t "UTF8 all the things!")
+  (org-support-shift-select t "Holding shift and moving point should select things.")
+  (org-fontify-quote-and-verse-blocks t "Provide a special face for quote and verse blocks.")
+  (org-M-RET-may-split-line nil "M-RET may never split a line.")
+  (org-enforce-todo-dependencies t "Can't finish parent before children.")
+  (org-enforce-todo-checkbox-dependencies t "Can't finish parent before children.")
+  (org-hide-emphasis-markers t "Make words italic or bold, hide / and *.")
+  (org-catch-invisible-edits 'show-and-error "Don't let me edit things I can't see.")
+  (org-special-ctrl-a/e t "Make C-a and C-e work more like how I want:.")
+  (org-preview-latex-default-process 'imagemagick "Let org's preview mechanism use imagemagick instead of dvipng.")
+  ;; Let imenu go deeper into menu structure
+  (org-imenu-depth 6)
+  (org-image-actual-width '(300))
+  (org-blank-before-new-entry '((heading . nil)
+                                (plain-list-item . nil)))
+  ;; For whatever reason, I have to explicitely tell org how to open pdf
+  ;; links.  I use pdf-tools.  If pdf-tools isn't installed, it will use
+  ;; doc-view (shipped with Emacs) instead.
+  (org-file-apps
+   '((auto-mode . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . default)
+     ("\\.pdf\\'" . emacs)))
+  (org-highlight-latex-and-related '(latex entities) "set up fontlocking for latex")
+  (org-startup-with-inline-images t "Show inline images.")
+  (org-log-done 'time)
+  (org-goto-interface 'outline-path-completion)
+  (org-ellipsis "⬎")
+  (org-tag-persistent-alist '(("jobs" . ?j)
+                              (:startgroup . nil)
+                              ("@work" . ?w)
+                              ("@home" . ?h)
+                              (:endgroup . nil)))
+  ;; I keep my recipes in an org file and tag them based on what kind of
+  ;; dish they are.  The level one headings are names, and each gets two
+  ;; level two headings --- ingredients and directions.  To easily search via
+  ;; tag, I can restrict org-agenda to that buffer using < then hit m to
+  ;; match based on a tag.
+  (org-tags-exclude-from-inheritance
+   '("BREAKFAST" "DINNER" "DESSERT" "SIDE" "CHICKEN" "SEAFOOD"
+     "BEEF" "PASTA" "SOUP" "SNACK" "DRINK" "LAMB" "VEGETARIAN" "CAKE"))
+  ;; Org-refile lets me quickly move around headings in org files.  It
+  ;; plays nicely with org-capture, which I use to turn emails into TODOs
+  ;; easily (among other things, of course)
+  (org-outline-path-complete-in-steps nil)
+  (org-refile-allow-creating-parent-nodes 'confirm)
+  (org-refile-use-outline-path 'file)
+
+  :custom-face
+  (org-block ((t (:inherit default))))
+
   :config
-  (setq org-directory "~/Dropbox/org/")
+  (setq org-refile-targets '((nil . (:level . 1)) ; current file
+                             (org-default-notes-file . (:maxlevel . 6))
+                             (my/org-scheduled . (:level . 1))))
+  ;; These are the programming languages org should teach itself:
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (latex . t)
+     (python . t)
+     (R . t)
+     (shell . t)))
+  ;; remove C-c [ from adding org file to front of agenda
+  (unbind-key "C-c [" org-mode-map)
 
-  ;; use syntax highlighting in org-file code blocks dan guna org code block
-  ;; seperti guna di major-mode kode blok tersebut
-  (setq org-src-fontify-natively t)
-  (setq org-src-tab-acts-natively t) ; utk completion di src blocks
+  (defun my/setup-org-mode ()
+    "Setup org-mode."
+    ;; An alist of symbols to prettify, see `prettify-symbols-alist'.
+    ;; Whether the symbol actually gets prettified is controlled by
+    ;; `org-pretty-compose-p', which see.
+    (setq-local prettify-symbols-unprettify-at-point nil)
+    (setq-local prettify-symbols-alist '(("*" . ?•)))
+    (setq-local prettify-symbols-compose-predicate #'my/org-pretty-compose-p))
 
-  ;;== Render subscripts and superscripts in org buffers
-  (setq org-pretty-entities-include-sub-superscripts t)
+  (defun my/org-next-visible-heading (arg)
+    "Go to next heading and beginning of line."
+    (interactive "p")
+    (org-next-visible-heading arg)
+    (org-beginning-of-line))
 
-  ;; Allow _ and ^ characters to sub/super-script strings but only when
-  ;; string is wrapped in braces
-  (setq org-use-sub-superscripts '{}) ; in-buffer rendering
-  (setq org-export-with-sub-superscripts nil)
+  (defun my/org-previous-visible-heading (arg)
+    "Go to previous heading and beginning of line."
+    (interactive "p")
+    (org-previous-visible-heading arg)
+    (org-beginning-of-line))
 
-  ;; Number of empty lines needed to keep an empty line between collapsed trees.
-  ;; If you leave an empty line between the end of a subtree and the following
-  ;; headline, this empty line is hidden when the subtree is folded.
-  ;; Org-mode will leave (exactly) one empty line visible if the number of
-  ;; empty lines is equal or larger to the number given in this variable.
-  (setq org-cycle-separator-lines 2) ; default = 2
-
-  ;; Prevent renumbering/sorting footnotes when a footnote is added/removed.
-  ;; Doing so would create a big diff in an org file containing lot of
-  ;; footnotes even if only one footnote was added/removed.
-  (setq org-footnote-auto-adjust t) ; `'sort' - only sort
-                                        ; `'renumber' - only renumber
-                                        ; `t' - sort and renumber
-                                        ; `nil' - do nothing (default)
-
-  ;; Make firefox the default web browser for applications like viewing
-  ;; an html file exported from org ( C-c C-e h o )
-  (when (executable-find "firefox")
-    (add-to-list 'org-file-apps '("\\.x?html\\'" . "firefox %s")))
-
-  ;; Do NOT try to auto-evaluate entered text as formula when I begin a field's
-  ;; content with "=" e.g. |=123=|. More often than not, I use the "=" to
-  ;; simply format that field text as verbatim. As now the below variable is
-  ;; set to nil, formula will not be automatically evaluated when hitting TAB.
-  ;; But you can still using ‘C-c =’ to evaluate it manually when needed.
-  (setq org-table-formula-evaluate-inline nil) ; default = t
-
-  ;; default with images open
-  (setq org-startup-with-inline-images "inlineimages")
-
-  ;; Prevent from editing things you can't seen
-  (setq org-catch-invisible-edits 'error)
-
-  ;; make words italic or bold, hide / and *
-  (setq org-hide-emphasis-markers nil)
-
-  ;; Masukkan image automatik ke file org
-  ;; (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+  (defun my/org-pretty-compose-p (start end match)
+    "Return t if the symbol should be prettified.
+START and END are the start and end points, MATCH is the string
+match.  See also `prettify-symbols-compose-predicate'."
+    (if (string= match "*")
+        ;; prettify asterisks in headings
+        (and (org-match-line org-outline-regexp-bol)
+             (< end (match-end 0)))
+      ;; else rely on the default function
+      (prettify-symbols-default-compose-p start end match)))
 
   ;; use font-lock-mode or this function
-  (defun org-toggle-link-display ()
+  (defun my/org-toggle-link-display ()
     "Toggle the literal or descriptive display of links."
     (interactive)
     (if org-descriptive-links
