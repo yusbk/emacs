@@ -94,11 +94,11 @@
 (bind-keys :prefix "C-v"
            :prefix-map my-assist-map)
 
-
+;; Exit Emacs
 ;; C-x C-c is originally bound to kill emacs. I accidentally type this
 ;; from time to time which is super-frustrating.  Get rid of it:
 (unbind-key "C-x C-c")
-(bind-key "<f12> x" #'save-buffers-kill-emacs)
+(bind-key "<f12> 0" #'save-buffers-kill-emacs)
 
 ;;; Symbolic link and folders
 (use-package my-init
@@ -399,7 +399,7 @@
   ;; resize buffer accordingly
   :bind
   ("<f8>" . (lambda () (interactive) (progn (visual-line-mode)
-                                       (follow-mode))))
+                                            (follow-mode))))
   ;; M-backspace to backward-delete-word
   ;; C-S-backspace is used by sp-kill-whole-line
   ("M-S-<backspace>" . backward-kill-sentence)
@@ -567,14 +567,14 @@ Otherwise, call `delete-blank-lines'."
   )
 
 
-(bind-key "C-x u " #'undo)
+;; (bind-key "C-x u " #'undo)
 
 (use-package undo-tree
   :straight t
   :diminish undo-tree-mode
-  :bind (:map my-assist-map
-              ("u" . undo-tree-visualize)
-              ("r" . redo))
+  :bind (("C-x u" . undo-tree-visualize)
+         :map my-assist-map
+         ("r" . redo))
   :config
   ;; make ctrl-Z redo
   (defalias 'redo 'undo-tree-redo)
@@ -1698,8 +1698,8 @@ Version 2017-09-01"
 
 (use-package default-text-scale
   :straight t
-  :bind (("M--" . default-text-scale-decrease)
-         ("M-+" . default-text-scale-increase))
+  :bind (("C--" . default-text-scale-decrease)
+         ("C-+" . default-text-scale-increase))
   :config
   (default-text-scale-mode))
 
@@ -2193,6 +2193,7 @@ Version 2017-09-01"
               ("C-c ," . my-add-match)
               ("C-c \\" . my-add-pipe)
               ("M-|" . my-ess-eval-pipe-through-line)
+              ("C-S-<return>" . ess-eval-region-or-function-or-paragraph-and-step)
               :map inferior-ess-r-mode-map
               ("C-S-<up>" . ess-readline) ;previous command from script
               ("M--" . ess-cycle-assign)
@@ -2650,9 +2651,15 @@ if there is displayed buffer that have shell it will use that window"
   (org-block ((t (:inherit default))))
 
   :config
+  ;; remove C-c [ from adding or excluding org file to front of agenda
+  ;; other then those specified in org-agenda-files
+  (unbind-key "C-c [" org-mode-map)
+  (unbind-key "C-c ]" org-mode-map)
+
   (setq org-refile-targets '((nil . (:level . 1)) ; current file
                              (org-default-notes-file . (:maxlevel . 6))
                              (my/org-scheduled . (:level . 1))))
+
   ;; These are the programming languages org should teach itself:
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -2708,6 +2715,184 @@ match.  See also `prettify-symbols-compose-predicate'."
              (org-restart-font-lock)
              (setq org-descriptive-links t))))
   )
+
+
+(use-package org-agenda
+  :straight ess
+  :bind
+  (("C-c a" . org-agenda)
+   ("C-'" . org-cycle-agenda-files) ; quickly access agenda files
+   :map org-agenda-mode-map
+   ("v" . hydra-org-agenda-view/body)
+   ("r" . org-agenda-refile) ; overrides org-agenda-redo, which I use "g" for anyway
+   ("s" . org-agenda-schedule) ; overrides saving all org buffers, also bound to C-x C-s
+   ("d" . my/org-agenda-mark-done)) ; overrides org-exit
+  :init
+  ;; ;;Include all files under these folder in org-agenda-files
+  ;; (setq org-agenda-files (quote ("~/Dropbox/org/"
+  ;;                                "~/Dropbox/org/privat/"
+  ;;                                )))
+
+  ;; Hydra http://oremacs.com/2016/04/04/hydra-doc-syntax/
+  (defun org-agenda-cts ()
+    (let ((args (get-text-property
+                 (min (1- (point-max)) (point))
+                 'org-last-args)))
+      (nth 2 args)))
+
+  (defhydra hydra-org-agenda-view (:hint none)
+    "
+    _d_: ?d? day        _g_: time grid=?g? _a_: arch-trees    _l_: show-log
+    _w_: ?w? week       _[_: inactive      _A_: arch-files    _L_: log-4
+    _t_: ?t? fortnight  _f_: follow=?f?    _r_: report=?r?    _c_: clockcheck
+    _m_: ?m? month      _e_: entry =?e?    _D_: diary=?D?
+    _y_: ?y? year     _SPC_: reset         _!_: deadline      _q_: quit"
+    ("SPC" org-agenda-reset-view)
+    ("d" org-agenda-day-view
+     (if (eq 'day (org-agenda-cts))
+         "[x]" "[ ]"))
+    ("w" org-agenda-week-view
+     (if (eq 'week (org-agenda-cts))
+         "[x]" "[ ]"))
+    ("t" org-agenda-fortnight-view
+     (if (eq 'fortnight (org-agenda-cts))
+         "[x]" "[ ]"))
+    ("m" org-agenda-month-view
+     (if (eq 'month (org-agenda-cts)) "[x]" "[ ]"))
+    ("y" org-agenda-year-view
+     (if (eq 'year (org-agenda-cts)) "[x]" "[ ]"))
+    ("l" org-agenda-log-mode
+     (format "% -3S" org-agenda-show-log))
+    ("L" (org-agenda-log-mode '(4)))
+    ("c" (org-agenda-log-mode 'clockcheck))
+    ("f" org-agenda-follow-mode
+     (format "% -3S" org-agenda-follow-mode))
+    ("a" org-agenda-archives-mode)
+    ("A" (org-agenda-archives-mode 'files))
+    ("r" org-agenda-clockreport-mode
+     (format "% -3S" org-agenda-clockreport-mode))
+    ("e" org-agenda-entry-text-mode
+     (format "% -3S" org-agenda-entry-text-mode))
+    ("g" org-agenda-toggle-time-grid
+     (format "% -3S" org-agenda-use-time-grid))
+    ("D" org-agenda-toggle-diary
+     (format "% -3S" org-agenda-include-diary))
+    ("!" org-agenda-toggle-deadlines)
+    ("["
+     (let ((org-agenda-include-inactive-timestamps t))
+       (org-agenda-check-type t 'timeline 'agenda)
+       (org-agenda-redo)))
+    ("q" (message "Abort") :exit t))
+
+  :custom
+  ;;Include all files under these folder in org-agenda-files
+  (org-agenda-files (quote ("~/Dropbox/org/"
+                            "~/Dropbox/org/privat/"
+                            )))
+  (org-agenda-skip-deadline-if-done t "Remove done deadlines from agenda.")
+  (org-agenda-skip-scheduled-if-done t "Remove done scheduled from agenda.")
+  (org-agenda-skip-timestamp-if-done t "Don't show timestamped things in agenda if they're done.")
+  (org-agenda-skip-scheduled-if-deadline-is-shown 'not-today "Don't show scheduled if the deadline is visible unless it's also scheduled for today.")
+  (org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled "Skip deadline warnings if it is scheduled.")
+  (org-deadline-warning-days 3 "warn me 3 days before a deadline")
+  (org-agenda-tags-todo-honor-ignore-options t "Ignore scheduled items in tags todo searches.")
+  (org-agenda-tags-column 'auto)
+  (org-agenda-window-setup 'only-window "Use current window for agenda.")
+  (org-agenda-restore-windows-after-quit t "Restore previous config after I'm done.")
+  (org-agenda-span 'day) ; just show today. I can "vw" to view the week
+  (org-agenda-time-grid
+   '((daily today remove-match) (800 1000 1200 1400 1600 1800 2000)
+     "" "") "By default, the time grid has a lot of ugly '-----' lines. Remove those.")
+  (org-agenda-scheduled-leaders '("" "%2dx ") "I don't need to know that something is scheduled.  That's why it's appearing on the agenda in the first place.")
+  (org-agenda-block-separator ?— "Use nice unicode character instead of ugly = to separate agendas:")
+  (org-agenda-deadline-leaders '("Deadline: " "In %d days: " "OVERDUE %d day: ") "Make deadlines, especially overdue ones, stand out more:")
+  (org-agenda-current-time-string "⸻ NÅ ⸻")
+  ;; Display format
+  ;; (org-agenda-prefix-format '((agenda  . "%-12 s%?-2t") ; (agenda . " %s %-12t ") or "%-12 s%?-2t" if want to show schedule/timeline
+  ;;                             (timeline . "%-9:T%?-2t%") ; "%-9:T%?-2t% s" if want to show deadline/schedule in timeline ie. s
+  ;;                             (todo . " +%i %t") ;%i%?-8:T tidak justify TODO
+  ;;                             (tags . " +%i %t") ;(tags . "%i %-8:T")
+  ;;                             (search . "%i %-8:T")))
+
+  ;; The agenda is ugly by default. It doesn't properly align items and it
+  ;; includes weird punctuation. Fix it:
+  (org-agenda-prefix-format '((agenda . "%-12c%-14t%s")
+                              (todo . " %i %-12:c")
+                              (tags . " %i %-12:c")
+                              (search . " %i %-12:c")))
+
+  ;; Custom agenda
+  (org-agenda-custom-commands
+   '(
+     ("h" "Home Agenda"
+      ((agenda "" nil)
+       (tags "@home"
+             ((org-agenda-overriding-header "Tasks to do at home")))
+       (tags "CATEGORY=\"inbox\"+LEVEL=2"
+             ((org-agenda-overriding-header "Refile")))))
+     ("w" "Work Agenda"
+      ((agenda "" nil)
+       (tags "@work"
+             ((org-agenda-overriding-header "Tasks to do at work")))
+       (tags "+CATEGORY=\"inbox\"+LEVEL=2"
+             ((org-agenda-overriding-header "Refile")))))
+     ("d" "deadlines"
+      ((agenda ""
+               ((org-agenda-entry-types '(:deadline))
+                (org-agenda-span 'fortnight)
+                (org-agenda-time-grid nil)
+                (org-deadline-warning-days 0)
+                (org-agenda-skip-deadline-prewarning-if-scheduled nil)
+                (org-agenda-skip-deadline-if-done nil)))))
+     ("b" "bibliography"
+      ((tags "CATEGORY=\"bib\"+LEVEL=2"
+             ((org-agenda-overriding-header "")))))
+     ("u" "unscheduled"
+      ((todo  "TODO"
+              ((org-agenda-overriding-header "Unscheduled tasks")
+               (org-agenda-todo-ignore-with-date t)))))))
+
+  :config
+  (defun my/org-agenda-mark-done (&optional _arg)
+    "Mark current TODO as DONE.
+See `org-agenda-todo' for more details."
+    (interactive "P")
+    (org-agenda-todo "DONE"))
+
+  )
+
+(use-package org-capture
+  :straight ess
+  :bind*
+  ("C-c c" . org-capture)
+  :bind
+  (:map org-capture-mode-map
+        ("C-c C-j" . my/org-capture-refile-and-jump))
+  :custom
+  (org-capture-templates
+   (quote (("a" "Appointment" entry (file  "~/Dropbox/org/gcal.org" )
+            "* %?\n\n%^T\n\n:PROPERTIES:\n\n:END:\n\n")
+           ("s" "store" entry (file my/org-inbox)
+            "* TODO %?\n %a\n %i\n %U\n ")
+           ("t" "task" entry (file  my/org-inbox)
+            "* TODO %? \n %i\n ")
+           ("m" "mail" entry (file my/org-inbox)
+            "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
+           ;; ("m" "mail" entry (file+headline my/org-mail "Email")
+           ;;  "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
+           ("n" "note" entry (file my/org-notes)
+            "* %?\n %i")
+           ("b" "bib" entry (file+headline my/org-inbox "Bibliography")
+            "* TODO %?\n %a \n %i")
+           ("p" "Protocol" entry (file my/org-inbox)
+            "* TODO [[%:link][%:description]]\n%i" :immediate-finish t)
+           ("L" "Protocol Link" entry (file my/org-inbox)
+            "* TODO [[%:link][%:description]]" :immediate-finish t))))
+  :config
+  (defun my/org-capture-refile-and-jump ()
+    (interactive)
+    (org-capture-refile)
+    (org-refile-goto-last-stored)))
 
 ;;; Extra
 ;;;; Weather
