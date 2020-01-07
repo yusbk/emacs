@@ -2388,6 +2388,145 @@ if there is displayed buffer that have shell it will use that window"
 
 (global-set-key (kbd "<f12> r") 'test-R-buffer)
 
+;;; Python
+(use-package python
+  ;; The package is called python, the mode is python-mode. Confusingly, there's
+  ;; also python-mode.el but I don't use that.
+  :disabled t
+  :defer t
+  :bind
+  (:map python-mode-map
+        ("C-<return>" . my/python-shell-send-region-or-statement-and-step))
+  :custom
+  ;; Use flake8 for flymake:
+  (python-flymake-command '("flake8" "-"))
+  (python-indent-guess-indent-offset-verbose nil)
+  (python-indent-offset 4)
+  (python-eldoc-function-timeout-permanent nil)
+  :config
+  (defun my/python-shell-send-region-or-statement ()
+    "Send the current region to the inferior python process if there is an active one, otherwise the current line."
+    (interactive)
+    (if (use-region-p)
+        (python-shell-send-region (region-beginning) (region-end))
+      (my/python-shell-send-statement)))
+  (defun my/python-shell-send-statement ()
+    "Send the current line to the inferior python process for evaluation."
+    (interactive)
+    (save-excursion
+      (let ((end (python-nav-end-of-statement))
+            (beginning (python-nav-beginning-of-statement)))
+        (python-shell-send-region beginning end))))
+  (defun my/python-shell-send-region-or-statement-and-step ()
+    "Call `python-shell-send-region-or-statement' and then `python-nav-forward-statement'."
+    (interactive)
+    (my/python-shell-send-region-or-statement)
+    (python-nav-forward-statement))
+  (define-minor-mode my/python-use-ipython-mode
+    ;; I don't really get the allure of ipython, but here's something that
+    ;; lets me switch back and forth:
+    "Make python mode use the ipython interpreter."
+    :lighter (" iPy")
+    (unless (executable-find "ipython")
+      (error "Could not find ipython executable"))
+    (if my/python-use-ipython-mode
+        ;; activate ipython stuff
+        (setq python-shell-buffer-name "Ipython"
+              python-shell-interpreter "ipython"
+              ;; https://emacs.stackexchange.com/q/24453/115
+              ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25306
+              python-shell-interpreter-args "--simple-prompt -i")
+      ;; else, deactivate everything
+      (setq python-shell-buffer-name "Python"
+            python-shell-interpreter "python" ;python3
+            python-shell-interpreter-args "-i")))
+
+  ;; (define-minor-mode my/python-use-jupyter
+  ;;   ;; Use Jupyter Notebook after installing it
+  ;;   ;; Use IPython for REPL
+  ;;   (setq python-shell-interpreter "jupyter"
+  ;;         python-shell-interpreter-args "console --simple-prompt"
+  ;;         python-shell-prompt-detect-failure-warning nil)
+  ;;   (add-to-list 'python-shell-completion-native-disabled-interpreters
+  ;;                "jupyter")
+  ;;   )
+  )
+
+
+;; Basically for the code below
+;; I just follow https://realpython.com/emacs-the-best-python-editor
+
+(use-package flycheck
+  :hook (elpy-mode . flycheck-mode)
+  )
+
+(use-package elpy
+  :straight t
+  :straight flycheck
+  :init
+  (advice-add 'python-mode :before 'elpy-enable)
+  :bind (:map python-mode-map
+              ("C-<return>" . my/python-shell-send-region-or-statement-and-step))
+  :custom
+  ;; Use flake8 for flymake:
+  (python-flymake-command '("flake8" "-"))
+  (python-indent-guess-indent-offset-verbose nil)
+  (python-indent-offset 4)
+  (python-eldoc-function-timeout-permanent nil)
+  :config
+  ;; Enable Flycheck
+  (when (require 'flycheck nil t)
+    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+    (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+  (defun my/python-shell-send-region-or-statement ()
+    "Send the current region to the inferior python process if there is an active one, otherwise the current line."
+    (interactive)
+    (if (use-region-p)
+        (python-shell-send-region (region-beginning) (region-end))
+      (my/python-shell-send-statement)))
+  (defun my/python-shell-send-statement ()
+    "Send the current line to the inferior python process for evaluation."
+    (interactive)
+    (save-excursion
+      (let ((end (python-nav-end-of-statement))
+            (beginning (python-nav-beginning-of-statement)))
+        (python-shell-send-region beginning end))))
+  (defun my/python-shell-send-region-or-statement-and-step ()
+    "Call `python-shell-send-region-or-statement' and then `python-nav-forward-statement'."
+    (interactive)
+    (my/python-shell-send-region-or-statement)
+    (python-nav-forward-statement))
+
+  (define-minor-mode my/python-use-ipython-mode
+    ;; I don't really get the allure of ipython, but here's something that
+    ;; lets me switch back and forth:
+    "Make python mode use the ipython interpreter."
+    :lighter (" iPy")
+    (unless (executable-find "ipython")
+      (error "Could not find ipython executable"))
+    (if my/python-use-ipython-mode
+        ;; activate ipython stuff
+        (setq python-shell-buffer-name "Ipython"
+              python-shell-interpreter "ipython"
+              ;; https://emacs.stackexchange.com/q/24453/115
+              ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25306
+              python-shell-interpreter-args "--simple-prompt -i")
+      ;; else, deactivate everything
+      (setq python-shell-buffer-name "Python"
+            python-shell-interpreter "python" ;python3
+            python-shell-interpreter-args "-i")))
+
+  ;; (setq python-shell-interpreter "ipython"
+  ;;       python-shell-interpreter-args "-i --simple-prompt")
+  )
+
+(use-package pyenv-mode
+  ;; virtualenv python with M-x pyvenv-activate
+  :config
+  (pyenv-mode)
+  )
+
 ;;; Graphics
 (use-package graphviz-dot-mode
   ;; graphvis must be installed
