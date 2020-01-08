@@ -2555,11 +2555,11 @@ if there is displayed buffer that have shell it will use that window"
 
   ;; utk tukar tema f10-t
   (setq my-themes '(
-                    doom-dracula
-                    doom-vibrant
+                    doom-gruvbox
+                    doom-snazzy
                     doom-acario-light
-                    doom-peacock
-                    doom-tomorrow-day
+                    ;; doom-vibrant
+                    doom-wilmersdorf
                     ;; doom-oceanic-next
                     ;; doom-Iosvkem ;bold has bigger font
                     ))
@@ -2577,7 +2577,6 @@ if there is displayed buffer that have shell it will use that window"
 
   ;; Switch to the first theme in the list above
   (cycle-my-theme)
-
   )
 
 (use-package solaire-mode
@@ -2857,7 +2856,7 @@ match.  See also `prettify-symbols-compose-predicate'."
 
 
 (use-package org-agenda
-  :straight ess
+  :straight org
   :bind
   (("C-c a" . org-agenda)
    ("C-'" . org-cycle-agenda-files) ; quickly access agenda files
@@ -2867,6 +2866,18 @@ match.  See also `prettify-symbols-compose-predicate'."
    ("s" . org-agenda-schedule) ; overrides saving all org buffers, also bound to C-x C-s
    ("d" . my/org-agenda-mark-done)) ; overrides org-exit
   :init
+  (defvar my/org-notes (expand-file-name "notes.org" org-directory)
+    "Long-term storage for notes.")
+  (defvar my/org-scheduled (expand-file-name "scheduled.org" org-directory)
+    "Scheduled tasks.")
+  (defvar my/org-misc (expand-file-name "misc.org" org-directory)
+    "All other info for diary.")
+  ;; set up org agenda files for the agenda
+  (setq org-agenda-files `(,org-default-notes-file
+                           ,my/org-scheduled
+                           ,my/org-misc))
+  (setq org-agenda-text-search-extra-files `(,my/org-notes))
+
   ;; ;;Include all files under these folder in org-agenda-files
   ;; (setq org-agenda-files (quote ("~/Dropbox/org/"
   ;;                                "~/Dropbox/org/privat/"
@@ -2925,9 +2936,10 @@ match.  See also `prettify-symbols-compose-predicate'."
 
   :custom
   ;;Include all files under these folder in org-agenda-files
-  (org-agenda-files (quote ("~/Dropbox/org/"
-                            "~/Dropbox/org/privat/"
-                            )))
+  ;; (org-agenda-files (quote ("~/Dropbox/org/"
+  ;;                           "~/Dropbox/org/privat/"
+  ;;                           )))
+  (org-default-notes-file (concat org-directory "todo.org"))
   (org-agenda-skip-deadline-if-done t "Remove done deadlines from agenda.")
   (org-agenda-skip-scheduled-if-done t "Remove done scheduled from agenda.")
   (org-agenda-skip-timestamp-if-done t "Don't show timestamped things in agenda if they're done.")
@@ -3001,32 +3013,48 @@ See `org-agenda-todo' for more details."
   )
 
 (use-package org-capture
-  :straight ess
+  :straight org
   :bind*
   ("C-c c" . org-capture)
   :bind
   (:map org-capture-mode-map
         ("C-c C-j" . my/org-capture-refile-and-jump))
   :custom
+  ;; And now for the capture templates themselves.  It's a bit complicated,
+  ;; but the manual does a great job explaining.
   (org-capture-templates
-   (quote (("a" "Appointment" entry (file  "~/Dropbox/org/gcal.org" )
-            "* %?\n\n%^T\n\n:PROPERTIES:\n\n:END:\n\n")
-           ("s" "store" entry (file my/org-inbox)
-            "* TODO %?\n %a\n %i\n %U\n ")
-           ("t" "task" entry (file  my/org-inbox)
-            "* TODO %? \n %i\n ")
-           ("m" "mail" entry (file my/org-inbox)
-            "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
-           ;; ("m" "mail" entry (file+headline my/org-mail "Email")
-           ;;  "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
-           ("n" "note" entry (file my/org-notes)
-            "* %?\n %i")
-           ("b" "bib" entry (file+headline my/org-inbox "Bibliography")
-            "* TODO %?\n %a \n %i")
-           ("p" "Protocol" entry (file my/org-inbox)
-            "* TODO [[%:link][%:description]]\n%i" :immediate-finish t)
-           ("L" "Protocol Link" entry (file my/org-inbox)
-            "* TODO [[%:link][%:description]]" :immediate-finish t))))
+   `(("s" "store" entry (file+headline org-default-notes-file "Inbox")
+      "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a \n%i")
+     ("t" "task" entry (file+headline org-default-notes-file "Inbox")
+      "* TODO %? \n:PROPERTIES:\n:CREATED: %U\n:END:\n%i")
+     ("n" "note" entry (file ,my/org-notes)
+      "* %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n %i")
+     ("b" "bib" entry (file+headline org-default-notes-file "Bibliography")
+      "* TODO %a            :@work:\n\n:PROPERTIES:\n:CREATED: %U\n:END:\n \n %i")
+     ("p" "Protocol" entry (file+headline org-default-notes-file "Inbox")
+      "* TODO %:annotation\n:PROPERTIES:\n:CREATED: %U\n:END:\n%i" :immediate-finish t)))
+
+
+  ;; (org-capture-templates
+  ;;  (quote (("a" "Appointment" entry (file  "~/Dropbox/org/gcal.org" )
+  ;;           "* %?\n\n%^T\n\n:PROPERTIES:\n\n:END:\n\n")
+  ;;          ("s" "store" entry (file my/org-inbox)
+  ;;           "* TODO %?\n %a\n %i\n %U\n ")
+  ;;          ("t" "task" entry (file  my/org-inbox)
+  ;;           "* TODO %? \n %i\n ")
+  ;;          ("m" "mail" entry (file my/org-inbox)
+  ;;           "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
+  ;;          ;; ("m" "mail" entry (file+headline my/org-mail "Email")
+  ;;          ;;  "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
+  ;;          ("n" "note" entry (file my/org-notes)
+  ;;           "* %?\n %i")
+  ;;          ("b" "bib" entry (file+headline my/org-inbox "Bibliography")
+  ;;           "* TODO %?\n %a \n %i")
+  ;;          ("p" "Protocol" entry (file my/org-inbox)
+  ;;           "* TODO [[%:link][%:description]]\n%i" :immediate-finish t)
+  ;;          ("L" "Protocol Link" entry (file my/org-inbox)
+  ;;           "* TODO [[%:link][%:description]]" :immediate-finish t))))
+
   :config
   (defun my/org-capture-refile-and-jump ()
     (interactive)
@@ -3034,6 +3062,37 @@ See `org-agenda-todo' for more details."
     (org-refile-goto-last-stored)))
 
 ;;; Extra
+;;;; Calendar
+;; Manual setup
+(setq calendar-week-start-day 1
+      calendar-day-name-array ["Søndag" "Mandag" "Tirsdag" "Onsdag"
+                               "Torsdag" "Fredag" "Lørdag"]
+      calendar-month-name-array ["Januar" "Februar" "März" "April" "Mai"
+                                 "Juni" "Juli" "August" "September"
+                                 "Oktober" "November" "Dezember"])
+
+(use-package calendar-norway
+  ;; :custom
+  ;; (calendar-holidays 'calendar-norway-raude-dagar "Include days where you don't have to work")
+  ;; (calendar-holidays 'calendar-norway-andre-merkedagar "Include other days that people celebrate")
+  ;; (calendar-holidays 'calendar-norway-dst "Daylight saving")
+  :config
+  ;; Set what holidays you want in your calendar:
+  (setq calendar-holidays
+        (append
+         ;; Include days where you don't have to work:
+         calendar-norway-raude-dagar
+         ;; Include other days that people celebrate:
+         calendar-norway-andre-merkedagar
+         ;; Include daylight savings time:
+         calendar-norway-dst
+         ;; And then you can add some non-Norwegian holidays etc. if you like:
+         '((holiday-fixed 3 17 "St. Patricksdag")
+           (holiday-fixed 10 31 "Hallowe'en")
+           (holiday-float 11 4 4 "Thanksgiving")
+           (solar-equinoxes-solstices))))
+  )
+
 ;;;; Weather
 (use-package weather-metno
   :straight t
