@@ -480,8 +480,8 @@ Otherwise, call `delete-blank-lines'."
 (use-package expand-region
   ;; Incrementally select a region
   ;; :after org ;; When using straight, er should byte-compiled with the latest Org
-  :bind (("C--" . er/expand-region)
-         ("C-M--" . er/contract-region))
+  :bind (("C-\\" . er/expand-region)
+         ("M-\\" . er/contract-region))
   :config
   (defun org-table-mark-field ()
     "Mark the current table field."
