@@ -90,8 +90,8 @@
 (bind-keys :prefix "C-s"
            :prefix-map my-search-map)
 
-(unbind-key "C-v") ;; Reserve for assist related commands
-(bind-keys :prefix "C-v"
+(unbind-key "C-q") ;; Reserve for assist related commands
+(bind-keys :prefix "C-q"
            :prefix-map my-assist-map)
 
 ;; Exit Emacs
@@ -208,6 +208,10 @@
 ;; Start maximized
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 ;; ESC is mapped as metakey by default, very counter-intuitive.
+(define-key isearch-mode-map [escape] 'isearch-abort)   ;; isearch
+(define-key isearch-mode-map "\e" 'isearch-abort)   ;; \e seems to work better for terminals
+(global-set-key [escape] 'keyboard-escape-quit)
+
 
 ;;;; Some functions to be used
 (defun suppress-messages (func &rest args)
