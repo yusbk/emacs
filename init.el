@@ -5,7 +5,6 @@
 ;; to locate individual use-package definition.
 ;; M-x describe-personal-keybindings to see all personally defined keybindings
 
-
 (progn ;startup
   (defvar before-user-init-time (current-time)
     "Value of `current-time' when Emacs begins loading `user-init-file'.")
@@ -78,7 +77,8 @@
 
 ;;; Personal keybindings
 ;; Personal map activate as early as possible
-(bind-keys :prefix "<f12>"
+(unbind-key "C-p")
+(bind-keys :prefix "C-p"
            :prefix-map my-personal-map)
 
 (bind-keys :prefix "C-c o"
@@ -98,7 +98,7 @@
 ;; C-x C-c is originally bound to kill emacs. I accidentally type this
 ;; from time to time which is super-frustrating.  Get rid of it:
 (unbind-key "C-x C-c")
-(bind-key "<f12> 0" #'save-buffers-kill-emacs)
+(bind-key "0" 'save-buffers-kill-emacs my-personal-map)
 
 ;;; Symbolic link and folders
 (use-package my-init
@@ -1158,6 +1158,19 @@ With ARG, swap them instead."
   )
 
 ;;;; Ivy / Swiper / Counsel
+(use-package ivy
+  :bind
+  ("C-M-z" . ivy-resume)
+  ([remap list-buffers] . ivy-switch-buffer)
+  :config
+  (setq ivy-count-format "(%d/%d) ")
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-extra-directories '("./"))
+  (dolist (fun '(org-refile org-agenda-refile org-capture-refile))
+    (setq ivy-initial-inputs-alist
+          (delete `(,fun . "^") ivy-initial-inputs-alist)))
+  (ivy-mode))
+
 (use-package counsel
   ;; specifying counsel will bring ivy and swiper as dependencies
   :demand t
@@ -1725,8 +1738,12 @@ Version 2017-09-01"
   :bind
   (("C-x C-d" . dired) ; overrides list-directory
    :map  dired-mode-map
-   ("l" . dired-up-directory)) ; use l to go up in dired
+   ("l" . dired-up-directory) ;go up in dired
+   ("i" . swiper)
+   ("j" . dired-next-line)
+   ("k" . dired-previous-line)) ;
   :config
+  ;; other settings
   (setq dired-auto-revert-buffer t)
   (setq dired-create-destination-dirs 'ask)
   (setq dired-dwim-target t)
