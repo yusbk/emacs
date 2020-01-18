@@ -576,15 +576,12 @@ Otherwise, call `delete-blank-lines'."
 (use-package undo-tree
   :straight t
   :diminish undo-tree-mode
-  :bind (("C-x u" . undo-tree-visualize)
-         :map my-assist-map
-         ("r" . redo))
+  :bind ("C-x u" . undo-tree-visualize) ;else C-z bind to undo
+  :custom
+  (undo-tree-visualize-timestamps t)
+  (undo-tree-visualize-diff t)
   :config
-  ;; make ctrl-Z redo
   (defalias 'redo 'undo-tree-redo)
-
-  (setq undo-tree-visualizer-timestamps t)
-  (setq undo-tree-visualizer-diff t)
 
   (defun ybk/undo-tree-enable-save-history ()
     "Enable auto saving of the undo history."
@@ -616,9 +613,7 @@ Otherwise, call `delete-blank-lines'."
     (remove-hook 'find-file-hook #'undo-tree-load-history-hook))
 
   ;; Aktifkan
-  (global-undo-tree-mode 1)
-
-  )
+  (global-undo-tree-mode 1))
 
 
 ;;; Completion
@@ -1330,9 +1325,9 @@ output file. %i path(s) are relative, while %o is absolute.")
   :init
   (setq bookmark-default-file (concat my-emacs-cache "bookmarks") ;bookmarks dir
         bookmark-save-flag 1) ;auto save when chnage else use "t" to autosave when emacs quits
-  :bind (:map my-personal-map
-              ("m" . bookmark-set)
-              ("j" . bookmark-jump)
+  :bind (:map my-assist-map
+              ("b" . bookmark-set)
+              ("c" . bookmark-jump)
               ("l" . bookmark-bmenu-list))
   :config
   ;; bookmark+ harus di download di GitHub dan pasang di load-path
@@ -1799,8 +1794,8 @@ Version 2017-09-01"
   :straight nil
   :defines eshell-prompt-function
   :functions eshell/alias
-  :bind (:map my-assist-map
-              ("x" . eshell))
+  :bind (:map my-personal-map
+              ("s" . eshell))
   :hook (eshell-mode . (lambda ()
                          (bind-key "C-l" 'eshell/clear eshell-mode-map)
                          (eshell/alias "f" "find-file $1")
@@ -2037,8 +2032,8 @@ Version 2017-09-01"
   :straight t
   :defer 2
   ;; :bind ([f9] . shell-pop)
-  :bind (:map my-assist-map
-              ("z" . shell-pop))
+  :bind (:map my-personal-map
+              ("x" . shell-pop))
   :custom
   (shell-pop-full-span t)
   (shell-pop-shell-type '("eshell" "*eshell" (lambda nil (eshell))))
@@ -2405,7 +2400,7 @@ if there is displayed buffer that have shell it will use that window"
   :after ess
   :bind (:map my-personal-map
               ("r" . ess-R-dev-ctable)
-              ("s" . ess-R-dev-pprint)))
+              ("p" . ess-R-dev-pprint)))
 
 ;; Open buffer to test R code
 (defun test-R-buffer ()
@@ -2420,7 +2415,8 @@ if there is displayed buffer that have shell it will use that window"
     $buf
     ))
 
-(global-set-key (kbd "<f12> r") 'test-R-buffer)
+(bind-key "R" 'test-R-buffer my-personal-map)
+
 
 ;;; Python
 (use-package python
