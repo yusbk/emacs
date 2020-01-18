@@ -2760,6 +2760,8 @@ if there is displayed buffer that have shell it will use that window"
    ("C-c t" . org-todo)
    ;; Toggle link or use font-lock
    ("M-L" . my/org-toggle-link-display)
+   ;; Insert code block
+   ("C-c s" . ybk/org-insert-src-block)
    )
   :hook
   (org-mode . my/setup-org-mode)
@@ -2882,7 +2884,57 @@ match.  See also `prettify-symbols-compose-predicate'."
       (progn (add-to-invisibility-spec '(org-link))
              (org-restart-font-lock)
              (setq org-descriptive-links t))))
+
+
+  ;; Code block shutcut
+  (defun ybk/org-insert-src-block (src-code-type)
+    "Insert a `SRC-CODE-TYPE' type source code block in org-mode."
+    (interactive
+     (let ((src-code-types
+            '("emacs-lisp" "R" "python" "stata" "sh" "latex")))
+       (list (ivy-completing-read "Source code type: " src-code-types))))
+    (progn
+      (newline-and-indent)
+      (insert "#+END_SRC\n")
+      (previous-line 2)
+      (insert (format "#+BEGIN_SRC %s\n" src-code-type))
+      (org-edit-src-code)))
   )
+
+;; Export top-level subtree to different file
+;; Example:
+;; * Header 1
+;; :PROPERTIES:
+;; :custom_id: rapport
+;; :end:
+;;
+;; * Header 2
+;; :PROPERTIES:
+;; :custom_id: beamer
+;; :end:
+
+(defun org-export-all (backend)
+  "Export all subtrees that are *not* tagged with :noexport: to
+separate files.
+
+Note that subtrees must have the :EXPORT_FILE_NAME: property set
+to a unique value for this to work properly."
+  (interactive "sEnter backend: ")
+  (let ((fn (cond ((equal backend "html") 'org-html-export-to-html)
+                  ((equal backend "latex") 'org-latex-export-to-latex)
+                  ((equal backend "pdf") 'org-latex-export-to-pdf)
+                  ((equal backend "Rnw") 'org-latex-export-to-Rnw))))
+    (org-map-entries (lambda () (funcall fn nil t)) "-noexport")))
+
+;; :EXPORT_FILE_NAME: dihasilkan dari :CUSTOM_ID:
+(defadvice org-set-property (after set-export-file-name
+                                   (property value) activate compile)
+  (when (equal org-last-set-property "CUSTOM_ID")
+    (let ((export-file-name
+           (concat (org-entry-get nil "CUSTOM_ID")
+                   "-"
+                   (replace-regexp-in-string " " "-" (downcase (org-get-heading t t))))))
+      (org-entry-put nil "EXPORT_FILE_NAME" export-file-name))))
 
 
 (use-package org-agenda
