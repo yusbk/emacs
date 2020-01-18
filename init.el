@@ -946,6 +946,19 @@ In that case, insert the number."
   :hook
   (ediff-prepare-buffer . my/ediff-prepare-buffer)
   :config
+  ;; Change some keybindings
+  (defun ora-ediff-hook ()
+    (ediff-setup-keymap)
+    (define-key ediff-mode-map "j" 'ediff-next-difference)
+    (define-key ediff-mode-map "k" 'ediff-previous-difference))
+
+  (add-hook 'ediff-mode-hook 'ora-ediff-hook)
+
+  ;; Restore window after Ediff quit
+  (winner-mode)
+  (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
+
+
   (defun my/ediff-prepare-buffer ()
     "Function to prepare ediff buffers.
 
