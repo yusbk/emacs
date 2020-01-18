@@ -4,11 +4,7 @@
 #+OPTIONS: toc:nil
 #+PROPERTY: header-args :comments org :catch yes :results silent :tangle yes
 
-# #+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
-# #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-light.min.css" />
-
-#+INFOJS_OPT: view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-dark.min.css" />
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
 
 Kandungan =PROPERTY= di atas ~:comments org~ ialah untuk memasukkan komen ke ~emacs25.el~
 
@@ -46,7 +42,6 @@ Format UTF-8. Tapi =org-mode= bullet jadi kecil itulah dimatikan
 #+END_SRC
 
 * Hydra
-Dimatikan
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package hydra
     :ensure t
@@ -63,7 +58,7 @@ Dimatikan
 
 Fungsi-fungsi di bawah diambil dari [[https://github.com/abo-abo/hydra/wiki/Emacs][Hydra Wiki]]
 ** Movement
-Hanya guna =C-n= untuk aktifkan kekuci. =Dimatikan=
+Hanya guna =C-n= untuk aktifkan kekuci
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (global-set-key
@@ -190,8 +185,6 @@ depakai untuk *Origami*).
 
 ** Personal keymap [F6]
 Setup a personal keymap. I'll bind various things to this later on:
-=Dimatikan=.
-
 #+BEGIN_SRC emacs-lisp :tangle no
   (bind-keys :prefix "<f6>"
              :prefix-map ybk/map)
@@ -325,7 +318,7 @@ Ini utk menyelesaikan masalah dengan =lexical-let= di ~auto-lang~
   (eval-when-compile(require 'cl))
 #+END_SRC
 ** Exit
-Save buffer and exit. =Dimatikan=
+Save buffer and exit
 #+BEGIN_SRC emacs-lisp :tangle no
   (bind-key "9" #'save-buffers-kill-emacs 'ybk/map )
 #+END_SRC
@@ -481,10 +474,10 @@ Sembunyikan tetikus masa menaip
 #+END_SRC
 ** Komen region
 Kommen line tanpa perlu highlight seperti menggunakan
-=comment-or-uncommment-region=. Barisan yang ada kursor akan di komen. Cara ini
-diambil dari Stackoverflow.
+~comment-or-uncommment-region~. Barisan yang ada kursor akan di komen. Cara ini
+diambil dari [[  (global-set-key (kbd "M-'") 'comment-or-uncomment-region)][StackOverflow]]
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp
   (defun comment-eclipse ()
     (interactive)
     (let ((start (line-beginning-position))
@@ -538,7 +531,7 @@ Insert newline if point at the end of the buffer
 
 *** Cursor ke baris awal
 Cursor move first line or block. Diambil di [[http://ergoemacs.org/emacs/emacs_keybinding_design_beginning-of-line-or-block.html][Ergoemacs]]. Dimatikan sebab bila di kode
-chunck cursor akan terus keluar chunck kalau tidak di 'save'. =Dimatikan=
+chunck cursor akan terus keluar chunck kalau tidak di 'save'.
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (defun xah-beginning-of-line-or-block ()
@@ -669,8 +662,7 @@ Pakai mouse =C-Scroll=
 #+END_SRC
 
 ** Line number
-Tunjukkan line number. =Dimatikan=
-
+Tunjukkan line number
 #+BEGIN_SRC emacs-lisp :tangle no
   (defun ybk/line-nr ()
     "Tunjukkan nombor garisan."
@@ -810,8 +802,6 @@ Beza warna bila buffer aktif atau tidak. Antara powerline yang boleh dipakai:
 - powerline-vim-theme
 - powerline-nano-theme
 
-=Dimatikan=
-
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package powerline
     :ensure t
@@ -823,8 +813,7 @@ Beza warna bila buffer aktif atau tidak. Antara powerline yang boleh dipakai:
 #+END_SRC
 
 *** Cara diambil dari GitHug
-Diambil di [[https://github.com/sandhu/emacs.d/blob/master/config/008-ui-config.el][sini]]. =Dimatikan=
-
+Diambil di [[https://github.com/sandhu/emacs.d/blob/master/config/008-ui-config.el][sini]]
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package powerline :ensure t
     :init (setq powerline-default-separator 'wave)
@@ -1072,7 +1061,7 @@ jumpa cara lain.
 #+END_SRC
 
 *** Moe-theme
-Untuk aturcara boleh baca di [[https://github.com/kuanyui/moe-theme.el][GitHub]]. =Dimatikan=
+Untuk aturcara boleh baca di [[https://github.com/kuanyui/moe-theme.el][GitHub]]
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package moe-theme
@@ -3814,7 +3803,7 @@ To convert to Rnw or Rmd. The ox-ravel.org file should be tangle =M-x
 org-babel-tangle=
 
 Cara guna:
-- Rujuk
+- Rujuk ke [[ESS and R]]
 - =C-c C-e l r= utk buat fail .Rnw
 - Buka fail .Rnw dan tekan =kk= utk buat fail .tex
 - Buka fail .tex dan tekan =C-c C-c= utk buat PDF atau lihat fail PDF
@@ -4438,7 +4427,7 @@ Rujukkan di [[https://github.com/Malabarba/org-agenda-property][Malabarba
 
 ** Capture
 I use org-capture to create short notes about all kinds of things. I can capture
-emails to remember for later, quick thoughts for later, RSS feeds (see =Feed reader=),
+emails to remember for later, quick thoughts for later, RSS feeds (see [[Feed reader]]),
 really anything.
 
 #+BEGIN_SRC emacs-lisp
