@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-01-18 lø. 23:38 -->
+<!-- 2020-01-18 lø. 23:45 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Aturcare Emacs versi 26.1</title>
@@ -235,342 +235,342 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org69c06a8">1. Sumbangan</a></li>
-<li><a href="#orgf0d67bc">2. Info+</a></li>
-<li><a href="#orgdd35b15">3. UTF-8</a></li>
-<li><a href="#org7f03d29">4. Hydra</a>
+<li><a href="#org2e22267">1. Sumbangan</a></li>
+<li><a href="#org9025b20">2. Info+</a></li>
+<li><a href="#org4d25426">3. UTF-8</a></li>
+<li><a href="#org025c6aa">4. Hydra</a>
 <ul>
-<li><a href="#org42178ec">4.1. Movement</a></li>
-<li><a href="#org48a58e5">4.2. Page Navigation</a></li>
+<li><a href="#orgebbe95e">4.1. Movement</a></li>
+<li><a href="#org6b42603">4.2. Page Navigation</a></li>
 </ul>
 </li>
-<li><a href="#org1a25364">5. Kekunci</a>
+<li><a href="#org13dbb62">5. Kekunci</a>
 <ul>
-<li><a href="#org525100a">5.1. Ringkasan kekunci</a></li>
-<li><a href="#org5f1f4f2">5.2. Key chord</a></li>
-<li><a href="#org9923e4e">5.3. Key sequence</a></li>
+<li><a href="#orga956b03">5.1. Ringkasan kekunci</a></li>
+<li><a href="#org8c67587">5.2. Key chord</a></li>
+<li><a href="#orgfc0e2fb">5.3. Key sequence</a></li>
 </ul>
 </li>
-<li><a href="#org354b4ce">6. Personalised keymaps</a>
+<li><a href="#org14755d2">6. Personalised keymaps</a>
 <ul>
-<li><a href="#org0f0b04c">6.1. Saiz kolom</a></li>
-<li><a href="#orgc8b001e">6.2. Personal keymap [F6]</a></li>
-<li><a href="#org50e1b52">6.3. Prog keymap [F12]</a></li>
-<li><a href="#orga8f9bab">6.4. Move keymap [F2]</a></li>
-<li><a href="#orgd0072c2">6.5. Org keymap [F10]</a></li>
-<li><a href="#org474ca34">6.6. R keymap [F9]</a></li>
-<li><a href="#org5c716a3">6.7. Misc keymap [F5]</a></li>
-<li><a href="#org519606e">6.8. Search keymap C-s</a></li>
+<li><a href="#orgee4c4dc">6.1. Saiz kolom</a></li>
+<li><a href="#org6e9fd52">6.2. Personal keymap [F6]</a></li>
+<li><a href="#orgf3defed">6.3. Prog keymap [F12]</a></li>
+<li><a href="#org7e7c871">6.4. Move keymap [F2]</a></li>
+<li><a href="#org6fbf724">6.5. Org keymap [F10]</a></li>
+<li><a href="#org81a534b">6.6. R keymap [F9]</a></li>
+<li><a href="#orgf7859c2">6.7. Misc keymap [F5]</a></li>
+<li><a href="#org872f9ff">6.8. Search keymap C-s</a></li>
 </ul>
 </li>
-<li><a href="#org74073cb">7. Directory sendiri</a>
+<li><a href="#orgff79a7e">7. Directory sendiri</a>
 <ul>
-<li><a href="#org42a80ad">7.1. Customize file</a></li>
-<li><a href="#org5ea2213">7.2. Personal elisp</a></li>
+<li><a href="#org9825183">7.1. Customize file</a></li>
+<li><a href="#orgadaff2d">7.2. Personal elisp</a></li>
 </ul>
 </li>
-<li><a href="#org5700548">8. Go to my emacs settings file</a></li>
-<li><a href="#org6401a0c">9. Other settings</a>
+<li><a href="#orgfa981d7">8. Go to my emacs settings file</a></li>
+<li><a href="#org8896225">9. Other settings</a>
 <ul>
-<li><a href="#orgc930fe1">9.1. Encypting file</a></li>
-<li><a href="#org4b86588">9.2. Customizing key</a></li>
-<li><a href="#orgc56cb8f">9.3. Compile</a></li>
-<li><a href="#org63e5589">9.4. Exit</a></li>
-<li><a href="#orgdf16e7f">9.5. Scratch buffer</a></li>
-<li><a href="#org49617d6">9.6. Buffer baru tanpa nama</a></li>
-<li><a href="#org0905d60">9.7. Cancel</a></li>
-<li><a href="#org50ad903">9.8. Face attribute</a></li>
-<li><a href="#org35c2084">9.9. Font</a></li>
-<li><a href="#org6c37395">9.10. Font-lock</a></li>
-<li><a href="#org0a1e549">9.11. Yes/No</a></li>
-<li><a href="#org3f1c5d3">9.12. Elisp test dan message permulaan</a></li>
-<li><a href="#orge64812b">9.13. Start maximized</a></li>
-<li><a href="#org2eba608">9.14. Bunyi beep</a></li>
-<li><a href="#orgab823da">9.15. Help window</a></li>
-<li><a href="#org807002b">9.16. Kill buffer</a></li>
-<li><a href="#org634ada1">9.17. Sembunyikan tetikus</a></li>
-<li><a href="#orge12316b">9.18. Komen region</a></li>
-<li><a href="#orgfdb564e">9.19. Scrolling</a></li>
-<li><a href="#org45f02c8">9.20. Tab</a></li>
-<li><a href="#org5afe133">9.21. Cursor</a></li>
-<li><a href="#org21e63e5">9.22. Indent</a></li>
-<li><a href="#org81c62d9">9.23. Find-file</a></li>
-<li><a href="#orgc6f5463">9.24. Zoom in/out</a></li>
-<li><a href="#orgd7b6d2c">9.25. Line number</a></li>
-<li><a href="#orga3d5de0">9.26. ag</a></li>
-<li><a href="#orga50c3e7">9.27. Warning redefinition</a></li>
-<li><a href="#orgfbf0d6d">9.28. Suspend-frame</a></li>
-<li><a href="#orgd91b4f9">9.29. Copy file path</a></li>
+<li><a href="#org613b9fc">9.1. Encypting file</a></li>
+<li><a href="#orgd7ba70f">9.2. Customizing key</a></li>
+<li><a href="#orgcba9dda">9.3. Compile</a></li>
+<li><a href="#orgb56dba5">9.4. Exit</a></li>
+<li><a href="#org1186731">9.5. Scratch buffer</a></li>
+<li><a href="#orgc2282ea">9.6. Buffer baru tanpa nama</a></li>
+<li><a href="#org6961e53">9.7. Cancel</a></li>
+<li><a href="#orge14cb8e">9.8. Face attribute</a></li>
+<li><a href="#orgdbf1fb5">9.9. Font</a></li>
+<li><a href="#orgb5886ad">9.10. Font-lock</a></li>
+<li><a href="#org68436e0">9.11. Yes/No</a></li>
+<li><a href="#org222ccba">9.12. Elisp test dan message permulaan</a></li>
+<li><a href="#orgda5f292">9.13. Start maximized</a></li>
+<li><a href="#org7551f96">9.14. Bunyi beep</a></li>
+<li><a href="#org7041153">9.15. Help window</a></li>
+<li><a href="#org0647c0f">9.16. Kill buffer</a></li>
+<li><a href="#org0bb173d">9.17. Sembunyikan tetikus</a></li>
+<li><a href="#org28e5864">9.18. Komen region</a></li>
+<li><a href="#orga20e902">9.19. Scrolling</a></li>
+<li><a href="#orgb0b7ae5">9.20. Tab</a></li>
+<li><a href="#org9bcd812">9.21. Cursor</a></li>
+<li><a href="#orge139917">9.22. Indent</a></li>
+<li><a href="#orgea9309d">9.23. Find-file</a></li>
+<li><a href="#orgbd1b56d">9.24. Zoom in/out</a></li>
+<li><a href="#orgabd9296">9.25. Line number</a></li>
+<li><a href="#orgf72bb2c">9.26. ag</a></li>
+<li><a href="#org0fed9e7">9.27. Warning redefinition</a></li>
+<li><a href="#orgb4d2bb8">9.28. Suspend-frame</a></li>
+<li><a href="#org2d0ea68">9.29. Copy file path</a></li>
 </ul>
 </li>
-<li><a href="#orgabde298">10. Winner mode</a></li>
-<li><a href="#orgb5996fe">11. Kill-ring</a></li>
-<li><a href="#org7735860">12. Cache</a></li>
-<li><a href="#org209208e">13. Estetik</a>
+<li><a href="#org2c9ac21">10. Winner mode</a></li>
+<li><a href="#orgc417d9a">11. Kill-ring</a></li>
+<li><a href="#org66ef515">12. Cache</a></li>
+<li><a href="#orgdb195b7">13. Estetik</a>
 <ul>
-<li><a href="#orgb54ffb7">13.1. Menu bar</a></li>
-<li><a href="#org780c892">13.2. Powerline</a></li>
-<li><a href="#org38c1d19">13.3. Tema utk paparan</a></li>
-<li><a href="#org8d3018b">13.4. Highlight line</a></li>
-<li><a href="#org6a932ea">13.5. Jam dan batteri</a></li>
+<li><a href="#orga9d0c53">13.1. Menu bar</a></li>
+<li><a href="#org5c07a79">13.2. Powerline</a></li>
+<li><a href="#org8b1b897">13.3. Tema utk paparan</a></li>
+<li><a href="#org8597f74">13.4. Highlight line</a></li>
+<li><a href="#orgb405833">13.5. Jam dan batteri</a></li>
 </ul>
 </li>
-<li><a href="#orgc94b1e8">14. Shells</a>
+<li><a href="#orge8d2a36">14. Shells</a>
 <ul>
-<li><a href="#org6f7e92a">14.1. Shell</a></li>
-<li><a href="#org66c1eb6">14.2. Eshell</a></li>
-<li><a href="#org829b483">14.3. Fancy prompt</a></li>
-<li><a href="#org2f388a6">14.4. Shell pop</a></li>
-<li><a href="#org9b1fbc1">14.5. Bash</a></li>
-<li><a href="#orgd7d35c7">14.6. Shell misc</a></li>
+<li><a href="#org036c63f">14.1. Shell</a></li>
+<li><a href="#org43f1479">14.2. Eshell</a></li>
+<li><a href="#org32c9b0c">14.3. Fancy prompt</a></li>
+<li><a href="#orgee9cbbd">14.4. Shell pop</a></li>
+<li><a href="#orgcefbf3b">14.5. Bash</a></li>
+<li><a href="#org43c7cd7">14.6. Shell misc</a></li>
 </ul>
 </li>
-<li><a href="#orgb94e575">15. Recent files</a></li>
-<li><a href="#orge3d8dad">16. Find or replace text</a></li>
-<li><a href="#org2689895">17. Backup and auto-save files</a>
+<li><a href="#orgac99b7c">15. Recent files</a></li>
+<li><a href="#orgdcbf39a">16. Find or replace text</a></li>
+<li><a href="#orgd10a897">17. Backup and auto-save files</a>
 <ul>
-<li><a href="#org1a9ec72">17.1. Backup settings</a></li>
-<li><a href="#org014c8c6">17.2. Auto-save</a></li>
+<li><a href="#orgee63175">17.1. Backup settings</a></li>
+<li><a href="#orgf2c6980">17.2. Auto-save</a></li>
 </ul>
 </li>
-<li><a href="#org7c52075">18. Undo</a></li>
-<li><a href="#org8ef7641">19. Which key</a></li>
-<li><a href="#org096819b">20. Crux</a></li>
-<li><a href="#org2bf6672">21. Windows</a>
+<li><a href="#org6ae8408">18. Undo</a></li>
+<li><a href="#org4fe1135">19. Which key</a></li>
+<li><a href="#org4482865">20. Crux</a></li>
+<li><a href="#org8e1387c">21. Windows</a>
 <ul>
-<li><a href="#org88019bd">21.1. Splitting windows</a></li>
-<li><a href="#orgcda8957">21.2. Tukar size windows</a></li>
-<li><a href="#org17fa0c5">21.3. Switching windows</a></li>
-<li><a href="#orgf7d4fe3">21.4. Transposing - perkataan dan window</a></li>
+<li><a href="#org63536f9">21.1. Splitting windows</a></li>
+<li><a href="#org2454622">21.2. Tukar size windows</a></li>
+<li><a href="#org5a10b77">21.3. Switching windows</a></li>
+<li><a href="#orgc1cdfe6">21.4. Transposing - perkataan dan window</a></li>
 </ul>
 </li>
-<li><a href="#org7d37ef4">22. Buffers</a>
+<li><a href="#org4571bc4">22. Buffers</a>
 <ul>
-<li><a href="#org235869d">22.1. Pindahkan buffer</a></li>
-<li><a href="#org17cdc0e">22.2. Ibuffer</a></li>
-<li><a href="#orgccf4d11">22.3. ibuffer-vc</a></li>
+<li><a href="#org0adc6a5">22.1. Pindahkan buffer</a></li>
+<li><a href="#orgc111f37">22.2. Ibuffer</a></li>
+<li><a href="#org04cf424">22.3. ibuffer-vc</a></li>
 </ul>
 </li>
-<li><a href="#orgf55d7d8">23. Ivy</a>
+<li><a href="#org4044556">23. Ivy</a>
 <ul>
-<li><a href="#orge6b6092">23.1. Ivy-hydra</a></li>
-<li><a href="#org19943f0">23.2. Insert file path</a></li>
-<li><a href="#org2429f38">23.3. Ivy-extra</a></li>
+<li><a href="#org8b04fb3">23.1. Ivy-hydra</a></li>
+<li><a href="#org5bb2bb8">23.2. Insert file path</a></li>
+<li><a href="#org1a7e096">23.3. Ivy-extra</a></li>
 </ul>
 </li>
-<li><a href="#org3e1f18b">24. Swiper</a></li>
-<li><a href="#orgd2e369b">25. Counsel</a></li>
-<li><a href="#org2ffef33">26. Avy-goto</a></li>
-<li><a href="#org10038cd">27. Amx</a></li>
-<li><a href="#org8cefe93">28. Company</a>
+<li><a href="#orgdd8ebca">24. Swiper</a></li>
+<li><a href="#org2b96583">25. Counsel</a></li>
+<li><a href="#org7b6f9af">26. Avy-goto</a></li>
+<li><a href="#org59d6aac">27. Amx</a></li>
+<li><a href="#orgc3c1257">28. Company</a>
 <ul>
-<li><a href="#org2091ea4">28.1. Aturcara umum</a></li>
-<li><a href="#org3fd099e">28.2. Company go</a></li>
-<li><a href="#org0f3adc6">28.3. Company quick-helps</a></li>
-<li><a href="#org5406288">28.4. Company-flx</a></li>
+<li><a href="#orgc6b31ff">28.1. Aturcara umum</a></li>
+<li><a href="#org7eff775">28.2. Company go</a></li>
+<li><a href="#org98e2d07">28.3. Company quick-helps</a></li>
+<li><a href="#orgf9093cd">28.4. Company-flx</a></li>
 </ul>
 </li>
-<li><a href="#orga28ab31">29. Yasnippet</a>
+<li><a href="#org588b4c7">29. Yasnippet</a>
 <ul>
-<li><a href="#org3dfc315">29.1. Aturcara yasnippet</a></li>
-<li><a href="#org49112f6">29.2. Koleksi snippet</a></li>
+<li><a href="#orgf1e14dc">29.1. Aturcara yasnippet</a></li>
+<li><a href="#org99c4b9e">29.2. Koleksi snippet</a></li>
 </ul>
 </li>
-<li><a href="#org885ac87">30. Parentheses</a>
+<li><a href="#org51eaa0a">30. Parentheses</a>
 <ul>
-<li><a href="#orgced921b">30.1. Smartparens</a></li>
-<li><a href="#org099f1e9">30.2. Rainbow-delimited</a></li>
+<li><a href="#org2331e33">30.1. Smartparens</a></li>
+<li><a href="#org4e3c52a">30.2. Rainbow-delimited</a></li>
 </ul>
 </li>
-<li><a href="#org1dd9999">31. Origami</a></li>
-<li><a href="#org465357c">32. Rainbow mode</a></li>
-<li><a href="#org178963d">33. Singkatan/Abbrev</a>
+<li><a href="#orge95cc6d">31. Origami</a></li>
+<li><a href="#org91e5e5b">32. Rainbow mode</a></li>
+<li><a href="#org6f1e5e6">33. Singkatan/Abbrev</a>
 <ul>
-<li><a href="#org4fd1fa6">33.1. Abbreviation</a></li>
-<li><a href="#org8372a09">33.2. Predictive abbreviation</a></li>
+<li><a href="#org45c25be">33.1. Abbreviation</a></li>
+<li><a href="#org060a0a0">33.2. Predictive abbreviation</a></li>
 </ul>
 </li>
-<li><a href="#orgf8db590">34. Navigation</a>
+<li><a href="#org136c20c">34. Navigation</a>
 <ul>
-<li><a href="#orgbd54ba8">34.1. Mark</a></li>
-<li><a href="#orge5b30de">34.2. Goto Change</a></li>
-<li><a href="#org50609ce">34.3. Goto Last Change</a></li>
-<li><a href="#org77cb3f9">34.4. Register</a></li>
-<li><a href="#org0d668f1">34.5. Bookmark</a></li>
-<li><a href="#org96d5390">34.6. Mark with bm</a></li>
+<li><a href="#org392e1c5">34.1. Mark</a></li>
+<li><a href="#orgc058896">34.2. Goto Change</a></li>
+<li><a href="#org64cec7b">34.3. Goto Last Change</a></li>
+<li><a href="#org4c9c53b">34.4. Register</a></li>
+<li><a href="#org3d52100">34.5. Bookmark</a></li>
+<li><a href="#orgb4ef462">34.6. Mark with bm</a></li>
 </ul>
 </li>
-<li><a href="#org3358d0a">35. Projectile</a>
+<li><a href="#orgb1a4e40">35. Projectile</a>
 <ul>
-<li><a href="#orgfd2bf4f">35.1. Tags</a></li>
-<li><a href="#orgbe21772">35.2. Aturcara seterusnya</a></li>
+<li><a href="#orgb2f4a07">35.1. Tags</a></li>
+<li><a href="#org35c94f3">35.2. Aturcara seterusnya</a></li>
 </ul>
 </li>
-<li><a href="#orga8801ed">36. PDF-Tools</a>
+<li><a href="#org2d9a2fb">36. PDF-Tools</a>
 <ul>
-<li><a href="#org795bd38">36.1. Aturcara</a></li>
-<li><a href="#orgf868851">36.2. Auto-revert</a></li>
-<li><a href="#org0c9e35e">36.3. Useful key bindings</a></li>
-<li><a href="#orgdd6fdc5">36.4. Interleave</a></li>
+<li><a href="#org66145bd">36.1. Aturcara</a></li>
+<li><a href="#orgeac32a3">36.2. Auto-revert</a></li>
+<li><a href="#org89e139d">36.3. Useful key bindings</a></li>
+<li><a href="#orge1c63a6">36.4. Interleave</a></li>
 </ul>
 </li>
-<li><a href="#org1e65835">37. Quick-preview</a></li>
-<li><a href="#org9c26ecd">38. Graphics</a>
+<li><a href="#org524d7ae">37. Quick-preview</a></li>
+<li><a href="#orgfd35fe7">38. Graphics</a>
 <ul>
-<li><a href="#orge75ccd2">38.1. PlantUML</a></li>
-<li><a href="#org6889b7d">38.2. DOT dan Graphviz</a></li>
-<li><a href="#orgc8f4c99">38.3. TikZ</a></li>
+<li><a href="#org56afac8">38.1. PlantUML</a></li>
+<li><a href="#org180a127">38.2. DOT dan Graphviz</a></li>
+<li><a href="#org08ed211">38.3. TikZ</a></li>
 </ul>
 </li>
-<li><a href="#orgb3c88b3">39. Org</a>
+<li><a href="#org6f22ba5">39. Org</a>
 <ul>
-<li><a href="#org522c55a">39.1. Maklumat</a></li>
-<li><a href="#org027aaf6">39.2. Rujukkan kekunci</a></li>
-<li><a href="#orgc6e4d46">39.3. Org-settings</a></li>
-<li><a href="#org557d895">39.4. Worf</a></li>
-<li><a href="#org8edeff8">39.5. Calendar</a></li>
-<li><a href="#org4abdf71">39.6. Nice bulleted lists</a></li>
-<li><a href="#orgf927f9e">39.7. Code blocks (org-babel)</a></li>
-<li><a href="#orgbee107b">39.8. Diagrams</a></li>
-<li><a href="#org1325d4b">39.9. Exporting</a></li>
-<li><a href="#org60ca1bf">39.10. Eksport setiap top-level subtree ke fail berasingan</a></li>
-<li><a href="#orgcf36005">39.11. Ravel dan Ravel auto</a></li>
-<li><a href="#orge81c61e">39.12. Code block shortcut</a></li>
-<li><a href="#orga063f92">39.13. References (org-ref)</a></li>
-<li><a href="#orge2c84b0">39.14. Org-todo</a></li>
-<li><a href="#orgf959b25">39.15. <span class="todo TODO">TODO</span> Test org-todo</a></li>
-<li><a href="#org20b4cbb">39.16. Agenda</a></li>
-<li><a href="#orgb6ce0e8">39.17. Capture</a></li>
-<li><a href="#orgb3bb0f2">39.18. Refile</a></li>
-<li><a href="#org09c3b92">39.19. Meeting</a></li>
-<li><a href="#orgfd40dbc">39.20. Slides Reveal</a></li>
-<li><a href="#orgfb651e9">39.21. Insert photo</a></li>
-<li><a href="#orgf487a8a">39.22. Images</a></li>
-<li><a href="#orgac6c524">39.23. CSS di org</a></li>
-<li><a href="#orgc8176c9">39.24. Blogs</a></li>
-<li><a href="#org69ede5a">39.25. Tips and tricks</a></li>
+<li><a href="#org3207e13">39.1. Maklumat</a></li>
+<li><a href="#orgf0040d4">39.2. Rujukkan kekunci</a></li>
+<li><a href="#org1b5d3cd">39.3. Org-settings</a></li>
+<li><a href="#orga3d2eea">39.4. Worf</a></li>
+<li><a href="#org07554e1">39.5. Calendar</a></li>
+<li><a href="#org64c3e09">39.6. Nice bulleted lists</a></li>
+<li><a href="#orgf0080a5">39.7. Code blocks (org-babel)</a></li>
+<li><a href="#org1ce4659">39.8. Diagrams</a></li>
+<li><a href="#org63fd756">39.9. Exporting</a></li>
+<li><a href="#orge030890">39.10. Eksport setiap top-level subtree ke fail berasingan</a></li>
+<li><a href="#orge43afa2">39.11. Ravel dan Ravel auto</a></li>
+<li><a href="#org7892d4d">39.12. Code block shortcut</a></li>
+<li><a href="#orgaeb30c1">39.13. References (org-ref)</a></li>
+<li><a href="#orgb5c1d32">39.14. Org-todo</a></li>
+<li><a href="#org4b1e81f">39.15. <span class="todo TODO">TODO</span> Test org-todo</a></li>
+<li><a href="#orgfa42aff">39.16. Agenda</a></li>
+<li><a href="#orge2e3b24">39.17. Capture</a></li>
+<li><a href="#orgd521e84">39.18. Refile</a></li>
+<li><a href="#orgc351a1c">39.19. Meeting</a></li>
+<li><a href="#org20cb44a">39.20. Slides Reveal</a></li>
+<li><a href="#org614a4d1">39.21. Insert photo</a></li>
+<li><a href="#org0be9d3a">39.22. Images</a></li>
+<li><a href="#org5b6ce46">39.23. CSS di org</a></li>
+<li><a href="#orge5f861d">39.24. Blogs</a></li>
+<li><a href="#org3834e85">39.25. Tips and tricks</a></li>
 </ul>
 </li>
-<li><a href="#org749afc0">40. CSV file</a></li>
-<li><a href="#orgb4f95dd">41. Periksa ejaan (spelling)</a>
+<li><a href="#org9a097dc">40. CSV file</a></li>
+<li><a href="#org50bb5b5">41. Periksa ejaan (spelling)</a>
 <ul>
-<li><a href="#orgfe91e06">41.1. Kerja</a></li>
-<li><a href="#org1b6d906">41.2. Flyspell: periksa ejaan</a></li>
-<li><a href="#org9a5bc3e">41.3. Tukar bahasa</a></li>
-<li><a href="#org8fa1ee4">41.4. Auto lang</a></li>
+<li><a href="#org0498f0e">41.1. Kerja</a></li>
+<li><a href="#org2f19de9">41.2. Flyspell: periksa ejaan</a></li>
+<li><a href="#org42049a7">41.3. Tukar bahasa</a></li>
+<li><a href="#org5610855">41.4. Auto lang</a></li>
 </ul>
 </li>
-<li><a href="#org615eddd">42. Periksa kode (flycheck)</a>
+<li><a href="#orge002aa6">42. Periksa kode (flycheck)</a>
 <ul>
-<li><a href="#orgf0f5d16">42.1. Flycheck: periksa kode</a></li>
-<li><a href="#org264ac65">42.2. Electric operator</a></li>
+<li><a href="#org4b4af6e">42.1. Flycheck: periksa kode</a></li>
+<li><a href="#orgbdbc549">42.2. Electric operator</a></li>
 </ul>
 </li>
-<li><a href="#org44d8f9b">43. ESS</a>
+<li><a href="#org6a76153">43. ESS</a>
 <ul>
-<li><a href="#org81d6af8">43.1. R</a></li>
-<li><a href="#orgb4827c0">43.2. Stata</a></li>
+<li><a href="#org618757e">43.1. R</a></li>
+<li><a href="#org182352a">43.2. Stata</a></li>
 </ul>
 </li>
-<li><a href="#org7775419">44. Markdown</a>
+<li><a href="#orgf5f9857">44. Markdown</a>
 <ul>
-<li><a href="#orgc11c2e2">44.1. Tips</a></li>
+<li><a href="#org7f915b2">44.1. Tips</a></li>
 </ul>
 </li>
-<li><a href="#orgea9a84b">45. Polymode (for knitr)</a>
+<li><a href="#orgc2f7470">45. Polymode (for knitr)</a>
 <ul>
-<li><a href="#org0b57c97">45.1. Aturcara</a></li>
-<li><a href="#org5a923a7">45.2. Masukkan chunk</a></li>
-<li><a href="#org518b44a">45.3. Menilai atau proseskan chunk</a></li>
-<li><a href="#org92eff3c">45.4. Sembunyikan chunk</a></li>
-<li><a href="#org3e77c67">45.5. Compile Rmd file</a></li>
+<li><a href="#orgc9f9b0b">45.1. Aturcara</a></li>
+<li><a href="#orgf2b7dbb">45.2. Masukkan chunk</a></li>
+<li><a href="#org8706911">45.3. Menilai atau proseskan chunk</a></li>
+<li><a href="#org6357c02">45.4. Sembunyikan chunk</a></li>
+<li><a href="#org69044ee">45.5. Compile Rmd file</a></li>
 </ul>
 </li>
-<li><a href="#org914f000">46. Pandoc</a></li>
-<li><a href="#org3e16741">47. LaTeX</a>
+<li><a href="#orgd43b062">46. Pandoc</a></li>
+<li><a href="#org9b94d18">47. LaTeX</a>
 <ul>
-<li><a href="#orgb804196">47.1. Reftex</a></li>
-<li><a href="#org3ffe993">47.2. Latex math</a></li>
+<li><a href="#org8cd813e">47.1. Reftex</a></li>
+<li><a href="#orgb3951da">47.2. Latex math</a></li>
 </ul>
 </li>
-<li><a href="#orgaf13601">48. HTML and Webpage</a>
+<li><a href="#orgcfc3eea">48. HTML and Webpage</a>
 <ul>
-<li><a href="#orgfd23618">48.1. Browser</a></li>
-<li><a href="#org143e2d5">48.2. eww</a></li>
-<li><a href="#orgb3e2c0f">48.3. HTML and friends</a></li>
+<li><a href="#orgb1f70ff">48.1. Browser</a></li>
+<li><a href="#org3ffd8a4">48.2. eww</a></li>
+<li><a href="#org67e00c9">48.3. HTML and friends</a></li>
 </ul>
 </li>
-<li><a href="#org6886ded">49. RSS Feed reader</a>
+<li><a href="#org923e47a">49. RSS Feed reader</a>
 <ul>
-<li><a href="#org6c615b7">49.1. Elfeed-org</a></li>
-<li><a href="#org136b0a3">49.2. Elfeed</a></li>
+<li><a href="#org6404f39">49.1. Elfeed-org</a></li>
+<li><a href="#org38757e6">49.2. Elfeed</a></li>
 </ul>
 </li>
-<li><a href="#org00e526d">50. Email</a>
+<li><a href="#orga274710">50. Email</a>
 <ul>
-<li><a href="#org9c6bb32">50.1. list TODO</a></li>
-<li><a href="#org6bb4a6b">50.2. Kekunci</a></li>
-<li><a href="#org8105670">50.3. W3M</a></li>
-<li><a href="#org761502a">50.4. mu4e</a></li>
-<li><a href="#org2ce9f98">50.5. mu4e notification</a></li>
-<li><a href="#orgc2b87e6">50.6. Gnus</a></li>
-<li><a href="#org0567990">50.7. SMTP</a></li>
-<li><a href="#org24f8bba">50.8. Address database</a></li>
+<li><a href="#org8a9ae54">50.1. list TODO</a></li>
+<li><a href="#org1dfa77d">50.2. Kekunci</a></li>
+<li><a href="#orge4e450a">50.3. W3M</a></li>
+<li><a href="#orgfca8cd1">50.4. mu4e</a></li>
+<li><a href="#org82de44b">50.5. mu4e notification</a></li>
+<li><a href="#orgeb3967e">50.6. Gnus</a></li>
+<li><a href="#org4869213">50.7. SMTP</a></li>
+<li><a href="#orgac2ab97">50.8. Address database</a></li>
 </ul>
 </li>
-<li><a href="#org8213e67">51. Neotree</a></li>
-<li><a href="#org4bdfcb5">52. Tunjuk beza (ediff)</a>
+<li><a href="#orgb5b1b97">51. Neotree</a></li>
+<li><a href="#org2b51910">52. Tunjuk beza (ediff)</a>
 <ul>
-<li><a href="#org3c4cdaf">52.1. Ediff</a></li>
-<li><a href="#orge681409">52.2. Backup-walker</a></li>
+<li><a href="#orgbaf2775">52.1. Ediff</a></li>
+<li><a href="#org6d6ec95">52.2. Backup-walker</a></li>
 </ul>
 </li>
-<li><a href="#org796f4cd">53. Version control</a>
+<li><a href="#org41a68e6">53. Version control</a>
 <ul>
-<li><a href="#org04709a2">53.1. Git</a></li>
-<li><a href="#orgf5ec473">53.2. Magit</a></li>
-<li><a href="#org0cf27e1">53.3. Diff highlights</a></li>
-<li><a href="#orge87ed1c">53.4. Cara pakai repo baru</a></li>
-<li><a href="#org588c390">53.5. Tips and tricks</a></li>
+<li><a href="#orgef3f33f">53.1. Git</a></li>
+<li><a href="#org4b9d5f3">53.2. Magit</a></li>
+<li><a href="#orga71e0a5">53.3. Diff highlights</a></li>
+<li><a href="#org06b7e5f">53.4. Cara pakai repo baru</a></li>
+<li><a href="#org15256cf">53.5. Tips and tricks</a></li>
 </ul>
 </li>
-<li><a href="#org3be6b2c">54. Weather</a></li>
-<li><a href="#org6793cd1">55. Google-translate</a>
+<li><a href="#orgbc65212">54. Weather</a></li>
+<li><a href="#org1d0824d">55. Google-translate</a>
 <ul>
-<li><a href="#org34546fc">55.1. Default-UI</a></li>
-<li><a href="#org3fb3af1">55.2. Smooth-UI</a></li>
+<li><a href="#org6f8c345">55.1. Default-UI</a></li>
+<li><a href="#org07bd438">55.2. Smooth-UI</a></li>
 </ul>
 </li>
-<li><a href="#org6f0fcc3">56. Code cleanup</a>
+<li><a href="#org4c58598">56. Code cleanup</a>
 <ul>
-<li><a href="#org832d7c7">56.1. Electric operator</a></li>
-<li><a href="#org0a81998">56.2. Whitespace shows</a></li>
-<li><a href="#orgc89db98">56.3. Whitespace-cleanup</a></li>
-<li><a href="#org6db0cde">56.4. smart-newline</a></li>
+<li><a href="#orge7877c2">56.1. Electric operator</a></li>
+<li><a href="#org354c509">56.2. Whitespace shows</a></li>
+<li><a href="#org78daad6">56.3. Whitespace-cleanup</a></li>
+<li><a href="#org92a9555">56.4. smart-newline</a></li>
 </ul>
 </li>
-<li><a href="#org9a5070a">57. StackExchange</a></li>
-<li><a href="#org62a22b5">58. Miscellaneous</a>
+<li><a href="#org4c5fd4b">57. StackExchange</a></li>
+<li><a href="#org5e60e64">58. Miscellaneous</a>
 <ul>
-<li><a href="#org8716ef8">58.1. Lorem</a></li>
-<li><a href="#orga0ae42f">58.2. Rmarkdown chunk</a></li>
+<li><a href="#org417e3f4">58.1. Lorem</a></li>
+<li><a href="#orgc0ea970">58.2. Rmarkdown chunk</a></li>
 </ul>
 </li>
-<li><a href="#orgddd2e0f">59. Coba</a></li>
-<li><a href="#org597a67f">60. Music</a></li>
-<li><a href="#orgff82b75">61. Selesaikan masalah</a>
+<li><a href="#org9fa1f0d">59. Coba</a></li>
+<li><a href="#org4195eec">60. Music</a></li>
+<li><a href="#org5eee192">61. Selesaikan masalah</a>
 <ul>
-<li><a href="#orgfc760b7">61.1. XF86 keys</a></li>
-<li><a href="#org8f23f43">61.2. Suspend-frame</a></li>
+<li><a href="#org1b66bf0">61.1. XF86 keys</a></li>
+<li><a href="#orgc1a20a0">61.2. Suspend-frame</a></li>
 </ul>
 </li>
-<li><a href="#org5d1384b">62. My personal hydra keymaps</a>
+<li><a href="#orgd12d5ed">62. My personal hydra keymaps</a>
 <ul>
-<li><a href="#org86e43ec">62.1. General keymap [jm]</a></li>
-<li><a href="#org97fb26d">62.2. Move keymap [jj]</a></li>
-<li><a href="#orgd45f478">62.3. Org keymap [jw]</a></li>
-<li><a href="#org53c6c7f">62.4. Prog keymap [jc]</a></li>
-<li><a href="#orgad21060">62.5. Sweave keymap [js]</a></li>
+<li><a href="#org66fbca2">62.1. General keymap [jm]</a></li>
+<li><a href="#org1a97674">62.2. Move keymap [jj]</a></li>
+<li><a href="#orgd2641a8">62.3. Org keymap [jw]</a></li>
+<li><a href="#org94799d8">62.4. Prog keymap [jc]</a></li>
+<li><a href="#org4f45418">62.5. Sweave keymap [js]</a></li>
 </ul>
 </li>
 </ul>
@@ -580,8 +580,8 @@ for the JavaScript code in this tag.
 Kandungan <code>PROPERTY</code> di atas <code>:comments org</code> ialah untuk memasukkan komen ke <code>emacs25.el</code>
 </p>
 
-<div id="outline-container-org69c06a8" class="outline-2">
-<h2 id="org69c06a8"><span class="section-number-2">1</span> Sumbangan</h2>
+<div id="outline-container-org2e22267" class="outline-2">
+<h2 id="org2e22267"><span class="section-number-2">1</span> Sumbangan</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Aturcara ini tidak berhasil tanpa sumbangan dari:
@@ -600,8 +600,8 @@ yang juga menerima sumbangan dari ramai lagi penyumbang di alam cyber.
 </div>
 </div>
 
-<div id="outline-container-orgf0d67bc" class="outline-2">
-<h2 id="orgf0d67bc"><span class="section-number-2">2</span> Info+</h2>
+<div id="outline-container-org9025b20" class="outline-2">
+<h2 id="org9025b20"><span class="section-number-2">2</span> Info+</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Bantuan untuk Emacs Info. Untuk dapatkan info mengenai pakej pakai <code>C-h r</code> kemudian <code>i</code>
@@ -618,8 +618,8 @@ untuk ke index dan cari nama pakej yang diingini
 </div>
 </div>
 
-<div id="outline-container-orgdd35b15" class="outline-2">
-<h2 id="orgdd35b15"><span class="section-number-2">3</span> UTF-8</h2>
+<div id="outline-container-org4d25426" class="outline-2">
+<h2 id="org4d25426"><span class="section-number-2">3</span> UTF-8</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Format UTF-8. Tapi <code>org-mode</code> bullet jadi kecil itulah dimatikan
@@ -636,8 +636,8 @@ Format UTF-8. Tapi <code>org-mode</code> bullet jadi kecil itulah dimatikan
 </div>
 </div>
 
-<div id="outline-container-org7f03d29" class="outline-2">
-<h2 id="org7f03d29"><span class="section-number-2">4</span> Hydra</h2>
+<div id="outline-container-org025c6aa" class="outline-2">
+<h2 id="org025c6aa"><span class="section-number-2">4</span> Hydra</h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">use-package</span> <span style="color: #fabd2f;">hydra</span>
@@ -658,8 +658,8 @@ Format UTF-8. Tapi <code>org-mode</code> bullet jadi kecil itulah dimatikan
 Fungsi-fungsi di bawah diambil dari <a href="https://github.com/abo-abo/hydra/wiki/Emacs">Hydra Wiki</a>
 </p>
 </div>
-<div id="outline-container-org42178ec" class="outline-3">
-<h3 id="org42178ec"><span class="section-number-3">4.1</span> Movement</h3>
+<div id="outline-container-orgebbe95e" class="outline-3">
+<h3 id="orgebbe95e"><span class="section-number-3">4.1</span> Movement</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 Hanya guna <code>C-n</code> untuk aktifkan kekuci
@@ -685,8 +685,8 @@ Hanya guna <code>C-n</code> untuk aktifkan kekuci
 </div>
 </div>
 </div>
-<div id="outline-container-org48a58e5" class="outline-3">
-<h3 id="org48a58e5"><span class="section-number-3">4.2</span> Page Navigation</h3>
+<div id="outline-container-org6b42603" class="outline-3">
+<h3 id="org6b42603"><span class="section-number-3">4.2</span> Page Navigation</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 Sesuai bila banyak mukasurat
@@ -703,12 +703,12 @@ Sesuai bila banyak mukasurat
 </div>
 </div>
 
-<div id="outline-container-org1a25364" class="outline-2">
-<h2 id="org1a25364"><span class="section-number-2">5</span> Kekunci</h2>
+<div id="outline-container-org13dbb62" class="outline-2">
+<h2 id="org13dbb62"><span class="section-number-2">5</span> Kekunci</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-org525100a" class="outline-3">
-<h3 id="org525100a"><span class="section-number-3">5.1</span> Ringkasan kekunci</h3>
+<div id="outline-container-orga956b03" class="outline-3">
+<h3 id="orga956b03"><span class="section-number-3">5.1</span> Ringkasan kekunci</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 Senarai kekunci yang dipakai
@@ -803,8 +803,8 @@ Senarai kekunci yang dipakai
 </div>
 </div>
 
-<div id="outline-container-org5f1f4f2" class="outline-3">
-<h3 id="org5f1f4f2"><span class="section-number-3">5.2</span> Key chord</h3>
+<div id="outline-container-org8c67587" class="outline-3">
+<h3 id="org8c67587"><span class="section-number-3">5.2</span> Key chord</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 Untuk membuat kekunci singkatan dengan hanya dua huruf. Rujukan <a href="http://www.emacswiki.org/emacs/key-chord.el">Key Chord Mode</a>
@@ -849,8 +849,8 @@ zb zd zf zg zk zm zp zs zw zx
 </div>
 </div>
 
-<div id="outline-container-org9923e4e" class="outline-3">
-<h3 id="org9923e4e"><span class="section-number-3">5.3</span> Key sequence</h3>
+<div id="outline-container-orgfc0e2fb" class="outline-3">
+<h3 id="orgfc0e2fb"><span class="section-number-3">5.3</span> Key sequence</h3>
 <div class="outline-text-3" id="text-5-3">
 <p>
 Pakej <code>key-seq</code> dipakai untuk memastikan turutan kekunci sebelum mengaktifkan
@@ -876,8 +876,8 @@ Dua fungsi yang boleh dipakai iaitu:
 </div>
 </div>
 
-<div id="outline-container-org354b4ce" class="outline-2">
-<h2 id="org354b4ce"><span class="section-number-2">6</span> Personalised keymaps</h2>
+<div id="outline-container-org14755d2" class="outline-2">
+<h2 id="org14755d2"><span class="section-number-2">6</span> Personalised keymaps</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 Untuk lihat fungsi kekunci terdapat pelbagai cara:
@@ -901,8 +901,8 @@ Namakan fungsi <code>keluar</code>.
 </div>
 </div>
 
-<div id="outline-container-org0f0b04c" class="outline-3">
-<h3 id="org0f0b04c"><span class="section-number-3">6.1</span> Saiz kolom</h3>
+<div id="outline-container-orgee4c4dc" class="outline-3">
+<h3 id="orgee4c4dc"><span class="section-number-3">6.1</span> Saiz kolom</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 Saiz untuk sebaris atau kolom ialah 85 <code>(fill-column)</code> tetapi sekiranya ingin menukarkan ke saiz
@@ -917,8 +917,8 @@ depakai untuk <b>Origami</b>).
 </div>
 </div>
 
-<div id="outline-container-orgc8b001e" class="outline-3">
-<h3 id="orgc8b001e"><span class="section-number-3">6.2</span> Personal keymap [F6]</h3>
+<div id="outline-container-org6e9fd52" class="outline-3">
+<h3 id="org6e9fd52"><span class="section-number-3">6.2</span> Personal keymap [F6]</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 Setup a personal keymap. I'll bind various things to this later on:
@@ -934,8 +934,8 @@ Setup a personal keymap. I'll bind various things to this later on:
 </div>
 </div>
 
-<div id="outline-container-org50e1b52" class="outline-3">
-<h3 id="org50e1b52"><span class="section-number-3">6.3</span> Prog keymap [F12]</h3>
+<div id="outline-container-orgf3defed" class="outline-3">
+<h3 id="orgf3defed"><span class="section-number-3">6.3</span> Prog keymap [F12]</h3>
 <div class="outline-text-3" id="text-6-3">
 <p>
 Setup utk keymap berkaitan dengan programming
@@ -950,8 +950,8 @@ Setup utk keymap berkaitan dengan programming
 </div>
 </div>
 
-<div id="outline-container-orga8f9bab" class="outline-3">
-<h3 id="orga8f9bab"><span class="section-number-3">6.4</span> Move keymap [F2]</h3>
+<div id="outline-container-org7e7c871" class="outline-3">
+<h3 id="org7e7c871"><span class="section-number-3">6.4</span> Move keymap [F2]</h3>
 <div class="outline-text-3" id="text-6-4">
 <p>
 Keymap utk pergerakkan
@@ -966,8 +966,8 @@ Keymap utk pergerakkan
 </div>
 </div>
 
-<div id="outline-container-orgd0072c2" class="outline-3">
-<h3 id="orgd0072c2"><span class="section-number-3">6.5</span> Org keymap [F10]</h3>
+<div id="outline-container-org6fbf724" class="outline-3">
+<h3 id="org6fbf724"><span class="section-number-3">6.5</span> Org keymap [F10]</h3>
 <div class="outline-text-3" id="text-6-5">
 <p>
 Keymap utk berkaitan dengan Org-mode
@@ -982,8 +982,8 @@ Keymap utk berkaitan dengan Org-mode
 </div>
 </div>
 
-<div id="outline-container-org474ca34" class="outline-3">
-<h3 id="org474ca34"><span class="section-number-3">6.6</span> R keymap [F9]</h3>
+<div id="outline-container-org81a534b" class="outline-3">
+<h3 id="org81a534b"><span class="section-number-3">6.6</span> R keymap [F9]</h3>
 <div class="outline-text-3" id="text-6-6">
 <p>
 Keymap untuk penggunaan berkaitan ESS-R. Cuma aktiv di <code>ess-mode</code>
@@ -999,8 +999,8 @@ Keymap untuk penggunaan berkaitan ESS-R. Cuma aktiv di <code>ess-mode</code>
 </div>
 </div>
 
-<div id="outline-container-org5c716a3" class="outline-3">
-<h3 id="org5c716a3"><span class="section-number-3">6.7</span> Misc keymap [F5]</h3>
+<div id="outline-container-orgf7859c2" class="outline-3">
+<h3 id="orgf7859c2"><span class="section-number-3">6.7</span> Misc keymap [F5]</h3>
 <div class="outline-text-3" id="text-6-7">
 <p>
 Fungsi lain yang berguna dan perlukan singkatan
@@ -1015,8 +1015,8 @@ Fungsi lain yang berguna dan perlukan singkatan
 </div>
 </div>
 
-<div id="outline-container-org519606e" class="outline-3">
-<h3 id="org519606e"><span class="section-number-3">6.8</span> Search keymap C-s</h3>
+<div id="outline-container-org872f9ff" class="outline-3">
+<h3 id="org872f9ff"><span class="section-number-3">6.8</span> Search keymap C-s</h3>
 <div class="outline-text-3" id="text-6-8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">bind-keys</span> <span style="color: #fe8019;">:prefix</span> <span style="color: #b8bb26;">"C-s"</span>
@@ -1029,12 +1029,12 @@ Fungsi lain yang berguna dan perlukan singkatan
 </div>
 </div>
 
-<div id="outline-container-org74073cb" class="outline-2">
-<h2 id="org74073cb"><span class="section-number-2">7</span> Directory sendiri</h2>
+<div id="outline-container-orgff79a7e" class="outline-2">
+<h2 id="orgff79a7e"><span class="section-number-2">7</span> Directory sendiri</h2>
 <div class="outline-text-2" id="text-7">
 </div>
-<div id="outline-container-org42a80ad" class="outline-3">
-<h3 id="org42a80ad"><span class="section-number-3">7.1</span> Customize file</h3>
+<div id="outline-container-org9825183" class="outline-3">
+<h3 id="org9825183"><span class="section-number-3">7.1</span> Customize file</h3>
 <div class="outline-text-3" id="text-7-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">setq</span> directory-sendiri <span style="color: #b8bb26;">"~/Dropbox/customize/"</span><span style="color: #fb4934;">)</span>
@@ -1049,8 +1049,8 @@ Fungsi lain yang berguna dan perlukan singkatan
 </div>
 </div>
 
-<div id="outline-container-org5ea2213" class="outline-3">
-<h3 id="org5ea2213"><span class="section-number-3">7.2</span> Personal elisp</h3>
+<div id="outline-container-orgadaff2d" class="outline-3">
+<h3 id="orgadaff2d"><span class="section-number-3">7.2</span> Personal elisp</h3>
 <div class="outline-text-3" id="text-7-2">
 <p>
 Semua pakej yang dimuatkan sendiri. Sekiranya perlu boleh compile semua file dengan
@@ -1073,8 +1073,8 @@ Recompile semua fail-fail <code>.el</code> walaupun sudah ada <code>.elc</code> 
 </div>
 </div>
 
-<div id="outline-container-org5700548" class="outline-2">
-<h2 id="org5700548"><span class="section-number-2">8</span> Go to my emacs settings file</h2>
+<div id="outline-container-orgfa981d7" class="outline-2">
+<h2 id="orgfa981d7"><span class="section-number-2">8</span> Go to my emacs settings file</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 It's nice to have a function to find this file quickly. Here's one:
@@ -1092,12 +1092,12 @@ It's nice to have a function to find this file quickly. Here's one:
 </div>
 </div>
 
-<div id="outline-container-org6401a0c" class="outline-2">
-<h2 id="org6401a0c"><span class="section-number-2">9</span> Other settings</h2>
+<div id="outline-container-org8896225" class="outline-2">
+<h2 id="org8896225"><span class="section-number-2">9</span> Other settings</h2>
 <div class="outline-text-2" id="text-9">
 </div>
-<div id="outline-container-orgc930fe1" class="outline-3">
-<h3 id="orgc930fe1"><span class="section-number-3">9.1</span> Encypting file</h3>
+<div id="outline-container-org613b9fc" class="outline-3">
+<h3 id="org613b9fc"><span class="section-number-3">9.1</span> Encypting file</h3>
 <div class="outline-text-3" id="text-9-1">
 <p>
 Guna Linux <code>gpg</code> untuk encyption. Bila buka sebarang <code>gpg</code> fail akan meng-encrypt fail
@@ -1123,8 +1123,8 @@ Untuk elakkan dari memasukkan key setiapkali encrypted file buffer disimpan, mul
 </p>
 </div>
 </div>
-<div id="outline-container-org4b86588" class="outline-3">
-<h3 id="org4b86588"><span class="section-number-3">9.2</span> Customizing key</h3>
+<div id="outline-container-orgd7ba70f" class="outline-3">
+<h3 id="orgd7ba70f"><span class="section-number-3">9.2</span> Customizing key</h3>
 <div class="outline-text-3" id="text-9-2">
 <p>
 Diambil dari <code>[[https://oremacs.com/2015/01/17/setting-up-ediff/][Oremacs]]</code> utk aturcara custom variable menggunakan singkatan <code>csetq</code>
@@ -1140,8 +1140,8 @@ Diambil dari <code>[[https://oremacs.com/2015/01/17/setting-up-ediff/][Oremacs]]
 </div>
 </div>
 
-<div id="outline-container-orgc56cb8f" class="outline-3">
-<h3 id="orgc56cb8f"><span class="section-number-3">9.3</span> Compile</h3>
+<div id="outline-container-orgcba9dda" class="outline-3">
+<h3 id="orgcba9dda"><span class="section-number-3">9.3</span> Compile</h3>
 <div class="outline-text-3" id="text-9-3">
 <p>
 Ini utk menyelesaikan masalah dengan <code>lexical-let</code> di <code>auto-lang</code>
@@ -1152,8 +1152,8 @@ Ini utk menyelesaikan masalah dengan <code>lexical-let</code> di <code>auto-lang
 </div>
 </div>
 </div>
-<div id="outline-container-org63e5589" class="outline-3">
-<h3 id="org63e5589"><span class="section-number-3">9.4</span> Exit</h3>
+<div id="outline-container-orgb56dba5" class="outline-3">
+<h3 id="orgb56dba5"><span class="section-number-3">9.4</span> Exit</h3>
 <div class="outline-text-3" id="text-9-4">
 <p>
 Save buffer and exit
@@ -1164,11 +1164,11 @@ Save buffer and exit
 </div>
 </div>
 </div>
-<div id="outline-container-orgdf16e7f" class="outline-3">
-<h3 id="orgdf16e7f"><span class="section-number-3">9.5</span> Scratch buffer</h3>
+<div id="outline-container-org1186731" class="outline-3">
+<h3 id="org1186731"><span class="section-number-3">9.5</span> Scratch buffer</h3>
 <div class="outline-text-3" id="text-9-5">
 <p>
-Untuk buka <code>scratch</code> boleh dicapai melalui <a href="#org86e43ec">General keymap</a> atau <a href="#org5d1384b">personal hydra keymaps</a>.
+Untuk buka <code>scratch</code> boleh dicapai melalui <a href="#org66fbca2">General keymap</a> atau <a href="#orgd12d5ed">personal hydra keymaps</a>.
 </p>
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">defun</span> <span style="color: #8ec07c;">ybk/get-scratch</span> <span style="color: #fabd2f;">()</span>
@@ -1181,8 +1181,8 @@ Untuk buka <code>scratch</code> boleh dicapai melalui <a href="#org86e43ec">Gene
 </div>
 </div>
 
-<div id="outline-container-org49617d6" class="outline-3">
-<h3 id="org49617d6"><span class="section-number-3">9.6</span> Buffer baru tanpa nama</h3>
+<div id="outline-container-orgc2282ea" class="outline-3">
+<h3 id="orgc2282ea"><span class="section-number-3">9.6</span> Buffer baru tanpa nama</h3>
 <div class="outline-text-3" id="text-9-6">
 <p>
 Buka buffer baru tanpa perlu tetapkan nama. Akan dinamakan "noname". Diambil dari
@@ -1210,8 +1210,8 @@ Buka buffer baru tanpa perlu tetapkan nama. Akan dinamakan "noname". Diambil dar
 </div>
 </div>
 
-<div id="outline-container-org0905d60" class="outline-3">
-<h3 id="org0905d60"><span class="section-number-3">9.7</span> Cancel</h3>
+<div id="outline-container-org6961e53" class="outline-3">
+<h3 id="org6961e53"><span class="section-number-3">9.7</span> Cancel</h3>
 <div class="outline-text-3" id="text-9-7">
 <p>
 Buat [ESC] key utk batal proses sama seperti <code>C-g</code>. Diambil dari <a href="https://www.emacswiki.org/emacs/CancelingInEmacs">EmacsWiki</a>
@@ -1225,8 +1225,8 @@ Buat [ESC] key utk batal proses sama seperti <code>C-g</code>. Diambil dari <a h
 </div>
 </div>
 
-<div id="outline-container-org50ad903" class="outline-3">
-<h3 id="org50ad903"><span class="section-number-3">9.8</span> Face attribute</h3>
+<div id="outline-container-orge14cb8e" class="outline-3">
+<h3 id="orge14cb8e"><span class="section-number-3">9.8</span> Face attribute</h3>
 <div class="outline-text-3" id="text-9-8">
 <p>
 Tetapkan face attribute terutama untuk premable di org-mode. Diambil di <a href="https://emacs.stackexchange.com/questions/22584/disable-enlarged-org-mode-header-appearance">sini</a>.
@@ -1260,8 +1260,8 @@ Tetapkan face attribute terutama untuk premable di org-mode. Diambil di <a href=
 </div>
 </div>
 
-<div id="outline-container-org35c2084" class="outline-3">
-<h3 id="org35c2084"><span class="section-number-3">9.9</span> Font</h3>
+<div id="outline-container-orgdbf1fb5" class="outline-3">
+<h3 id="orgdbf1fb5"><span class="section-number-3">9.9</span> Font</h3>
 <div class="outline-text-3" id="text-9-9">
 <p>
 Bergantung dengan <code>hostname</code>. Dynamik size font diambil dari <a href="https://coderwall.com/p/ifgyag/change-font-size-in-emacs-dynamically-based-on-screen-resolution">sini</a>
@@ -1298,8 +1298,8 @@ Bergantung dengan <code>hostname</code>. Dynamik size font diambil dari <a href=
 </div>
 </div>
 </div>
-<div id="outline-container-org6c37395" class="outline-3">
-<h3 id="org6c37395"><span class="section-number-3">9.10</span> Font-lock</h3>
+<div id="outline-container-orgb5886ad" class="outline-3">
+<h3 id="orgb5886ad"><span class="section-number-3">9.10</span> Font-lock</h3>
 <div class="outline-text-3" id="text-9-10">
 <p>
 Minor mode untuk highlight ("fontify") menggunakan pelbagai <i>faces</i>. Hidupkan
@@ -1312,8 +1312,8 @@ globally sekiranya mode yang dipakai support fontify.
 </div>
 </div>
 
-<div id="outline-container-org0a1e549" class="outline-3">
-<h3 id="org0a1e549"><span class="section-number-3">9.11</span> Yes/No</h3>
+<div id="outline-container-org68436e0" class="outline-3">
+<h3 id="org68436e0"><span class="section-number-3">9.11</span> Yes/No</h3>
 <div class="outline-text-3" id="text-9-11">
 <p>
 Hanya pakai 'y' atau 'n' untuk 'Yes' dan 'No'
@@ -1324,8 +1324,8 @@ Hanya pakai 'y' atau 'n' untuk 'Yes' dan 'No'
 </div>
 </div>
 </div>
-<div id="outline-container-org3f1c5d3" class="outline-3">
-<h3 id="org3f1c5d3"><span class="section-number-3">9.12</span> Elisp test dan message permulaan</h3>
+<div id="outline-container-org222ccba" class="outline-3">
+<h3 id="org222ccba"><span class="section-number-3">9.12</span> Elisp test dan message permulaan</h3>
 <div class="outline-text-3" id="text-9-12">
 <p>
 Mulakan tanpa startup message
@@ -1342,8 +1342,8 @@ Mulakan tanpa startup message
 </div>
 </div>
 
-<div id="outline-container-orge64812b" class="outline-3">
-<h3 id="orge64812b"><span class="section-number-3">9.13</span> Start maximized</h3>
+<div id="outline-container-orgda5f292" class="outline-3">
+<h3 id="orgda5f292"><span class="section-number-3">9.13</span> Start maximized</h3>
 <div class="outline-text-3" id="text-9-13">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span>add-to-list 'default-frame-alist '<span style="color: #fabd2f;">(</span>fullscreen . maximized<span style="color: #fabd2f;">)</span><span style="color: #fb4934;">)</span>
@@ -1351,8 +1351,8 @@ Mulakan tanpa startup message
 </div>
 </div>
 </div>
-<div id="outline-container-org2eba608" class="outline-3">
-<h3 id="org2eba608"><span class="section-number-3">9.14</span> Bunyi beep</h3>
+<div id="outline-container-org7551f96" class="outline-3">
+<h3 id="org7551f96"><span class="section-number-3">9.14</span> Bunyi beep</h3>
 <div class="outline-text-3" id="text-9-14">
 <p>
 Matikan bunyi beep
@@ -1363,8 +1363,8 @@ Matikan bunyi beep
 </div>
 </div>
 </div>
-<div id="outline-container-orgab823da" class="outline-3">
-<h3 id="orgab823da"><span class="section-number-3">9.15</span> Help window</h3>
+<div id="outline-container-org7041153" class="outline-3">
+<h3 id="org7041153"><span class="section-number-3">9.15</span> Help window</h3>
 <div class="outline-text-3" id="text-9-15">
 <p>
 Bila guna <code>C-h f</code>, <code>C-h v</code>, <code>C-h k</code> dan lain2 utk back dokument, fungsi ini menukarkan fokus ke windows tersebut
@@ -1375,8 +1375,8 @@ Bila guna <code>C-h f</code>, <code>C-h v</code>, <code>C-h k</code> dan lain2 u
 </div>
 </div>
 </div>
-<div id="outline-container-org807002b" class="outline-3">
-<h3 id="org807002b"><span class="section-number-3">9.16</span> Kill buffer</h3>
+<div id="outline-container-org0647c0f" class="outline-3">
+<h3 id="org0647c0f"><span class="section-number-3">9.16</span> Kill buffer</h3>
 <div class="outline-text-3" id="text-9-16">
 <p>
 Tidak perlu sahkan utk matikan buffer yang sedang berfungsi cth bila buka ESS
@@ -1389,8 +1389,8 @@ Tidak perlu sahkan utk matikan buffer yang sedang berfungsi cth bila buka ESS
 </div>
 </div>
 </div>
-<div id="outline-container-org634ada1" class="outline-3">
-<h3 id="org634ada1"><span class="section-number-3">9.17</span> Sembunyikan tetikus</h3>
+<div id="outline-container-org0bb173d" class="outline-3">
+<h3 id="org0bb173d"><span class="section-number-3">9.17</span> Sembunyikan tetikus</h3>
 <div class="outline-text-3" id="text-9-17">
 <p>
 Sembunyikan tetikus masa menaip
@@ -1403,8 +1403,8 @@ Sembunyikan tetikus masa menaip
 </div>
 </div>
 </div>
-<div id="outline-container-orge12316b" class="outline-3">
-<h3 id="orge12316b"><span class="section-number-3">9.18</span> Komen region</h3>
+<div id="outline-container-org28e5864" class="outline-3">
+<h3 id="org28e5864"><span class="section-number-3">9.18</span> Komen region</h3>
 <div class="outline-text-3" id="text-9-18">
 <p>
 Kommen line tanpa perlu highlight seperti menggunakan
@@ -1433,12 +1433,12 @@ Kommen line tanpa perlu highlight seperti menggunakan
 </div>
 </div>
 
-<div id="outline-container-orgfdb564e" class="outline-3">
-<h3 id="orgfdb564e"><span class="section-number-3">9.19</span> Scrolling</h3>
+<div id="outline-container-orga20e902" class="outline-3">
+<h3 id="orga20e902"><span class="section-number-3">9.19</span> Scrolling</h3>
 <div class="outline-text-3" id="text-9-19">
 </div>
 <ol class="org-ol">
-<li><a id="org3a742ed"></a>Cursor move 10 lines<br />
+<li><a id="org78c3006"></a>Cursor move 10 lines<br />
 <div class="outline-text-4" id="text-9-19-1">
 <p>
 Diambil dari <a href="http://whattheemacsd.com/key-bindings.el-02.html">What the emacs.d</a>
@@ -1479,7 +1479,7 @@ Insert newline if point at the end of the buffer
 </div>
 </li>
 
-<li><a id="orge2ba0a0"></a>Cursor ke baris awal<br />
+<li><a id="org5dd8278"></a>Cursor ke baris awal<br />
 <div class="outline-text-4" id="text-9-19-2">
 <p>
 Cursor move first line or block. Diambil di <a href="http://ergoemacs.org/emacs/emacs_keybinding_design_beginning-of-line-or-block.html">Ergoemacs</a>. Dimatikan sebab bila di kode
@@ -1532,7 +1532,7 @@ chunck cursor akan terus keluar chunck kalau tidak di 'save'.
 </li>
 
 
-<li><a id="org4f8525b"></a>Scroll sahaja<br />
+<li><a id="orge3c9f93"></a>Scroll sahaja<br />
 <div class="outline-text-4" id="text-9-19-3">
 <p>
 Scrolling tanpa menggerakkan tetikus/pointer tetapi kedua-dua kekunci mesti ditekan
@@ -1565,8 +1565,8 @@ contohnya utk bergerak ke bawah F2-n mesti ditekan utk setiap pergerakkan
 </ol>
 </div>
 
-<div id="outline-container-org45f02c8" class="outline-3">
-<h3 id="org45f02c8"><span class="section-number-3">9.20</span> Tab</h3>
+<div id="outline-container-orgb0b7ae5" class="outline-3">
+<h3 id="orgb0b7ae5"><span class="section-number-3">9.20</span> Tab</h3>
 <div class="outline-text-3" id="text-9-20">
 <p>
 Aturcara bagaimana <code>TAB</code> berfunksi
@@ -1580,12 +1580,12 @@ Aturcara bagaimana <code>TAB</code> berfunksi
 </div>
 </div>
 </div>
-<div id="outline-container-org5afe133" class="outline-3">
-<h3 id="org5afe133"><span class="section-number-3">9.21</span> Cursor</h3>
+<div id="outline-container-org9bcd812" class="outline-3">
+<h3 id="org9bcd812"><span class="section-number-3">9.21</span> Cursor</h3>
 <div class="outline-text-3" id="text-9-21">
 </div>
 <ol class="org-ol">
-<li><a id="org9f44abe"></a>Blink<br />
+<li><a id="org245315c"></a>Blink<br />
 <div class="outline-text-4" id="text-9-21-1">
 <p>
 Tidak blink
@@ -1600,8 +1600,8 @@ Tidak blink
 </ol>
 </div>
 
-<div id="outline-container-org21e63e5" class="outline-3">
-<h3 id="org21e63e5"><span class="section-number-3">9.22</span> Indent</h3>
+<div id="outline-container-orge139917" class="outline-3">
+<h3 id="orge139917"><span class="section-number-3">9.22</span> Indent</h3>
 <div class="outline-text-3" id="text-9-22">
 <p>
 <a href="https://github.com/Malabarba/aggressive-indent-mode">Agrressive indent</a> keep code align even after rearranging stuff. Dimatikan globally sebab
@@ -1619,8 +1619,8 @@ confict dengan <code>Polymode</code> code chuck.
 </div>
 </div>
 </div>
-<div id="outline-container-org81c62d9" class="outline-3">
-<h3 id="org81c62d9"><span class="section-number-3">9.23</span> Find-file</h3>
+<div id="outline-container-orgea9309d" class="outline-3">
+<h3 id="orgea9309d"><span class="section-number-3">9.23</span> Find-file</h3>
 <div class="outline-text-3" id="text-9-23">
 <p>
 Cari fail guna <code>C-x C-f</code> dan buat folder sekiranya belum tersedia seperti guna <code>mkdir
@@ -1639,12 +1639,12 @@ Cari fail guna <code>C-x C-f</code> dan buat folder sekiranya belum tersedia sep
 </div>
 </div>
 
-<div id="outline-container-orgc6f5463" class="outline-3">
-<h3 id="orgc6f5463"><span class="section-number-3">9.24</span> Zoom in/out</h3>
+<div id="outline-container-orgbd1b56d" class="outline-3">
+<h3 id="orgbd1b56d"><span class="section-number-3">9.24</span> Zoom in/out</h3>
 <div class="outline-text-3" id="text-9-24">
 </div>
 <ol class="org-ol">
-<li><a id="org1483f97"></a>Zoom<br />
+<li><a id="org7d49d4c"></a>Zoom<br />
 <div class="outline-text-4" id="text-9-24-1">
 <p>
 Untuk zoom in/out pakai kekunci <code>C-+/-</code> . Diambil dari <a href="https://github.com/purcell/default-text-scale">GitHub</a>
@@ -1660,7 +1660,7 @@ Untuk zoom in/out pakai kekunci <code>C-+/-</code> . Diambil dari <a href="https
 </div>
 </div>
 </li>
-<li><a id="org85a2195"></a>Mouse<br />
+<li><a id="org262bb39"></a>Mouse<br />
 <div class="outline-text-4" id="text-9-24-2">
 <p>
 Pakai mouse <code>C-Scroll</code>
@@ -1676,8 +1676,8 @@ Pakai mouse <code>C-Scroll</code>
 </ol>
 </div>
 
-<div id="outline-container-orgd7b6d2c" class="outline-3">
-<h3 id="orgd7b6d2c"><span class="section-number-3">9.25</span> Line number</h3>
+<div id="outline-container-orgabd9296" class="outline-3">
+<h3 id="orgabd9296"><span class="section-number-3">9.25</span> Line number</h3>
 <div class="outline-text-3" id="text-9-25">
 <p>
 Tunjukkan line number
@@ -1698,8 +1698,8 @@ Tunjukkan line number
 </div>
 </div>
 </div>
-<div id="outline-container-orga3d5de0" class="outline-3">
-<h3 id="orga3d5de0"><span class="section-number-3">9.26</span> ag</h3>
+<div id="outline-container-orgf72bb2c" class="outline-3">
+<h3 id="orgf72bb2c"><span class="section-number-3">9.26</span> ag</h3>
 <div class="outline-text-3" id="text-9-26">
 <p>
 Untuk memudahkan pencarian dan abaikan fail seperti folder .git dan ikut cara .gitignore
@@ -1710,8 +1710,8 @@ Untuk memudahkan pencarian dan abaikan fail seperti folder .git dan ikut cara .g
 </div>
 </div>
 </div>
-<div id="outline-container-orga50c3e7" class="outline-3">
-<h3 id="orga50c3e7"><span class="section-number-3">9.27</span> Warning redefinition</h3>
+<div id="outline-container-org0fed9e7" class="outline-3">
+<h3 id="org0fed9e7"><span class="section-number-3">9.27</span> Warning redefinition</h3>
 <div class="outline-text-3" id="text-9-27">
 <p>
 Bila buat pertukaran di aturcara, kekadang ada amaran seperti ini
@@ -1730,8 +1730,8 @@ Ini adalah noise sahaja, untuk matikan amaran ini boleh baca dari <a href="https
 </div>
 </div>
 </div>
-<div id="outline-container-orgfbf0d6d" class="outline-3">
-<h3 id="orgfbf0d6d"><span class="section-number-3">9.28</span> Suspend-frame</h3>
+<div id="outline-container-orgb4d2bb8" class="outline-3">
+<h3 id="orgb4d2bb8"><span class="section-number-3">9.28</span> Suspend-frame</h3>
 <div class="outline-text-3" id="text-9-28">
 <p>
 Bila pakai <code>C-x C-z</code> akan menjadikan frame freeze. Kurang pasti bila fungsi ini
@@ -1753,8 +1753,8 @@ xkill -frame $emacs
 </div>
 </div>
 
-<div id="outline-container-orgd91b4f9" class="outline-3">
-<h3 id="orgd91b4f9"><span class="section-number-3">9.29</span> Copy file path</h3>
+<div id="outline-container-org2d0ea68" class="outline-3">
+<h3 id="org2d0ea68"><span class="section-number-3">9.29</span> Copy file path</h3>
 <div class="outline-text-3" id="text-9-29">
 <p>
 Cara untuk menyalin file path di buffer yang sedang digunakan.
@@ -1799,8 +1799,8 @@ Cara untuk menyalin file path di buffer yang sedang digunakan.
 </div>
 </div>
 
-<div id="outline-container-orgabde298" class="outline-2">
-<h2 id="orgabde298"><span class="section-number-2">10</span> Winner mode</h2>
+<div id="outline-container-org2c9ac21" class="outline-2">
+<h2 id="org2c9ac21"><span class="section-number-2">10</span> Winner mode</h2>
 <div class="outline-text-2" id="text-10">
 <p>
 Gunakan <code>C-c &lt;left&gt;</code> and <code>C-c &lt;right&gt;</code> untuk kembali ke buffer sebelumnya
@@ -1813,8 +1813,8 @@ Gunakan <code>C-c &lt;left&gt;</code> and <code>C-c &lt;right&gt;</code> untuk k
 </div>
 </div>
 
-<div id="outline-container-orgb5996fe" class="outline-2">
-<h2 id="orgb5996fe"><span class="section-number-2">11</span> Kill-ring</h2>
+<div id="outline-container-orgc417d9a" class="outline-2">
+<h2 id="orgc417d9a"><span class="section-number-2">11</span> Kill-ring</h2>
 <div class="outline-text-2" id="text-11">
 <p>
 Dari <a href="https://github.com/browse-kill-ring/browse-kill-ring">GitHub</a>
@@ -1831,8 +1831,8 @@ Dari <a href="https://github.com/browse-kill-ring/browse-kill-ring">GitHub</a>
 </div>
 </div>
 
-<div id="outline-container-org7735860" class="outline-2">
-<h2 id="org7735860"><span class="section-number-2">12</span> Cache</h2>
+<div id="outline-container-org66ef515" class="outline-2">
+<h2 id="org66ef515"><span class="section-number-2">12</span> Cache</h2>
 <div class="outline-text-2" id="text-12">
 <p>
 I set up a cache folder in my <code>.emacs.d</code> folder so that it's not quite as crowded:
@@ -1859,12 +1859,12 @@ Save a few misc files in the <code>.cache</code> directory:
 </div>
 </div>
 
-<div id="outline-container-org209208e" class="outline-2">
-<h2 id="org209208e"><span class="section-number-2">13</span> Estetik</h2>
+<div id="outline-container-orgdb195b7" class="outline-2">
+<h2 id="orgdb195b7"><span class="section-number-2">13</span> Estetik</h2>
 <div class="outline-text-2" id="text-13">
 </div>
-<div id="outline-container-orgb54ffb7" class="outline-3">
-<h3 id="orgb54ffb7"><span class="section-number-3">13.1</span> Menu bar</h3>
+<div id="outline-container-orga9d0c53" class="outline-3">
+<h3 id="orga9d0c53"><span class="section-number-3">13.1</span> Menu bar</h3>
 <div class="outline-text-3" id="text-13-1">
 <p>
 Buang menu bar dan sekiranya perlu tekan <code>F10-m</code> atau <code>M-x
@@ -1880,15 +1880,15 @@ tetapi <code>f6</code> dipakai untuk <code>ybk/map</code>
 </div>
 </div>
 
-<div id="outline-container-org780c892" class="outline-3">
-<h3 id="org780c892"><span class="section-number-3">13.2</span> Powerline</h3>
+<div id="outline-container-org5c07a79" class="outline-3">
+<h3 id="org5c07a79"><span class="section-number-3">13.2</span> Powerline</h3>
 <div class="outline-text-3" id="text-13-2">
 <p>
 Untuk modeline
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org98b6b5c"></a>Cara Powerline<br />
+<li><a id="org79fab99"></a>Cara Powerline<br />
 <div class="outline-text-4" id="text-13-2-1">
 <p>
 Beza warna bila buffer aktif atau tidak. Antara powerline yang boleh dipakai:
@@ -1914,7 +1914,7 @@ Beza warna bila buffer aktif atau tidak. Antara powerline yang boleh dipakai:
 </div>
 </li>
 
-<li><a id="org9a87242"></a>Cara diambil dari GitHug<br />
+<li><a id="orgc0bf794"></a>Cara diambil dari GitHug<br />
 <div class="outline-text-4" id="text-13-2-2">
 <p>
 Diambil di <a href="https://github.com/sandhu/emacs.d/blob/master/config/008-ui-config.el">sini</a>
@@ -1984,7 +1984,7 @@ Diambil di <a href="https://github.com/sandhu/emacs.d/blob/master/config/008-ui-
 </div>
 </li>
 
-<li><a id="org250e8e7"></a>Powerline aturcara sendiri<br />
+<li><a id="orgf2b724f"></a>Powerline aturcara sendiri<br />
 <div class="outline-text-4" id="text-13-2-3">
 <p>
 Sekiranya <code>moe-theme</code> dipakai maka matikan source-code di bawah.
@@ -2096,7 +2096,7 @@ Sekiranya <code>moe-theme</code> dipakai maka matikan source-code di bawah.
 </div>
 </div>
 </li>
-<li><a id="org1d841f9"></a>Tukar powerline-separator<br />
+<li><a id="orga11153d"></a>Tukar powerline-separator<br />
 <div class="outline-text-4" id="text-13-2-4">
 <p>
 Untuk tukar separator terutama bila tukar tema. Diambil di <a href="https://github.com/aaronbieber/dotfiles/blob/master/configs/emacs.d/lisp/init-global-functions.el">sini</a>. Antara separator
@@ -2125,8 +2125,8 @@ yang boleh dipakai ialah contour, butt, wave, arrow, arrow-fade etc
 </ol>
 </div>
 
-<div id="outline-container-org38c1d19" class="outline-3">
-<h3 id="org38c1d19"><span class="section-number-3">13.3</span> Tema utk paparan</h3>
+<div id="outline-container-org8b1b897" class="outline-3">
+<h3 id="org8b1b897"><span class="section-number-3">13.3</span> Tema utk paparan</h3>
 <div class="outline-text-3" id="text-13-3">
 <p>
 Utk tukar tema paparan yang lain tekan <code>yy-t</code>. Dua themes boleh di pakai:
@@ -2145,7 +2145,7 @@ jumpa cara lain.
 </div>
 
 <ol class="org-ol">
-<li><a id="org353b4aa"></a>Sanityinc-tomorrow<br />
+<li><a id="orgacb343e"></a>Sanityinc-tomorrow<br />
 <div class="outline-text-4" id="text-13-3-1">
 <p>
 <code>color-theme-sanityinc-tomorrow</code> Tidak ada masalah tukar tema di <code>Org-mode</code>:
@@ -2199,7 +2199,7 @@ jumpa cara lain.
 </div>
 </li>
 
-<li><a id="org1bd58e3"></a>Moe-theme<br />
+<li><a id="orga25ff7f"></a>Moe-theme<br />
 <div class="outline-text-4" id="text-13-3-2">
 <p>
 Untuk aturcara boleh baca di <a href="https://github.com/kuanyui/moe-theme.el">GitHub</a>
@@ -2244,14 +2244,14 @@ Untuk aturcara boleh baca di <a href="https://github.com/kuanyui/moe-theme.el">G
 </div>
 </div>
 </li>
-<li><a id="orgbe5c1f6"></a>Pelbagai theme<br />
+<li><a id="org1a68779"></a>Pelbagai theme<br />
 <div class="outline-text-4" id="text-13-3-3">
 <p>
 Diambil dari <a href="https://www.greghendershott.com/2017/02/emacs-themes.html">sini</a>.
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="orgc8ffa00"></a>Matikan semua theme<br />
+<li><a id="org3ea404d"></a>Matikan semua theme<br />
 <div class="outline-text-5" id="text-13-3-3-1">
 <p>
 Buat fungsi untuk matikan semua theme.
@@ -2265,7 +2265,7 @@ Buat fungsi untuk matikan semua theme.
 </div>
 </li>
 
-<li><a id="org6fede93"></a>Theme hook<br />
+<li><a id="orge4106c9"></a>Theme hook<br />
 <div class="outline-text-5" id="text-13-3-3-2">
 <p>
 Buat theme hook supaya boleh pakai <code>M-x load-theme</code>
@@ -2300,7 +2300,7 @@ Buat theme hook supaya boleh pakai <code>M-x load-theme</code>
 </div>
 </li>
 
-<li><a id="orga73a75a"></a>Nord-theme<br />
+<li><a id="org1aea213"></a>Nord-theme<br />
 <div class="outline-text-5" id="text-13-3-3-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">use-package</span> <span style="color: #fabd2f;">nord-theme</span>
@@ -2319,7 +2319,7 @@ Buat theme hook supaya boleh pakai <code>M-x load-theme</code>
 </div>
 </li>
 
-<li><a id="org75b5b46"></a>Sanityinc-tomorrow<br />
+<li><a id="org69f998c"></a>Sanityinc-tomorrow<br />
 <div class="outline-text-5" id="text-13-3-3-4">
 <p>
 Utk di pakai di theme-hook
@@ -2338,7 +2338,7 @@ Utk di pakai di theme-hook
 </div>
 </li>
 
-<li><a id="orga82d1ff"></a>Material-theme<br />
+<li><a id="orgd82e6e7"></a>Material-theme<br />
 <div class="outline-text-5" id="text-13-3-3-5">
 <p>
 Pasang meterial-theme
@@ -2365,7 +2365,7 @@ Pasang meterial-theme
 </div>
 </li>
 
-<li><a id="org1ab741f"></a>Solarize theme<br />
+<li><a id="orgf2235ae"></a>Solarize theme<br />
 <div class="outline-text-5" id="text-13-3-3-6">
 <p>
 Pasang Solarize theme
@@ -2400,7 +2400,7 @@ Pasang Solarize theme
 </div>
 </li>
 
-<li><a id="orga3645fe"></a>Hydra utk load-theme<br />
+<li><a id="org0af9efb"></a>Hydra utk load-theme<br />
 <div class="outline-text-5" id="text-13-3-3-7">
 <p>
 Pakai hydra untuk guna theme yang diingini
@@ -2435,15 +2435,15 @@ Pakai hydra untuk guna theme yang diingini
 </ol>
 </div>
 
-<div id="outline-container-org8d3018b" class="outline-3">
-<h3 id="org8d3018b"><span class="section-number-3">13.4</span> Highlight line</h3>
+<div id="outline-container-org8597f74" class="outline-3">
+<h3 id="org8597f74"><span class="section-number-3">13.4</span> Highlight line</h3>
 <div class="outline-text-3" id="text-13-4">
 <p>
 Bila mahu aktifkan pakai <code>yy-g</code> dari <b>ybk/map</b>
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="orgc9f1c15"></a><span class="todo TODO">TODO</span> hl-line+ beri error catch<br />
+<li><a id="org89e3abb"></a><span class="todo TODO">TODO</span> hl-line+ beri error catch<br />
 <div class="outline-text-4" id="text-13-4-1">
 <p>
 Masalah utk load <code>hl-line+</code> dan memberikan error
@@ -2464,7 +2464,7 @@ Masalah utk load <code>hl-line+</code> dan memberikan error
 </div>
 </div>
 </li>
-<li><a id="org8d435fc"></a>Current line<br />
+<li><a id="org35be0e3"></a>Current line<br />
 <div class="outline-text-4" id="text-13-4-2">
 <p>
 Highlight current line.
@@ -2554,8 +2554,8 @@ Highlight current line.
 </ol>
 </div>
 
-<div id="outline-container-org6a932ea" class="outline-3">
-<h3 id="org6a932ea"><span class="section-number-3">13.5</span> Jam dan batteri</h3>
+<div id="outline-container-orgb405833" class="outline-3">
+<h3 id="orgb405833"><span class="section-number-3">13.5</span> Jam dan batteri</h3>
 <div class="outline-text-3" id="text-13-5">
 <p>
 Tujukkan waktu dan batteri
@@ -2582,12 +2582,12 @@ Tujukkan waktu dan batteri
 </div>
 </div>
 
-<div id="outline-container-orgc94b1e8" class="outline-2">
-<h2 id="orgc94b1e8"><span class="section-number-2">14</span> Shells</h2>
+<div id="outline-container-orge8d2a36" class="outline-2">
+<h2 id="orge8d2a36"><span class="section-number-2">14</span> Shells</h2>
 <div class="outline-text-2" id="text-14">
 </div>
-<div id="outline-container-org6f7e92a" class="outline-3">
-<h3 id="org6f7e92a"><span class="section-number-3">14.1</span> Shell</h3>
+<div id="outline-container-org036c63f" class="outline-3">
+<h3 id="org036c63f"><span class="section-number-3">14.1</span> Shell</h3>
 <div class="outline-text-3" id="text-14-1">
 <p>
 Pastikan Emacs guna path yang sama utk semua system
@@ -2604,8 +2604,8 @@ Pastikan Emacs guna path yang sama utk semua system
 </div>
 </div>
 
-<div id="outline-container-org66c1eb6" class="outline-3">
-<h3 id="org66c1eb6"><span class="section-number-3">14.2</span> Eshell</h3>
+<div id="outline-container-org43f1479" class="outline-3">
+<h3 id="org43f1479"><span class="section-number-3">14.2</span> Eshell</h3>
 <div class="outline-text-3" id="text-14-2">
 <p>
 Mulakan <code>eshell</code> dengan singkatan <code>C-x t</code>
@@ -2660,12 +2660,12 @@ Mulakan <code>eshell</code> dengan singkatan <code>C-x t</code>
 </div>
 </div>
 </div>
-<div id="outline-container-org829b483" class="outline-3">
-<h3 id="org829b483"><span class="section-number-3">14.3</span> Fancy prompt</h3>
+<div id="outline-container-org32c9b0c" class="outline-3">
+<h3 id="org32c9b0c"><span class="section-number-3">14.3</span> Fancy prompt</h3>
 <div class="outline-text-3" id="text-14-3">
 </div>
 <ol class="org-ol">
-<li><a id="org96374b0"></a>Eshell-git-prompt<br />
+<li><a id="org4a00de2"></a>Eshell-git-prompt<br />
 <div class="outline-text-4" id="text-14-3-1">
 <p>
 Boleh di lihat di <a href="https://github.com/xuchunyang/eshell-git-prompt">sini</a>
@@ -2679,7 +2679,7 @@ Boleh di lihat di <a href="https://github.com/xuchunyang/eshell-git-prompt">sini
 </div>
 </div>
 </li>
-<li><a id="org0b35d30"></a>Eshell-git-extras<br />
+<li><a id="orge95d02e"></a>Eshell-git-extras<br />
 <div class="outline-text-4" id="text-14-3-2">
 <p>
 Boleh lihat di <a href="https://github.com/kaihaosw/eshell-prompt-extras">sini</a>. Tema samada <code>epe-theme-lambda</code> atau <code>epe-theme-dakrone</code>
@@ -2700,8 +2700,8 @@ Boleh lihat di <a href="https://github.com/kaihaosw/eshell-prompt-extras">sini</
 </li>
 </ol>
 </div>
-<div id="outline-container-org2f388a6" class="outline-3">
-<h3 id="org2f388a6"><span class="section-number-3">14.4</span> Shell pop</h3>
+<div id="outline-container-orgee9cbbd" class="outline-3">
+<h3 id="orgee9cbbd"><span class="section-number-3">14.4</span> Shell pop</h3>
 <div class="outline-text-3" id="text-14-4">
 <p>
 Boleh guna key-chort <code>-t</code> untuk pakai selain dari <code>C-x t</code>
@@ -2749,8 +2749,8 @@ Boleh guna key-chort <code>-t</code> untuk pakai selain dari <code>C-x t</code>
 </div>
 </div>
 </div>
-<div id="outline-container-org9b1fbc1" class="outline-3">
-<h3 id="org9b1fbc1"><span class="section-number-3">14.5</span> Bash</h3>
+<div id="outline-container-orgcefbf3b" class="outline-3">
+<h3 id="orgcefbf3b"><span class="section-number-3">14.5</span> Bash</h3>
 <div class="outline-text-3" id="text-14-5">
 <p>
 Untuk penggunaan <code>alias</code>. Eshell akan simpan alias-alias di fail <code>~/.emacs.d/eshell/alias</code>. Utk simpan alias di
@@ -2766,8 +2766,8 @@ alias d 'dired $1' ;utk Map dired ke d
 </pre>
 </div>
 </div>
-<div id="outline-container-orgd7d35c7" class="outline-3">
-<h3 id="orgd7d35c7"><span class="section-number-3">14.6</span> Shell misc</h3>
+<div id="outline-container-org43c7cd7" class="outline-3">
+<h3 id="org43c7cd7"><span class="section-number-3">14.6</span> Shell misc</h3>
 <div class="outline-text-3" id="text-14-6">
 <p>
 Setting lain termasuk proses di inferior <code>R</code> yang dipakai oleh <code>ESS</code>
@@ -2782,8 +2782,8 @@ Setting lain termasuk proses di inferior <code>R</code> yang dipakai oleh <code>
 </div>
 </div>
 
-<div id="outline-container-orgb94e575" class="outline-2">
-<h2 id="orgb94e575"><span class="section-number-2">15</span> Recent files</h2>
+<div id="outline-container-orgac99b7c" class="outline-2">
+<h2 id="orgac99b7c"><span class="section-number-2">15</span> Recent files</h2>
 <div class="outline-text-2" id="text-15">
 <p>
 Utk tetapkan kekerapan menyimpan <code>recentf</code> supaya "recent file" tidak hilang kalau
@@ -2810,8 +2810,8 @@ ditetapkan di <code>Ivy</code> atau <code>C-x C-r</code> dari <a href="https://w
 </div>
 </div>
 
-<div id="outline-container-orge3d8dad" class="outline-2">
-<h2 id="orge3d8dad"><span class="section-number-2">16</span> Find or replace text</h2>
+<div id="outline-container-orgdcbf39a" class="outline-2">
+<h2 id="orgdcbf39a"><span class="section-number-2">16</span> Find or replace text</h2>
 <div class="outline-text-2" id="text-16">
 <p>
 Untuk cari atau cari dan tukar teks di direktori. Diambil dari <a href="https://github.com/xahlee/xah-find">GitHub</a>. Antara fungsi
@@ -2839,15 +2839,15 @@ yang boleh dipakai:
 </div>
 </div>
 
-<div id="outline-container-org2689895" class="outline-2">
-<h2 id="org2689895"><span class="section-number-2">17</span> Backup and auto-save files</h2>
+<div id="outline-container-orgd10a897" class="outline-2">
+<h2 id="orgd10a897"><span class="section-number-2">17</span> Backup and auto-save files</h2>
 <div class="outline-text-2" id="text-17">
 <p>
 Aturcara berkenaan dengan backup
 </p>
 </div>
-<div id="outline-container-org1a9ec72" class="outline-3">
-<h3 id="org1a9ec72"><span class="section-number-3">17.1</span> Backup settings</h3>
+<div id="outline-container-orgee63175" class="outline-3">
+<h3 id="orgee63175"><span class="section-number-3">17.1</span> Backup settings</h3>
 <div class="outline-text-3" id="text-17-1">
 <p>
 Setiap fail akan di backup bila fail di simpan <i>(save)</i> dan versi sebelumnya disimpan
@@ -2874,8 +2874,8 @@ disimpan. Fail-fail ini disimpan di folder <code>backups</code> supaya tidak ter
 </div>
 </div>
 
-<div id="outline-container-org014c8c6" class="outline-3">
-<h3 id="org014c8c6"><span class="section-number-3">17.2</span> Auto-save</h3>
+<div id="outline-container-orgf2c6980" class="outline-3">
+<h3 id="orgf2c6980"><span class="section-number-3">17.2</span> Auto-save</h3>
 <div class="outline-text-3" id="text-17-2">
 <p>
 Fail-fail yang sedang dibuka akan disimpan setiap saat atau setiap tambahan huruf
@@ -2902,8 +2902,8 @@ secara automatik.
 </div>
 </div>
 
-<div id="outline-container-org7c52075" class="outline-2">
-<h2 id="org7c52075"><span class="section-number-2">18</span> Undo</h2>
+<div id="outline-container-org6ae8408" class="outline-2">
+<h2 id="org6ae8408"><span class="section-number-2">18</span> Undo</h2>
 <div class="outline-text-2" id="text-18">
 <p>
 <code>C-z</code> as undo, not minimize emacs
@@ -2968,8 +2968,8 @@ Undo-tree
 </div>
 </div>
 
-<div id="outline-container-org8ef7641" class="outline-2">
-<h2 id="org8ef7641"><span class="section-number-2">19</span> Which key</h2>
+<div id="outline-container-org4fe1135" class="outline-2">
+<h2 id="org4fe1135"><span class="section-number-2">19</span> Which key</h2>
 <div class="outline-text-2" id="text-19">
 <p>
 Tunjukkan kombinasi kekunci. Untuk aturcara sila rujuk <a href="https://github.com/justbur/emacs-which-key">GitHub</a>. Bila kekunci
@@ -3001,8 +3001,8 @@ ditunjukkan dipelbagai mukasurat, guna <code>C-h</code> untuk pilih mukasurat se
 </div>
 </div>
 
-<div id="outline-container-org096819b" class="outline-2">
-<h2 id="org096819b"><span class="section-number-2">20</span> Crux</h2>
+<div id="outline-container-org4482865" class="outline-2">
+<h2 id="org4482865"><span class="section-number-2">20</span> Crux</h2>
 <div class="outline-text-2" id="text-20">
 <p>
 Kompilasi pelbagi fungsi untuk Emacs. <a href="https://github.com/bbatsov/crux#keybindings">Crux</a>
@@ -3028,12 +3028,12 @@ Kompilasi pelbagi fungsi untuk Emacs. <a href="https://github.com/bbatsov/crux#k
 </div>
 </div>
 
-<div id="outline-container-org2bf6672" class="outline-2">
-<h2 id="org2bf6672"><span class="section-number-2">21</span> Windows</h2>
+<div id="outline-container-org8e1387c" class="outline-2">
+<h2 id="org8e1387c"><span class="section-number-2">21</span> Windows</h2>
 <div class="outline-text-2" id="text-21">
 </div>
-<div id="outline-container-org88019bd" class="outline-3">
-<h3 id="org88019bd"><span class="section-number-3">21.1</span> Splitting windows</h3>
+<div id="outline-container-org63536f9" class="outline-3">
+<h3 id="org63536f9"><span class="section-number-3">21.1</span> Splitting windows</h3>
 <div class="outline-text-3" id="text-21-1">
 <p>
 Seperti <code>C-x 2</code> atau <code>C-x 3</code> cuma lebih baik
@@ -3059,12 +3059,12 @@ Seperti <code>C-x 2</code> atau <code>C-x 3</code> cuma lebih baik
 </div>
 </div>
 
-<div id="outline-container-orgcda8957" class="outline-3">
-<h3 id="orgcda8957"><span class="section-number-3">21.2</span> Tukar size windows</h3>
+<div id="outline-container-org2454622" class="outline-3">
+<h3 id="org2454622"><span class="section-number-3">21.2</span> Tukar size windows</h3>
 <div class="outline-text-3" id="text-21-2">
 </div>
 <ol class="org-ol">
-<li><a id="org31a38a4"></a>Resize pakej<br />
+<li><a id="org5821fc2"></a>Resize pakej<br />
 <div class="outline-text-4" id="text-21-2-1">
 <p>
 Aktifkan dengan <code>f2 +</code> kemudian pakai anak panah.
@@ -3088,7 +3088,7 @@ Aktifkan dengan <code>f2 +</code> kemudian pakai anak panah.
 </div>
 </li>
 
-<li><a id="org60e7f44"></a>Cara Elisp<br />
+<li><a id="orgedecafe"></a>Cara Elisp<br />
 <div class="outline-text-4" id="text-21-2-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3202,8 +3202,8 @@ Untuk membesarkan window melintang atau menegak
 </ol>
 </div>
 
-<div id="outline-container-org17fa0c5" class="outline-3">
-<h3 id="org17fa0c5"><span class="section-number-3">21.3</span> Switching windows</h3>
+<div id="outline-container-org5a10b77" class="outline-3">
+<h3 id="org5a10b77"><span class="section-number-3">21.3</span> Switching windows</h3>
 <div class="outline-text-3" id="text-21-3">
 <p>
 Tukarkan ke window atau buffers tertentu bila terdapat window/buffer terbahagi
@@ -3248,8 +3248,8 @@ Lompat dari window ke window dengan menggunakan <code>M</code> kemudian nombor w
 </div>
 </div>
 
-<div id="outline-container-orgf7d4fe3" class="outline-3">
-<h3 id="orgf7d4fe3"><span class="section-number-3">21.4</span> Transposing - perkataan dan window</h3>
+<div id="outline-container-orgc1cdfe6" class="outline-3">
+<h3 id="orgc1cdfe6"><span class="section-number-3">21.4</span> Transposing - perkataan dan window</h3>
 <div class="outline-text-3" id="text-21-4">
 <p>
 Untuk tukarkan window layout
@@ -3274,15 +3274,15 @@ Untuk tukarkan window layout
 </div>
 </div>
 
-<div id="outline-container-org7d37ef4" class="outline-2">
-<h2 id="org7d37ef4"><span class="section-number-2">22</span> Buffers</h2>
+<div id="outline-container-org4571bc4" class="outline-2">
+<h2 id="org4571bc4"><span class="section-number-2">22</span> Buffers</h2>
 <div class="outline-text-2" id="text-22">
 <p>
 Aturcare berkaitan dengan buffer
 </p>
 </div>
-<div id="outline-container-org235869d" class="outline-3">
-<h3 id="org235869d"><span class="section-number-3">22.1</span> Pindahkan buffer</h3>
+<div id="outline-container-org0adc6a5" class="outline-3">
+<h3 id="org0adc6a5"><span class="section-number-3">22.1</span> Pindahkan buffer</h3>
 <div class="outline-text-3" id="text-22-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">use-package</span> <span style="color: #fabd2f;">buffer-move</span>
@@ -3313,8 +3313,8 @@ Aturcare berkaitan dengan buffer
 </div>
 </div>
 </div>
-<div id="outline-container-org17cdc0e" class="outline-3">
-<h3 id="org17cdc0e"><span class="section-number-3">22.2</span> Ibuffer</h3>
+<div id="outline-container-orgc111f37" class="outline-3">
+<h3 id="orgc111f37"><span class="section-number-3">22.2</span> Ibuffer</h3>
 <div class="outline-text-3" id="text-22-2">
 <p>
 Guna <code>ibuffer</code> menggantikan <code>buffer</code> biasa bila pakai C-x C-b
@@ -3350,8 +3350,8 @@ Guna <code>ibuffer</code> menggantikan <code>buffer</code> biasa bila pakai C-x 
 </div>
 </div>
 </div>
-<div id="outline-container-orgccf4d11" class="outline-3">
-<h3 id="orgccf4d11"><span class="section-number-3">22.3</span> ibuffer-vc</h3>
+<div id="outline-container-org04cf424" class="outline-3">
+<h3 id="org04cf424"><span class="section-number-3">22.3</span> ibuffer-vc</h3>
 <div class="outline-text-3" id="text-22-3">
 <p>
 Ibuffer for version control. Rujukan di <a href="https://github.com/purcell/ibuffer-vc">GitHub</a>
@@ -3372,8 +3372,8 @@ Ibuffer for version control. Rujukan di <a href="https://github.com/purcell/ibuf
 </div>
 </div>
 
-<div id="outline-container-orgf55d7d8" class="outline-2">
-<h2 id="orgf55d7d8"><span class="section-number-2">23</span> Ivy</h2>
+<div id="outline-container-org4044556" class="outline-2">
+<h2 id="org4044556"><span class="section-number-2">23</span> Ivy</h2>
 <div class="outline-text-2" id="text-23">
 <p>
 A generic completion mechanism for Emacs. Rujukan utk kekuci dan penerangan di <a href="https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html">sini</a>
@@ -3511,8 +3511,8 @@ Fungsi berguna bila di minibuffer <code>M-o</code>
 </div>
 </div>
 
-<div id="outline-container-orge6b6092" class="outline-3">
-<h3 id="orge6b6092"><span class="section-number-3">23.1</span> Ivy-hydra</h3>
+<div id="outline-container-org8b04fb3" class="outline-3">
+<h3 id="org8b04fb3"><span class="section-number-3">23.1</span> Ivy-hydra</h3>
 <div class="outline-text-3" id="text-23-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">use-package</span> <span style="color: #fabd2f;">ivy-hydra</span>
@@ -3522,8 +3522,8 @@ Fungsi berguna bila di minibuffer <code>M-o</code>
 </div>
 </div>
 </div>
-<div id="outline-container-org19943f0" class="outline-3">
-<h3 id="org19943f0"><span class="section-number-3">23.2</span> Insert file path</h3>
+<div id="outline-container-org5bb2bb8" class="outline-3">
+<h3 id="org5bb2bb8"><span class="section-number-3">23.2</span> Insert file path</h3>
 <div class="outline-text-3" id="text-23-2">
 <p>
 Diambil dari <a href="https://www.emacswiki.org/emacs/InsertFileName">Wiki</a>. Cari fail yang ingin dimasukkan dengan <code>C-x C-f</code> kemudian bila di minibuffer boleh pakai
@@ -3544,8 +3544,8 @@ Diambil dari <a href="https://www.emacswiki.org/emacs/InsertFileName">Wiki</a>. 
 </div>
 </div>
 </div>
-<div id="outline-container-org2429f38" class="outline-3">
-<h3 id="org2429f38"><span class="section-number-3">23.3</span> Ivy-extra</h3>
+<div id="outline-container-org1a7e096" class="outline-3">
+<h3 id="org1a7e096"><span class="section-number-3">23.3</span> Ivy-extra</h3>
 <div class="outline-text-3" id="text-23-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">use-package</span> <span style="color: #fabd2f;">ivy-rich</span> <span style="color: #fe8019;">:ensure</span>
@@ -3563,8 +3563,8 @@ Diambil dari <a href="https://www.emacswiki.org/emacs/InsertFileName">Wiki</a>. 
 </div>
 </div>
 
-<div id="outline-container-org3e1f18b" class="outline-2">
-<h2 id="org3e1f18b"><span class="section-number-2">24</span> Swiper</h2>
+<div id="outline-container-orgdd8ebca" class="outline-2">
+<h2 id="orgdd8ebca"><span class="section-number-2">24</span> Swiper</h2>
 <div class="outline-text-2" id="text-24">
 <p>
 Untuk memudahkan pencarian di buffer. Untuk fungsi <code>cari &amp; tukar</code> (search &amp; replace)
@@ -3585,8 +3585,8 @@ mula dengan cari <code>C-s</code> dan kemudian <code>M-q</code> utk perkataan ya
 </div>
 </div>
 
-<div id="outline-container-orgd2e369b" class="outline-2">
-<h2 id="orgd2e369b"><span class="section-number-2">25</span> Counsel</h2>
+<div id="outline-container-org2b96583" class="outline-2">
+<h2 id="org2b96583"><span class="section-number-2">25</span> Counsel</h2>
 <div class="outline-text-2" id="text-25">
 <p>
 A collection of Ivy-enhanced versions of common Emacs commands. Pakai <code>M-o</code> utk buka
@@ -3629,8 +3629,8 @@ actions bila di Ivy minibuffer. Atau <code>C-o</code> utk Counsel commands
 </div>
 </div>
 
-<div id="outline-container-org2ffef33" class="outline-2">
-<h2 id="org2ffef33"><span class="section-number-2">26</span> Avy-goto</h2>
+<div id="outline-container-org7b6f9af" class="outline-2">
+<h2 id="org7b6f9af"><span class="section-number-2">26</span> Avy-goto</h2>
 <div class="outline-text-2" id="text-26">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3716,8 +3716,8 @@ Guna seperti <code>ace-jump-mode</code> untuk mencari perkataan kemudian taip
 </div>
 </div>
 
-<div id="outline-container-org10038cd" class="outline-2">
-<h2 id="org10038cd"><span class="section-number-2">27</span> Amx</h2>
+<div id="outline-container-org59d6aac" class="outline-2">
+<h2 id="org59d6aac"><span class="section-number-2">27</span> Amx</h2>
 <div class="outline-text-2" id="text-27">
 <p>
 Cara alternatif utk pemakaian <code>M-x</code>. Boleh dibaca di <a href="https://github.com/DarwinAwardWinner/amx/">GitHub</a>. Untuk matikan pakai <code>M-x amx-mode</code>.
@@ -3733,8 +3733,8 @@ Cara alternatif utk pemakaian <code>M-x</code>. Boleh dibaca di <a href="https:/
 </div>
 </div>
 
-<div id="outline-container-org8cefe93" class="outline-2">
-<h2 id="org8cefe93"><span class="section-number-2">28</span> Company</h2>
+<div id="outline-container-orgc3c1257" class="outline-2">
+<h2 id="orgc3c1257"><span class="section-number-2">28</span> Company</h2>
 <div class="outline-text-2" id="text-28">
 <p>
 Utk melengkapkan pencarian perkataan dsb. Tekan <code>TAB</code> utk percepatkan carian tanpa
@@ -3742,8 +3742,8 @@ tunggu 1 saat. Untuk masalah di <code>eshall</code> bila pakai estrisk (*) boleh
 </p>
 </div>
 
-<div id="outline-container-org2091ea4" class="outline-3">
-<h3 id="org2091ea4"><span class="section-number-3">28.1</span> Aturcara umum</h3>
+<div id="outline-container-orgc6b31ff" class="outline-3">
+<h3 id="orgc6b31ff"><span class="section-number-3">28.1</span> Aturcara umum</h3>
 <div class="outline-text-3" id="text-28-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3885,8 +3885,8 @@ tunggu 1 saat. Untuk masalah di <code>eshall</code> bila pakai estrisk (*) boleh
 </div>
 </div>
 </div>
-<div id="outline-container-org3fd099e" class="outline-3">
-<h3 id="org3fd099e"><span class="section-number-3">28.2</span> Company go</h3>
+<div id="outline-container-org7eff775" class="outline-3">
+<h3 id="org7eff775"><span class="section-number-3">28.2</span> Company go</h3>
 <div class="outline-text-3" id="text-28-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">use-package</span> <span style="color: #fabd2f;">company-go</span>
@@ -3919,8 +3919,8 @@ tunggu 1 saat. Untuk masalah di <code>eshall</code> bila pakai estrisk (*) boleh
 </div>
 </div>
 
-<div id="outline-container-org0f3adc6" class="outline-3">
-<h3 id="org0f3adc6"><span class="section-number-3">28.3</span> Company quick-helps</h3>
+<div id="outline-container-org98e2d07" class="outline-3">
+<h3 id="org98e2d07"><span class="section-number-3">28.3</span> Company quick-helps</h3>
 <div class="outline-text-3" id="text-28-3">
 <p>
 Tambahan informasi bagi funksi contohnya di R atau program lain. Tapi bila
@@ -3946,8 +3946,8 @@ aktivkan sepenuhnya selalu mengganggu. Jadi aktivkan bila perlu sahaja
 </div>
 </div>
 
-<div id="outline-container-org5406288" class="outline-3">
-<h3 id="org5406288"><span class="section-number-3">28.4</span> Company-flx</h3>
+<div id="outline-container-orgf9093cd" class="outline-3">
+<h3 id="orgf9093cd"><span class="section-number-3">28.4</span> Company-flx</h3>
 <div class="outline-text-3" id="text-28-4">
 <p>
 Tambah fuzzy matching ke Company
@@ -3962,7 +3962,7 @@ Tambah fuzzy matching ke Company
 </div>
 </div>
 <ol class="org-ol">
-<li><a id="org6748d1d"></a>Completing<br />
+<li><a id="org641e7bc"></a>Completing<br />
 <div class="outline-text-4" id="text-28-4-1">
 <p>
 Sumber dari <a href="https://github.com/company-mode/company-statistics">sini</a>. Buat log completion yang dipakai dan akan disusun mengikut
@@ -3982,16 +3982,16 @@ kekerapan.
 </div>
 </div>
 
-<div id="outline-container-orga28ab31" class="outline-2">
-<h2 id="orga28ab31"><span class="section-number-2">29</span> Yasnippet</h2>
+<div id="outline-container-org588b4c7" class="outline-2">
+<h2 id="org588b4c7"><span class="section-number-2">29</span> Yasnippet</h2>
 <div class="outline-text-2" id="text-29">
 </div>
-<div id="outline-container-org3dfc315" class="outline-3">
-<h3 id="org3dfc315"><span class="section-number-3">29.1</span> Aturcara yasnippet</h3>
+<div id="outline-container-orgf1e14dc" class="outline-3">
+<h3 id="orgf1e14dc"><span class="section-number-3">29.1</span> Aturcara yasnippet</h3>
 <div class="outline-text-3" id="text-29-1">
 </div>
 <ol class="org-ol">
-<li><a id="org0dd687c"></a>Cara 1<br />
+<li><a id="org7bc99da"></a>Cara 1<br />
 <div class="outline-text-4" id="text-29-1-1">
 <p>
 Untuk dapatkan templete di Emacs. Sila rujuk <a href="https://www.emacswiki.org/emacs/Yasnippet">EmacsWiki</a> untuk <a href="https://github.com/joaotavora/yasnippet">Yasnippet</a>. Untuk buat snippets boleh baca di <a href="https://joaotavora.github.io/yasnippet/snippet-development.html">sini</a>.
@@ -4067,7 +4067,7 @@ Keychord <code>jy</code> untuk <i>company-yasnippet</i>.
 </div>
 </li>
 
-<li><a id="org84c132c"></a>Cara 2<br />
+<li><a id="org3cdf925"></a>Cara 2<br />
 <div class="outline-text-4" id="text-29-1-2">
 <p>
 Cara ini diambil dari <a href="https://github.com/magnars/.emacs.d/blob/master/settings/setup-yasnippet.el">GitHub</a>. Untuk pakai, tuliskan <code>key</code> yang ditetapkan di definasi
@@ -4157,8 +4157,8 @@ dengan <code>Ctrl-TAB</code> utk buka snippet. Untuk next atau previous pakai <c
 </ol>
 </div>
 
-<div id="outline-container-org49112f6" class="outline-3">
-<h3 id="org49112f6"><span class="section-number-3">29.2</span> Koleksi snippet</h3>
+<div id="outline-container-org99c4b9e" class="outline-3">
+<h3 id="org99c4b9e"><span class="section-number-3">29.2</span> Koleksi snippet</h3>
 <div class="outline-text-3" id="text-29-2">
 <p>
 Koleksi rasmi snippet boleh dimuat turun di <a href="https://github.com/AndreaCrotti/yasnippet-snippets">GitHub</a> atau pakai <code>use-package
@@ -4194,12 +4194,12 @@ git clone https://github.com/mattfidler/yasnippet-ess-mode.git
 </div>
 </div>
 
-<div id="outline-container-org885ac87" class="outline-2">
-<h2 id="org885ac87"><span class="section-number-2">30</span> Parentheses</h2>
+<div id="outline-container-org51eaa0a" class="outline-2">
+<h2 id="org51eaa0a"><span class="section-number-2">30</span> Parentheses</h2>
 <div class="outline-text-2" id="text-30">
 </div>
-<div id="outline-container-orgced921b" class="outline-3">
-<h3 id="orgced921b"><span class="section-number-3">30.1</span> Smartparens</h3>
+<div id="outline-container-org2331e33" class="outline-3">
+<h3 id="org2331e33"><span class="section-number-3">30.1</span> Smartparens</h3>
 <div class="outline-text-3" id="text-30-1">
 <p>
 Pasangan utk parentheses
@@ -4239,8 +4239,8 @@ Pasangan utk parentheses
 </div>
 </div>
 
-<div id="outline-container-org099f1e9" class="outline-3">
-<h3 id="org099f1e9"><span class="section-number-3">30.2</span> Rainbow-delimited</h3>
+<div id="outline-container-org4e3c52a" class="outline-3">
+<h3 id="org4e3c52a"><span class="section-number-3">30.2</span> Rainbow-delimited</h3>
 <div class="outline-text-3" id="text-30-2">
 <p>
 Warna untuk setiap pasangan parentheses
@@ -4262,8 +4262,8 @@ Warna untuk setiap pasangan parentheses
 </div>
 </div>
 
-<div id="outline-container-org1dd9999" class="outline-2">
-<h2 id="org1dd9999"><span class="section-number-2">31</span> Origami</h2>
+<div id="outline-container-orge95cc6d" class="outline-2">
+<h2 id="orge95cc6d"><span class="section-number-2">31</span> Origami</h2>
 <div class="outline-text-2" id="text-31">
 <p>
 Untuk sembunyikan tekst yang panjang. Rujukan di <a href="https://github.com/gregsexton/origami.el">GitHub</a>
@@ -4325,8 +4325,8 @@ Untuk sembunyikan tekst yang panjang. Rujukan di <a href="https://github.com/gre
 </div>
 </div>
 
-<div id="outline-container-org465357c" class="outline-2">
-<h2 id="org465357c"><span class="section-number-2">32</span> Rainbow mode</h2>
+<div id="outline-container-org91e5e5b" class="outline-2">
+<h2 id="org91e5e5b"><span class="section-number-2">32</span> Rainbow mode</h2>
 <div class="outline-text-2" id="text-32">
 <p>
 <code>rainbow-mode</code> displays hexadecimal colors with the color they
@@ -4350,12 +4350,12 @@ represent as their background.
 </div>
 </div>
 
-<div id="outline-container-org178963d" class="outline-2">
-<h2 id="org178963d"><span class="section-number-2">33</span> Singkatan/Abbrev</h2>
+<div id="outline-container-org6f1e5e6" class="outline-2">
+<h2 id="org6f1e5e6"><span class="section-number-2">33</span> Singkatan/Abbrev</h2>
 <div class="outline-text-2" id="text-33">
 </div>
-<div id="outline-container-org4fd1fa6" class="outline-3">
-<h3 id="org4fd1fa6"><span class="section-number-3">33.1</span> Abbreviation</h3>
+<div id="outline-container-org45c25be" class="outline-3">
+<h3 id="org45c25be"><span class="section-number-3">33.1</span> Abbreviation</h3>
 <div class="outline-text-3" id="text-33-1">
 <p>
 Sila rujuk <a href="https://www.emacswiki.org/emacs/AbbrevMode">Abbrev Mode</a> untuk penerangan lanjut.  Contoh untuk guna singkatan 'ns' ke
@@ -4400,8 +4400,8 @@ aktiv hanya taip 'ns' untuk dapatkan 'Nama Saya'
 </div>
 </div>
 
-<div id="outline-container-org8372a09" class="outline-3">
-<h3 id="org8372a09"><span class="section-number-3">33.2</span> Predictive abbreviation</h3>
+<div id="outline-container-org060a0a0" class="outline-3">
+<h3 id="org060a0a0"><span class="section-number-3">33.2</span> Predictive abbreviation</h3>
 <div class="outline-text-3" id="text-33-2">
 <p>
 Penerangan boleh baca di <a href="https://www.emacswiki.org/emacs/PredictiveAbbreviation">Wiki</a>. Fungsi ini memakai perkataan2 yang telah dipakai di
@@ -4451,8 +4451,8 @@ buffer untuk mempercepatkan penulisan, hampir seperti <code>company</code>.
 </div>
 </div>
 
-<div id="outline-container-orgf8db590" class="outline-2">
-<h2 id="orgf8db590"><span class="section-number-2">34</span> Navigation</h2>
+<div id="outline-container-org136c20c" class="outline-2">
+<h2 id="org136c20c"><span class="section-number-2">34</span> Navigation</h2>
 <div class="outline-text-2" id="text-34">
 <p>
 Untuk memudahkan pergerakkan di dokument yang sedang dibuka.
@@ -4491,8 +4491,8 @@ Untuk memudahkan pergerakkan di dokument yang sedang dibuka.
 </table>
 </div>
 
-<div id="outline-container-orgbd54ba8" class="outline-3">
-<h3 id="orgbd54ba8"><span class="section-number-3">34.1</span> Mark</h3>
+<div id="outline-container-org392e1c5" class="outline-3">
+<h3 id="org392e1c5"><span class="section-number-3">34.1</span> Mark</h3>
 <div class="outline-text-3" id="text-34-1">
 <p>
 Cara asas untuk pergerakkan boleh guna fungsi <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Mark.html">mark document</a>. Caranya:
@@ -4508,8 +4508,8 @@ Selanjutnya boleh dibaca di <a href="http://ergoemacs.org/emacs/emacs_jump_to_pr
 </p>
 </div>
 </div>
-<div id="outline-container-orge5b30de" class="outline-3">
-<h3 id="orge5b30de"><span class="section-number-3">34.2</span> Goto Change</h3>
+<div id="outline-container-orgc058896" class="outline-3">
+<h3 id="orgc058896"><span class="section-number-3">34.2</span> Goto Change</h3>
 <div class="outline-text-3" id="text-34-2">
 <p>
 Fungsi <a href="https://www.emacswiki.org/emacs/GotoChg">Goto Chg</a> dipakai untuk kembali ke tempat pertukaran sebelumnya.
@@ -4525,8 +4525,8 @@ Fungsi <a href="https://www.emacswiki.org/emacs/GotoChg">Goto Chg</a> dipakai un
 </div>
 </div>
 
-<div id="outline-container-org50609ce" class="outline-3">
-<h3 id="org50609ce"><span class="section-number-3">34.3</span> Goto Last Change</h3>
+<div id="outline-container-org64cec7b" class="outline-3">
+<h3 id="org64cec7b"><span class="section-number-3">34.3</span> Goto Last Change</h3>
 <div class="outline-text-3" id="text-34-3">
 <p>
 Fungsi <a href="https://www.emacswiki.org/emacs/GotoLastChange">Goto Last Change</a> hampir sama dengan <b>Goto Chg</b> diatas dipakai untuk kembali
@@ -4542,8 +4542,8 @@ tempat pertukaran sebelumnya.
 </div>
 </div>
 
-<div id="outline-container-org77cb3f9" class="outline-3">
-<h3 id="org77cb3f9"><span class="section-number-3">34.4</span> Register</h3>
+<div id="outline-container-org4c9c53b" class="outline-3">
+<h3 id="org4c9c53b"><span class="section-number-3">34.4</span> Register</h3>
 <div class="outline-text-3" id="text-34-4">
 <p>
 Untuk simpan sementara (transient storage) dan hilang bila matikan Emacs. Caranya:
@@ -4572,8 +4572,8 @@ Contoh <code>C-x r SPC b</code> daftarkan tempat cursor sebagai <b>b</b> dan utk
 </div>
 </div>
 
-<div id="outline-container-org0d668f1" class="outline-3">
-<h3 id="org0d668f1"><span class="section-number-3">34.5</span> Bookmark</h3>
+<div id="outline-container-org3d52100" class="outline-3">
+<h3 id="org3d52100"><span class="section-number-3">34.5</span> Bookmark</h3>
 <div class="outline-text-3" id="text-34-5">
 <p>
 Berlu dipelajari. Sila baca <a href="https://www.emacswiki.org/emacs/BookMarks">Wiki:Bookmarks</a> utk cara umum iaitu:
@@ -4665,8 +4665,8 @@ diambil dari <a href="http://blog.binchen.org/posts/hello-ivy-mode-bye-helm.html
 </div>
 </div>
 </div>
-<div id="outline-container-org96d5390" class="outline-3">
-<h3 id="org96d5390"><span class="section-number-3">34.6</span> Mark with bm</h3>
+<div id="outline-container-orgb4ef462" class="outline-3">
+<h3 id="orgb4ef462"><span class="section-number-3">34.6</span> Mark with bm</h3>
 <div class="outline-text-3" id="text-34-6">
 <p>
 Cara lain untuk pakai bookmark diambil dari <a href="https://github.com/joodland/bm">GitHub</a>. Bolah tandah dibarisan dengan <code>C-f4</code>
@@ -4740,15 +4740,15 @@ Cara lain untuk pakai bookmark diambil dari <a href="https://github.com/joodland
 </div>
 </div>
 
-<div id="outline-container-org3358d0a" class="outline-2">
-<h2 id="org3358d0a"><span class="section-number-2">35</span> Projectile</h2>
+<div id="outline-container-orgb1a4e40" class="outline-2">
+<h2 id="orgb1a4e40"><span class="section-number-2">35</span> Projectile</h2>
 <div class="outline-text-2" id="text-35">
 <p>
 Projek yang diletakkan di github akan mudah dilawati dengan menggunakan <code>projectile</code>.
 </p>
 </div>
-<div id="outline-container-orgfd2bf4f" class="outline-3">
-<h3 id="orgfd2bf4f"><span class="section-number-3">35.1</span> Tags</h3>
+<div id="outline-container-orgb2f4a07" class="outline-3">
+<h3 id="orgb2f4a07"><span class="section-number-3">35.1</span> Tags</h3>
 <div class="outline-text-3" id="text-35-1">
 <p>
 Utk buat project etags atau gtags. Pertama pasangkan <code>ctags</code>.
@@ -4777,8 +4777,8 @@ Kemudian pasang <code>gtags</code> dari <a href="https://github.com/leoliu/ggtag
 </div>
 </div>
 
-<div id="outline-container-orgbe21772" class="outline-3">
-<h3 id="orgbe21772"><span class="section-number-3">35.2</span> Aturcara seterusnya</h3>
+<div id="outline-container-org35c94f3" class="outline-3">
+<h3 id="org35c94f3"><span class="section-number-3">35.2</span> Aturcara seterusnya</h3>
 <div class="outline-text-3" id="text-35-2">
 <p>
 Utk masukkan projek ke <a href="http://projectile.readthedocs.io/en/latest/">Projectile</a>, buka projek fail dan hidupkan <code>projectile-mode</code>
@@ -4923,8 +4923,8 @@ Aktivkan <code>Ivy</code> dengan <code>Projectile</code>.
 </div>
 </div>
 
-<div id="outline-container-orga8801ed" class="outline-2">
-<h2 id="orga8801ed"><span class="section-number-2">36</span> PDF-Tools</h2>
+<div id="outline-container-org2d9a2fb" class="outline-2">
+<h2 id="org2d9a2fb"><span class="section-number-2">36</span> PDF-Tools</h2>
 <div class="outline-text-2" id="text-36">
 <p>
 PDF Tools dipakai utk menggantikan <code>DocView</code> yang sedia ada di Emacs utk fail-fail
@@ -4954,8 +4954,8 @@ tekan <code>g</code> utk refresh pertukaran.
 </p>
 </div>
 
-<div id="outline-container-org795bd38" class="outline-3">
-<h3 id="org795bd38"><span class="section-number-3">36.1</span> Aturcara</h3>
+<div id="outline-container-org66145bd" class="outline-3">
+<h3 id="org66145bd"><span class="section-number-3">36.1</span> Aturcara</h3>
 <div class="outline-text-3" id="text-36-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">use-package</span> <span style="color: #fabd2f;">pdf-tools</span>
@@ -4977,8 +4977,8 @@ tekan <code>g</code> utk refresh pertukaran.
 </div>
 </div>
 </div>
-<div id="outline-container-orgf868851" class="outline-3">
-<h3 id="orgf868851"><span class="section-number-3">36.2</span> Auto-revert</h3>
+<div id="outline-container-orgeac32a3" class="outline-3">
+<h3 id="orgeac32a3"><span class="section-number-3">36.2</span> Auto-revert</h3>
 <div class="outline-text-3" id="text-36-2">
 <p>
 <code>Auto-revert-mode</code> untuk auto update di <code>doc-view-mode</code> sebarang
@@ -5001,8 +5001,8 @@ pertukaran di file LaTeX dengan menekan <code>C-c C-c</code>. Boleh baca di
 </div>
 </div>
 
-<div id="outline-container-org0c9e35e" class="outline-3">
-<h3 id="org0c9e35e"><span class="section-number-3">36.3</span> Useful key bindings</h3>
+<div id="outline-container-org89e139d" class="outline-3">
+<h3 id="org89e139d"><span class="section-number-3">36.3</span> Useful key bindings</h3>
 <div class="outline-text-3" id="text-36-3">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -5138,8 +5138,8 @@ pertukaran di file LaTeX dengan menekan <code>C-c C-c</code>. Boleh baca di
 </div>
 </div>
 
-<div id="outline-container-orgdd6fdc5" class="outline-3">
-<h3 id="orgdd6fdc5"><span class="section-number-3">36.4</span> Interleave</h3>
+<div id="outline-container-orge1c63a6" class="outline-3">
+<h3 id="orge1c63a6"><span class="section-number-3">36.4</span> Interleave</h3>
 <div class="outline-text-3" id="text-36-4">
 <p>
 Untuk memasukkan nota dan komet di fail PDF.
@@ -5192,8 +5192,8 @@ are already present, 'i' will switchover to the other buffer.</li>
 </div>
 </div>
 
-<div id="outline-container-org1e65835" class="outline-2">
-<h2 id="org1e65835"><span class="section-number-2">37</span> Quick-preview</h2>
+<div id="outline-container-org524d7ae" class="outline-2">
+<h2 id="org524d7ae"><span class="section-number-2">37</span> Quick-preview</h2>
 <div class="outline-text-2" id="text-37">
 <p>
 Utk <code>quick-preview</code> sebarang fail menggunakan external tool seperti GNOME Sushi, Gloobus preview atau Quick Look.
@@ -5210,12 +5210,12 @@ Utk <code>quick-preview</code> sebarang fail menggunakan external tool seperti G
 </div>
 </div>
 
-<div id="outline-container-org9c26ecd" class="outline-2">
-<h2 id="org9c26ecd"><span class="section-number-2">38</span> Graphics</h2>
+<div id="outline-container-orgfd35fe7" class="outline-2">
+<h2 id="orgfd35fe7"><span class="section-number-2">38</span> Graphics</h2>
 <div class="outline-text-2" id="text-38">
 </div>
-<div id="outline-container-orge75ccd2" class="outline-3">
-<h3 id="orge75ccd2"><span class="section-number-3">38.1</span> PlantUML</h3>
+<div id="outline-container-org56afac8" class="outline-3">
+<h3 id="org56afac8"><span class="section-number-3">38.1</span> PlantUML</h3>
 <div class="outline-text-3" id="text-38-1">
 <p>
 Major mode untuk edit <a href="http://plantuml.com/">PlantUML</a>. Untuk memastikan plantuml befungsi, pastikan <code>java</code>
@@ -5311,8 +5311,8 @@ xmlgraphics-commons-1.4.jar
 </div>
 </div>
 </div>
-<div id="outline-container-org6889b7d" class="outline-3">
-<h3 id="org6889b7d"><span class="section-number-3">38.2</span> DOT dan Graphviz</h3>
+<div id="outline-container-org180a127" class="outline-3">
+<h3 id="org180a127"><span class="section-number-3">38.2</span> DOT dan Graphviz</h3>
 <div class="outline-text-3" id="text-38-2">
 <p>
 Cara untuk guna <code>DOT</code> boleh dibaca di <a href="http://tonyballantyne.com/graphs.html">sini</a> dan untuk <code>GraphViz</code> di <a href="http://graphs.grevian.org/example">sini</a>. Untuk pakai
@@ -5336,8 +5336,8 @@ graph graphname {
 </pre>
 </div>
 </div>
-<div id="outline-container-orgc8f4c99" class="outline-3">
-<h3 id="orgc8f4c99"><span class="section-number-3">38.3</span> TikZ</h3>
+<div id="outline-container-org08ed211" class="outline-3">
+<h3 id="org08ed211"><span class="section-number-3">38.3</span> TikZ</h3>
 <div class="outline-text-3" id="text-38-3">
 <p>
 TikZ digunakan terutama sebab ia amat robus. TikZ boleh di baca di <a href="https://en.wikibooks.org/wiki/LaTeX/PGF/TikZ">Wikibook</a>. Untuk
@@ -5348,12 +5348,12 @@ membolehkan menukarkan fail PDF yang dihasilkan bila memakai TikZ, program
 </div>
 </div>
 
-<div id="outline-container-orgb3c88b3" class="outline-2">
-<h2 id="orgb3c88b3"><span class="section-number-2">39</span> Org</h2>
+<div id="outline-container-org6f22ba5" class="outline-2">
+<h2 id="org6f22ba5"><span class="section-number-2">39</span> Org</h2>
 <div class="outline-text-2" id="text-39">
 </div>
-<div id="outline-container-org522c55a" class="outline-3">
-<h3 id="org522c55a"><span class="section-number-3">39.1</span> Maklumat</h3>
+<div id="outline-container-org3207e13" class="outline-3">
+<h3 id="org3207e13"><span class="section-number-3">39.1</span> Maklumat</h3>
 <div class="outline-text-3" id="text-39-1">
 <p>
 Rujukkan utk aturcara org-mode diambil dari <a href="http://doc.norang.ca/org-mode.html#Setup">Bernt Hansen</a> dan <a href="https://github.com/jabranham/emacs/blob/master/emacs.org">Jabraham</a>. Utk asas sila rujuk <a href="https://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html">Aaron Bieber</a>
@@ -5366,8 +5366,8 @@ terlebih dahulu sebelum memakai fungsi <code>C-c c</code>.
 </div>
 </div>
 
-<div id="outline-container-org027aaf6" class="outline-3">
-<h3 id="org027aaf6"><span class="section-number-3">39.2</span> Rujukkan kekunci</h3>
+<div id="outline-container-orgf0040d4" class="outline-3">
+<h3 id="orgf0040d4"><span class="section-number-3">39.2</span> Rujukkan kekunci</h3>
 <div class="outline-text-3" id="text-39-2">
 <p>
 Pasang dan kemaskini aturcara org-mode.
@@ -5420,12 +5420,12 @@ SCHEDULED: &lt;2012-08-17 Fri .+1d&gt;
 </div>
 </div>
 
-<div id="outline-container-orgc6e4d46" class="outline-3">
-<h3 id="orgc6e4d46"><span class="section-number-3">39.3</span> Org-settings</h3>
+<div id="outline-container-org1b5d3cd" class="outline-3">
+<h3 id="org1b5d3cd"><span class="section-number-3">39.3</span> Org-settings</h3>
 <div class="outline-text-3" id="text-39-3">
 </div>
 <ol class="org-ol">
-<li><a id="org12d191c"></a>org-mode<br />
+<li><a id="org1ed1852"></a>org-mode<br />
 <div class="outline-text-4" id="text-39-3-1">
 <p>
 Aktifkan org-mode, auto-mode dan org-direktori. Sekiranya org-directory belum ada
@@ -5498,7 +5498,7 @@ sila sediakan.
 </div>
 </div>
 </li>
-<li><a id="org4b9cf6a"></a>Toggle display<br />
+<li><a id="orge3a2ded"></a>Toggle display<br />
 <div class="outline-text-4" id="text-39-3-2">
 <p>
 Untuk tunjukkan sumber link atau kode tersembunyi boleh gunakan <code>font-lock-mode</code>
@@ -5522,7 +5522,7 @@ dari <a href="https://emacs.stackexchange.com/questions/5387/show-org-mode-hyper
 </div>
 </li>
 
-<li><a id="orgd81d424"></a>Link<br />
+<li><a id="orgf371607"></a>Link<br />
 <div class="outline-text-4" id="text-39-3-3">
 <p>
 Simpan link dengan <code>C-c l</code> kemudian letakkan link ke tempat tertentu dengan <code>C-c C-l</code>.
@@ -5530,7 +5530,7 @@ Untuk mengikuti atau buka link tersebut pakai <code>C-c C-o</code>. Utk kembali 
 </p>
 
 <p>
-Link guna ivy rujuk di heading <a href="#org557d895">Worf</a>
+Link guna ivy rujuk di heading <a href="#orga3d2eea">Worf</a>
 </p>
 
 <div class="org-src-container">
@@ -5545,7 +5545,7 @@ Link guna ivy rujuk di heading <a href="#org557d895">Worf</a>
 </div>
 </div>
 </li>
-<li><a id="org6fdce45"></a>indent<br />
+<li><a id="org5c87c1a"></a>indent<br />
 <div class="outline-text-4" id="text-39-3-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7c6f64;">;;</span><span style="color: #7c6f64;">== Indent bila mula</span>
@@ -5554,7 +5554,7 @@ Link guna ivy rujuk di heading <a href="#org557d895">Worf</a>
 </div>
 </div>
 </li>
-<li><a id="orge0650d1"></a>Blank line<br />
+<li><a id="org61387d9"></a>Blank line<br />
 <div class="outline-text-4" id="text-39-3-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7c6f64;">;;</span><span style="color: #7c6f64;">== Prevent auto insertion of blank lines before headings and list items</span>
@@ -5564,7 +5564,7 @@ Link guna ivy rujuk di heading <a href="#org557d895">Worf</a>
 </div>
 </div>
 </li>
-<li><a id="orge7e76a5"></a>Current window<br />
+<li><a id="orgd3116a0"></a>Current window<br />
 <div class="outline-text-4" id="text-39-3-6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7c6f64;">;; </span><span style="color: #7c6f64;">Use the current window for indirect buffer display</span>
@@ -5587,7 +5587,7 @@ Tunjukkan kandungan sebagai <code>sparse tree</code> cth TODO, SCHEDULE, DEADLIN
 </div>
 </li>
 
-<li><a id="org539c491"></a>Navigate headings<br />
+<li><a id="org94aee25"></a>Navigate headings<br />
 <div class="outline-text-4" id="text-39-3-7">
 <p>
 Bind <code>F10-h-b</code> and <code>F10-h-d</code> to navigate heading more easily (these are bound to <code>C-c C-p/n</code>
@@ -5604,8 +5604,8 @@ by default):
 </ol>
 </div>
 
-<div id="outline-container-org557d895" class="outline-3">
-<h3 id="org557d895"><span class="section-number-3">39.4</span> Worf</h3>
+<div id="outline-container-orga3d2eea" class="outline-3">
+<h3 id="orga3d2eea"><span class="section-number-3">39.4</span> Worf</h3>
 <div class="outline-text-3" id="text-39-4">
 <p>
 <a href="https://github.com/abo-abo/worf">Worf</a> ialah minor mode utk mempercepatkan process contohnya seperti penggunaan fungsi
@@ -5649,12 +5649,12 @@ utk 'Headings' diambil dari <a href="http://stackoverflow.com/questions/28030946
 </div>
 </div>
 </div>
-<div id="outline-container-org8edeff8" class="outline-3">
-<h3 id="org8edeff8"><span class="section-number-3">39.5</span> Calendar</h3>
+<div id="outline-container-org07554e1" class="outline-3">
+<h3 id="org07554e1"><span class="section-number-3">39.5</span> Calendar</h3>
 <div class="outline-text-3" id="text-39-5">
 </div>
 <ol class="org-ol">
-<li><a id="orge60a73a"></a>Calendar settings<br />
+<li><a id="org24b5d21"></a>Calendar settings<br />
 <div class="outline-text-4" id="text-39-5-1">
 <p>
 Not technically part of org, but I'll stick the calendar config here since I mainly use it along with org-agenda (config'ed below)
@@ -5683,7 +5683,7 @@ Not technically part of org, but I'll stick the calendar config here since I mai
 </div>
 </div>
 </li>
-<li><a id="org0019d02"></a>Google calendar sync<br />
+<li><a id="org5d592ba"></a>Google calendar sync<br />
 <div class="outline-text-4" id="text-39-5-2">
 <p>
 Dapatkan Google kalender ke org-agenda. Cara ini boleh di baca di <a href="https://github.com/myuhe/org-gcal.el">org-gcal</a> atau di <a href="http://cestlaz.github.io/posts/using-emacs-26-gcal/#.WmJ80N_ODSf">sini</a>.
@@ -5714,8 +5714,8 @@ Dapatkan Google kalender ke org-agenda. Cara ini boleh di baca di <a href="https
 </ol>
 </div>
 
-<div id="outline-container-org4abdf71" class="outline-3">
-<h3 id="org4abdf71"><span class="section-number-3">39.6</span> Nice bulleted lists</h3>
+<div id="outline-container-org64c3e09" class="outline-3">
+<h3 id="org64c3e09"><span class="section-number-3">39.6</span> Nice bulleted lists</h3>
 <div class="outline-text-3" id="text-39-6">
 <p>
 Mencatikkan <b>bullet</b> di Org-mode. Untuk dapatkan bullet lain boleh periksa guna <code>C-x 8 RET</code>
@@ -5743,8 +5743,8 @@ kemudian tulis symbol yang diingini cth. <code>check mark</code> atau <code>star
 </div>
 </div>
 
-<div id="outline-container-orgf927f9e" class="outline-3">
-<h3 id="orgf927f9e"><span class="section-number-3">39.7</span> Code blocks (org-babel)</h3>
+<div id="outline-container-orgf0080a5" class="outline-3">
+<h3 id="orgf0080a5"><span class="section-number-3">39.7</span> Code blocks (org-babel)</h3>
 <div class="outline-text-3" id="text-39-7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7c6f64;">;; </span><span style="color: #7c6f64;">Load languages</span>
@@ -5765,12 +5765,12 @@ kemudian tulis symbol yang diingini cth. <code>check mark</code> atau <code>star
 </div>
 </div>
 </div>
-<div id="outline-container-orgbee107b" class="outline-3">
-<h3 id="orgbee107b"><span class="section-number-3">39.8</span> Diagrams</h3>
+<div id="outline-container-org1ce4659" class="outline-3">
+<h3 id="org1ce4659"><span class="section-number-3">39.8</span> Diagrams</h3>
 <div class="outline-text-3" id="text-39-8">
 </div>
 <ol class="org-ol">
-<li><a id="org27f1aac"></a>Ditaa<br />
+<li><a id="org54a9a23"></a>Ditaa<br />
 <div class="outline-text-4" id="text-39-8-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">setq</span> my-diagram-dir <span style="color: #b8bb26;">"~/Dropbox/softwares/"</span><span style="color: #fb4934;">)</span>
@@ -5781,9 +5781,9 @@ kemudian tulis symbol yang diingini cth. <code>check mark</code> atau <code>star
 </div>
 </div>
 </li>
-<li><a id="orga20001f"></a>TikZ<br />
+<li><a id="org4f15075"></a>TikZ<br />
 <ol class="org-ol">
-<li><a id="orgfe6ac8e"></a>PDF<br />
+<li><a id="orgc460cc5"></a>PDF<br />
 <div class="outline-text-5" id="text-39-8-2-1">
 <p>
 Untuk membolehkan preview image Tikz di org-mode diambil dari <a href="http://bnbeckwith.com/blog/org-mode-tikz-previews-on-windows.html">sini</a>. Pakai kekuci <code>C-c
@@ -5831,7 +5831,7 @@ dan tidak dilarikan.
 </div>
 </li>
 
-<li><a id="orgc6884ce"></a>HTML<br />
+<li><a id="orgbdc9672"></a>HTML<br />
 <div class="outline-text-5" id="text-39-8-2-2">
 <p>
 Untuk menghasilkan TikZ object sebagi svg untuk dimasukkan di HTML dokumen, guna
@@ -5878,12 +5878,12 @@ hasil pertama ialah LaTeX. Oleh itu perlu tetapkan secara manual seperti di atas
 </ol>
 </div>
 
-<div id="outline-container-org1325d4b" class="outline-3">
-<h3 id="org1325d4b"><span class="section-number-3">39.9</span> Exporting</h3>
+<div id="outline-container-org63fd756" class="outline-3">
+<h3 id="org63fd756"><span class="section-number-3">39.9</span> Exporting</h3>
 <div class="outline-text-3" id="text-39-9">
 </div>
 <ol class="org-ol">
-<li><a id="org35c04a8"></a>markdown<br />
+<li><a id="org88d8131"></a>markdown<br />
 <div class="outline-text-4" id="text-39-9-1">
 <p>
 HTML and latex shown by default, let's add markdown:
@@ -5895,7 +5895,7 @@ HTML and latex shown by default, let's add markdown:
 </div>
 </div>
 </li>
-<li><a id="org12040bb"></a>LaTeX<br />
+<li><a id="org8aa6a5e"></a>LaTeX<br />
 <div class="outline-text-4" id="text-39-9-2">
 <p>
 Shortcut latex-to-pdf-open dan latex-save-pdf di ambil di <a href="https://stackoverflow.com/questions/18291114/emacs-org-mode-how-to-automatically-process-to-pdf-on-save">sini</a>
@@ -5934,7 +5934,7 @@ Proses ke PDF bila save
 </div>
 </li>
 
-<li><a id="org23504fc"></a>others<br />
+<li><a id="orge3d9085"></a>others<br />
 <div class="outline-text-4" id="text-39-9-3">
 <p>
 This makes org export smart quotes so that it uses <code>``word``</code> style quotes for
@@ -5960,8 +5960,8 @@ beginning of org-mode files for export:
 </ol>
 </div>
 
-<div id="outline-container-org60ca1bf" class="outline-3">
-<h3 id="org60ca1bf"><span class="section-number-3">39.10</span> Eksport setiap top-level subtree ke fail berasingan</h3>
+<div id="outline-container-orge030890" class="outline-3">
+<h3 id="orge030890"><span class="section-number-3">39.10</span> Eksport setiap top-level subtree ke fail berasingan</h3>
 <div class="outline-text-3" id="text-39-10">
 <p>
 Pilih backend kemudian boleh eksport setiap top-level substree ke fail
@@ -6017,8 +6017,8 @@ Bla.. bla.. bla..
 </div>
 </div>
 </div>
-<div id="outline-container-orgcf36005" class="outline-3">
-<h3 id="orgcf36005"><span class="section-number-3">39.11</span> Ravel dan Ravel auto</h3>
+<div id="outline-container-orge43afa2" class="outline-3">
+<h3 id="orge43afa2"><span class="section-number-3">39.11</span> Ravel dan Ravel auto</h3>
 <div class="outline-text-3" id="text-39-11">
 <p>
 To convert to Rnw or Rmd. The ox-ravel.org file should be tangle <code>M-x
@@ -6079,8 +6079,8 @@ Kembali ke <code>session *R*</code> utk guna knitr, kemaskini src blocks, dan <c
 </div>
 </div>
 
-<div id="outline-container-orge81c61e" class="outline-3">
-<h3 id="orge81c61e"><span class="section-number-3">39.12</span> Code block shortcut</h3>
+<div id="outline-container-org7892d4d" class="outline-3">
+<h3 id="org7892d4d"><span class="section-number-3">39.12</span> Code block shortcut</h3>
 <div class="outline-text-3" id="text-39-12">
 <p>
 Here I define a function (<a href="https://github.com/vdemeester/emacs-config/blob/master/.emacs.d/emacs.org">thanks!</a>) that lets me easily add and edit source blocks in
@@ -6108,8 +6108,8 @@ org mode. Just use <code>f12-s</code> or <code>C-c s</code>
 </div>
 </div>
 
-<div id="outline-container-orga063f92" class="outline-3">
-<h3 id="orga063f92"><span class="section-number-3">39.13</span> References (org-ref)</h3>
+<div id="outline-container-orgaeb30c1" class="outline-3">
+<h3 id="orgaeb30c1"><span class="section-number-3">39.13</span> References (org-ref)</h3>
 <div class="outline-text-3" id="text-39-13">
 <p>
 Utk pakai org-ref letak fail <code>.bib</code> dan tetapkan <code>ref style</code> di penghujung dokument
@@ -6280,8 +6280,8 @@ bibliography:nama-fail.bib
 </div>
 </div>
 </div>
-<div id="outline-container-orge2c84b0" class="outline-3">
-<h3 id="orge2c84b0"><span class="section-number-3">39.14</span> Org-todo</h3>
+<div id="outline-container-orgb5c1d32" class="outline-3">
+<h3 id="orgb5c1d32"><span class="section-number-3">39.14</span> Org-todo</h3>
 <div class="outline-text-3" id="text-39-14">
 <p>
 Tambah keyword <code>org-todo</code> dan pakai <code>C-c C-t</code> untuk tukar status. Bila <code>Hold</code> atau
@@ -6344,11 +6344,11 @@ wUntuk tunjukkan semua TODO di current buffer yang tidak termasuk di
 </div>
 </div>
 </div>
-<div id="outline-container-orgf959b25" class="outline-3">
-<h3 id="orgf959b25"><span class="section-number-3">39.15</span> <span class="todo TODO">TODO</span> Test org-todo</h3>
+<div id="outline-container-org4b1e81f" class="outline-3">
+<h3 id="org4b1e81f"><span class="section-number-3">39.15</span> <span class="todo TODO">TODO</span> Test org-todo</h3>
 </div>
-<div id="outline-container-org20b4cbb" class="outline-3">
-<h3 id="org20b4cbb"><span class="section-number-3">39.16</span> Agenda</h3>
+<div id="outline-container-orgfa42aff" class="outline-3">
+<h3 id="orgfa42aff"><span class="section-number-3">39.16</span> Agenda</h3>
 <div class="outline-text-3" id="text-39-16">
 <p>
 Tunjukkan semua TODO, temujanji dan pelbagai tugasan yang perlu
@@ -6357,7 +6357,7 @@ utk sync fail-fail di Orgzly dan komputer lain. Lock to current file <code>C-u C
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org544c7bd"></a>Aturcara agenda<br />
+<li><a id="orgaf5b5a1"></a>Aturcara agenda<br />
 <div class="outline-text-4" id="text-39-16-1">
 <p>
 Selepas pasang versi org-mode 9.1.2, masalah untuk tukar stail
@@ -6631,7 +6631,7 @@ Selepas pasang versi org-mode 9.1.2, masalah untuk tukar stail
 </div>
 </div>
 </li>
-<li><a id="orgdb50c0b"></a>Org-super-agenda<br />
+<li><a id="orgbb6f58d"></a>Org-super-agenda<br />
 <div class="outline-text-4" id="text-39-16-2">
 <p>
 Diambil dari <a href="https://github.com/alphapapa/org-super-agenda">GitHub:alphapapa</a>
@@ -6694,7 +6694,7 @@ Diambil dari <a href="https://github.com/alphapapa/org-super-agenda">GitHub:alph
 </div>
 </li>
 
-<li><a id="org7490005"></a>Org-agenda-property<br />
+<li><a id="org3909ec0"></a>Org-agenda-property<br />
 <div class="outline-text-4" id="text-39-16-3">
 <p>
 Aturcara utk tunjukkan property of items di org-agenda buffer sekiranya tidak pakai
@@ -6723,8 +6723,8 @@ Rujukkan di <a href="https://github.com/Malabarba/org-agenda-property">Malabarba
 </ol>
 </div>
 
-<div id="outline-container-orgb6ce0e8" class="outline-3">
-<h3 id="orgb6ce0e8"><span class="section-number-3">39.17</span> Capture</h3>
+<div id="outline-container-orge2e3b24" class="outline-3">
+<h3 id="orge2e3b24"><span class="section-number-3">39.17</span> Capture</h3>
 <div class="outline-text-3" id="text-39-17">
 <p>
 I use org-capture to create short notes about all kinds of things. I can capture
@@ -6747,7 +6747,7 @@ emails to remember for later, quick thoughts for later, RSS feeds, really anythi
 </div>
 </div>
 <ol class="org-ol">
-<li><a id="org19c948d"></a>Org-eww<br />
+<li><a id="org7bcd018"></a>Org-eww<br />
 <div class="outline-text-4" id="text-39-17-1">
 <p>
 Org-eww lets me capture eww webpages with org-mode
@@ -6760,7 +6760,7 @@ Org-eww lets me capture eww webpages with org-mode
 </div>
 </li>
 
-<li><a id="orga8444ec"></a>Firefox<br />
+<li><a id="org82f51e1"></a>Firefox<br />
 <div class="outline-text-4" id="text-39-17-2">
 <p>
 This line is necessary for the <a href="https://addons.mozilla.org/en-US/firefox/addon/org-capture/">org capture</a> extension for Firefox.
@@ -6773,7 +6773,7 @@ This line is necessary for the <a href="https://addons.mozilla.org/en-US/firefox
 </div>
 </li>
 
-<li><a id="orgeaf9908"></a>Capture templates<br />
+<li><a id="org450dc57"></a>Capture templates<br />
 <div class="outline-text-4" id="text-39-17-3">
 <p>
 And now for the capture templates themselves. It's a bit complicated, but <a href="http://orgmode.org/manual/Capture-templates.html">the manual</a> does a great job explaining:
@@ -6865,7 +6865,7 @@ Untuk meletakkan SCHEDULED <code>C-c C-s</code> dan DEADLINE <code>C-c C-d</code
 </div>
 </div>
 </li>
-<li><a id="org0e65313"></a>Capture shortcut<br />
+<li><a id="org7cf6246"></a>Capture shortcut<br />
 <div class="outline-text-4" id="text-39-17-4">
 <p>
 Guna fungsi key-chord dan tekan <code>qq</code> utk terus ke TODO task
@@ -6884,8 +6884,8 @@ Guna fungsi key-chord dan tekan <code>qq</code> utk terus ke TODO task
 </ol>
 </div>
 
-<div id="outline-container-orgb3bb0f2" class="outline-3">
-<h3 id="orgb3bb0f2"><span class="section-number-3">39.18</span> Refile</h3>
+<div id="outline-container-orgd521e84" class="outline-3">
+<h3 id="orgd521e84"><span class="section-number-3">39.18</span> Refile</h3>
 <div class="outline-text-3" id="text-39-18">
 <p>
 Org-refile lets me quickly move around headings in org files. It plays nicely with
@@ -6910,8 +6910,8 @@ course)
 </div>
 </div>
 
-<div id="outline-container-org09c3b92" class="outline-3">
-<h3 id="org09c3b92"><span class="section-number-3">39.19</span> Meeting</h3>
+<div id="outline-container-orgc351a1c" class="outline-3">
+<h3 id="orgc351a1c"><span class="section-number-3">39.19</span> Meeting</h3>
 <div class="outline-text-3" id="text-39-19">
 <p>
 Diambil dari <a href="https://github.com/howardabrams/dot-files/blob/master/emacs-org.org">sini</a>. Untuk memudahkan buat nota masa meeting dan menggelakkan sebarang
@@ -6947,8 +6947,8 @@ gangguan dari semua buffer-buffer yang dibuka
 </div>
 </div>
 </div>
-<div id="outline-container-orgfd40dbc" class="outline-3">
-<h3 id="orgfd40dbc"><span class="section-number-3">39.20</span> Slides Reveal</h3>
+<div id="outline-container-org20cb44a" class="outline-3">
+<h3 id="org20cb44a"><span class="section-number-3">39.20</span> Slides Reveal</h3>
 <div class="outline-text-3" id="text-39-20">
 <p>
 Cara buat slides pembentangan menggunakan <code>Reveal.js</code>. Untuk memakai Reveal
@@ -6994,14 +6994,14 @@ Antara fungsi berguna yang disenaraikan di <a href="https://github.com/yjwen/org
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org6f981ff"></a>Force split<br />
+<li><a id="orga8f5ecf"></a>Force split<br />
 <div class="outline-text-4" id="text-39-20-1">
 <p>
 Masukkan <code>#+REVEAL: split</code> dan slide baru bermula selepas kekunci <code>#+REVEAL</code> tersebut.
 </p>
 </div>
 </li>
-<li><a id="org1e1a06d"></a>Tajuk<br />
+<li><a id="orgccc804c"></a>Tajuk<br />
 <div class="outline-text-4" id="text-39-20-2">
 <p>
 Tajuk dimasukkan secara automatik dari <code>#+Title:</code>. Sekiranya tidak ingin masukkan
@@ -7009,7 +7009,7 @@ tajuk, boleh letakkan <code>reveal_title_slide:nil</code> di <code>#+OPTIONS:</c
 </p>
 </div>
 </li>
-<li><a id="org0bbb906"></a>Ubah tajuk<br />
+<li><a id="orgcf449f8"></a>Ubah tajuk<br />
 <div class="outline-text-4" id="text-39-20-3">
 <p>
 Untuk ubah tajuk slide boleh gunakan fungsi <code>org-reveal-title-slide</code> dan tetapkan
@@ -7059,9 +7059,9 @@ informasi yang diinginkan menggunakan:
 </table>
 </div>
 </li>
-<li><a id="org3479049"></a>Latarbelakang<br />
+<li><a id="org9cdb218"></a>Latarbelakang<br />
 <ol class="org-ol">
-<li><a id="org85ea045"></a>Satu warna<br />
+<li><a id="org871bdc1"></a>Satu warna<br />
 <div class="outline-text-5" id="text-39-20-4-1">
 <p>
 Tetapkan di fungsi <code>reveal_background</code> guna RGB atau format warna CSS. Contohnya:
@@ -7075,7 +7075,7 @@ Tetapkan di fungsi <code>reveal_background</code> guna RGB atau format warna CSS
 </pre>
 </div>
 </li>
-<li><a id="orgb3e41c1"></a>Imej<br />
+<li><a id="org103d76e"></a>Imej<br />
 <div class="outline-text-5" id="text-39-20-4-2">
 <p>
 Gunakan URL atau tetapkan imej. <code>reveal_background_trans</code> gunakan <code>slide</code> untuk
@@ -7091,7 +7091,7 @@ menetapkan yang imej latarbelakang <i>sliding</i> dan tidak <i>fading</i>.
 </pre>
 </div>
 </li>
-<li><a id="orgc4e9403"></a>Ulang imej latarbelakang<br />
+<li><a id="orga0a275e"></a>Ulang imej latarbelakang<br />
 <div class="outline-text-5" id="text-39-20-4-3">
 <p>
 Gunakan fungsi <code>reveal_background_repeat</code> dan tetapkan <code>repeat</code>
@@ -7107,7 +7107,7 @@ Gunakan fungsi <code>reveal_background_repeat</code> dan tetapkan <code>repeat</
 </pre>
 </div>
 </li>
-<li><a id="org6f0cc3d"></a>Imej untuk tajuk latarbelakang<br />
+<li><a id="orga2914bf"></a>Imej untuk tajuk latarbelakang<br />
 <div class="outline-text-5" id="text-39-20-4-4">
 <p>
 Untuk menggunakan imej utk tajuk latarbelakang, tetapkan:
@@ -7121,7 +7121,7 @@ Untuk menggunakan imej utk tajuk latarbelakang, tetapkan:
 </li>
 </ol>
 </li>
-<li><a id="org5b83155"></a>Tunjukkan isi-kandungan<br />
+<li><a id="org618fb8e"></a>Tunjukkan isi-kandungan<br />
 <div class="outline-text-4" id="text-39-20-5">
 <p>
 Tetapkan <code>:frag t</code> di <code>#+OPTIONS</code> akan menggunakan <i>fragment style</i> sedia ada. Untuk
@@ -7142,8 +7142,8 @@ Guna <code>#+ATTR_REVEAL</code> untuk tetapkan cara menunjukkan kandungan di sli
 </li>
 </ol>
 </div>
-<div id="outline-container-orgfb651e9" class="outline-3">
-<h3 id="orgfb651e9"><span class="section-number-3">39.21</span> Insert photo</h3>
+<div id="outline-container-org614a4d1" class="outline-3">
+<h3 id="org614a4d1"><span class="section-number-3">39.21</span> Insert photo</h3>
 <div class="outline-text-3" id="text-39-21">
 <p>
 Masukkan gambar ke <code>org-file</code> melalui command folder contohnya dari Dropbox. File
@@ -7305,12 +7305,12 @@ dan original di biarkan di folder asal pakai prefix <code>M-x</code>
 </div>
 </div>
 </div>
-<div id="outline-container-orgf487a8a" class="outline-3">
-<h3 id="orgf487a8a"><span class="section-number-3">39.22</span> Images</h3>
+<div id="outline-container-org0be9d3a" class="outline-3">
+<h3 id="org0be9d3a"><span class="section-number-3">39.22</span> Images</h3>
 <div class="outline-text-3" id="text-39-22">
 </div>
 <ol class="org-ol">
-<li><a id="org8170ef2"></a>Kekalkan saiz imej<br />
+<li><a id="org1b20212"></a>Kekalkan saiz imej<br />
 <div class="outline-text-4" id="text-39-22-1">
 <p>
 Untuk pastikan yang saiz imej sama untuk semua imej-imej di dokument. Pastikan
@@ -7367,7 +7367,7 @@ program <code>ImageMagick</code> sudah dipasang. Sekiranya ingin size lebih besa
 </div>
 </div>
 </li>
-<li><a id="org51621bd"></a>Imej PDF<br />
+<li><a id="org686ddb8"></a>Imej PDF<br />
 <div class="outline-text-4" id="text-39-22-2">
 <p>
 Secara asalnya imej PDF tidak dapat ditunjukkan <i>inline</i> di Org-mode. Fungsi di bawah
@@ -7442,7 +7442,7 @@ Sekiranya ingin membuat link, namakan ke <code>./&lt;nama-fail&gt;_thumb.png</co
 </div>
 </div>
 </li>
-<li><a id="org0d2c88f"></a>Tukar PDF ke png<br />
+<li><a id="org77c5da9"></a>Tukar PDF ke png<br />
 <div class="outline-text-4" id="text-39-22-3">
 <p>
 Cara lain yang boleh dipakai untuk tukarkan imej PDF ke PNG diambil dari <a href="https://emacs.stackexchange.com/questions/390/display-pdf-images-in-org-mode">Kaushal
@@ -7515,8 +7515,8 @@ Fungsinya ialah <code>org-include-img-from-pdf</code> dan dilarikan setiap kali 
 </ol>
 </div>
 
-<div id="outline-container-orgac6c524" class="outline-3">
-<h3 id="orgac6c524"><span class="section-number-3">39.23</span> CSS di org</h3>
+<div id="outline-container-org5b6ce46" class="outline-3">
+<h3 id="org5b6ce46"><span class="section-number-3">39.23</span> CSS di org</h3>
 <div class="outline-text-3" id="text-39-23">
 <p>
 Untuk memasukkan CSS persendirian ke org file bila eksport. Diambil dari
@@ -7548,8 +7548,8 @@ Untuk memasukkan CSS persendirian ke org file bila eksport. Diambil dari
 </div>
 </div>
 
-<div id="outline-container-orgc8176c9" class="outline-3">
-<h3 id="orgc8176c9"><span class="section-number-3">39.24</span> Blogs</h3>
+<div id="outline-container-orge5f861d" class="outline-3">
+<h3 id="orge5f861d"><span class="section-number-3">39.24</span> Blogs</h3>
 <div class="outline-text-3" id="text-39-24">
 <p>
 Aktivkan library yang diperlukan untuk mengeksport ke html.
@@ -7603,12 +7603,12 @@ tags: [emacs]
 </div>
 </div>
 
-<div id="outline-container-org69ede5a" class="outline-3">
-<h3 id="org69ede5a"><span class="section-number-3">39.25</span> Tips and tricks</h3>
+<div id="outline-container-org3834e85" class="outline-3">
+<h3 id="org3834e85"><span class="section-number-3">39.25</span> Tips and tricks</h3>
 <div class="outline-text-3" id="text-39-25">
 </div>
 <ol class="org-ol">
-<li><a id="org9fd7bd9"></a>Buat table<br />
+<li><a id="orgbc3d37f"></a>Buat table<br />
 <div class="outline-text-4" id="text-39-25-1">
 <ul class="org-ul">
 <li>Pakai <code>C-C |</code> utk buat table cth. 2x5</li>
@@ -7619,7 +7619,7 @@ tags: [emacs]
 </ul>
 </div>
 </li>
-<li><a id="org20dbcc5"></a>Numbering<br />
+<li><a id="org6c3de43"></a>Numbering<br />
 <div class="outline-text-4" id="text-39-25-2">
 <ul class="org-ul">
 <li>Utk masukkan nombor atau bullet di ayat2 yang sedia ada, tekan <code>C-c -</code> dan gunakan
@@ -7630,7 +7630,7 @@ tags: [emacs]
 </div>
 </li>
 
-<li><a id="org0fa3388"></a>Properties<br />
+<li><a id="orgdef0f0d"></a>Properties<br />
 <div class="outline-text-4" id="text-39-25-3">
 <p>
 Shortcut <code>C-c C-x p</code> (org-set-property) dan utk padam C-c C-c d (org-delete-property)
@@ -7641,8 +7641,8 @@ Shortcut <code>C-c C-x p</code> (org-set-property) dan utk padam C-c C-c d (org-
 </div>
 </div>
 
-<div id="outline-container-org749afc0" class="outline-2">
-<h2 id="org749afc0"><span class="section-number-2">40</span> CSV file</h2>
+<div id="outline-container-org9a097dc" class="outline-2">
+<h2 id="org9a097dc"><span class="section-number-2">40</span> CSV file</h2>
 <div class="outline-text-2" id="text-40">
 <p>
 Untuk menggendali fail csv
@@ -7659,23 +7659,23 @@ Untuk menggendali fail csv
 </div>
 </div>
 
-<div id="outline-container-orgb4f95dd" class="outline-2">
-<h2 id="orgb4f95dd"><span class="section-number-2">41</span> Periksa ejaan (spelling)</h2>
+<div id="outline-container-org50bb5b5" class="outline-2">
+<h2 id="org50bb5b5"><span class="section-number-2">41</span> Periksa ejaan (spelling)</h2>
 <div class="outline-text-2" id="text-41">
 <p>
 Untuk periksa enjaan
 </p>
 </div>
-<div id="outline-container-orgfe91e06" class="outline-3">
-<h3 id="orgfe91e06"><span class="section-number-3">41.1</span> Kerja</h3>
+<div id="outline-container-org0498f0e" class="outline-3">
+<h3 id="org0498f0e"><span class="section-number-3">41.1</span> Kerja</h3>
 <div class="outline-text-3" id="text-41-1">
 </div>
 <ol class="org-ol">
-<li><a id="orgb99f8f4"></a><span class="todo TODO">TODO</span> Elisp periksa kalau hunspell atau aspell sudah tersedia dan pakai apa yang tersedia<br /></li>
+<li><a id="orgc7fa0a6"></a><span class="todo TODO">TODO</span> Elisp periksa kalau hunspell atau aspell sudah tersedia dan pakai apa yang tersedia<br /></li>
 </ol>
 </div>
-<div id="outline-container-org1b6d906" class="outline-3">
-<h3 id="org1b6d906"><span class="section-number-3">41.2</span> Flyspell: periksa ejaan</h3>
+<div id="outline-container-org2f19de9" class="outline-3">
+<h3 id="org2f19de9"><span class="section-number-3">41.2</span> Flyspell: periksa ejaan</h3>
 <div class="outline-text-3" id="text-41-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -7931,8 +7931,8 @@ Untuk tukar bahasa boleh ditetapkan di <code>ispell-local-dictionary</code>.
 </div>
 </div>
 
-<div id="outline-container-org9a5bc3e" class="outline-3">
-<h3 id="org9a5bc3e"><span class="section-number-3">41.3</span> Tukar bahasa</h3>
+<div id="outline-container-org42049a7" class="outline-3">
+<h3 id="org42049a7"><span class="section-number-3">41.3</span> Tukar bahasa</h3>
 <div class="outline-text-3" id="text-41-3">
 <p>
 Hanya dipakai sekiranya fungsi di <code>auto-lang</code> memili basa yang lain.
@@ -7970,8 +7970,8 @@ Hanya dipakai sekiranya fungsi di <code>auto-lang</code> memili basa yang lain.
 </div>
 </div>
 
-<div id="outline-container-org8fa1ee4" class="outline-3">
-<h3 id="org8fa1ee4"><span class="section-number-3">41.4</span> Auto lang</h3>
+<div id="outline-container-org5610855" class="outline-3">
+<h3 id="org5610855"><span class="section-number-3">41.4</span> Auto lang</h3>
 <div class="outline-text-3" id="text-41-4">
 <p>
 Kenal pasti bahasa secara automatik. Utk larikan secara manual guna <code>M-x
@@ -7997,15 +7997,15 @@ dimatikan sebab crash dengan BM
 </div>
 </div>
 
-<div id="outline-container-org615eddd" class="outline-2">
-<h2 id="org615eddd"><span class="section-number-2">42</span> Periksa kode (flycheck)</h2>
+<div id="outline-container-orge002aa6" class="outline-2">
+<h2 id="orge002aa6"><span class="section-number-2">42</span> Periksa kode (flycheck)</h2>
 <div class="outline-text-2" id="text-42">
 <p>
 Untuk periksa kode
 </p>
 </div>
-<div id="outline-container-orgf0f5d16" class="outline-3">
-<h3 id="orgf0f5d16"><span class="section-number-3">42.1</span> Flycheck: periksa kode</h3>
+<div id="outline-container-org4b4af6e" class="outline-3">
+<h3 id="org4b4af6e"><span class="section-number-3">42.1</span> Flycheck: periksa kode</h3>
 <div class="outline-text-3" id="text-42-1">
 <p>
 Emacs can tell you magically if your code is wrong (or just ugly). Flycheck is a
@@ -8066,8 +8066,8 @@ apt-get install libxml2-dev libxslt-dev
 </div>
 </div>
 </div>
-<div id="outline-container-org264ac65" class="outline-3">
-<h3 id="org264ac65"><span class="section-number-3">42.2</span> Electric operator</h3>
+<div id="outline-container-orgbdbc549" class="outline-3">
+<h3 id="orgbdbc549"><span class="section-number-3">42.2</span> Electric operator</h3>
 <div class="outline-text-3" id="text-42-2">
 <p>
 Electric operator will turn <code>a=10*5+2</code> into <code>a = 10 * 5 + 2</code>, so let's enable it for R:
@@ -8089,19 +8089,19 @@ Electric operator will turn <code>a=10*5+2</code> into <code>a = 10 * 5 + 2</cod
 </div>
 </div>
 
-<div id="outline-container-org44d8f9b" class="outline-2">
-<h2 id="org44d8f9b"><span class="section-number-2">43</span> ESS</h2>
+<div id="outline-container-org6a76153" class="outline-2">
+<h2 id="org6a76153"><span class="section-number-2">43</span> ESS</h2>
 <div class="outline-text-2" id="text-43">
 </div>
-<div id="outline-container-org81d6af8" class="outline-3">
-<h3 id="org81d6af8"><span class="section-number-3">43.1</span> R</h3>
+<div id="outline-container-org618757e" class="outline-3">
+<h3 id="org618757e"><span class="section-number-3">43.1</span> R</h3>
 <div class="outline-text-3" id="text-43-1">
 <p>
 Aturcara dan ESS snippet
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="orgf063536"></a>Aturcara ESS<br />
+<li><a id="orgd5d0150"></a>Aturcara ESS<br />
 <div class="outline-text-4" id="text-43-1-1">
 <p>
 Untuk guna R. Kekunci yang berguna antaranya:
@@ -8271,7 +8271,7 @@ Untuk tukar syntax highlight, boleh guna <code>menu</code> dan <code>Font-lock</
 </div>
 </li>
 
-<li><a id="org4417f77"></a>ESS snippet<br />
+<li><a id="org6e0a7b9"></a>ESS snippet<br />
 <div class="outline-text-4" id="text-43-1-2">
 <p>
 Diambil dari <a href="https://github.com/mattfidler/r-autoyas.el">GitHub</a>. Pakai <code>TAB</code> untuk buka snippet. <code>Yasnippet</code> perlu dipasang untuk
@@ -8302,7 +8302,7 @@ memakai fungsi ini.
 </div>
 </div>
 </li>
-<li><a id="orgb6e6ff8"></a>Deploy shiny app<br />
+<li><a id="org47af9f4"></a>Deploy shiny app<br />
 <div class="outline-text-4" id="text-43-1-3">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -8351,7 +8351,7 @@ shiny::runApp('~/Git-work/traume/ntrApp', launch.browser = TRUE)
 </div>
 </div>
 </li>
-<li><a id="org41119b9"></a><span class="todo TODO">TODO</span> Tool-tips<br />
+<li><a id="org002934d"></a><span class="todo TODO">TODO</span> Tool-tips<br />
 <div class="outline-text-4" id="text-43-1-4">
 <p>
 Info boleh baca di <a href="https://github.com/mattfidler/EmacsMate/blob/master/EmacsMate-ess.org">sini</a>. Tapi tidak berjaya diaktifkan. Perlu baca.
@@ -8427,7 +8427,7 @@ Info boleh baca di <a href="https://github.com/mattfidler/EmacsMate/blob/master/
 </div>
 </li>
 
-<li><a id="org1c142e9"></a>Test R buffer<br />
+<li><a id="org9f0c0c7"></a>Test R buffer<br />
 <div class="outline-text-4" id="text-43-1-5">
 <p>
 Buka buffer untuk test fungsi R dll guna <code>R-mode</code>. Fungsi ini dimodifikasikan dari
@@ -8452,7 +8452,7 @@ Buka buffer untuk test fungsi R dll guna <code>R-mode</code>. Fungsi ini dimodif
 </div>
 </div>
 </li>
-<li><a id="orge721cd7"></a>Log file<br />
+<li><a id="orgb1ed779"></a>Log file<br />
 <div class="outline-text-4" id="text-43-1-6">
 <p>
 Untuk buka log file secara langsung. Log file harus diletakkan di folder <code>doc</code>.
@@ -8470,7 +8470,7 @@ Untuk buka log file secara langsung. Log file harus diletakkan di folder <code>d
 </div>
 </li>
 
-<li><a id="org85e6693"></a>Debug keys<br />
+<li><a id="orgd654747"></a>Debug keys<br />
 <div class="outline-text-4" id="text-43-1-7">
 <p>
 <code>ess-tracebug</code> aktiv secara automatik dan untuk mematikan boleh tetapkan <code>(setq
@@ -8584,7 +8584,7 @@ Guna <code>F9</code> <b>hydra-ybk-r-debug</b> bila di ess-mode untuk dapatkan ke
 </div>
 </li>
 
-<li><a id="org943bdff"></a>Flycheck-julia<br />
+<li><a id="org91dc3b4"></a>Flycheck-julia<br />
 <div class="outline-text-4" id="text-43-1-8">
 <p>
 Periksa kode di ESS. Diambil dari <a href="https://github.com/gdkrmr/flycheck-julia">GitHub</a>
@@ -8604,9 +8604,9 @@ Periksa kode di ESS. Diambil dari <a href="https://github.com/gdkrmr/flycheck-ju
 </div>
 </li>
 
-<li><a id="orgd2c3130"></a>Buka data.frame<br />
+<li><a id="org12d5a02"></a>Buka data.frame<br />
 <ol class="org-ol">
-<li><a id="org15e7baf"></a>ESS-view<br />
+<li><a id="org50abd05"></a>ESS-view<br />
 <div class="outline-text-5" id="text-43-1-9-1">
 <p>
 Untuk view data.frame di speadsheet software seperti Excel atau Calc. Untuk lihat
@@ -8622,7 +8622,7 @@ semula ke R gunakan kekunci <code>C-x q</code>
 </li>
 </ol>
 </li>
-<li><a id="org6da8f43"></a>Tips<br />
+<li><a id="orgbb7cf7d"></a>Tips<br />
 <div class="outline-text-4" id="text-43-1-10">
 <p>
 Beberapa tips yang boleh memudahkan kerja:
@@ -8645,15 +8645,15 @@ DT[Inn{M-/}]
 </div>
 
 
-<div id="outline-container-orgb4827c0" class="outline-3">
-<h3 id="orgb4827c0"><span class="section-number-3">43.2</span> Stata</h3>
+<div id="outline-container-org182352a" class="outline-3">
+<h3 id="org182352a"><span class="section-number-3">43.2</span> Stata</h3>
 <div class="outline-text-3" id="text-43-2">
 <p>
 Untuk guna Stata di ESS
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org05e49e7"></a>Tetapkan dimana Stata dipasang<br />
+<li><a id="orgd1868d3"></a>Tetapkan dimana Stata dipasang<br />
 <div class="outline-text-4" id="text-43-2-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">use-package</span> <span style="color: #fabd2f;">ess-site</span>
@@ -8672,7 +8672,7 @@ Untuk guna Stata di ESS
 </div>
 </div>
 </li>
-<li><a id="orgffe5a3c"></a>Stata guna Ado-mode<br />
+<li><a id="org81ca5b6"></a>Stata guna Ado-mode<br />
 <div class="outline-text-4" id="text-43-2-2">
 <p>
 Download <code>ado-mode</code> dari Github atau di <a href="https://www.louabill.org/Stata/ado-mode_install.html">sini</a>
@@ -8693,8 +8693,8 @@ Download <code>ado-mode</code> dari Github atau di <a href="https://www.louabill
 </div>
 </div>
 
-<div id="outline-container-org7775419" class="outline-2">
-<h2 id="org7775419"><span class="section-number-2">44</span> Markdown</h2>
+<div id="outline-container-orgf5f9857" class="outline-2">
+<h2 id="orgf5f9857"><span class="section-number-2">44</span> Markdown</h2>
 <div class="outline-text-2" id="text-44">
 <p>
 Markdown mode for Markdown editing! Guna <code>Pandoc</code> utk view. Pandoc harus di install
@@ -8737,8 +8737,8 @@ Of course, markdown contains a yaml header, so we need yaml-mode as well:
 </div>
 </div>
 
-<div id="outline-container-orgc11c2e2" class="outline-3">
-<h3 id="orgc11c2e2"><span class="section-number-3">44.1</span> Tips</h3>
+<div id="outline-container-org7f915b2" class="outline-3">
+<h3 id="org7f915b2"><span class="section-number-3">44.1</span> Tips</h3>
 <div class="outline-text-3" id="text-44-1">
 <ul class="org-ul">
 <li>Untuk tunjuk atau sembunyikan <code>heading</code> boleh pakai <code>Shift-Tab</code> bila cursor di
@@ -8748,15 +8748,15 @@ header.</li>
 </div>
 </div>
 
-<div id="outline-container-orgea9a84b" class="outline-2">
-<h2 id="orgea9a84b"><span class="section-number-2">45</span> Polymode (for knitr)</h2>
+<div id="outline-container-orgc2f7470" class="outline-2">
+<h2 id="orgc2f7470"><span class="section-number-2">45</span> Polymode (for knitr)</h2>
 <div class="outline-text-2" id="text-45">
 <p>
 Mode ini dipakai untuk membuat dokumen yang menggunakan program R.
 </p>
 </div>
-<div id="outline-container-org0b57c97" class="outline-3">
-<h3 id="org0b57c97"><span class="section-number-3">45.1</span> Aturcara</h3>
+<div id="outline-container-orgc9f9b0b" class="outline-3">
+<h3 id="orgc9f9b0b"><span class="section-number-3">45.1</span> Aturcara</h3>
 <div class="outline-text-3" id="text-45-1">
 <p>
 Sweave atau knitr
@@ -8892,8 +8892,8 @@ NB! Utk aktifkan <code>ess-company</code> dan <code>ElDoc</code> utk bantuan fun
 </div>
 </div>
 
-<div id="outline-container-org5a923a7" class="outline-3">
-<h3 id="org5a923a7"><span class="section-number-3">45.2</span> Masukkan chunk</h3>
+<div id="outline-container-orgf2b7dbb" class="outline-3">
+<h3 id="orgf2b7dbb"><span class="section-number-3">45.2</span> Masukkan chunk</h3>
 <div class="outline-text-3" id="text-45-2">
 <p>
 Untuk memasukkan <code>r-chunck</code> di polymode.
@@ -8921,8 +8921,8 @@ Untuk memasukkan <code>r-chunck</code> di polymode.
 </div>
 </div>
 
-<div id="outline-container-org518b44a" class="outline-3">
-<h3 id="org518b44a"><span class="section-number-3">45.3</span> Menilai atau proseskan chunk</h3>
+<div id="outline-container-org8706911" class="outline-3">
+<h3 id="org8706911"><span class="section-number-3">45.3</span> Menilai atau proseskan chunk</h3>
 <div class="outline-text-3" id="text-45-3">
 <p>
 Untuk dapatkan hasilan dari chunk, boleh diproses chunk satu persatu atau semuanya serentak.
@@ -8963,8 +8963,8 @@ Untuk dapatkan hasilan dari chunk, boleh diproses chunk satu persatu atau semuan
 </div>
 </div>
 
-<div id="outline-container-org92eff3c" class="outline-3">
-<h3 id="org92eff3c"><span class="section-number-3">45.4</span> Sembunyikan chunk</h3>
+<div id="outline-container-org6357c02" class="outline-3">
+<h3 id="org6357c02"><span class="section-number-3">45.4</span> Sembunyikan chunk</h3>
 <div class="outline-text-3" id="text-45-4">
 <p>
 Pakai pakej <a href="https://github.com/magnars/fold-this.el">fold-this</a> dan aturcara diambil dari <a href="https://github.com/brendan-r/dotemacs/blob/b601eb09e227d1a0ec3220a79884a743e4027e5a/init.el#L821-L843">Brendan</a>.
@@ -9008,8 +9008,8 @@ Pakai pakej <a href="https://github.com/magnars/fold-this.el">fold-this</a> dan 
 </div>
 </div>
 
-<div id="outline-container-org3e77c67" class="outline-3">
-<h3 id="org3e77c67"><span class="section-number-3">45.5</span> Compile Rmd file</h3>
+<div id="outline-container-org69044ee" class="outline-3">
+<h3 id="org69044ee"><span class="section-number-3">45.5</span> Compile Rmd file</h3>
 <div class="outline-text-3" id="text-45-5">
 <p>
 Fungsi ini menggunakan informasi YAML di fail Rmd untuk menetapkan jenis fail samada
@@ -9076,8 +9076,8 @@ output:
 </div>
 </div>
 
-<div id="outline-container-org914f000" class="outline-2">
-<h2 id="org914f000"><span class="section-number-2">46</span> Pandoc</h2>
+<div id="outline-container-orgd43b062" class="outline-2">
+<h2 id="orgd43b062"><span class="section-number-2">46</span> Pandoc</h2>
 <div class="outline-text-2" id="text-46">
 <p>
 Guna <code>pandoc-mode</code>. Untuk rujukkan boleh baca di <a href="http://joostkremers.github.io/pandoc-mode/">manual</a>. Dapatkan menu dengan key
@@ -9093,8 +9093,8 @@ Guna <code>pandoc-mode</code>. Untuk rujukkan boleh baca di <a href="http://joos
 </div>
 </div>
 
-<div id="outline-container-org3e16741" class="outline-2">
-<h2 id="org3e16741"><span class="section-number-2">47</span> LaTeX</h2>
+<div id="outline-container-org9b94d18" class="outline-2">
+<h2 id="org9b94d18"><span class="section-number-2">47</span> LaTeX</h2>
 <div class="outline-text-2" id="text-47">
 <p>
 AuCTeX diguna sebab ia lebih bagus dari yang tersedia (build in) tex mode. Penggunaan
@@ -9196,8 +9196,8 @@ following command. If I want more information, I can drop into a shell with <cod
 </div>
 </div>
 
-<div id="outline-container-orgb804196" class="outline-3">
-<h3 id="orgb804196"><span class="section-number-3">47.1</span> Reftex</h3>
+<div id="outline-container-org8cd813e" class="outline-3">
+<h3 id="org8cd813e"><span class="section-number-3">47.1</span> Reftex</h3>
 <div class="outline-text-3" id="text-47-1">
 <p>
 I use <code>helm-bibtex</code> to manage my references, but ReFTeX is still great to have around
@@ -9232,8 +9232,8 @@ You will need to change <code>reftex-default-bibliography</code> to wherever you
 </div>
 </div>
 
-<div id="outline-container-org3ffe993" class="outline-3">
-<h3 id="org3ffe993"><span class="section-number-3">47.2</span> Latex math</h3>
+<div id="outline-container-orgb3951da" class="outline-3">
+<h3 id="orgb3951da"><span class="section-number-3">47.2</span> Latex math</h3>
 <div class="outline-text-3" id="text-47-2">
 <p>
 Cdlatex lets me write latex in org-mode. It's particularly useful for math. <a href="https://www.gnu.org/software/emacs/manual/html_node/org/CDLaTeX-mode.html">doc</a>
@@ -9250,12 +9250,12 @@ Cdlatex lets me write latex in org-mode. It's particularly useful for math. <a h
 </div>
 </div>
 
-<div id="outline-container-orgaf13601" class="outline-2">
-<h2 id="orgaf13601"><span class="section-number-2">48</span> HTML and Webpage</h2>
+<div id="outline-container-orgcfc3eea" class="outline-2">
+<h2 id="orgcfc3eea"><span class="section-number-2">48</span> HTML and Webpage</h2>
 <div class="outline-text-2" id="text-48">
 </div>
-<div id="outline-container-orgfd23618" class="outline-3">
-<h3 id="orgfd23618"><span class="section-number-3">48.1</span> Browser</h3>
+<div id="outline-container-orgb1f70ff" class="outline-3">
+<h3 id="orgb1f70ff"><span class="section-number-3">48.1</span> Browser</h3>
 <div class="outline-text-3" id="text-48-1">
 <p>
 Buka link di browser guna <code>F5-w</code>. Untuk buka html fail ke browser boleh pakai <code>F12-w</code>
@@ -9272,8 +9272,8 @@ browser-url-of-buffer
 </div>
 </div>
 
-<div id="outline-container-org143e2d5" class="outline-3">
-<h3 id="org143e2d5"><span class="section-number-3">48.2</span> eww</h3>
+<div id="outline-container-org3ffd8a4" class="outline-3">
+<h3 id="org3ffd8a4"><span class="section-number-3">48.2</span> eww</h3>
 <div class="outline-text-3" id="text-48-2">
 <p>
 Guna Emacs' build in <code>eww</code> browser ie. Emacs Web Wowser (eww), by default. Cuma bila larikan Rmd berikan error.
@@ -9327,15 +9327,15 @@ Untuk menyenangkan ikuti link di <code>eww</code>
 </div>
 </div>
 
-<div id="outline-container-orgb3e2c0f" class="outline-3">
-<h3 id="orgb3e2c0f"><span class="section-number-3">48.3</span> HTML and friends</h3>
+<div id="outline-container-org67e00c9" class="outline-3">
+<h3 id="org67e00c9"><span class="section-number-3">48.3</span> HTML and friends</h3>
 <div class="outline-text-3" id="text-48-3">
 <p>
 Web-mode dipakai sebagai emacs major-mode utk edit web templates.
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="orgb2766e2"></a>Web mode<br />
+<li><a id="org85d0f53"></a>Web mode<br />
 <div class="outline-text-4" id="text-48-3-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">use-package</span> <span style="color: #fabd2f;">web-mode</span>
@@ -9369,7 +9369,7 @@ Web-mode dipakai sebagai emacs major-mode utk edit web templates.
 </div>
 </div>
 </li>
-<li><a id="org7e11424"></a>Htmlize<br />
+<li><a id="org378d24f"></a>Htmlize<br />
 <div class="outline-text-4" id="text-48-3-2">
 <p>
 Untuk menukarkan file atau buffer ke kod HTML dan CSS. Untuk maklumat selajutnya boleh baca di <a href="https://github.com/abo-abo/htmlize/blob/master/htmlize.el">GitHub</a>
@@ -9399,12 +9399,12 @@ Untuk menukarkan file atau buffer ke kod HTML dan CSS. Untuk maklumat selajutnya
 </div>
 </div>
 
-<div id="outline-container-org6886ded" class="outline-2">
-<h2 id="org6886ded"><span class="section-number-2">49</span> RSS Feed reader</h2>
+<div id="outline-container-org923e47a" class="outline-2">
+<h2 id="org923e47a"><span class="section-number-2">49</span> RSS Feed reader</h2>
 <div class="outline-text-2" id="text-49">
 </div>
-<div id="outline-container-org6c615b7" class="outline-3">
-<h3 id="org6c615b7"><span class="section-number-3">49.1</span> Elfeed-org</h3>
+<div id="outline-container-org6404f39" class="outline-3">
+<h3 id="org6404f39"><span class="section-number-3">49.1</span> Elfeed-org</h3>
 <div class="outline-text-3" id="text-49-1">
 <p>
 Untuk simpan semua langanan RSS. Masukkan alamat RSS di fail <code>ybk-elfeed.org</code> di
@@ -9446,8 +9446,8 @@ Untuk tambah topik baru di <code>bookmark-jump</code>:
 </div>
 </div>
 
-<div id="outline-container-org136b0a3" class="outline-3">
-<h3 id="org136b0a3"><span class="section-number-3">49.2</span> Elfeed</h3>
+<div id="outline-container-org38757e6" class="outline-3">
+<h3 id="org38757e6"><span class="section-number-3">49.2</span> Elfeed</h3>
 <div class="outline-text-3" id="text-49-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">use-package</span> <span style="color: #fabd2f;">elfeed</span>
@@ -9534,8 +9534,8 @@ Untuk tambah topik baru di <code>bookmark-jump</code>:
 </div>
 </div>
 
-<div id="outline-container-org00e526d" class="outline-2">
-<h2 id="org00e526d"><span class="section-number-2">50</span> Email</h2>
+<div id="outline-container-orga274710" class="outline-2">
+<h2 id="orga274710"><span class="section-number-2">50</span> Email</h2>
 <div class="outline-text-2" id="text-50">
 <p>
 <a href="https://www.emacswiki.org/emacs/GnusTutorial">Gnus</a> digunakan untuk membaca email. Tetapi <code>Gmail web</code> juga digunakan dari masa ke
@@ -9561,23 +9561,23 @@ machine smtp.gmail.com login Brukernavn password DinPassord port 587
 machine reise login Brukernavn password DinPassord port 993
 </pre>
 </div>
-<div id="outline-container-org9c6bb32" class="outline-3">
-<h3 id="org9c6bb32"><span class="section-number-3">50.1</span> list TODO</h3>
+<div id="outline-container-org8a9ae54" class="outline-3">
+<h3 id="org8a9ae54"><span class="section-number-3">50.1</span> list TODO</h3>
 <div class="outline-text-3" id="text-50-1">
 </div>
 <ol class="org-ol">
-<li><a id="org538dd30"></a><span class="done DONE">DONE</span> ybk/gnus-list-all kaji semula<br />
+<li><a id="org1bcb5ee"></a><span class="done DONE">DONE</span> ybk/gnus-list-all kaji semula<br />
 <div class="outline-text-4" id="text-50-1-1">
 </div>
 </li>
-<li><a id="org1ddd4d4"></a><span class="done DONE">DONE</span> masukkan list unread <code>/ o</code> di mode-map <b>Y</b><br />
+<li><a id="org6b409db"></a><span class="done DONE">DONE</span> masukkan list unread <code>/ o</code> di mode-map <b>Y</b><br />
 <div class="outline-text-4" id="text-50-1-2">
 </div>
 </li>
 </ol>
 </div>
-<div id="outline-container-org6bb4a6b" class="outline-3">
-<h3 id="org6bb4a6b"><span class="section-number-3">50.2</span> Kekunci</h3>
+<div id="outline-container-org1dfa77d" class="outline-3">
+<h3 id="org1dfa77d"><span class="section-number-3">50.2</span> Kekunci</h3>
 <div class="outline-text-3" id="text-50-2">
 <p>
 Kekunci utk penggunaan Gnus: Group buffer, Summary buffer, Read buffer dll
@@ -9718,8 +9718,8 @@ Bila di <b>summary buffer</b>, utk capaikan read messages boleh pakai <code>gnus
 </div>
 </div>
 
-<div id="outline-container-org8105670" class="outline-3">
-<h3 id="org8105670"><span class="section-number-3">50.3</span> W3M</h3>
+<div id="outline-container-orge4e450a" class="outline-3">
+<h3 id="orge4e450a"><span class="section-number-3">50.3</span> W3M</h3>
 <div class="outline-text-3" id="text-50-3">
 <p>
 Web Browser untuk Emacs selain dari <code>eww</code>. Harus pasang <code>w3m</code> dengan <code>apt-get install
@@ -9750,8 +9750,8 @@ libncurses5-dev
 </div>
 </div>
 </div>
-<div id="outline-container-org761502a" class="outline-3">
-<h3 id="org761502a"><span class="section-number-3">50.4</span> mu4e</h3>
+<div id="outline-container-orgfca8cd1" class="outline-3">
+<h3 id="orgfca8cd1"><span class="section-number-3">50.4</span> mu4e</h3>
 <div class="outline-text-3" id="text-50-4">
 <p>
 Email cara <code>mu4e</code> diambil dari <a href="https://www.reddit.com/r/emacs/comments/8q84dl/tip_how_to_easily_manage_your_emails_with_mu4e/">sini</a>. Boleh juga lihat di <a href="https://www.youtube.com/watch?time_continue=179&amp;v=newRHXKm4H4">YouTube</a>. Untuk simpan
@@ -9929,8 +9929,8 @@ Guna org-mode untuk tulis email. Guna utk boleh masukkan ke TODO diambil dari <a
 </div>
 </div>
 
-<div id="outline-container-org2ce9f98" class="outline-3">
-<h3 id="org2ce9f98"><span class="section-number-3">50.5</span> mu4e notification</h3>
+<div id="outline-container-org82de44b" class="outline-3">
+<h3 id="org82de44b"><span class="section-number-3">50.5</span> mu4e notification</h3>
 <div class="outline-text-3" id="text-50-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">use-package</span> <span style="color: #fabd2f;">mu4e-alert</span>
@@ -9944,8 +9944,8 @@ Guna org-mode untuk tulis email. Guna utk boleh masukkan ke TODO diambil dari <a
 </div>
 </div>
 
-<div id="outline-container-orgc2b87e6" class="outline-3">
-<h3 id="orgc2b87e6"><span class="section-number-3">50.6</span> Gnus</h3>
+<div id="outline-container-orgeb3967e" class="outline-3">
+<h3 id="orgeb3967e"><span class="section-number-3">50.6</span> Gnus</h3>
 <div class="outline-text-3" id="text-50-6">
 <p>
 OBS! dimatikan sebab pakai mu4e
@@ -10231,7 +10231,7 @@ Aturcara untuk Gnus. Untuk akaun <code>Gmail</code> perlu tukar aturcara di web 
 </div>
 </div>
 <ol class="org-ol">
-<li><a id="orgcc91deb"></a>Hydra email<br />
+<li><a id="orgcf4c486"></a>Hydra email<br />
 <div class="outline-text-4" id="text-50-6-1">
 <p>
 Kekunci email gunakan hydra untuk Gnus.
@@ -10268,7 +10268,7 @@ Kekunci email gunakan hydra untuk Gnus.
 </div>
 </li>
 
-<li><a id="org46c5978"></a>Summary view<br />
+<li><a id="orgd66be83"></a>Summary view<br />
 <div class="outline-text-4" id="text-50-6-2">
 <p>
 Bagaimana cara untuk ditujukkan di summary utk Gnus
@@ -10301,7 +10301,7 @@ Bagaimana cara untuk ditujukkan di summary utk Gnus
 </div>
 </li>
 
-<li><a id="org8d4caf3"></a>Notify<br />
+<li><a id="org0e5aebe"></a>Notify<br />
 <div class="outline-text-4" id="text-50-6-3">
 <p>
 Diambil dari <a href="https://www.emacswiki.org/emacs/GnusNotify">EmacsWiki</a>. Notification di modeline. Utk guna, pakai <code>G-p</code> di group buffer
@@ -10342,12 +10342,12 @@ minit scan di aplikasi
 </ol>
 </div>
 
-<div id="outline-container-org0567990" class="outline-3">
-<h3 id="org0567990"><span class="section-number-3">50.7</span> SMTP</h3>
+<div id="outline-container-org4869213" class="outline-3">
+<h3 id="org4869213"><span class="section-number-3">50.7</span> SMTP</h3>
 <div class="outline-text-3" id="text-50-7">
 </div>
 <ol class="org-ol">
-<li><a id="orgb9c61b9"></a>Utk Gnus<br />
+<li><a id="org567c12f"></a>Utk Gnus<br />
 <div class="outline-text-4" id="text-50-7-1">
 <p>
 Untuk menghantar email. Rujukan di <a href="https://www.emacswiki.org/emacs/SendingMail">Wiki</a>.
@@ -10370,7 +10370,7 @@ Untuk menghantar email. Rujukan di <a href="https://www.emacswiki.org/emacs/Send
 </div>
 </div>
 </li>
-<li><a id="orge239b38"></a>Ukt mu4e<br />
+<li><a id="orgba080e4"></a>Ukt mu4e<br />
 <div class="outline-text-4" id="text-50-7-2">
 <p>
 Aturcara utk pakai dengan <code>mu4e</code>. Guna TLS untuk pakai Gmail
@@ -10415,15 +10415,15 @@ sudo apt-get install gnutls-bin
 </ol>
 </div>
 
-<div id="outline-container-org24f8bba" class="outline-3">
-<h3 id="org24f8bba"><span class="section-number-3">50.8</span> Address database</h3>
+<div id="outline-container-orgac2ab97" class="outline-3">
+<h3 id="orgac2ab97"><span class="section-number-3">50.8</span> Address database</h3>
 <div class="outline-text-3" id="text-50-8">
 <p>
 Email address database. Contoh aturcara di <a href="https://github.com/redguardtoo/emacs.d/blob/master/lisp/init-bbdb.el">sini</a>.
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org8464e73"></a>BBDB<br />
+<li><a id="org3e4ab87"></a>BBDB<br />
 <div class="outline-text-4" id="text-50-8-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #fb4934;">(</span><span style="color: #fb4934;">use-package</span> <span style="color: #fabd2f;">bbdb</span>
@@ -10437,7 +10437,7 @@ Email address database. Contoh aturcara di <a href="https://github.com/redguardt
 </div>
 </li>
 
-<li><a id="orgb7506fb"></a>Counsel-bbdb<br />
+<li><a id="orgd1598ca"></a>Counsel-bbdb<br />
 <div class="outline-text-4" id="text-50-8-2">
 <p>
 Rujuk di <a href="https://github.com/redguardtoo/counsel-bbdb">GitHub</a>.
@@ -10464,7 +10464,7 @@ Rujuk di <a href="https://github.com/redguardtoo/counsel-bbdb">GitHub</a>.
 </div>
 </div>
 </li>
-<li><a id="org9674a5a"></a>gmail2bbdb<br />
+<li><a id="orgdf7edab"></a>gmail2bbdb<br />
 <div class="outline-text-4" id="text-50-8-3">
 <p>
 Sila rujuk ke <a href="https://github.com/redguardtoo/gmail2bbdb">Github</a>
@@ -10485,8 +10485,8 @@ Sila rujuk ke <a href="https://github.com/redguardtoo/gmail2bbdb">Github</a>
 </div>
 </div>
 
-<div id="outline-container-org8213e67" class="outline-2">
-<h2 id="org8213e67"><span class="section-number-2">51</span> Neotree</h2>
+<div id="outline-container-orgb5b1b97" class="outline-2">
+<h2 id="orgb5b1b97"><span class="section-number-2">51</span> Neotree</h2>
 <div class="outline-text-2" id="text-51">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -10610,12 +10610,12 @@ Untuk navigasi di directory. Rujukkan di <a href="https://github.com/jaypei/emac
 </div>
 </div>
 
-<div id="outline-container-org4bdfcb5" class="outline-2">
-<h2 id="org4bdfcb5"><span class="section-number-2">52</span> Tunjuk beza (ediff)</h2>
+<div id="outline-container-org2b51910" class="outline-2">
+<h2 id="org2b51910"><span class="section-number-2">52</span> Tunjuk beza (ediff)</h2>
 <div class="outline-text-2" id="text-52">
 </div>
-<div id="outline-container-org3c4cdaf" class="outline-3">
-<h3 id="org3c4cdaf"><span class="section-number-3">52.1</span> Ediff</h3>
+<div id="outline-container-orgbaf2775" class="outline-3">
+<h3 id="orgbaf2775"><span class="section-number-3">52.1</span> Ediff</h3>
 <div class="outline-text-3" id="text-52-1">
 <p>
 Untuk melihat perbezaan antara dua fail menggunakan <code>ediff</code>. Aturcara ini diambil dari <code>[[https://oremacs.com/2015/01/17/setting-up-ediff/][Oremacs]]</code>
@@ -10647,8 +10647,8 @@ Untuk melihat perbezaan antara dua fail menggunakan <code>ediff</code>. Aturcara
 </div>
 </div>
 
-<div id="outline-container-orge681409" class="outline-3">
-<h3 id="orge681409"><span class="section-number-3">52.2</span> Backup-walker</h3>
+<div id="outline-container-org6d6ec95" class="outline-3">
+<h3 id="org6d6ec95"><span class="section-number-3">52.2</span> Backup-walker</h3>
 <div class="outline-text-3" id="text-52-2">
 <p>
 Untuk menunjukkan <code>diff</code> file semasa dan file sebelumnya sekiranya fail ada di
@@ -10665,8 +10665,8 @@ Untuk menunjukkan <code>diff</code> file semasa dan file sebelumnya sekiranya fa
 </div>
 </div>
 
-<div id="outline-container-org796f4cd" class="outline-2">
-<h2 id="org796f4cd"><span class="section-number-2">53</span> Version control</h2>
+<div id="outline-container-org41a68e6" class="outline-2">
+<h2 id="org41a68e6"><span class="section-number-2">53</span> Version control</h2>
 <div class="outline-text-2" id="text-53">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -10744,8 +10744,8 @@ Untuk menunjukkan <code>diff</code> file semasa dan file sebelumnya sekiranya fa
 </table>
 </div>
 
-<div id="outline-container-org04709a2" class="outline-3">
-<h3 id="org04709a2"><span class="section-number-3">53.1</span> Git</h3>
+<div id="outline-container-orgef3f33f" class="outline-3">
+<h3 id="orgef3f33f"><span class="section-number-3">53.1</span> Git</h3>
 <div class="outline-text-3" id="text-53-1">
 <p>
 Untuk pakai git command line:
@@ -10759,8 +10759,8 @@ git show
 </pre>
 </div>
 </div>
-<div id="outline-container-orgf5ec473" class="outline-3">
-<h3 id="orgf5ec473"><span class="section-number-3">53.2</span> Magit</h3>
+<div id="outline-container-org4b9d5f3" class="outline-3">
+<h3 id="org4b9d5f3"><span class="section-number-3">53.2</span> Magit</h3>
 <div class="outline-text-3" id="text-53-2">
 <p>
 Utk guna Github. Utk kali pertama perlu <code>git config</code> di
@@ -10911,8 +10911,8 @@ git config --global user.email "youremail@uremail.com"
 </div>
 </div>
 </div>
-<div id="outline-container-org0cf27e1" class="outline-3">
-<h3 id="org0cf27e1"><span class="section-number-3">53.3</span> Diff highlights</h3>
+<div id="outline-container-orga71e0a5" class="outline-3">
+<h3 id="orga71e0a5"><span class="section-number-3">53.3</span> Diff highlights</h3>
 <div class="outline-text-3" id="text-53-3">
 <p>
 Menanda secara langsung pertukaran di dokument. Rujuk <a href="https://github.com/nonsequitur/git-gutter-plus">Github</a>.
@@ -10954,8 +10954,8 @@ Menanda secara langsung pertukaran di dokument. Rujuk <a href="https://github.co
 </div>
 </div>
 
-<div id="outline-container-orge87ed1c" class="outline-3">
-<h3 id="orge87ed1c"><span class="section-number-3">53.4</span> Cara pakai repo baru</h3>
+<div id="outline-container-org06b7e5f" class="outline-3">
+<h3 id="org06b7e5f"><span class="section-number-3">53.4</span> Cara pakai repo baru</h3>
 <div class="outline-text-3" id="text-53-4">
 <p>
 Cara utk memuatpasang repo baru ke <code>Github</code> ialah:
@@ -10979,8 +10979,8 @@ cth. README.md sebelum <code>push</code>. Fail yg sama nama di <code>master</cod
 </div>
 </div>
 
-<div id="outline-container-org588c390" class="outline-3">
-<h3 id="org588c390"><span class="section-number-3">53.5</span> Tips and tricks</h3>
+<div id="outline-container-org15256cf" class="outline-3">
+<h3 id="org15256cf"><span class="section-number-3">53.5</span> Tips and tricks</h3>
 <div class="outline-text-3" id="text-53-5">
 <p>
 Beberapa tips utk membantu memudahkan penggunaan <code>Magit</code>
@@ -10996,8 +10996,8 @@ Beberapa tips utk membantu memudahkan penggunaan <code>Magit</code>
 </div>
 </div>
 </div>
-<div id="outline-container-org3be6b2c" class="outline-2">
-<h2 id="org3be6b2c"><span class="section-number-2">54</span> Weather</h2>
+<div id="outline-container-orgbc65212" class="outline-2">
+<h2 id="orgbc65212"><span class="section-number-2">54</span> Weather</h2>
 <div class="outline-text-2" id="text-54">
 <p>
 Cuaca semasa dari <a href="https://www.met.no/">Meteorologisk institutt</a>. Aturcara boleh di lihat di <a href="https://github.com/ruediger/weather-metno-el">GitHub</a>. Untuk
@@ -11022,8 +11022,8 @@ lihat cuaca tempat lain boleh pakai <code>M-x weather-metno-forecast-location</c
 </div>
 </div>
 
-<div id="outline-container-org6793cd1" class="outline-2">
-<h2 id="org6793cd1"><span class="section-number-2">55</span> Google-translate</h2>
+<div id="outline-container-org1d0824d" class="outline-2">
+<h2 id="org1d0824d"><span class="section-number-2">55</span> Google-translate</h2>
 <div class="outline-text-2" id="text-55">
 <p>
 Untuk pakai fungsi <code>Google Translate</code> di GNU Emacs. Sila lihat sumber di<a href="https://github.com/atykhonov/google-translate">sini</a>. Sekiranya
@@ -11053,8 +11053,8 @@ aturcara yang ditetapkan dan kembali ke asalnya (<i>default</i>).
 </div>
 </div>
 
-<div id="outline-container-org34546fc" class="outline-3">
-<h3 id="org34546fc"><span class="section-number-3">55.1</span> Default-UI</h3>
+<div id="outline-container-org6f8c345" class="outline-3">
+<h3 id="org6f8c345"><span class="section-number-3">55.1</span> Default-UI</h3>
 <div class="outline-text-3" id="text-55-1">
 <p>
 Sekiranya bahasa tidak sedia ditetapkan di 'Smooth UI' boleh pilih dari pilihan
@@ -11078,8 +11078,8 @@ pelbagai bahasa. Jika bahasa untuk terjemahan selain dari NO ke BI, boleh matika
 </div>
 </div>
 
-<div id="outline-container-org3fb3af1" class="outline-3">
-<h3 id="org3fb3af1"><span class="section-number-3">55.2</span> Smooth-UI</h3>
+<div id="outline-container-org07bd438" class="outline-3">
+<h3 id="org07bd438"><span class="section-number-3">55.2</span> Smooth-UI</h3>
 <div class="outline-text-3" id="text-55-2">
 <p>
 Untuk kombinasi pelbagi bahasa. Tukar bahasa untuk terjemah pakai <code>C-n</code> atau <code>C-p</code>
@@ -11107,15 +11107,15 @@ Untuk kombinasi pelbagi bahasa. Tukar bahasa untuk terjemah pakai <code>C-n</cod
 </div>
 </div>
 
-<div id="outline-container-org6f0fcc3" class="outline-2">
-<h2 id="org6f0fcc3"><span class="section-number-2">56</span> Code cleanup</h2>
+<div id="outline-container-org4c58598" class="outline-2">
+<h2 id="org4c58598"><span class="section-number-2">56</span> Code cleanup</h2>
 <div class="outline-text-2" id="text-56">
 <p>
 Berbagai fungsi untuk bersihkan code
 </p>
 </div>
-<div id="outline-container-org832d7c7" class="outline-3">
-<h3 id="org832d7c7"><span class="section-number-3">56.1</span> Electric operator</h3>
+<div id="outline-container-orge7877c2" class="outline-3">
+<h3 id="orge7877c2"><span class="section-number-3">56.1</span> Electric operator</h3>
 <div class="outline-text-3" id="text-56-1">
 <p>
 Electric operator akan menjarakkan <code>y=1*3+2</code> ke <code>y = 1 * 3 + 2</code>
@@ -11139,8 +11139,8 @@ Electric operator akan menjarakkan <code>y=1*3+2</code> ke <code>y = 1 * 3 + 2</
 </div>
 </div>
 
-<div id="outline-container-org0a81998" class="outline-3">
-<h3 id="org0a81998"><span class="section-number-3">56.2</span> Whitespace shows</h3>
+<div id="outline-container-org354c509" class="outline-3">
+<h3 id="org354c509"><span class="section-number-3">56.2</span> Whitespace shows</h3>
 <div class="outline-text-3" id="text-56-2">
 <p>
 Tunjukkan whitespace.
@@ -11153,8 +11153,8 @@ Tunjukkan whitespace.
 </div>
 </div>
 
-<div id="outline-container-orgc89db98" class="outline-3">
-<h3 id="orgc89db98"><span class="section-number-3">56.3</span> Whitespace-cleanup</h3>
+<div id="outline-container-org78daad6" class="outline-3">
+<h3 id="org78daad6"><span class="section-number-3">56.3</span> Whitespace-cleanup</h3>
 <div class="outline-text-3" id="text-56-3">
 <p>
 Akan memakai "whitespace-cleanup" sebelum buffer disimpan (save) smartly sumber
@@ -11171,8 +11171,8 @@ Akan memakai "whitespace-cleanup" sebelum buffer disimpan (save) smartly sumber
 </div>
 </div>
 
-<div id="outline-container-org6db0cde" class="outline-3">
-<h3 id="org6db0cde"><span class="section-number-3">56.4</span> smart-newline</h3>
+<div id="outline-container-org92a9555" class="outline-3">
+<h3 id="org92a9555"><span class="section-number-3">56.4</span> smart-newline</h3>
 <div class="outline-text-3" id="text-56-4">
 <p>
 Guna <code>RET</code> untuk newline bila buat kode
@@ -11196,8 +11196,8 @@ Guna <code>RET</code> untuk newline bila buat kode
 </div>
 </div>
 
-<div id="outline-container-org9a5070a" class="outline-2">
-<h2 id="org9a5070a"><span class="section-number-2">57</span> StackExchange</h2>
+<div id="outline-container-org4c5fd4b" class="outline-2">
+<h2 id="org4c5fd4b"><span class="section-number-2">57</span> StackExchange</h2>
 <div class="outline-text-2" id="text-57">
 <p>
 Stack Exchange mode for Emacs from <a href="https://github.com/vermiculus/sx.el">GitHub</a>
@@ -11222,12 +11222,12 @@ Stack Exchange mode for Emacs from <a href="https://github.com/vermiculus/sx.el"
 </div>
 </div>
 
-<div id="outline-container-org62a22b5" class="outline-2">
-<h2 id="org62a22b5"><span class="section-number-2">58</span> Miscellaneous</h2>
+<div id="outline-container-org5e60e64" class="outline-2">
+<h2 id="org5e60e64"><span class="section-number-2">58</span> Miscellaneous</h2>
 <div class="outline-text-2" id="text-58">
 </div>
-<div id="outline-container-org8716ef8" class="outline-3">
-<h3 id="org8716ef8"><span class="section-number-3">58.1</span> Lorem</h3>
+<div id="outline-container-org417e3f4" class="outline-3">
+<h3 id="org417e3f4"><span class="section-number-3">58.1</span> Lorem</h3>
 <div class="outline-text-3" id="text-58-1">
 <p>
 Lorem ipsum
@@ -11248,15 +11248,15 @@ Lorem ipsum
 </div>
 </div>
 
-<div id="outline-container-orga0ae42f" class="outline-3">
-<h3 id="orga0ae42f"><span class="section-number-3">58.2</span> Rmarkdown chunk</h3>
+<div id="outline-container-orgc0ea970" class="outline-3">
+<h3 id="orgc0ea970"><span class="section-number-3">58.2</span> Rmarkdown chunk</h3>
 <div class="outline-text-3" id="text-58-2">
 <p>
 Ini ialah chunk untuk dipakai bila buat <b>Kvartalsrapport</b>
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org0a714fb"></a>premeable<br />
+<li><a id="org78e0e67"></a>premeable<br />
 <div class="outline-text-4" id="text-58-2-1">
 <p>
 Untuk pakai bila buat Rmarkdown
@@ -11276,7 +11276,7 @@ Untuk pakai bila buat Rmarkdown
 </div>
 </div>
 </li>
-<li><a id="org6a1246d"></a>chunck<br />
+<li><a id="org007631f"></a>chunck<br />
 <div class="outline-text-4" id="text-58-2-2">
 <p>
 Rmarkdown chunck
@@ -11296,8 +11296,8 @@ Rmarkdown chunck
 </div>
 </div>
 
-<div id="outline-container-orgddd2e0f" class="outline-2">
-<h2 id="orgddd2e0f"><span class="section-number-2">59</span> Coba</h2>
+<div id="outline-container-org9fa1f0d" class="outline-2">
+<h2 id="org9fa1f0d"><span class="section-number-2">59</span> Coba</h2>
 <div class="outline-text-2" id="text-59">
 <p>
 Untuk coba pakej sebelum dipakai. Install di tmp
@@ -11311,8 +11311,8 @@ Untuk coba pakej sebelum dipakai. Install di tmp
 </div>
 </div>
 
-<div id="outline-container-org597a67f" class="outline-2">
-<h2 id="org597a67f"><span class="section-number-2">60</span> Music</h2>
+<div id="outline-container-org4195eec" class="outline-2">
+<h2 id="org4195eec"><span class="section-number-2">60</span> Music</h2>
 <div class="outline-text-2" id="text-60">
 <p>
 Untuk dengar lagu-lagu diambil dari <a href="https://www.gnu.org/software/emms/index.html">EMMS</a>
@@ -11336,15 +11336,15 @@ Untuk dengar lagu-lagu diambil dari <a href="https://www.gnu.org/software/emms/i
 </div>
 </div>
 
-<div id="outline-container-orgff82b75" class="outline-2">
-<h2 id="orgff82b75"><span class="section-number-2">61</span> Selesaikan masalah</h2>
+<div id="outline-container-org5eee192" class="outline-2">
+<h2 id="org5eee192"><span class="section-number-2">61</span> Selesaikan masalah</h2>
 <div class="outline-text-2" id="text-61">
 <p>
 Beberapa situasi yang pernah dialami dan beberikan masalah. Cara penyelesaian:
 </p>
 </div>
-<div id="outline-container-orgfc760b7" class="outline-3">
-<h3 id="orgfc760b7"><span class="section-number-3">61.1</span> XF86 keys</h3>
+<div id="outline-container-org1b66bf0" class="outline-3">
+<h3 id="org1b66bf0"><span class="section-number-3">61.1</span> XF86 keys</h3>
 <div class="outline-text-3" id="text-61-1">
 <p>
 Sekiranya kekunci dari F2 ke F12 tidak berfungsi dan hanya menunjukkan XF86New, XF86Open,
@@ -11352,8 +11352,8 @@ XF86Close dan sebagainya ini menandakan yang button <code>LOCK</code> diaktifkan
 </p>
 </div>
 </div>
-<div id="outline-container-org8f23f43" class="outline-3">
-<h3 id="org8f23f43"><span class="section-number-3">61.2</span> Suspend-frame</h3>
+<div id="outline-container-orgc1a20a0" class="outline-3">
+<h3 id="orgc1a20a0"><span class="section-number-3">61.2</span> Suspend-frame</h3>
 <div class="outline-text-3" id="text-61-2">
 <p>
 Emacs freez bila tekan <code>C-x C-z</code> atau <code>C-z</code>. Kekunci ini boleh dimatikan dengan
@@ -11380,12 +11380,12 @@ Kemudian mouse-click Emacs frame.
 </div>
 </div>
 
-<div id="outline-container-org5d1384b" class="outline-2">
-<h2 id="org5d1384b"><span class="section-number-2">62</span> My personal hydra keymaps</h2>
+<div id="outline-container-orgd12d5ed" class="outline-2">
+<h2 id="orgd12d5ed"><span class="section-number-2">62</span> My personal hydra keymaps</h2>
 <div class="outline-text-2" id="text-62">
 </div>
-<div id="outline-container-org86e43ec" class="outline-3">
-<h3 id="org86e43ec"><span class="section-number-3">62.1</span> General keymap [jm]</h3>
+<div id="outline-container-org66fbca2" class="outline-3">
+<h3 id="org66fbca2"><span class="section-number-3">62.1</span> General keymap [jm]</h3>
 <div class="outline-text-3" id="text-62-1">
 <p>
 Hydra untuk fungsi awam
@@ -11434,8 +11434,8 @@ Hydra untuk fungsi awam
 </div>
 </div>
 
-<div id="outline-container-org97fb26d" class="outline-3">
-<h3 id="org97fb26d"><span class="section-number-3">62.2</span> Move keymap [jj]</h3>
+<div id="outline-container-org1a97674" class="outline-3">
+<h3 id="org1a97674"><span class="section-number-3">62.2</span> Move keymap [jj]</h3>
 <div class="outline-text-3" id="text-62-2">
 <p>
 Hydra move keymap seperti <code>F2</code>. Singkatan <code>j</code> sebagai <b>Jalan</b>
@@ -11492,8 +11492,8 @@ Hydra move keymap seperti <code>F2</code>. Singkatan <code>j</code> sebagai <b>J
 </div>
 </div>
 
-<div id="outline-container-orgd45f478" class="outline-3">
-<h3 id="orgd45f478"><span class="section-number-3">62.3</span> Org keymap [jw]</h3>
+<div id="outline-container-orgd2641a8" class="outline-3">
+<h3 id="orgd2641a8"><span class="section-number-3">62.3</span> Org keymap [jw]</h3>
 <div class="outline-text-3" id="text-62-3">
 <p>
 Hydra keymap untuk <code>org</code>. Singkatan <code>w</code> sebagai <b>Word</b>
@@ -11550,8 +11550,8 @@ Hydra keymap untuk <code>org</code>. Singkatan <code>w</code> sebagai <b>Word</b
 </div>
 </div>
 
-<div id="outline-container-org53c6c7f" class="outline-3">
-<h3 id="org53c6c7f"><span class="section-number-3">62.4</span> Prog keymap [jc]</h3>
+<div id="outline-container-org94799d8" class="outline-3">
+<h3 id="org94799d8"><span class="section-number-3">62.4</span> Prog keymap [jc]</h3>
 <div class="outline-text-3" id="text-62-4">
 <p>
 Hydra keymap untuk program seperti penggunaan <code>[F12]</code> cuma lebih ringkas. <code>c</code> sebagai <b>Code</b>.
@@ -11603,8 +11603,8 @@ Hydra keymap untuk program seperti penggunaan <code>[F12]</code> cuma lebih ring
 </div>
 </div>
 
-<div id="outline-container-orgad21060" class="outline-3">
-<h3 id="orgad21060"><span class="section-number-3">62.5</span> Sweave keymap [js]</h3>
+<div id="outline-container-org4f45418" class="outline-3">
+<h3 id="org4f45418"><span class="section-number-3">62.5</span> Sweave keymap [js]</h3>
 <div class="outline-text-3" id="text-62-5">
 <p>
 Hydra untuk polymode guna masa knitr.
@@ -11662,7 +11662,7 @@ Hydra untuk polymode guna masa knitr.
 <div id="postamble" class="status">
 <p class="date">Date: 05 Jan 2019</p>
 <p class="author">Author: Yusman Kamaleri</p>
-<p class="date">Created: 2020-01-18 lø. 23:38</p>
+<p class="date">Created: 2020-01-18 lø. 23:45</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
