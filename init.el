@@ -2947,9 +2947,10 @@ match.  See also `prettify-symbols-compose-predicate'."
    ;; overrides org-agenda-redo, which I use "g" for anyway
    ("r" . org-agenda-refile)
    ;; overrides saving all org buffers, also bound to C-x C-s
-   ("s" . org-agenda-schedule)
-   ;; overrides org-exit
-   ("x" . my/org-agenda-mark-done))
+   ("t" . org-agenda-schedule)
+   ("d" . my/org-agenda-mark-done)
+   ("n" . my/org-agenda-mark-next)
+   )
 
   :init
   ;; create org folder if doesn't exist
@@ -2967,14 +2968,15 @@ match.  See also `prettify-symbols-compose-predicate'."
   ;;Include all files under these folder in org-agenda-files
   (setq org-agenda-files `(,org-default-notes-file
                            ,my-org-todo
-                           ,my-org-note
                            ,my-org-misc))
+  (setq org-agenda-text-search-extra-files `(,my-org-note))
+
   :custom
   (org-directory "~/Dropbox/org/" "Kept in sync with syncthing.")
   (org-default-notes-file (concat org-directory "refile.org"))
 
 
-  ;; (org-agenda-text-search-extra-files `(,my-org-note))
+
 
   (org-agenda-skip-deadline-if-done t "Remove done deadlines from agenda.")
   (org-agenda-skip-scheduled-if-done t "Remove done scheduled from agenda.")
@@ -3011,7 +3013,8 @@ match.  See also `prettify-symbols-compose-predicate'."
               (org-agenda-overriding-header "Dagens oppgaver:")
               ))
        (tags "@home"
-             ((org-agenda-overriding-header "Samlet oppgaver:")))
+             ((org-agenda-overriding-header "Samlet oppgaver:")
+              (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "NEXT")))))
        (tags "REFILE"
              ((org-agenda-overriding-header "Refile:")
               (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "NEXT"))))))
@@ -3023,7 +3026,8 @@ match.  See also `prettify-symbols-compose-predicate'."
               (org-agenda-overriding-header "Dagens oppgaver:")
               ))
        (tags "@work"
-             ((org-agenda-overriding-header "Oppgavene som skal gjøres:")))
+             ((org-agenda-overriding-header "Oppgavene som skal gjøres:")
+              (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "NEXT")))))
        (tags "REFILE"
              ((org-agenda-overriding-header "Refile:")
               (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "NEXT"))))))
