@@ -1424,6 +1424,7 @@ Version 2017-09-01"
          $fpath )))))
 
 (global-set-key (kbd "C-c d") 'xah-copy-file-path)
+(bind-key "d" 'xah-copy-file-path my-assist-map)
 
 ;;; Workspace Mgmt: eyebrowse + projectile
 
@@ -1686,7 +1687,7 @@ Version 2017-09-01"
         [default bold shadow italic underline bold bold-italic bold])
 
   :bind (:map my-assist-map
-              ("d" . display-ansi-col))
+              ("a" . display-ansi-col))
   :hook ((ess-r-mode inferior-ess-r-mode) . display-ansi-col)
   :config
   (defun display-ansi-col ()
@@ -2727,18 +2728,14 @@ if there is displayed buffer that have shell it will use that window"
     LaTeX-mode) . rainbow-mode)
   )
 
-
 ;;; Org
-;; All settings are mainly copied from https://gitlab.com/jabranham/emacs/blob/master/init.el
-;; Nice guides for org-mode options http://www.pangloss.com/wiki/Emacs
 (use-package ob-core
+  :straight org
   ;; ob is org-babel, which lets org know about code and code blocks
-  :straight nil
   :defer t
   :custom
   ;; I know what I'm getting myself into.
   (org-confirm-babel-evaluate nil "Don't ask to confirm evaluation."))
-
 
 (use-package org
   ;; Org mode is a great thing. I use it for writing academic papers,
@@ -2758,15 +2755,12 @@ if there is displayed buffer that have shell it will use that window"
    ;; C-c C-t is bound to `org-todo' by default, but I want it
    ;; bound to C-c t as well:
    ("C-c t" . org-todo)
-   ;; Toggle link or use font-lock
+   ;; Show hidden link
    ("M-L" . my/org-toggle-link-display)
-   ;; Insert code block
-   ("C-c s" . ybk/org-insert-src-block)
    )
   :hook
   (org-mode . my/setup-org-mode)
   :custom
-  (org-directory "~/Dropbox/org/")
   (org-blank-before-new-entry nil)
   (org-cycle-separator-lines 0)
   (org-pretty-entities t "UTF8 all the things!")
@@ -2797,11 +2791,15 @@ if there is displayed buffer that have shell it will use that window"
   (org-log-done 'time)
   (org-goto-interface 'outline-path-completion)
   (org-ellipsis "⬎")
-  (org-tag-persistent-alist '(("jobs" . ?j)
+  ;; tags within start-endgroup will allow only one of those in a file
+  ;; C-c C-q for setting tags
+  (org-tag-persistent-alist '(("annent" . ?a)
+                              ("fhprofil" . ?p)
                               (:startgroup . nil)
                               ("@work" . ?w)
                               ("@home" . ?h)
                               (:endgroup . nil)))
+
   ;; I keep my recipes in an org file and tag them based on what kind of
   ;; dish they are.  The level one headings are names, and each gets two
   ;; level two headings --- ingredients and directions.  To easily search via
@@ -2809,26 +2807,26 @@ if there is displayed buffer that have shell it will use that window"
   ;; match based on a tag.
   (org-tags-exclude-from-inheritance
    '("BREAKFAST" "DINNER" "DESSERT" "SIDE" "CHICKEN" "SEAFOOD"
-     "BEEF" "PASTA" "SOUP" "SNACK" "DRINK" "LAMB" "VEGETARIAN" "CAKE"))
+     "BEEF" "PASTA" "SOUP" "SNACK" "DRINK" "LAMB" "VEGETARIAN"))
   ;; Org-refile lets me quickly move around headings in org files.  It
   ;; plays nicely with org-capture, which I use to turn emails into TODOs
   ;; easily (among other things, of course)
   (org-outline-path-complete-in-steps nil)
   (org-refile-allow-creating-parent-nodes 'confirm)
   (org-refile-use-outline-path 'file)
+  (org-refile-targets '((org-agenda-files . (:maxlevel . 6)))"Up to 6 level deep headlines")
 
   :custom-face
   (org-block ((t (:inherit default))))
 
   :config
-  ;; remove C-c [ from adding or excluding org file to front of agenda
-  ;; other then those specified in org-agenda-files
-  (unbind-key "C-c [" org-mode-map)
-  (unbind-key "C-c ]" org-mode-map)
+  ;; Exclude DONE state tasks from refile targets
+  (defun ybk/verify-refile-target ()
+    "Exclude todo keywords with a done state from refile targets"
+    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
 
-  (setq org-refile-targets '((nil . (:level . 1)) ; current file
-                             (org-default-notes-file . (:maxlevel . 6))
-                             (my/org-scheduled . (:level . 1))))
+  (setq org-refile-target-verify-function 'ybk/verify-refile-target)
+
 
   ;; These are the programming languages org should teach itself:
   (org-babel-do-load-languages
@@ -2838,8 +2836,11 @@ if there is displayed buffer that have shell it will use that window"
      (python . t)
      (R . t)
      (shell . t)))
-  ;; remove C-c [ from adding org file to front of agenda
+
+  ;; remove C-c [ from adding or excluding org file to front of agenda
+  ;; other then those specified in org-agenda-files
   (unbind-key "C-c [" org-mode-map)
+  (unbind-key "C-c ]" org-mode-map)
 
   (defun my/setup-org-mode ()
     "Setup org-mode."
@@ -2863,7 +2864,7 @@ if there is displayed buffer that have shell it will use that window"
     (org-beginning-of-line))
 
   (defun my/org-pretty-compose-p (start end match)
-    "Return t if the symbol should be prettified.
+    "Return it if the symbol should be prettified.
 START and END are the start and end points, MATCH is the string
 match.  See also `prettify-symbols-compose-predicate'."
     (if (string= match "*")
@@ -2886,142 +2887,95 @@ match.  See also `prettify-symbols-compose-predicate'."
              (setq org-descriptive-links t))))
 
 
-  ;; Code block shutcut
-  (defun ybk/org-insert-src-block (src-code-type)
-    "Insert a `SRC-CODE-TYPE' type source code block in org-mode."
-    (interactive
-     (let ((src-code-types
-            '("emacs-lisp" "R" "python" "stata" "sh" "latex")))
-       (list (ivy-completing-read "Source code type: " src-code-types))))
-    (progn
-      (newline-and-indent)
-      (insert "#+END_SRC\n")
-      (previous-line 2)
-      (insert (format "#+BEGIN_SRC %s\n" src-code-type))
-      (org-edit-src-code)))
+  ;; TODO keywords
+  (setq org-todo-keywords
+        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                (sequence "HOLD(h@/!)" "CANCELLED(c@/!)"))))
+
+  ;;Menyenagkan utk tukar kekunci TODO dengan C-c C-t KEKUNCI (org-todo-keywords)
+  (setq org-use-fast-todo-selection t)
+
+  ;;Tetapkan warna keyword
+  (setq org-todo-keyword-faces
+        (quote (("TODO" :foreground "red" :weight bold)
+                ("NEXT" :foreground "purple" :weight bold)
+                ("DONE" :foreground "forest green" :weight bold)
+                ("HOLD" :foreground "magenta" :weight bold)
+                ("CANCELLED" :foreground "forest green" :weight bold)
+                )))
+
+
+  ;;== Buat TAGS automatik
+  ;; Status TODO memberikan atau menukarkan tag secara automatisk. Cth ke status 'HOLD'
+  ;; memberikan tag 'HOLD' dan ke status 'DONE' membuang tag 'HOLD' dan 'CANCELLED'
+  (setq org-todo-state-tags-triggers
+        (quote (("CANCELLED" ("CANCELLED" . t))
+                ("HOLD" ("HOLD" . t))
+                (done ("HOLD"))
+                ("TODO" ("CANCELLED") ("HOLD"))
+                ("NEXT" ("CANCELLED") ("HOLD"))
+                ("DONE" ("CANCELLED") ("HOLD")))))
+
+  ;; Utk tukar status TODO menggunakan S-kiri dan S-kanan dan elakkan proses biasa seperti memasukkan masa
+  ;; atau nota utk HOLD atau CANCELLED sekiranya yang ingin dibuat ialah pertukaran status TODO sahaja
+  (setq org-treat-S-cursor-todo-selection-as-state-change nil)
+
+  ;;== Tukar parents status ke "DONE" hanya bila semua child tasks sudah ke status "DONE"
+  (setq org-enforce-todo-dependencies t
+        org-enforce-todo-checkbox-dependencies t)
+
+  ;;== Masukkan annotation di task bila tukar status
+  (setq org-log-done (quote time))
+
+  ;;== Masukkan annotation bila tukar tarikh DEADLINE
+  (setq org-log-redeadline (quote time))
+
+  ;;== Masukkan annotation bila tukar tarikh SCHEDULE
+  (setq org-log-reschedule (quote time))
   )
-
-;; Export top-level subtree to different file
-;; Example:
-;; * Header 1
-;; :PROPERTIES:
-;; :custom_id: rapport
-;; :end:
-;;
-;; * Header 2
-;; :PROPERTIES:
-;; :custom_id: beamer
-;; :end:
-
-(defun org-export-all (backend)
-  "Export all subtrees that are *not* tagged with :noexport: to
-separate files.
-
-Note that subtrees must have the :EXPORT_FILE_NAME: property set
-to a unique value for this to work properly."
-  (interactive "sEnter backend: ")
-  (let ((fn (cond ((equal backend "html") 'org-html-export-to-html)
-                  ((equal backend "latex") 'org-latex-export-to-latex)
-                  ((equal backend "pdf") 'org-latex-export-to-pdf)
-                  ((equal backend "Rnw") 'org-latex-export-to-Rnw))))
-    (org-map-entries (lambda () (funcall fn nil t)) "-noexport")))
-
-;; :EXPORT_FILE_NAME: dihasilkan dari :CUSTOM_ID:
-(defadvice org-set-property (after set-export-file-name
-                                   (property value) activate compile)
-  (when (equal org-last-set-property "CUSTOM_ID")
-    (let ((export-file-name
-           (concat (org-entry-get nil "CUSTOM_ID")
-                   "-"
-                   (replace-regexp-in-string " " "-" (downcase (org-get-heading t t))))))
-      (org-entry-put nil "EXPORT_FILE_NAME" export-file-name))))
 
 
 (use-package org-agenda
+  ;; Here's where I set which files are added to org-agenda, which controls
+  ;; org's global todo list, scheduling, and agenda features.  I use
+  ;; Syncthing to keep these files in sync across computers.
   :straight org
   :bind
   (("C-c a" . org-agenda)
-   ("C-'" . org-cycle-agenda-files) ; quickly access agenda files
+   ("<f5>" . org-agenda)
    :map org-agenda-mode-map
-   ("v" . hydra-org-agenda-view/body)
-   ("r" . org-agenda-refile) ; overrides org-agenda-redo, which I use "g" for anyway
-   ("s" . org-agenda-schedule) ; overrides saving all org buffers, also bound to C-x C-s
-   ("d" . my/org-agenda-mark-done)) ; overrides org-exit
+   ;; overrides org-agenda-redo, which I use "g" for anyway
+   ("r" . org-agenda-refile)
+   ;; overrides saving all org buffers, also bound to C-x C-s
+   ("s" . org-agenda-schedule)
+   ;; overrides org-exit
+   ("x" . my/org-agenda-mark-done))
+
   :init
-  (defvar my/org-notes (expand-file-name "notes.org" org-directory)
-    "Long-term storage for notes.")
-  (defvar my/org-scheduled (expand-file-name "scheduled.org" org-directory)
-    "Scheduled tasks.")
-  (defvar my/org-misc (expand-file-name "misc.org" org-directory)
+  ;; create org folder if doesn't exist
+  (defvar my-org-directory "~/Dropbox/org")
+  (unless (file-exists-p my-org-directory)
+    (make-directory my-org-directory))
+
+  (defvar my-org-todo (expand-file-name "todo.org" my-org-directory)
+    "Unstructure capture")
+  (defvar my-org-misc (expand-file-name "misc.org" my-org-directory)
     "All other info for diary.")
-  ;; set up org agenda files for the agenda
-  (setq org-agenda-files `(,org-default-notes-file
-                           ,my/org-scheduled
-                           ,my/org-misc))
-  (setq org-agenda-text-search-extra-files `(,my/org-notes))
+  (defvar my-org-note (expand-file-name "notes.org" my-org-directory)
+    "All other info for diary.")
 
-  ;; ;;Include all files under these folder in org-agenda-files
-  ;; (setq org-agenda-files (quote ("~/Dropbox/org/"
-  ;;                                "~/Dropbox/org/privat/"
-  ;;                                )))
-
-  ;; Hydra http://oremacs.com/2016/04/04/hydra-doc-syntax/
-  (defun org-agenda-cts ()
-    (let ((args (get-text-property
-                 (min (1- (point-max)) (point))
-                 'org-last-args)))
-      (nth 2 args)))
-
-  (defhydra hydra-org-agenda-view (:hint none)
-    "
-    _d_: ?d? day        _g_: time grid=?g? _a_: arch-trees    _l_: show-log
-    _w_: ?w? week       _[_: inactive      _A_: arch-files    _L_: log-4
-    _t_: ?t? fortnight  _f_: follow=?f?    _r_: report=?r?    _c_: clockcheck
-    _m_: ?m? month      _e_: entry =?e?    _D_: diary=?D?
-    _y_: ?y? year     _SPC_: reset         _!_: deadline      _q_: quit"
-    ("SPC" org-agenda-reset-view)
-    ("d" org-agenda-day-view
-     (if (eq 'day (org-agenda-cts))
-         "[x]" "[ ]"))
-    ("w" org-agenda-week-view
-     (if (eq 'week (org-agenda-cts))
-         "[x]" "[ ]"))
-    ("t" org-agenda-fortnight-view
-     (if (eq 'fortnight (org-agenda-cts))
-         "[x]" "[ ]"))
-    ("m" org-agenda-month-view
-     (if (eq 'month (org-agenda-cts)) "[x]" "[ ]"))
-    ("y" org-agenda-year-view
-     (if (eq 'year (org-agenda-cts)) "[x]" "[ ]"))
-    ("l" org-agenda-log-mode
-     (format "% -3S" org-agenda-show-log))
-    ("L" (org-agenda-log-mode '(4)))
-    ("c" (org-agenda-log-mode 'clockcheck))
-    ("f" org-agenda-follow-mode
-     (format "% -3S" org-agenda-follow-mode))
-    ("a" org-agenda-archives-mode)
-    ("A" (org-agenda-archives-mode 'files))
-    ("r" org-agenda-clockreport-mode
-     (format "% -3S" org-agenda-clockreport-mode))
-    ("e" org-agenda-entry-text-mode
-     (format "% -3S" org-agenda-entry-text-mode))
-    ("g" org-agenda-toggle-time-grid
-     (format "% -3S" org-agenda-use-time-grid))
-    ("D" org-agenda-toggle-diary
-     (format "% -3S" org-agenda-include-diary))
-    ("!" org-agenda-toggle-deadlines)
-    ("["
-     (let ((org-agenda-include-inactive-timestamps t))
-       (org-agenda-check-type t 'timeline 'agenda)
-       (org-agenda-redo)))
-    ("q" (message "Abort") :exit t))
-
-  :custom
   ;;Include all files under these folder in org-agenda-files
-  ;; (org-agenda-files (quote ("~/Dropbox/org/"
-  ;;                           "~/Dropbox/org/privat/"
-  ;;                           )))
-  (org-default-notes-file (concat org-directory "todo.org"))
+  (setq org-agenda-files `(,org-default-notes-file
+                           ,my-org-todo
+                           ,my-org-note
+                           ,my-org-misc))
+  :custom
+  (org-directory "~/Dropbox/org/" "Kept in sync with syncthing.")
+  (org-default-notes-file (concat org-directory "refile.org"))
+
+
+  ;; (org-agenda-text-search-extra-files `(,my-org-note))
+
   (org-agenda-skip-deadline-if-done t "Remove done deadlines from agenda.")
   (org-agenda-skip-scheduled-if-done t "Remove done scheduled from agenda.")
   (org-agenda-skip-timestamp-if-done t "Don't show timestamped things in agenda if they're done.")
@@ -3039,14 +2993,7 @@ to a unique value for this to work properly."
   (org-agenda-scheduled-leaders '("" "%2dx ") "I don't need to know that something is scheduled.  That's why it's appearing on the agenda in the first place.")
   (org-agenda-block-separator ?— "Use nice unicode character instead of ugly = to separate agendas:")
   (org-agenda-deadline-leaders '("Deadline: " "In %d days: " "OVERDUE %d day: ") "Make deadlines, especially overdue ones, stand out more:")
-  (org-agenda-current-time-string "⸻ NÅ ⸻")
-  ;; Display format
-  ;; (org-agenda-prefix-format '((agenda  . "%-12 s%?-2t") ; (agenda . " %s %-12t ") or "%-12 s%?-2t" if want to show schedule/timeline
-  ;;                             (timeline . "%-9:T%?-2t%") ; "%-9:T%?-2t% s" if want to show deadline/schedule in timeline ie. s
-  ;;                             (todo . " +%i %t") ;%i%?-8:T tidak justify TODO
-  ;;                             (tags . " +%i %t") ;(tags . "%i %-8:T")
-  ;;                             (search . "%i %-8:T")))
-
+  (org-agenda-current-time-string "⸻ NOW ⸻")
   ;; The agenda is ugly by default. It doesn't properly align items and it
   ;; includes weird punctuation. Fix it:
   (org-agenda-prefix-format '((agenda . "%-12c%-14t%s")
@@ -3059,16 +3006,28 @@ to a unique value for this to work properly."
    '(
      ("h" "Home Agenda"
       ((agenda "" nil)
+       (todo "NEXT"
+             ((org-agenda-max-entries 5)
+              (org-agenda-overriding-header "Dagens oppgaver:")
+              ))
        (tags "@home"
-             ((org-agenda-overriding-header "Tasks to do at home")))
-       (tags "CATEGORY=\"inbox\"+LEVEL=2"
-             ((org-agenda-overriding-header "Refile")))))
+             ((org-agenda-overriding-header "Samlet oppgaver:")))
+       (tags "REFILE"
+             ((org-agenda-overriding-header "Refile:")
+              (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "NEXT"))))))
+      ((org-agenda-tag-filter-preset '("-@work"))))
      ("w" "Work Agenda"
       ((agenda "" nil)
+       (todo "NEXT"
+             ((org-agenda-max-entries 5)
+              (org-agenda-overriding-header "Dagens oppgaver:")
+              ))
        (tags "@work"
-             ((org-agenda-overriding-header "Tasks to do at work")))
-       (tags "+CATEGORY=\"inbox\"+LEVEL=2"
-             ((org-agenda-overriding-header "Refile")))))
+             ((org-agenda-overriding-header "Oppgavene som skal gjøres:")))
+       (tags "REFILE"
+             ((org-agenda-overriding-header "Refile:")
+              (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "NEXT"))))))
+      ((org-agenda-tag-filter-preset '("-@home"))))
      ("d" "deadlines"
       ((agenda ""
                ((org-agenda-entry-types '(:deadline))
@@ -3092,56 +3051,64 @@ See `org-agenda-todo' for more details."
     (interactive "P")
     (org-agenda-todo "DONE"))
 
+  (defun my/org-agenda-mark-next (&optional _arg)
+    "Mark current TODO as NEXT.
+See `org-agenda-todo' for more details."
+    (interactive "P")
+    (org-agenda-todo "NEXT"))
   )
+
 
 (use-package org-capture
   :straight org
   :bind*
   ("C-c c" . org-capture)
   :bind
-  (:map org-capture-mode-map
-        ("C-c C-j" . my/org-capture-refile-and-jump))
+  ((:map org-capture-mode-map
+         ("C-c C-j" . my/org-capture-refile-and-jump))
+   (:map my-personal-map
+         ("p" . ybk/org-task-capture)))
+  ;; :init
+  ;; (setq org-default-notes-file (concat org-directory "refile.org"))
+  ;; (defconst my/org-inbox (concat org-directory "refile.org"))
+  ;; (defconst my/org-notes (concat org-directory "notes.org"))
   :custom
-  ;; And now for the capture templates themselves.  It's a bit complicated,
-  ;; but the manual does a great job explaining.
   (org-capture-templates
-   `(("s" "store" entry (file+headline org-default-notes-file "Inbox")
-      "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a \n%i")
-     ("t" "task" entry (file+headline org-default-notes-file "Inbox")
-      "* TODO %? \n:PROPERTIES:\n:CREATED: %U\n:END:\n%i")
-     ("n" "note" entry (file ,my/org-notes)
-      "* %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n %i")
-     ("b" "bib" entry (file+headline org-default-notes-file "Bibliography")
-      "* TODO %a            :@work:\n\n:PROPERTIES:\n:CREATED: %U\n:END:\n \n %i")
-     ("p" "Protocol" entry (file+headline org-default-notes-file "Inbox")
-      "* TODO %:annotation\n:PROPERTIES:\n:CREATED: %U\n:END:\n%i" :immediate-finish t)))
-
-
-  ;; (org-capture-templates
-  ;;  (quote (("a" "Appointment" entry (file  "~/Dropbox/org/gcal.org" )
-  ;;           "* %?\n\n%^T\n\n:PROPERTIES:\n\n:END:\n\n")
-  ;;          ("s" "store" entry (file my/org-inbox)
-  ;;           "* TODO %?\n %a\n %i\n %U\n ")
-  ;;          ("t" "task" entry (file  my/org-inbox)
-  ;;           "* TODO %? \n %i\n ")
-  ;;          ("m" "mail" entry (file my/org-inbox)
-  ;;           "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
-  ;;          ;; ("m" "mail" entry (file+headline my/org-mail "Email")
-  ;;          ;;  "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
-  ;;          ("n" "note" entry (file my/org-notes)
-  ;;           "* %?\n %i")
-  ;;          ("b" "bib" entry (file+headline my/org-inbox "Bibliography")
-  ;;           "* TODO %?\n %a \n %i")
-  ;;          ("p" "Protocol" entry (file my/org-inbox)
-  ;;           "* TODO [[%:link][%:description]]\n%i" :immediate-finish t)
-  ;;          ("L" "Protocol Link" entry (file my/org-inbox)
-  ;;           "* TODO [[%:link][%:description]]" :immediate-finish t))))
-
+   (quote (("a" "Avtale" entry (file+headline org-default-notes-file "Avtale")
+            "* %?\n\n%^T\n\n:PROPERTIES:\n\n:END:\n\n")
+           ("t" "task" entry (file  org-default-notes-file)
+            "* TODO \n:PROPERTIES:\n:CREATED: %U\n:END:\n%i")
+           ("m" "mail" entry (file org-default-notes-file)
+            "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
+           ("n" "note" entry (file my-org-note)
+            "* %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n %i")
+           )))
   :config
   (defun my/org-capture-refile-and-jump ()
     (interactive)
     (org-capture-refile)
-    (org-refile-goto-last-stored)))
+    (org-refile-goto-last-stored))
+
+  ;; Org-capture shortcut
+  (defun ybk/org-task-capture ()
+    "Capture a task with my default template."
+    (interactive)
+    (org-capture nil "t"))
+  )
+
+
+(use-package org-eww
+  ;; Org-eww lets me capture eww webpages with org-mode
+  :straight org
+  :straight eww
+  :after eww)
+
+(use-package org-indent
+  ;; org-indent-mode nicely aligns text with the outline level
+  :straight org
+  :hook
+  (org-mode . org-indent-mode))
+
 
 ;;; Extra
 ;;;; Calendar
