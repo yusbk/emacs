@@ -6,3 +6,4 @@ privat.el
 *.gpg
 customize.el
 /#emacs25.org#
+/#init.el#
