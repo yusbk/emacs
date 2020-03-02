@@ -3220,6 +3220,27 @@ match.  See also `prettify-symbols-compose-predicate'."
              (setq org-descriptive-links t))))
 
 
+  ;; to enable <s[TAB] https://github.com/syl20bnr/spacemacs/issues/11798
+  ;; else M-x org-insert-structure-template
+  (require 'org-tempo)
+
+  ;; Code block shortcuts instead of <s[TAB]
+  (defun my-org-insert-src-block (src-code-type)
+    "Insert a `SRC-CODE-TYPE' type source code block in org-mode."
+    (interactive
+     (let ((src-code-types
+            '("emacs-lisp" "python" "sh" "calc" "R" "latex")))
+       (list (ivy-completing-read "Source code type: " src-code-types))))
+    (progn
+      (newline-and-indent)
+      (insert "#+END_SRC\n")
+      (previous-line 2)
+      (insert (format "#+BEGIN_SRC %s\n" src-code-type))
+      (org-edit-src-code)))
+
+  (bind-key "C-c s" #'my-org-insert-src-block org-mode-map)
+
+
   ;; surround command https://github.com/alphapapa/unpackaged.el#surround-region-with-emphasis-or-syntax-characters
   ;; block the text and use the surround selected KEY
   ;;###autoload
