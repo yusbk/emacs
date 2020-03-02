@@ -573,6 +573,55 @@ Otherwise, call `delete-blank-lines'."
   ;; (setq mc/list-file (expand-file-name "mc-list.el" my-private-conf-directory))
   )
 
+(use-package iedit
+  ;;to combine iedit with mc can use idedit-switch-to-mc-mode
+  :straight t
+  :config
+  ;; https://github.com/alphapapa/unpackaged.el#iedit
+  ;;###autoload
+  (defun unpackaged/iedit-scoped (orig-fn)
+    "Call `iedit-mode' with function-local scope, or global scope if called with a universal prefix."
+    (interactive)
+    (pcase-exhaustive current-prefix-arg
+      ('nil (funcall orig-fn '(0)))
+      ('(4) (funcall orig-fn))))
+
+  (advice-add #'iedit-mode :around #'unpackaged/iedit-scoped)
+
+  ;;###autoload
+  (defun unpackaged/iedit-or-flyspell ()
+    "Toggle `iedit-mode' or correct previous misspelling with `flyspell', depending on context.
+
+With point in code or when `iedit-mode' is already active, toggle
+`iedit-mode'.  With point in a comment or string, and when
+`iedit-mode' is not already active, auto-correct previous
+misspelled word with `flyspell'.  Call this command a second time
+to choose a different correction."
+    (interactive)
+    (if (or (bound-and-true-p iedit-mode)
+            (and (derived-mode-p 'prog-mode)
+                 (not (or (nth 4 (syntax-ppss))
+                          (nth 3 (syntax-ppss))))))
+        ;; prog-mode is active and point is in a comment, string, or
+        ;; already in iedit-mode
+        (call-interactively #'iedit-mode)
+      ;; Not prog-mode or not in comment or string
+      (if (not (equal flyspell-previous-command this-command))
+          ;; FIXME: This mostly works, but if there are two words on the
+          ;; same line that are misspelled, it doesn't work quite right
+          ;; when correcting the earlier word after correcting the later
+          ;; one
+
+          ;; First correction; autocorrect
+          (call-interactively 'flyspell-auto-correct-previous-word)
+        ;; First correction was not wanted; use popup to choose
+        (progn
+          (save-excursion
+            (undo))  ; This doesn't move point, which I think may be the problem.
+          (flyspell-region (line-beginning-position) (line-end-position))
+          (call-interactively 'flyspell-correct-previous-word-generic)))))
+  )
+
 
 ;; (bind-key "C-x u " #'undo)
 
@@ -1784,6 +1833,72 @@ Version 2017-09-01"
               ("x l" . find-library))
   :hook
   (find-function-after . reposition-window))
+
+;; Fill paragraph https://github.com/alphapapa/unpackaged.el#programming
+;; look the example from the refered url
+(defvar unpackaged/flex-fill-paragraph-column nil
+  "Last fill column used in command `unpackaged/flex-fill-paragraph'.")
+
+;;;###autoload
+(defun unpackaged/flex-fill-paragraph (&optional fewer-lines unfill)
+  "Fill paragraph, incrementing fill column to cause a change when repeated.
+The global value of `fill-column' is not modified; it is only
+bound around calls to `fill-paragraph'.
+
+When called for the first time in a sequence, unfill to the
+default `fill-column'.
+
+When called repeatedly, increase `fill-column' until filling
+changes.
+
+With one universal prefix, increase `fill-column' until the
+number of lines is reduced.  With two, unfill completely."
+  (interactive "P")
+  (let* ((fewer-lines (or fewer-lines (equal current-prefix-arg '(4))))
+         (unfill (or unfill (equal current-prefix-arg '(16))))
+         (fill-column
+          (cond (unfill (setf unpackaged/flex-fill-paragraph-column nil)
+                        most-positive-fixnum)
+                (t (setf unpackaged/flex-fill-paragraph-column
+                         (if (equal last-command this-command)
+                             (or (unpackaged/flex-fill-paragraph--next-fill-column fewer-lines)
+                                 fill-column)
+                           fill-column))))))
+    (fill-paragraph)
+    (message "Fill column: %s" fill-column)))
+
+(defun unpackaged/flex-fill-paragraph--next-fill-column (&optional fewer-lines)
+  "Return next `fill-column' value.
+If FEWER-LINES is non-nil, reduce the number of lines in the
+buffer, otherwise just change the current paragraph."
+  ;; This works well, but because of all the temp buffers, sometimes when called
+  ;; in rapid succession, it can cause GC, which can be noticeable.  It would be
+  ;; nice to avoid that.  Note that this has primarily been tested on
+  ;; `emacs-lisp-mode'; hopefully it works well in other modes.
+  (let* ((point (point))
+         (source-buffer (current-buffer))
+         (mode major-mode)
+         (fill-column (or unpackaged/flex-fill-paragraph-column fill-column))
+         (old-fill-column fill-column)
+         (hash (unless fewer-lines
+                 (buffer-hash)))
+         (original-num-lines (when fewer-lines
+                               (line-number-at-pos (point-max)))))
+    (with-temp-buffer
+      (delay-mode-hooks
+        (funcall mode))
+      (insert-buffer-substring source-buffer)
+      (goto-char point)
+      (cl-loop while (and (fill-paragraph)
+                          (if fewer-lines
+                              (= original-num-lines (line-number-at-pos (point-max)))
+                            (string= hash (buffer-hash))))
+               ;; If filling doesn't change after 100 iterations, abort by returning nil.
+               if (> (- fill-column old-fill-column) 100)
+               return nil
+               else do (cl-incf fill-column)
+               finally return fill-column))))
+
 
 
 ;;; Commenting
