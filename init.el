@@ -47,10 +47,12 @@
 
 ;; Integration with use-package
 (straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
+(setq straight-use-package-by-default t) ;always-ensure
+
 ;; Early load Org from Git version instead of Emacs built-in version
-;; (straight-use-package 'org-plus-contrib)
-(straight-use-package '(org :local-repo nil))
+(straight-use-package 'org-plus-contrib)
+;; Use build-in and not save to local disk
+;; (straight-use-package '(org :local-repo nil))
 
 ;;;;  package.el
 ;;; so package-list-packages includes them
@@ -58,6 +60,7 @@
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/")
              '("melpa-stable" . "https://stable.melpa.org/packages/")) ;melpa-stable is not in straight.el
+
 
 (package-initialize)
 
@@ -1975,58 +1978,58 @@ Version 2017-09-01"
     (local-set-key '[right] 'comint-next-matching-input-from-input)
     (setq comint-input-sender 'n-shell-simple-send)))
 
-;; ANSI & XTERM 256 color support
-(use-package xterm-color
-  :defines (compilation-environment
-            eshell-preoutput-filter-functions
-            eshell-output-filter-functions)
-  :functions (compilation-filter my-advice-compilation-filter)
-  :init
-  ;; For shell
-  (setenv "TERM" "xterm-256color")
-  (setq comint-output-filter-functions
-        (remove 'ansi-color-process-output comint-output-filter-functions))
-  (add-hook 'shell-mode-hook
-            (lambda ()
-              ;; Disable font-locking in this buffer to improve performance
-              (font-lock-mode -1)
-              ;; Prevent font-locking from being re-enabled in this buffer
-              (make-local-variable 'font-lock-function)
-              (setq font-lock-function (lambda (_) nil))
-              (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t)))
+;; ;; ANSI & XTERM 256 color support
+;; (use-package xterm-color
+;;   :defines (compilation-environment
+;;             eshell-preoutput-filter-functions
+;;             eshell-output-filter-functions)
+;;   :functions (compilation-filter my-advice-compilation-filter)
+;;   :init
+;;   ;; For shell
+;;   (setenv "TERM" "xterm-256color")
+;;   (setq comint-output-filter-functions
+;;         (remove 'ansi-color-process-output comint-output-filter-functions))
+;;   (add-hook 'shell-mode-hook
+;;             (lambda ()
+;;               ;; Disable font-locking in this buffer to improve performance
+;;               (font-lock-mode -1)
+;;               ;; Prevent font-locking from being re-enabled in this buffer
+;;               (make-local-variable 'font-lock-function)
+;;               (setq font-lock-function (lambda (_) nil))
+;;               (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t)))
 
-  ;; For eshell
-  (with-eval-after-load 'esh-mode
-    (add-hook 'eshell-before-prompt-hook
-              (lambda ()
-                (setq xterm-color-preserve-properties t)))
-    (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
-    (setq eshell-output-filter-functions
-          (remove 'eshell-handle-ansi-color eshell-output-filter-functions)))
+;;   ;; For eshell
+;;   (with-eval-after-load 'esh-mode
+;;     (add-hook 'eshell-before-prompt-hook
+;;               (lambda ()
+;;                 (setq xterm-color-preserve-properties t)))
+;;     (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
+;;     (setq eshell-output-filter-functions
+;;           (remove 'eshell-handle-ansi-color eshell-output-filter-functions)))
 
-  ;; For compilation buffers
-  (setq compilation-environment '("TERM=xterm-256color"))
-  (defun my-advice-compilation-filter (f proc string)
-    (funcall f proc
-             (if (eq major-mode 'rg-mode) ; compatible with `rg'
-                 string
-               (xterm-color-filter string))))
-  (advice-add 'compilation-filter :around #'my-advice-compilation-filter)
-  (advice-add 'gud-filter :around #'my-advice-compilation-filter)
+;;   ;; For compilation buffers
+;;   (setq compilation-environment '("TERM=xterm-256color"))
+;;   (defun my-advice-compilation-filter (f proc string)
+;;     (funcall f proc
+;;              (if (eq major-mode 'rg-mode) ; compatible with `rg'
+;;                  string
+;;                (xterm-color-filter string))))
+;;   (advice-add 'compilation-filter :around #'my-advice-compilation-filter)
+;;   (advice-add 'gud-filter :around #'my-advice-compilation-filter)
 
-  ;; For prolog inferior
-  (with-eval-after-load 'prolog
-    (add-hook 'prolog-inferior-mode-hook
-              (lambda ()
-                (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t)))))
+;;   ;; For prolog inferior
+;;   (with-eval-after-load 'prolog
+;;     (add-hook 'prolog-inferior-mode-hook
+;;               (lambda ()
+;;                 (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t)))))
 
-;; Better term
-;; @see https://github.com/akermu/emacs-libvterm#installation
-(when (and (executable-find "cmake")
-           (executable-find "libtool")
-           (executable-find "make"))
-  (use-package vterm
-    :init (defalias #'term #'vterm)))
+;; ;; Better term
+;; ;; @see https://github.com/akermu/emacs-libvterm#installation
+;; (when (and (executable-find "cmake")
+;;            (executable-find "libtool")
+;;            (executable-find "make"))
+;;   (use-package vterm
+;;     :init (defalias #'term #'vterm)))
 
 ;; Shell Pop
 (use-package shell-pop
@@ -2224,6 +2227,9 @@ Version 2017-09-01"
               ("C-c \\" . my-add-pipe)
               ("M-|" . my-ess-eval-pipe-through-line)
               ("C-S-<return>" . ess-eval-region-or-function-or-paragraph-and-step)
+              ("C-." . ess-eval-paragraph-and-step)
+              ("M-." . ess-eval-paragraph-and-go)
+              ("C-S-<tab>" . ess-indent-region-with-styler)
               :map inferior-ess-r-mode-map
               ("C-S-<up>" . ess-readline) ;previous command from script
               ("M--" . ess-cycle-assign)
@@ -2251,6 +2257,13 @@ Version 2017-09-01"
   (setq comint-scroll-to-bottom-on-input t)
   (setq comint-scroll-to-bottom-on-output t)
   (setq comint-move-point-for-output t)
+
+  ;; inferior not read-only
+  ;; https://github.com/emacs-ess/ESS/issues/300#issuecomment-231314374
+  (add-hook 'inferior-ess-mode-hook
+            (lambda()
+              (setq-local comint-use-prompt-regexp nil)
+              (setq-local inhibit-field-text-motion nil)))
 
   ;; ess-trace-bug.el
   (setq ess-use-tracebug t) ; permanent activation
@@ -2310,6 +2323,36 @@ Version 2017-09-01"
     (just-one-space 1)
     (insert "%>%")
     (ess-newline-and-indent))
+
+
+  ;; use styler package but it has to be install first
+  (defun ess-indent-region-with-styler (beg end)
+    "Format region of code R using styler::style_text()."
+    (interactive "r")
+    (let ((string
+           (replace-regexp-in-string
+            "\"" "\\\\\\&"
+            (replace-regexp-in-string ;; how to avoid this double matching?
+             "\\\\\"" "\\\\\\&"
+             (buffer-substring-no-properties beg end))))
+          (buf (get-buffer-create "*ess-command-output*")))
+      (ess-force-buffer-current "Process to load into:")
+      (ess-command
+       (format
+        "local({options(styler.colored_print.vertical = FALSE);styler::style_text(text = \"\n%s\", reindention = styler::specify_reindention(regex_pattern = \"###\", indention = 0), indent_by = 4)})\n"
+        string) buf)
+      (with-current-buffer buf
+        (goto-char (point-max))
+        ;; (skip-chars-backward "\n")
+        (let ((end (point)))
+          (goto-char (point-min))
+          (goto-char (1+ (point-at-eol)))
+          (setq string (buffer-substring-no-properties (point) end))
+          ))
+      (delete-region beg end)
+      (insert string)
+      (delete-char -1)
+      ))
 
   ;; Get commands run from script or console
   ;; https://stackoverflow.com/questions/27307757/ess-retrieving-command-history-from-commands-entered-in-essr-inferior-mode-or
@@ -2558,6 +2601,27 @@ if there is displayed buffer that have shell it will use that window"
   (pyenv-mode)
   )
 
+;;; Database
+(use-package sql
+  :straight t
+  :mode ("\\.\\(sqlite\\|db\\|sqlite3\\)\\'" . sql-mode)
+  :interpreter ("sql" . sql-mode)
+  ;; :custom
+  ;; (sql-sqlite-program "c:/Program Files/R/sqlite/sqlite3.exe")
+
+  :config
+  ;; use only one database no need to login
+  (defalias 'sql-get-login 'ignore)
+  )
+
+(use-package sqlup-mode
+  ;;Upercase SQL words
+  :straight t
+  :bind ("C-c u" . sqlup-capitalize-keywords-in-region)
+  ;; if activated in sql-interactive-mode can make trouble to run commands
+  :hook ((sql-mode redis-mode) . sqlup-mode)
+  )
+
 ;;; Graphics
 (use-package graphviz-dot-mode
   ;; graphvis must be installed
@@ -2571,10 +2635,28 @@ if there is displayed buffer that have shell it will use that window"
 ;; (use-package naysayer-theme)
 ;; (load-theme 'naysayer t)
 
+(use-package all-the-icons
+  ;; needed to display icon correctly in doom-modeline
+  ;; Run M-x all-the-icons-install-fonts to install all-the-icons
+  ;; if error then M-x package-install all-the-icons
+  :straight t
+  :defer 0.5)
+
+(use-package major-mode-icons
+  ;; Is disabled because doom-modeline is activated
+  :disabled
+  :straight t
+  :defer 0.5
+  :config
+  (major-mode-icons-mode 1))
+
+
 (use-package doom-themes
   :straight t
   :init
   ;; need to load at init for cyclye theme to work
+  ;; but gives error at first use before installing doom-themes
+  (require 'doom-themes)
   (load-theme 'doom-one t)
   :bind ("C-9" . cycle-my-theme)
   :config
@@ -2584,7 +2666,20 @@ if there is displayed buffer that have shell it will use that window"
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config)
 
-  ;; utk tukar tema f10-t
+  ;; ;; brighter source buffers (that represent files)
+  ;; (add-hook 'find-file-hook #'doom-buffer-mode-maybe)
+  ;; ;; ...if you use auto-revert-mode
+  ;; (add-hook 'after-revert-hook #'doom-buffer-mode-maybe)
+  ;; ;; And you can brighten other buffers (unconditionally) with:
+  ;; (add-hook 'ediff-prepare-buffer-hook #'doom-buffer-mode)
+
+  ;; ;; brighter minibuffer when active
+  ;; (add-hook 'minibuffer-setup-hook #'doom-brighten-minibuffer)
+
+  ;; Enable custom neotree theme
+  (doom-themes-neotree-config)  ; all-the-icons fonts must be installed!
+
+  ;; utk tukar tema
   (setq my-themes '(
                     doom-gruvbox
                     doom-snazzy
@@ -2608,6 +2703,40 @@ if there is displayed buffer that have shell it will use that window"
 
   ;; Switch to the first theme in the list above
   (cycle-my-theme)
+  )
+
+
+(use-package doom-modeline
+  ;; Customization guides https://seagle0128.github.io/doom-modeline/
+  :straight t
+  :defer t
+  :custom
+  (doom-modeline-buffer-file-name-style 'truncate-with-project)
+  (doom-modeline-icon (display-graphic-p))
+  (doom-modeline-major-mode-icon nil)
+  (doom-modeline-minor-modes nil)
+  (doom-modeline-project-detection 'project "Detect the project root")
+  (doom-modeline-buffer-state-icon t)
+  (doom-modeline-buffer-encoding t)
+  (doom-modeline-env-load-string "..." "Display as the version while the new one is being loaded")
+  :hook
+  ;; (after-init . doom-modeline-mode)
+  (after-init . doom-modeline-init)
+  :config
+  ;; (set-face-attribute 'mode-line nil
+  ;;                     :background "#539"
+  ;;                     :foreground "white"
+  ;;                     :box '(:line-width 5 :color "#539")
+  ;;                     :overline nil
+  ;;                     :underline nil)
+
+  ;; (set-face-attribute 'mode-line-inactive nil
+  ;;                     :background "#565063"
+  ;;                     :foreground "white"
+  ;;                     :box '(:line-width 5 :color "#565063")
+  ;;                     :overline nil
+  ;;                     :underline nil)
+
   )
 
 (use-package solaire-mode
@@ -2685,37 +2814,6 @@ if there is displayed buffer that have shell it will use that window"
                ))
 
 
-(use-package all-the-icons
-  ;; needed to display icon correctly in doom-modeline
-  :straight t)
-
-(use-package doom-modeline
-  ;; Run M-x all-the-icons-install-fonts to install all-the-icons
-  :straight t
-  :custom
-  (doom-modeline-buffer-file-name-style 'truncate-with-project)
-  (doom-modeline-icon t)
-  (doom-modeline-major-mode-icon nil)
-  (doom-modeline-minor-modes nil)
-  :hook
-  (after-init . doom-modeline-mode)
-  :config
-  (set-face-attribute 'mode-line nil
-                      :background "#353644"
-                      :foreground "white"
-                      :box '(:line-width 6 :color "#353644")
-                      :overline nil
-                      :underline nil)
-
-  (set-face-attribute 'mode-line-inactive nil
-                      :background "#565063"
-                      :foreground "white"
-                      :box '(:line-width 6 :color "#565063")
-                      :overline nil
-                      :underline nil)
-
-  )
-
 ;; Show hexadecimal color in the background they represent
 (use-package rainbow-mode
   :straight t
@@ -2728,20 +2826,14 @@ if there is displayed buffer that have shell it will use that window"
     LaTeX-mode) . rainbow-mode)
   )
 
-;;; Org
-(use-package ob-core
-  :straight org
-  ;; ob is org-babel, which lets org know about code and code blocks
-  :defer t
-  :custom
-  ;; I know what I'm getting myself into.
-  (org-confirm-babel-evaluate nil "Don't ask to confirm evaluation."))
 
+;;; Org
 (use-package org
   ;; Org mode is a great thing. I use it for writing academic papers,
   ;; managing my schedule, managing my references and notes, writing
   ;; presentations, writing lecture slides, and pretty much anything
   ;; else.
+  :straight org-plus-contrib
   :bind
   (("C-c l" . org-store-link)
    ("C-'" . org-cycle-agenda-files) ; quickly access agenda files
@@ -2933,6 +3025,15 @@ match.  See also `prettify-symbols-compose-predicate'."
   ;;== Masukkan annotation bila tukar tarikh SCHEDULE
   (setq org-log-reschedule (quote time))
   )
+
+
+(use-package ob-core
+  :straight org
+  ;; ob is org-babel, which lets org know about code and code blocks
+  :defer t
+  :custom
+  ;; I know what I'm getting myself into.
+  (org-confirm-babel-evaluate nil "Don't ask to confirm evaluation."))
 
 
 (use-package org-agenda
@@ -3171,3 +3272,13 @@ See `org-agenda-todo' for more details."
   (:map my-personal-map
         ("c" . quick-calc)
         ("C" . my/calc-eval-region)))
+;; ;;;; Google drive
+;; ;; Access google drive folder
+;; (defvar gdocs-folder-id "1G-5SDJMg8s074kgZ0qKijrgyrivxpQPS"
+;;   "location for storing org to gdocs exported files, use 'gdrive list  -t <foldername>' to find the id")
+;; (defun gdoc-upload-buffer-to-gdrive ()
+;;   "Export current buffer to gdrive folder identified by gdocs-folder-id"
+;;   (interactive)
+;;   (shell-command
+;;    (format "gdrive upload --parent %s %s"
+;;            gdocs-folder-id buffer-file-name)))
