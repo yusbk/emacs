@@ -861,6 +861,7 @@ In that case, insert the number."
   :straight diff-hl
   :straight git-gutter
   :straight ov
+  :straight smerge-mode
   :straight git-timemachine
   ;;display flycheck errors only on added/modified lines
   :straight magit-todos
@@ -917,6 +918,7 @@ In that case, insert the number."
   ;;   (let ((current-prefix-arg '(4)))
   ;;     (call-interactively 'magit-status)))
 
+  ;; autoload https://github.com/alphapapa/unpackaged.el#magit
   (defun unpackaged/magit-status ()
     "Open a `magit-status' buffer and close the other window so only Magit is visible.
 If a file was visited in the buffer that was active when this
@@ -938,6 +940,7 @@ command was called, go to its unstaged changes section."
                         (magit-section-forward)
                       (error (cl-return (magit-status-goto-initial-section-1))))))))
 
+  ;; autoload
   (defun unpackaged/magit-save-buffer-show-status ()
     "Save buffer and show its changes in `magit-status'."
     (interactive)
@@ -949,22 +952,24 @@ command was called, go to its unstaged changes section."
   (add-to-list 'magit-process-find-password-functions
                'magit-process-password-auth-source)
 
-  ;; Useful functions copied from
-  ;; https://stackoverflow.com/questions/9656311/conflict-resolution-with-emacs-ediff-how-can-i-take-the-changes-of-both-version/29757750#29757750
-  ;; Combined with ~ to swap the order of the buffers you can get A then B or B then A
-  (defun ediff-copy-both-to-C ()
-    (interactive)
-    (ediff-copy-diff ediff-current-difference nil 'C nil
-                     (concat
-                      (ediff-get-region-contents ediff-current-difference 'A ediff-control-buffer)
-                      (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
-  (defun add-d-to-ediff-mode-map () (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
-  (add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map)
+  ;; ;; Useful functions copied from
+  ;; ;; https://stackoverflow.com/questions/9656311/conflict-resolution-with-emacs-ediff-how-can-i-take-the-changes-of-both-version/29757750#29757750
+  ;; ;; Combined with ~ to swap the order of the buffers you can get A then B or B then A
+  ;; (defun ediff-copy-both-to-C ()
+  ;;   (interactive)
+  ;;   (ediff-copy-diff ediff-current-difference nil 'C nil
+  ;;                    (concat
+  ;;                     (ediff-get-region-contents ediff-current-difference 'A ediff-control-buffer)
+  ;;                     (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
+  ;; (defun add-d-to-ediff-mode-map () (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
+  ;; (add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map)
 
-  ;; Always expand file in ediff
+  ;; Always expand file in ediff.
+  ;; show help in same windows
   (add-hook 'ediff-prepare-buffer-hook #'show-all)
   ;; Do everything in one frame
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
 
   (use-package ov
     ;; Add date headers to Magit log buffers https://github.com/alphapapa/unpackaged.el#magit
@@ -1013,10 +1018,55 @@ command was called, go to its unstaged changes section."
   )
 
 
+(use-package smerge-mode
+  ;; For comparing conflict better than ediff
+  ;; https://github.com/alphapapa/unpackaged.el#smerge-mode
+  :straight t
+  :after hydra
+  :config
+  (defhydra unpackaged/smerge-hydra
+    (:color pink :hint nil :post (smerge-auto-leave))
+    "
+^Move^       ^Keep^               ^Diff^                 ^Other^
+^^-----------^^-------------------^^---------------------^^-------
+_n_ext       _b_ase               _<_: upper/base        _C_ombine
+_p_rev       _u_pper              _=_: upper/lower       _r_esolve
+^^           _l_ower              _>_: base/lower        _k_ill current
+^^           _a_ll                _R_efine
+^^           _RET_: current       _E_diff
+"
+    ("n" smerge-next)
+    ("p" smerge-prev)
+    ("b" smerge-keep-base)
+    ("u" smerge-keep-upper)
+    ("l" smerge-keep-lower)
+    ("a" smerge-keep-all)
+    ("RET" smerge-keep-current)
+    ("\C-m" smerge-keep-current)
+    ("<" smerge-diff-base-upper)
+    ("=" smerge-diff-upper-lower)
+    (">" smerge-diff-base-lower)
+    ("R" smerge-refine)
+    ("E" smerge-ediff)
+    ("C" smerge-combine-with-next)
+    ("r" smerge-resolve)
+    ("k" smerge-kill-current)
+    ("ZZ" (lambda ()
+            (interactive)
+            (save-buffer)
+            (bury-buffer))
+     "Save and bury buffer" :color blue)
+    ("q" nil "cancel" :color blue))
+  :hook (magit-diff-visit-file . (lambda ()
+                                   (when smerge-mode
+                                     (unpackaged/smerge-hydra/body)))))
+
+;; smerge-mode is used instead
 (use-package ediff
   ;; Ediff is great, but I have to tell it to use one frame (since I start
   ;; Emacs before X/wayland, it defaults to using two frames).
   :defer t
+  :disabled
   :straight t
   :custom
   (ediff-window-setup-function #'ediff-setup-windows-plain)
@@ -1044,7 +1094,6 @@ three ediff buffers (A, B, and C)."
     (when (memq major-mode '(org-mode emacs-lisp-mode))
       ;; unfold org/elisp files
       (outline-show-all))))
-
 
 ;;; Window and Buffer management
 (use-package windmove
