@@ -919,7 +919,7 @@ In that case, insert the number."
   ;;     (call-interactively 'magit-status)))
 
   ;; autoload https://github.com/alphapapa/unpackaged.el#magit
-  (defun unpackaged/magit-status ()
+  (defun my-magit-status ()
     "Open a `magit-status' buffer and close the other window so only Magit is visible.
 If a file was visited in the buffer that was active when this
 command was called, go to its unstaged changes section."
@@ -941,11 +941,11 @@ command was called, go to its unstaged changes section."
                       (error (cl-return (magit-status-goto-initial-section-1))))))))
 
   ;; autoload
-  (defun unpackaged/magit-save-buffer-show-status ()
+  (defun my-magit-save-buffer-show-status ()
     "Save buffer and show its changes in `magit-status'."
     (interactive)
     (save-buffer)
-    (unpackaged/magit-status))
+    (my-magit-status))
 
 
   ;; Set magit password authentication source to auth-source
@@ -971,52 +971,54 @@ command was called, go to its unstaged changes section."
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 
-  (use-package ov
-    ;; Add date headers to Magit log buffers https://github.com/alphapapa/unpackaged.el#magit
-    :defer 3
-    :config
-    (defun unpackaged/magit-log--add-date-headers (&rest _ignore)
-      "Add date headers to Magit log buffers."
-      (when (derived-mode-p 'magit-log-mode)
-        (save-excursion
-          (ov-clear 'date-header t)
-          (goto-char (point-min))
-          (cl-loop with last-age
-                   for this-age = (-some--> (ov-in 'before-string 'any (line-beginning-position) (line-end-position))
-                                    car
-                                    (overlay-get it 'before-string)
-                                    (get-text-property 0 'display it)
-                                    cadr
-                                    (s-match (rx (group (1+ digit) ; number
-                                                        " "
-                                                        (1+ (not blank))) ; unit
-                                                 (1+ blank) eos)
-                                             it)
-                                    cadr)
-                   do (when (and this-age
-                                 (not (equal this-age last-age)))
-                        (ov (line-beginning-position) (line-beginning-position)
-                            'after-string (propertize (concat " " this-age "\n")
-                                                      'face 'magit-section-heading)
-                            'date-header t)
-                        (setq last-age this-age))
-                   do (forward-line 1)
-                   until (eobp)))))
+  ;; Add date headers to Magit log buffers https://github.com/alphapapa/unpackaged.el#magit
+  ;; require ov package
+  (defun my-magit-log--add-date-headers (&rest _ignore)
+    "Add date headers to Magit log buffers."
+    (when (derived-mode-p 'magit-log-mode)
+      (save-excursion
+        (ov-clear 'date-header t)
+        (goto-char (point-min))
+        (cl-loop with last-age
+                 for this-age = (-some--> (ov-in 'before-string 'any (line-beginning-position) (line-end-position))
+                                  car
+                                  (overlay-get it 'before-string)
+                                  (get-text-property 0 'display it)
+                                  cadr
+                                  (s-match (rx (group (1+ digit) ; number
+                                                      " "
+                                                      (1+ (not blank))) ; unit
+                                               (1+ blank) eos)
+                                           it)
+                                  cadr)
+                 do (when (and this-age
+                               (not (equal this-age last-age)))
+                      (ov (line-beginning-position) (line-beginning-position)
+                          'after-string (propertize (concat " " this-age "\n")
+                                                    'face 'magit-section-heading)
+                          'date-header t)
+                      (setq last-age this-age))
+                 do (forward-line 1)
+                 until (eobp)))))
 
-    (define-minor-mode unpackaged/magit-log-date-headers-mode
-      "Display date/time headers in `magit-log' buffers."
-      :global t
-      (if unpackaged/magit-log-date-headers-mode
-          (progn
-            ;; Enable mode
-            (add-hook 'magit-post-refresh-hook #'unpackaged/magit-log--add-date-headers)
-            (advice-add #'magit-setup-buffer-internal :after #'unpackaged/magit-log--add-date-headers))
-        ;; Disable mode
-        (remove-hook 'magit-post-refresh-hook #'unpackaged/magit-log--add-date-headers)
-        (advice-remove #'magit-setup-buffer-internal #'unpackaged/magit-log--add-date-headers))))
+  (define-minor-mode my-magit-log-date-headers-mode
+    "Display date/time headers in `magit-log' buffers."
+    :global t
+    (if my-magit-log-date-headers-mode
+        (progn
+          ;; Disable mode
+          (remove-hook 'magit-post-refresh-hook #'my-magit-log--add-date-headers)
+          (advice-remove #'magit-setup-buffer-internal #'my-magit-log--add-date-headers)
+          ;; Enable mode
+          (add-hook 'magit-post-refresh-hook #'my-magit-log--add-date-headers)
+          (advice-add #'magit-setup-buffer-internal :after #'my-magit-log--add-date-headers))
+      )
+    )
+
+  ;; activate magit-log header with date
+  (my-magit-log-date-headers-mode 1)
 
   )
-
 
 (use-package smerge-mode
   ;; For comparing conflict better than ediff
@@ -1024,7 +1026,7 @@ command was called, go to its unstaged changes section."
   :straight t
   :after hydra
   :config
-  (defhydra unpackaged/smerge-hydra
+  (defhydra my-smerge-hydra
     (:color pink :hint nil :post (smerge-auto-leave))
     "
 ^Move^       ^Keep^               ^Diff^                 ^Other^
@@ -1059,7 +1061,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
     ("q" nil "cancel" :color blue))
   :hook (magit-diff-visit-file . (lambda ()
                                    (when smerge-mode
-                                     (unpackaged/smerge-hydra/body)))))
+                                     (my-smerge-hydra/body)))))
 
 ;; smerge-mode is used instead
 (use-package ediff
