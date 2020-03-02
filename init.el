@@ -3605,6 +3605,27 @@ See `org-agenda-todo' for more details."
   (org-mode . org-indent-mode))
 
 
+;;; Blogs
+;; Required packages from org-contrib for export to html
+(require 'ox-html)
+(require 'ox-publish)
+(require 'ox-rss)
+
+(setq org-publish-project-alist
+      '(("yusbk.blog"
+         ;; Path to org files.
+         :base-directory "~/Git-personal/yusbk.github.io/org"
+         :base-extension "org"
+
+         ;; Path to Jekyll Posts
+         :publishing-directory "~/Git-personal/yusbk.github.io/_posts/"
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :headline-levels 4
+         :html-extension "html"
+         :body-only t
+         )))
+
 ;;; Extra
 ;;;; Calendar
 ;; Manual setup
