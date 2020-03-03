@@ -678,6 +678,7 @@ to choose a different correction."
   :bind (
          :map company-active-map
          ("C-c ?" . company-quickhelp-manual-begin)
+         ;; Deactivate default M-n and M-h for convinence in inferior-R buffer
          ("C-n" . company-select-next)
          ("C-p" . company-select-previous)
          ("C-d" . company-show-doc-buffer)
@@ -2460,8 +2461,9 @@ buffer, otherwise just change the current paragraph."
   (unless (file-exists-p ybk/r-dir)
     (make-directory ybk/r-dir t))
 
-  :bind (
-         ("C-c d" . ess-r-package-dev-map)
+  :bind (("C-c d" . ess-r-package-dev-map)
+         :map ess-dev-map ;C-c C-t
+         ("r" . ess-r-package-dev-map)
          :map ess-r-mode-map
          ("M--" . ess-cycle-assign)
          ;; ("M--" . ess-insert-assign)
