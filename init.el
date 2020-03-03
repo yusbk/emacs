@@ -2734,6 +2734,7 @@ if there is displayed buffer that have shell it will use that window"
 
 (use-package poly-markdown
   :straight polymode
+  :straight markdown-mode
   :defer t
   :config
   ;; Wrap lines at column limit, but don't put hard returns in
@@ -2748,6 +2749,8 @@ if there is displayed buffer that have shell it will use that window"
   :straight poly-markdown
   :straight poly-noweb
   :defer t
+  :bind(:map polymode-map
+             ("i" . rmd-insert-r-chunk))
   :config
   ;; Add a chunk for rmarkdown
   ;; Need to add a keyboard shortcut
