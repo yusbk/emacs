@@ -1601,8 +1601,8 @@ Version 2017-09-01"
          (message "File path copied: 「%s」" $fpath)
          $fpath )))))
 
-(global-set-key (kbd "C-c d") 'xah-copy-file-path)
-(bind-key "d" 'xah-copy-file-path my-assist-map)
+(global-set-key (kbd "C-c x") 'xah-copy-file-path)
+(bind-key "x" 'xah-copy-file-path my-assist-map)
 
 ;;; Workspace Mgmt: eyebrowse + projectile
 
@@ -2460,21 +2460,24 @@ buffer, otherwise just change the current paragraph."
   (unless (file-exists-p ybk/r-dir)
     (make-directory ybk/r-dir t))
 
-  :bind (:map ess-r-mode-map
-              ("M--" . ess-cycle-assign)
-              ;; ("M--" . ess-insert-assign)
-              ("C-c +" . my-add-column)
-              ("C-c ," . my-add-match)
-              ("C-c \\" . my-add-pipe)
-              ("M-|" . my-ess-eval-pipe-through-line)
-              ("C-S-<return>" . ess-eval-region-or-function-or-paragraph-and-step)
-              ("C-." . ess-eval-paragraph-and-step)
-              ("M-." . ess-eval-paragraph-and-go)
-              ("C-S-<tab>" . ess-indent-region-with-styler)
-              :map inferior-ess-r-mode-map
-              ("C-S-<up>" . ess-readline) ;previous command from script
-              ("M--" . ess-cycle-assign)
-              )
+  :bind (
+         ("C-c d" . ess-r-package-dev-map)
+         :map ess-r-mode-map
+         ("M--" . ess-cycle-assign)
+         ;; ("M--" . ess-insert-assign)
+         ("C-c +" . my-add-column)
+         ("C-c ," . my-add-match)
+         ("C-c \\" . my-add-pipe)
+         ("M-|" . my-ess-eval-pipe-through-line)
+         ("C-S-<return>" . ess-eval-region-or-function-or-paragraph-and-step)
+         ("C-." . ess-eval-paragraph-and-step)
+         ("M-." . ess-eval-paragraph-and-go)
+         ("C-S-<tab>" . ess-indent-region-with-styler)
+         :map inferior-ess-r-mode-map
+         ("C-S-<up>" . ess-readline) ;previous command from script
+         ("M--" . ess-cycle-assign)
+
+         )
 
   :custom
   (ess-plain-first-buffername nil "Name first R process R:1")
