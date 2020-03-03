@@ -1606,13 +1606,69 @@ Version 2017-09-01"
 (bind-key "x" 'xah-copy-file-path my-assist-map)
 
 ;;; Workspace Mgmt: eyebrowse + projectile
+;; Create a project keymap
+(bind-keys :prefix "C-c p"
+           :prefix-map my-proj-map)
 
 (use-package projectile
   :defer 5
   :straight ripgrep ;; required by projectile-ripgrep
-  :bind-keymap
-  ("C-c p" . projectile-command-map)
-  :bind* (("C-c p f" . 'projectile-find-file))
+  :straight hydra
+  ;; :bind-keymap
+  ;; ("C-c p" . projectile-command-map)
+  ;; :bind* (("C-c p f" . 'projectile-find-file))
+  :bind (:map my-proj-map
+              ("f" . projectile-find-file)
+              ("p" . counsel-switch-project))
+  :init
+  (setq projectile-cache-file (concat my-emacs-cache "projectile.cache"))
+  (setq projectile-known-projects-file (concat my-emacs-cache "projectile-bookmarks.eld"))
+
+  ;; Projectile hydra
+  ;; https://github.com/abo-abo/hydra/wiki/Projectile
+  (defhydra hydra-projectile-other-window (:color teal)
+    "projectile-other-window"
+    ("f"  projectile-find-file-other-window        "file")
+    ("g"  projectile-find-file-dwim-other-window   "file dwim")
+    ("d"  projectile-find-dir-other-window         "dir")
+    ("b"  projectile-switch-to-buffer-other-window "buffer")
+    ("q"  nil                                      "cancel" :color blue))
+
+  (defhydra hydra-projectile (:color teal
+                                     :hint nil)
+    "
+       PROJECTILE: %(projectile-project-root)
+
+       Find File            Search/Tags          Buffers                Cache
+  ------------------------------------------------------------------------------------------
+    _f_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
+    _m_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
+    _j_: file curr dir   _o_: multi-occur       _k_: Kill all buffers  _X_: cleanup non-existing
+    _r_: recent file                                               ^^^^_z_: cache current
+    _d_: dir
+
+  "
+    ("a"   projectile-ag)
+    ("b"   projectile-switch-to-buffer)
+    ("c"   projectile-invalidate-cache)
+    ("d"   projectile-find-dir)
+    ("f"   projectile-find-file)
+    ("m"   projectile-find-file-dwim)
+    ("j"   projectile-find-file-in-directory)
+    ("g"   ggtags-update-tags)
+    ("i"   projectile-ibuffer)
+    ("k"   projectile-kill-buffers)
+    ("o"   projectile-multi-occur)
+    ("p|s" projectile-switch-project "switch project")
+    ("s"   projectile-switch-project)
+    ("p"   counsel-switch-project)
+    ("r"   projectile-recentf)
+    ("x"   projectile-remove-known-project)
+    ("X"   projectile-cleanup-known-projects)
+    ("z"   projectile-cache-current-file)
+    ("w"   hydra-projectile-other-window/body "other window")
+    ("q"   nil "cancel" :color blue))
+
   :config
   ;; Where my projects and clones are normally placed.
   (setq projectile-project-search-path '("~/projects")
@@ -1632,7 +1688,7 @@ Version 2017-09-01"
                         ("g" magit-status "magit")
                         ("s" (lambda (a) (setq default-directory a) (counsel-git-grep)) "git grep"))
               :caller 'counsel-switch-project))
-  (bind-key* "C-c p p" 'counsel-switch-project)
+  ;; (bind-key* "C-c p p" 'counsel-switch-project)
   )
 
 (use-package eyebrowse
