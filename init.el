@@ -2708,6 +2708,80 @@ if there is displayed buffer that have shell it will use that window"
 (bind-key "R" 'test-R-buffer my-personal-map)
 
 
+;;; Markdown
+;; Code highlighting via polymode
+(use-package markdown-mode
+  :straight t
+  :mode
+  (("README\\.md\\'" . gfm-mode)
+   ("\\.md\\'" . markdown-mode)
+   ("\\.markdown\\'" . markdown-mode))
+  :init
+  (setq markdown-command "markdown")
+  )
+
+(use-package polymode
+  :straight markdown-mode
+  :straight poly-R
+  :straight poly-noweb
+  :config
+  ;; R/tex polymodes
+  (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
+  (add-to-list 'auto-mode-alist '("\\.rnw" . poly-noweb+r-mode))
+  (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+  )
+
+
+(use-package poly-markdown
+  :straight polymode
+  :defer t
+  :config
+  ;; Wrap lines at column limit, but don't put hard returns in
+  (add-hook 'markdown-mode-hook (lambda () (visual-line-mode 1)))
+  ;; Flyspell on
+  (add-hook 'markdown-mode-hook (lambda () (flyspell-mode 1)))
+  )
+
+;; poly-R
+(use-package poly-R
+  :straight polymode
+  :straight poly-markdown
+  :straight poly-noweb
+  :defer t
+  :config
+  ;; Add a chunk for rmarkdown
+  ;; Need to add a keyboard shortcut
+  ;; https://emacs.stackexchange.com/questions/27405/insert-code-chunk-in-r-markdown-with-yasnippet-and-polymode
+  ;; (defun insert-r-chunk (header)
+  ;;   "Insert an r-chunk in markdown mode. Necessary due to interactions between polymode and yas snippet"
+  ;;   (interactive "sHeader: ")
+  ;;   (insert (concat "```{r " header "}\n\n\n```"))
+  ;;   (forward-line -2))
+  ;; (define-key poly-markdown+r-mode-map (kbd "M-c") #'insert-r-chunk)
+  ;;Masukkan R-chunk M-n M-i
+
+  (defun polymode-insert-new-chunk ()
+    (interactive)
+    (insert "\n```{r}\n")
+    (save-excursion
+      (newline)
+      (insert "```\n")
+      (previous-line)))
+
+  ;; Masukkan R-chunk cara lain
+  ;; https://emacs.stackexchange.com/questions/27405/insert-code-chunk-in-r-markdown-with-yasnippet-and-polymode
+  (defun rmd-insert-r-chunk (header)
+    "Insert an r-chunk in markdown mode. Necessary due to interactions between polymode and yas snippet"
+    (interactive "sHeader: ")
+    (insert (concat "```{r " header "}\n\n```"))
+    (forward-line -1))
+  )
+
+;; Add yaml to markdown an .yml files
+(use-package yaml-mode
+  :straight t
+  :mode (("\\.yml\\'" . yaml-mode)))
+
 ;;; Python
 (use-package python
   ;; The package is called python, the mode is python-mode. Confusingly, there's
