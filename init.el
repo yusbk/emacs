@@ -1619,7 +1619,9 @@ Version 2017-09-01"
   ;; :bind* (("C-c p f" . 'projectile-find-file))
   :bind (:map my-proj-map
               ("f" . projectile-find-file)
-              ("p" . counsel-switch-project))
+              ("p" . counsel-switch-project)
+              ("h" . hydra-projectile/body)
+              ("w" . hydra-projectile-other-window/body))
   :init
   (setq projectile-cache-file (concat my-emacs-cache "projectile.cache"))
   (setq projectile-known-projects-file (concat my-emacs-cache "projectile-bookmarks.eld"))
