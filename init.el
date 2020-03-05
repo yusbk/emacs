@@ -1693,10 +1693,25 @@ Version 2017-09-01"
   ;; (bind-key* "C-c p p" 'counsel-switch-project)
   )
 
+
 (use-package eyebrowse
   :defer 2
+  :after hydra
   :init
   (setq eyebrowse-keymap-prefix (kbd "C-c w")) ;; w for workspace
+
+  ;; Eyebrowser hydra
+  (defhydra hydra-eyebrowse (:color teal)
+    "hydra eyebroser prefix"
+    ("s"  eyebrowse-switch-to-window-config "switch")
+    ("k"  eyebrowse-close-window-config     "kill")
+    ("w"  eyebrowse-last-window-config      "last")
+    ("n"  eyebrowse-next-window-config      "next")
+    ("p"  eyebrowse-prev-window-config      "previous")
+    ("q"  nil                               "cancel" :color blue))
+
+
+
   :bind
   (
    ;; ("<f9>"      . 'eyebrowse-last-window-config)
@@ -1707,7 +1722,10 @@ Version 2017-09-01"
    ("C-c w k"   . 'eyebrowse-close-window-config)
    ("C-c w w"   . 'eyebrowse-last-window-config)
    ("C-c w n"   . 'eyebrowse-next-window-config)
-   ("C-c w p"   . 'eyebrowse-prev-window-config))
+   ("C-c w p"   . 'eyebrowse-prev-window-config)
+   :map my-assist-map
+   ("w" . hydra-eyebrowse/body)
+   )
   :config
   (setq eyebrowse-wrap-around t
         eyebrowse-close-window-config-prompt t
