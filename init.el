@@ -2110,7 +2110,10 @@ buffer, otherwise just change the current paragraph."
                          (eshell/alias "gw" "cd ~/Git-work")
                          (eshell/alias "gp" "cd ~/Git-personal")
                          (eshell/alias "gf" "cd ~/Git-fhi")
-                         ;; folkehelseprofil mappen
+                         ;; encrypted folder
+                         (eshell/alias "cdp" "encfs ~/Dropbox/.encrypted ~/fhpro")
+                         (eshell/alias "cdu" "fusermount -u ~/fhpro") ;unmount
+                         ;; folkehelseprofil
                          (eshell/alias "cdf" "cd /f/Prosjekter/Kommunehelsa")))
   :config
   (setq eshell-list-files-after-cd t) ;ls after cd
