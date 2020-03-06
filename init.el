@@ -2164,7 +2164,7 @@ buffer, otherwise just change the current paragraph."
                          (eshell/alias "gp" "cd ~/Git-personal")
                          (eshell/alias "gf" "cd ~/Git-fhi")
                          ;; encrypted folder
-                         (eshell/alias "cdp" "cd ~/avid")
+                         (eshell/alias "cda" "cd ~/avid")
                          (eshell/alias "cdi" "encfs ~/Dropbox/.encrypted ~/avid")
                          (eshell/alias "cdo" "fusermount -u ~/avid") ;unmount
                          ;; folkehelseprofil
