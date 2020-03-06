@@ -2129,7 +2129,8 @@ buffer, otherwise just change the current paragraph."
                          (eshell/alias "gp" "cd ~/Git-personal")
                          (eshell/alias "gf" "cd ~/Git-fhi")
                          ;; encrypted folder
-                         (eshell/alias "cdp" "encfs ~/Dropbox/.encrypted ~/Private")
+                         (eshell/alias "cdp" "cd ~/Private")
+                         (eshell/alias "cdi" "encfs ~/Dropbox/.encrypted ~/Private")
                          (eshell/alias "cdo" "fusermount -u ~/Private") ;unmount
                          ;; folkehelseprofil
                          (eshell/alias "cdf" "cd /f/Prosjekter/Kommunehelsa")))
