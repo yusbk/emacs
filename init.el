@@ -686,7 +686,7 @@ to choose a different correction."
          ("C-i" . company-complete-common)
          :map my-search-map
          ;; ("c" . company-complete-selection)
-         ("c" . company-complete-common)
+         ("<tab>" . company-complete-selection)
          )
   :config
   (global-company-mode t)
