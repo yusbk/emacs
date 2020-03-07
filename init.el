@@ -1759,7 +1759,7 @@ Version 2017-09-01"
    ("C-c w n"   . 'eyebrowse-next-window-config)
    ("C-c w p"   . 'eyebrowse-prev-window-config)
    :map my-assist-map
-   ("w" . hydra-eyebrowse/body)
+   ("e" . hydra-eyebrowse/body)
    )
   :config
   (setq eyebrowse-wrap-around t
@@ -3073,6 +3073,20 @@ if there is displayed buffer that have shell it will use that window"
 
 
 
+;;; HTML
+(use-package sgml-mode
+  ;; nice for identing
+  :bind (:map my-assist-map
+              ("w" . sgml-pretty-print))
+  :config
+  (setq sgml-basic-offset 4)
+  (add-hook 'sgml-mode-hook
+            (lambda ()
+              (setq indent-tabs-mode nil)))
+  :mode (("\\.pt$" . sgml-mode)
+         ("\\.cpt$" . sgml-mode)
+         ("\\.html" . sgml-mode)
+         ("\\.htm" . sgml-mode)))
 ;;; Appearance
 ;; (use-package naysayer-theme)
 ;; (load-theme 'naysayer t)
