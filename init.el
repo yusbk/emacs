@@ -102,6 +102,7 @@
 ;; from time to time which is super-frustrating.  Get rid of it:
 (unbind-key "C-x C-c")
 (bind-key "0" 'save-buffers-kill-emacs my-personal-map)
+;; (define-key my-personal-map (kbd "0") 'save-buffers-kill-emacs) ;this will also work
 
 ;;; Symbolic link and folders
 (use-package my-init
@@ -217,6 +218,7 @@
 
 
 ;;;; Some functions to be used
+
 (defun suppress-messages (func &rest args)
   "Suppress message output from FUNC."
   ;; Some packages are too noisy.
@@ -226,6 +228,7 @@
     (unwind-protect
         (apply func args)
       (advice-remove 'message #'silence))))
+
 
 (defun the-the ()
   ;; https://www.gnu.org/software/emacs/manual/html_node/eintr/the_002dthe.html
@@ -240,12 +243,17 @@
       (message "Found duplicated word.")
     (message "End of buffer")))
 
-(defun sudo-shell-command (command)
+(bind-key "t" 'the-the my-assist-map)
+
+
+(defun sudo-shell-root (command)
   "Run COMMAND as root."
   (interactive "MShell command (root): ")
   (with-temp-buffer
     (cd "/sudo::/")
     (async-shell-command command)))
+
+(bind-key "r" 'sudo-shell-root my-personal-map)
 
 
 ;;; General function
@@ -282,6 +290,9 @@ Version 2019-11-24"
       (put this-command 'state 0)))))
 
 (bind-key "C-8" 'xah-toggle-letter-case)
+
+
+
 
 ;;; General purpose packages
 ;; Keep .emacs.d folder clean and save things in etc and var folders
@@ -610,51 +621,71 @@ Otherwise, call `delete-blank-lines'."
 
 (use-package iedit
   ;;to combine iedit with mc can use idedit-switch-to-mc-mode
+  ;;use C-; to start and end iedit
   :straight t
+  :bind ("C-;" . iedit-dwim)
   :config
-  ;; https://github.com/alphapapa/unpackaged.el#iedit
-  ;;###autoload
-  (defun unpackaged/iedit-scoped (orig-fn)
-    "Call `iedit-mode' with function-local scope, or global scope if called with a universal prefix."
-    (interactive)
-    (pcase-exhaustive current-prefix-arg
-      ('nil (funcall orig-fn '(0)))
-      ('(4) (funcall orig-fn))))
+  ;;   ;; https://github.com/alphapapa/unpackaged.el#iedit
+  ;;   ;;###autoload
+  ;;   (defun unpackaged/iedit-scoped (orig-fn)
+  ;;     "Call `iedit-mode' with function-local scope, or global scope if called with a universal prefix."
+  ;;     (interactive)
+  ;;     (pcase-exhaustive current-prefix-arg
+  ;;       ('nil (funcall orig-fn '(0)))
+  ;;       ('(4) (funcall orig-fn))))
 
-  (advice-add #'iedit-mode :around #'unpackaged/iedit-scoped)
+  ;;   (advice-add #'iedit-mode :around #'unpackaged/iedit-scoped)
 
-  ;;###autoload
-  (defun unpackaged/iedit-or-flyspell ()
-    "Toggle `iedit-mode' or correct previous misspelling with `flyspell', depending on context.
+  ;;   ;;###autoload
+  ;;   (defun unpackaged/iedit-or-flyspell ()
+  ;;     "Toggle `iedit-mode' or correct previous misspelling with `flyspell', depending on context.
 
-With point in code or when `iedit-mode' is already active, toggle
-`iedit-mode'.  With point in a comment or string, and when
-`iedit-mode' is not already active, auto-correct previous
-misspelled word with `flyspell'.  Call this command a second time
-to choose a different correction."
-    (interactive)
-    (if (or (bound-and-true-p iedit-mode)
-            (and (derived-mode-p 'prog-mode)
-                 (not (or (nth 4 (syntax-ppss))
-                          (nth 3 (syntax-ppss))))))
-        ;; prog-mode is active and point is in a comment, string, or
-        ;; already in iedit-mode
-        (call-interactively #'iedit-mode)
-      ;; Not prog-mode or not in comment or string
-      (if (not (equal flyspell-previous-command this-command))
-          ;; FIXME: This mostly works, but if there are two words on the
-          ;; same line that are misspelled, it doesn't work quite right
-          ;; when correcting the earlier word after correcting the later
-          ;; one
+  ;; With point in code or when `iedit-mode' is already active, toggle
+  ;; `iedit-mode'.  With point in a comment or string, and when
+  ;; `iedit-mode' is not already active, auto-correct previous
+  ;; misspelled word with `flyspell'.  Call this command a second time
+  ;; to choose a different correction."
+  ;;     (interactive)
+  ;;     (if (or (bound-and-true-p iedit-mode)
+  ;;             (and (derived-mode-p 'prog-mode)
+  ;;                  (not (or (nth 4 (syntax-ppss))
+  ;;                           (nth 3 (syntax-ppss))))))
+  ;;         ;; prog-mode is active and point is in a comment, string, or
+  ;;         ;; already in iedit-mode
+  ;;         (call-interactively #'iedit-mode)
+  ;;       ;; Not prog-mode or not in comment or string
+  ;;       (if (not (equal flyspell-previous-command this-command))
+  ;;           ;; FIXME: This mostly works, but if there are two words on the
+  ;;           ;; same line that are misspelled, it doesn't work quite right
+  ;;           ;; when correcting the earlier word after correcting the later
+  ;;           ;; one
 
-          ;; First correction; autocorrect
-          (call-interactively 'flyspell-auto-correct-previous-word)
-        ;; First correction was not wanted; use popup to choose
-        (progn
-          (save-excursion
-            (undo))  ; This doesn't move point, which I think may be the problem.
-          (flyspell-region (line-beginning-position) (line-end-position))
-          (call-interactively 'flyspell-correct-previous-word-generic)))))
+  ;;           ;; First correction; autocorrect
+  ;;           (call-interactively 'flyspell-auto-correct-previous-word)
+  ;;         ;; First correction was not wanted; use popup to choose
+  ;;         (progn
+  ;;           (save-excursion
+  ;;             (undo))  ; This doesn't move point, which I think may be the problem.
+  ;;           (flyspell-region (line-beginning-position) (line-end-position))
+  ;;           (call-interactively 'flyspell-correct-previous-word-generic)))))
+
+  ;; https://www.masteringemacs.org/article/iedit-interactive-multi-occurrence-editing-in-your-buffer
+  (defun iedit-dwim (arg)
+    "Starts iedit but uses \\[narrow-to-defun] to limit its scope."
+    (interactive "P")
+    (if arg
+        (iedit-mode)
+      (save-excursion
+        (save-restriction
+          (widen)
+          ;; this function determines the scope of `iedit-start'.
+          (if iedit-mode
+              (iedit-done)
+            ;; `current-word' can of course be replaced by other
+            ;; functions.
+            (narrow-to-defun)
+            (iedit-start (current-word) (point-min) (point-max)))))))
+
   )
 
 
@@ -1759,7 +1790,7 @@ Version 2017-09-01"
    ("C-c w n"   . 'eyebrowse-next-window-config)
    ("C-c w p"   . 'eyebrowse-prev-window-config)
    :map my-assist-map
-   ("w" . hydra-eyebrowse/body)
+   ("e" . hydra-eyebrowse/body)
    )
   :config
   (setq eyebrowse-wrap-around t
@@ -2164,9 +2195,9 @@ buffer, otherwise just change the current paragraph."
                          (eshell/alias "gp" "cd ~/Git-personal")
                          (eshell/alias "gf" "cd ~/Git-fhi")
                          ;; encrypted folder
-                         (eshell/alias "cdp" "cd ~/Private")
-                         (eshell/alias "cdi" "encfs ~/Dropbox/.encrypted ~/Private")
-                         (eshell/alias "cdo" "fusermount -u ~/Private") ;unmount
+                         (eshell/alias "cda" "cd ~/avid")
+                         (eshell/alias "cdi" "encfs ~/Dropbox/.encrypted ~/avid")
+                         (eshell/alias "cdo" "fusermount -u ~/avid") ;unmount
                          ;; folkehelseprofil
                          (eshell/alias "cdf" "cd /f/Prosjekter/Kommunehelsa")))
   :config
@@ -2297,8 +2328,12 @@ buffer, otherwise just change the current paragraph."
   :hook ((shell-mode . ansi-color-for-comint-mode-on)
          (shell-mode . n-shell-mode-hook)
          (comint-output-filter-functions . comint-strip-ctrl-m))
-  :bind (:map shell-mode-map
-              ([tab] . company-manual-begin))
+  :bind (
+         :map shell-mode-map
+         ([tab] . company-manual-begin)
+         :map my-personal-map
+         ("t" . shell)
+         )
   :init
   (setq system-uses-terminfo nil)
 
@@ -3073,6 +3108,20 @@ if there is displayed buffer that have shell it will use that window"
 
 
 
+;;; HTML
+(use-package sgml-mode
+  ;; nice for identing
+  :bind (:map my-assist-map
+              ("w" . sgml-pretty-print))
+  :config
+  (setq sgml-basic-offset 4)
+  (add-hook 'sgml-mode-hook
+            (lambda ()
+              (setq indent-tabs-mode nil)))
+  :mode (("\\.pt$" . sgml-mode)
+         ("\\.cpt$" . sgml-mode)
+         ("\\.html" . sgml-mode)
+         ("\\.htm" . sgml-mode)))
 ;;; Appearance
 ;; (use-package naysayer-theme)
 ;; (load-theme 'naysayer t)
