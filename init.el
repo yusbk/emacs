@@ -623,68 +623,68 @@ Otherwise, call `delete-blank-lines'."
   ;;to combine iedit with mc can use idedit-switch-to-mc-mode
   ;;use C-; to start and end iedit
   :straight t
-  :bind ("C-;" . iedit-dwim)
+  :bind ("C-;" . iedit-mode)
   :config
-  ;;   ;; https://github.com/alphapapa/unpackaged.el#iedit
-  ;;   ;;###autoload
-  ;;   (defun unpackaged/iedit-scoped (orig-fn)
-  ;;     "Call `iedit-mode' with function-local scope, or global scope if called with a universal prefix."
-  ;;     (interactive)
-  ;;     (pcase-exhaustive current-prefix-arg
-  ;;       ('nil (funcall orig-fn '(0)))
-  ;;       ('(4) (funcall orig-fn))))
+  ;; ;; https://github.com/alphapapa/unpackaged.el#iedit
+  ;; ;;###autoload
+  ;; (defun unpackaged/iedit-scoped (orig-fn)
+  ;;   "Call `iedit-mode' with function-local scope, or global scope if called with a universal prefix."
+  ;;   (interactive)
+  ;;   (pcase-exhaustive current-prefix-arg
+  ;;     ('nil (funcall orig-fn '(0)))
+  ;;     ('(4) (funcall orig-fn))))
 
-  ;;   (advice-add #'iedit-mode :around #'unpackaged/iedit-scoped)
+  ;; (advice-add #'iedit-mode :around #'unpackaged/iedit-scoped)
 
-  ;;   ;;###autoload
-  ;;   (defun unpackaged/iedit-or-flyspell ()
-  ;;     "Toggle `iedit-mode' or correct previous misspelling with `flyspell', depending on context.
+  ;; ;;###autoload
+  ;; (defun unpackaged/iedit-or-flyspell ()
+  ;;   "Toggle `iedit-mode' or correct previous misspelling with `flyspell', depending on context.
 
   ;; With point in code or when `iedit-mode' is already active, toggle
   ;; `iedit-mode'.  With point in a comment or string, and when
   ;; `iedit-mode' is not already active, auto-correct previous
   ;; misspelled word with `flyspell'.  Call this command a second time
   ;; to choose a different correction."
-  ;;     (interactive)
-  ;;     (if (or (bound-and-true-p iedit-mode)
-  ;;             (and (derived-mode-p 'prog-mode)
-  ;;                  (not (or (nth 4 (syntax-ppss))
-  ;;                           (nth 3 (syntax-ppss))))))
-  ;;         ;; prog-mode is active and point is in a comment, string, or
-  ;;         ;; already in iedit-mode
-  ;;         (call-interactively #'iedit-mode)
-  ;;       ;; Not prog-mode or not in comment or string
-  ;;       (if (not (equal flyspell-previous-command this-command))
-  ;;           ;; FIXME: This mostly works, but if there are two words on the
-  ;;           ;; same line that are misspelled, it doesn't work quite right
-  ;;           ;; when correcting the earlier word after correcting the later
-  ;;           ;; one
+  ;;   (interactive)
+  ;;   (if (or (bound-and-true-p iedit-mode)
+  ;;           (and (derived-mode-p 'prog-mode)
+  ;;                (not (or (nth 4 (syntax-ppss))
+  ;;                         (nth 3 (syntax-ppss))))))
+  ;;       ;; prog-mode is active and point is in a comment, string, or
+  ;;       ;; already in iedit-mode
+  ;;       (call-interactively #'iedit-mode)
+  ;;     ;; Not prog-mode or not in comment or string
+  ;;     (if (not (equal flyspell-previous-command this-command))
+  ;;         ;; FIXME: This mostly works, but if there are two words on the
+  ;;         ;; same line that are misspelled, it doesn't work quite right
+  ;;         ;; when correcting the earlier word after correcting the later
+  ;;         ;; one
 
-  ;;           ;; First correction; autocorrect
-  ;;           (call-interactively 'flyspell-auto-correct-previous-word)
-  ;;         ;; First correction was not wanted; use popup to choose
-  ;;         (progn
-  ;;           (save-excursion
-  ;;             (undo))  ; This doesn't move point, which I think may be the problem.
-  ;;           (flyspell-region (line-beginning-position) (line-end-position))
-  ;;           (call-interactively 'flyspell-correct-previous-word-generic)))))
+  ;;         ;; First correction; autocorrect
+  ;;         (call-interactively 'flyspell-auto-correct-previous-word)
+  ;;       ;; First correction was not wanted; use popup to choose
+  ;;       (progn
+  ;;         (save-excursion
+  ;;           (undo))  ; This doesn't move point, which I think may be the problem.
+  ;;         (flyspell-region (line-beginning-position) (line-end-position))
+  ;;         (call-interactively 'flyspell-correct-previous-word-generic)))))
 
-  ;; https://www.masteringemacs.org/article/iedit-interactive-multi-occurrence-editing-in-your-buffer
-  (defun iedit-dwim (arg)
-    "Starts iedit but uses \\[narrow-to-defun] to limit its scope."
-    (interactive "P")
-    (if arg
-        (iedit-mode)
-      (save-excursion
-        (save-restriction
-          (widen)
-          ;; this function determines the scope of `iedit-start'.
-          (if iedit-mode
-              (iedit-done)
-            ;; `current-word' can of course be replaced by other
-            ;; functions.
-            (narrow-to-defun)
-            (iedit-start (current-word) (point-min) (point-max)))))))
+  ;; ;; https://www.masteringemacs.org/article/iedit-interactive-multi-occurrence-editing-in-your-buffer
+  ;; (defun iedit-dwim (arg)
+  ;;   "Starts iedit but uses \\[narrow-to-defun] to limit its scope."
+  ;;   (interactive "P")
+  ;;   (if arg
+  ;;       (iedit-mode)
+  ;;     (save-excursion
+  ;;       (save-restriction
+  ;;         (widen)
+  ;;         ;; this function determines the scope of `iedit-start'.
+  ;;         (if iedit-mode
+  ;;             (iedit-done)
+  ;;           ;; `current-word' can of course be replaced by other
+  ;;           ;; functions.
+  ;;           (narrow-to-defun)
+  ;;           (iedit-start (current-word) (point-min) (point-max)))))))
 
   )
 
