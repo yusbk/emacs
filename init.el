@@ -737,19 +737,22 @@ Otherwise, call `delete-blank-lines'."
 
 
 ;;; Auto-Completion
-(use-package auto-complete
+(use-package fuzzy
   ;; need fuzzy.el for fuzzy completion (optional)
+  :straight t)
+
+(use-package auto-complete
   :defer 3
-  :straight fuzzy
-  :hook (inferior-ess-mode . auto-complete-mode)
-  :bind(
-        :map ac-complete-mode-map
-        ("C-n" . ac-next)
-        ("C-p" . ac-previous)
-        ([?\t] . ac-expand)
-        ([?\r] . ac-complete)
-        :map my-search-map
-        ("C" . auto-complete-mode))
+  :straight t
+  :hook (inferior-ess-r-mode . auto-complete-mode)
+  :bind (:map ac-complete-mode-map
+              ("C-n" . ac-next)
+              ("C-p" . ac-previous)
+              ([?\t] . ac-expand)
+              ([?\r] . ac-complete)
+              :map my-search-map
+              ("C" . auto-complete-mode)
+              )
   :custom
   (ac-use-quick-help 'nil)
   (ac-auto-start 3 "Start after 3 letters")
@@ -2621,6 +2624,15 @@ buffer, otherwise just change the current paragraph."
         ;; inferior buffers. Use it to switch to the R script (like C-c
         ;; C-z):
         ("C-z" . ess-switch-to-inferior-or-script-buffer))
+  :config
+  (defun ess-company-stop-hook ()
+    "Disabled company in inferior ess."
+    (interactive)
+    (company-mode -1))
+  (add-hook 'inferior-ess-mode-hook 'ess-company-stop-hook)
+  ;; Alternative
+  ;; (setq company-global-modes '(not inferior-ess-mode))
+
   )
 
 (use-package ess-r-mode
