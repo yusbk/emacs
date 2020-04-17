@@ -736,8 +736,29 @@ Otherwise, call `delete-blank-lines'."
   (global-undo-tree-mode 1))
 
 
-;;; Completion
-;;;; Auto-completion with Company
+;;; Auto-Completion
+(use-package auto-complete
+  ;; need fuzzy.el for fuzzy completion (optional)
+  :defer 3
+  :straight fuzzy
+  :hook (inferior-ess-mode . auto-complete-mode)
+  :bind(
+        :map ac-complete-mode-map
+        ("C-n" . ac-next)
+        ("C-p" . ac-previous)
+        ([?\t] . ac-expand)
+        ([?\r] . ac-complete)
+        :map my-search-map
+        ("C" . auto-complete-mode))
+  :custom
+  (ac-use-quick-help 'nil)
+  (ac-auto-start 3 "Start after 3 letters")
+  (ac-dwim t "Do what I mean")
+  (ac-candidate-limit 5 "Number of candidates to show")
+  (ac-menu-height 5 "Height of candidate menu")
+  )
+
+
 (use-package company
   :defer 3
   :straight company-quickhelp ; Show short documentation at point
@@ -753,7 +774,7 @@ Otherwise, call `delete-blank-lines'."
          ("<tab>" . company-complete)
          ("C-i" . company-complete-common)
          :map my-search-map
-         ;; ("c" . company-complete-selection)
+         ("c" . company-mode)
          ("<tab>" . company-complete-selection)
          )
   :config
@@ -2615,14 +2636,16 @@ buffer, otherwise just change the current paragraph."
   (unless (file-exists-p ybk/r-dir)
     (make-directory ybk/r-dir t))
 
-  :bind (("C-c d" . ess-r-package-dev-map)
+  :bind (
+         ("C-c d" . ess-r-package-dev-map)
+         ("C-c +" . my-add-column)
+         ("C-c ," . my-add-match)
          :map ess-dev-map ;C-c C-t
          ("r" . ess-r-package-dev-map)
          :map ess-r-mode-map
          ("M--" . ess-cycle-assign)
-         ;; ("M--" . ess-insert-assign)
-         ("C-c +" . my-add-column)
-         ("C-c ," . my-add-match)
+         ;; ("C-c +" . my-add-column)
+         ;; ("C-c ," . my-add-match)
          ("C-c \\" . my-add-pipe)
          ("M-|" . my-ess-eval-pipe-through-line)
          ("C-S-<return>" . ess-eval-region-or-function-or-paragraph-and-step)
@@ -2632,6 +2655,8 @@ buffer, otherwise just change the current paragraph."
          :map inferior-ess-r-mode-map
          ("C-S-<up>" . ess-readline) ;previous command from script
          ("M--" . ess-cycle-assign)
+         ;; ("C-c +" . my-add-column)
+         ;; ("C-c ," . my-add-match)
          :map ess-r-package-dev-map
          ("p" . ess-r-devtools-create-package)
 
@@ -2640,10 +2665,16 @@ buffer, otherwise just change the current paragraph."
   :custom
   (ess-plain-first-buffername nil "Name first R process R:1")
   (ess-tab-complete-in-script t "TAB should complete.")
+  (ess-history-file t "Save .Rhistory in history-directory")
 
   :config
   ;; ESS-company
   (setq ess-use-company t)
+
+  (setq ess-history-directory ybk/r-dir)
+
+  ;; prefer pdf-tools
+  (setq ess-pdf-viewer-pref "emacsclient")
 
   ;; Must-haves for ESS
   ;; http://www.emacswiki.org/emacs/CategoryESS
@@ -2702,6 +2733,25 @@ buffer, otherwise just change the current paragraph."
           (ess-fl-keyword:delimiters . nil)
           (ess-fl-keyword:= . nil)
           (ess-R-fl-keyword:F&T . nil)))
+
+
+
+  ;; https://emacs.readthedocs.io/en/latest/ess__emacs_speaks_statistics.html
+  ;; - remove comments lines start with ‘## ‘
+  ;; - remove blank lines,
+  ;; - add one blank lines between sections, which defined by ‘#### ‘.
+  (defun r-clean ()
+    (interactive)
+    (when (string= major-mode "ess-mode")
+      (progn
+        (goto-char (point-min))
+        ;; remove lines with only commenst and start with #, ##, or ###, but not #### for it's the section heading.
+        (flush-lines "^\\(\\|[[:space:]]+\\)[#]\\{1,3\\} ")
+        (flush-lines "^\\(\\|[[:space:]]+\\)$") ;; blank lines
+        (replace-regexp "#### " "\n#### ") ;; add blank lines between sections.
+        (while (search-forward-regexp "##[^']" nil t) ;; remove inline comments start with ##
+          (kill-region (- (point) 3) (line-end-position)))
+        (save-buffer))))
 
 
   ;; data.table update
@@ -3126,6 +3176,7 @@ if there is displayed buffer that have shell it will use that window"
          ("\\.cpt$" . sgml-mode)
          ("\\.html" . sgml-mode)
          ("\\.htm" . sgml-mode)))
+
 ;;; Appearance
 ;; (use-package naysayer-theme)
 ;; (load-theme 'naysayer t)
@@ -3178,6 +3229,7 @@ if there is displayed buffer that have shell it will use that window"
   (setq my-themes '(
                     doom-gruvbox
                     doom-nord-light
+                    doom-solarized-light
                     doom-snazzy
                     doom-acario-light
                     ;; doom-vibrant
