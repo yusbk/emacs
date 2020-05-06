@@ -78,10 +78,16 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+;; ;; Start emacs as server
+;; (use-package server
+;;   :config
+;;   (server-start))
+
+
 ;;; Personal keybindings
 ;; Personal map activate as early as possible
-(unbind-key "C-p")
-(bind-keys :prefix "C-p"
+(unbind-key [f12])
+(bind-keys :prefix [f12]
            :prefix-map my-personal-map)
 
 (bind-keys :prefix "C-c o"
@@ -136,7 +142,8 @@
   (load custom-file :noerror))
 
 ;;; General setup
-(setq-default ;; Use setq-default to define global default
+(setq-default
+ ;; Use setq-default to define global default
  ;; Don't show scratch message, and use fundamental-mode for *scratch*
  ;; Remove splash screen and the echo area message
  inhibit-startup-message t
@@ -1160,6 +1167,14 @@ command was called, go to its unstaged changes section."
   ;; activate magit-log header with date
   (my-magit-log-date-headers-mode 1)
 
+  )
+
+(use-package with-editor
+  :straight t
+  :config
+  (add-hook 'shell-mode-hook  'with-editor-export-editor)
+  (add-hook 'term-exec-hook   'with-editor-export-editor)
+  (add-hook 'eshell-mode-hook 'with-editor-export-editor)
   )
 
 (use-package smerge-mode
@@ -3306,8 +3321,17 @@ if there is displayed buffer that have shell it will use that window"
   ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
   (minibuffer-setup . solaire-mode-in-minibuffer)
   :config
+
+  ;; for doom-themes package
   (solaire-mode-swap-bg)
-  (solaire-global-mode +1))
+
+  ;; Enable solaire-mode anywhere it can be enabled
+  (solaire-global-mode +1)
+
+  ;; highlight the minibuffer when it is activated:
+  (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
+
+  )
 
 
 ;; Adjust for time display in modeline
@@ -3873,10 +3897,6 @@ made unique when necessary."
   :custom
   (org-directory "~/Dropbox/org/" "Kept in sync with syncthing.")
   (org-default-notes-file (concat org-directory "refile.org"))
-
-
-
-
   (org-agenda-skip-deadline-if-done t "Remove done deadlines from agenda.")
   (org-agenda-skip-scheduled-if-done t "Remove done scheduled from agenda.")
   (org-agenda-skip-timestamp-if-done t "Don't show timestamped things in agenda if they're done.")
@@ -4011,6 +4031,20 @@ See `org-agenda-todo' for more details."
   :straight org
   :hook
   (org-mode . org-indent-mode))
+
+(use-package ox-gfm
+  ;; to export to markdown
+  ;; M-x org-gfm-export-to-markdown
+  :straight t
+  :after org
+  :bind (:map my-assist-map
+              ("m m" . org-gfm-export-to-markdown) ;export as file
+              ("m a" . org-gfm-export-as-markdown) ;export as buffer
+              )
+  :init
+  (eval-after-load "org"
+    '(require 'ox-gfm nil t))
+  )
 
 
 ;;; Blogs
