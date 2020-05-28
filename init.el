@@ -99,22 +99,24 @@
 (bind-keys :prefix "C-s"
            :prefix-map my-search-map)
 
-(unbind-key "C-q") ;; Reserve for assist related commands
-(bind-keys :prefix "C-q"
+(unbind-key [f9]) ;; Reserve for assist related commands
+(bind-keys :prefix [f9]
            :prefix-map my-assist-map)
 
 ;; Exit Emacs
 ;; C-x C-c is originally bound to kill emacs. I accidentally type this
 ;; from time to time which is super-frustrating.  Get rid of it:
 (unbind-key "C-x C-c")
-(bind-key "0" 'save-buffers-kill-emacs my-personal-map)
-;; (define-key my-personal-map (kbd "0") 'save-buffers-kill-emacs) ;this will also work
 
 ;;; Symbolic link and folders
 (use-package my-init
   :straight nil
-  :bind (:map my-personal-map
-              ("y" . my-init-file))
+  :bind (
+         :map my-personal-map
+         ("y" . my-init-file)
+         ("0" . save-buffers-kill-emacs)
+         ("q" . delete-frame) ;C-x 5 0
+         )
   :init
   (defun my-init-file ()
     "Open my emacs init.el file"
@@ -437,6 +439,7 @@ Version 2019-11-24"
          ("C-c n"         . 'crux-cleanup-buffer-or-region)
          (:map my-assist-map
                ("<backspace>" . crux-kill-line-backwards) ;C-S-backspace sp-kill-whole-line
+               ("k" . crux-kill-other-buffers) ;except this
                ;; ("t" . crux-transpose-windows)
                )
          (:map my-personal-map
@@ -1449,16 +1452,18 @@ With ARG, swap them instead."
 ;;;; Find-replace
 (use-package xah-find
   ;; find text from all files in a folder
-  :bind (("C-s w" . xah-find-text)
-         ("C-s o" . xah-find-replace-text)
-         ("C-s e" . xah-find-text-regex)
-         ("C-s k" . xah-find-count))
+
+  :bind (
+         :map my-search-map
+         ("w" . xah-find-text)
+         ("o" . xah-find-replace-text)
+         ("e" . xah-find-text-regex)
+         ("k" . xah-find-count))
   )
 
 ;;;; Ivy / Swiper / Counsel
 (use-package ivy
   :bind
-  ("C-M-z" . ivy-resume)
   ([remap list-buffers] . ivy-switch-buffer)
   :config
   (setq ivy-count-format "(%d/%d) ")
@@ -1477,9 +1482,10 @@ With ARG, swap them instead."
   :straight counsel-projectile
   :straight ivy-posframe
   :straight smex
-  :bind (("M-s"     . swiper)
-         ("<f6>"    . ivy-resume) ;C-s C-r
+  :bind (
          :map my-search-map
+         ("s"     . swiper)
+         ("c"    . ivy-resume) ;continue C-s C-r
          ("a" . counsel-ag)
          ("d" . counsel-dired-jump)
          ("f" . counsel-find-file)
@@ -1488,10 +1494,10 @@ With ARG, swap them instead."
          ("j" . counsel-file-jump)
          ("l" . counsel-find-library)
          ("r" . counsel-recentf)
-         ("s" . counsel-locate)
+         ("S" . counsel-locate)
          ("u" . counsel-unicode-char)
          ("v" . counsel-set-variable)
-         ("C-r" . ivy-resume))
+         )
   :init
   (setq ivy-rich--display-transformers-list
         '(ivy-switch-buffer
@@ -1948,18 +1954,81 @@ Version 2017-09-01"
 ;; And this tutorial: https://ebzzry.io/en/emacs-pairs/
 (use-package smartparens
   :defer 5
-  :bind (:map smartparens-mode-map
-              ("M-("           . sp-wrap-round)
-              ("M-["           . sp-wrap-square)
-              ("M-{"           . sp-wrap-curly)
-              ("M-<backspace>" . sp-backward-unwrap-sexp)
-              ("M-<del>"       . sp-unwrap-sexp)
-              ("C-<right>"     . sp-forward-slurp-sexp)
-              ("C-<left>"      . sp-backward-slurp-sexp)
-              ("C-M-<right>"   . sp-forward-barf-sexp)
-              ("C-M-<left>"    . sp-backward-barf-sexp)
-              ("C-M-a"         . sp-beginning-of-sexp)
-              ("C-M-e"         . sp-end-of-sexp))
+  :bind (
+         :map my-assist-map
+         ("p" . hydra-smartparens/body)
+         :map smartparens-mode-map
+         ("M-("           . sp-wrap-round)
+         ("M-["           . sp-wrap-square)
+         ("M-{"           . sp-wrap-curly)
+         ("M-<backspace>" . sp-backward-unwrap-sexp)
+         ("M-<del>"       . sp-unwrap-sexp)
+         ("C-<right>"     . sp-forward-slurp-sexp)
+         ("C-<left>"      . sp-backward-slurp-sexp)
+         ("C-M-<right>"   . sp-forward-barf-sexp)
+         ("C-M-<left>"    . sp-backward-barf-sexp)
+         ("C-M-a"         . sp-beginning-of-sexp)
+         ("C-M-z"         . sp-end-of-sexp)
+         ("C-M-k"         . sp-kill-sexp)
+         :map my-personal-map
+         ("a" . sp-beginning-of-sexp)
+         ("e" . sp-end-of-sexp)
+         ("u" . sp-unwrap-sexp) ;sama seperti sp-splice-sexp
+         ("k" . sp-kill-sexp)
+         )
+  :init
+  (defhydra hydra-smartparens (:hint nil)
+    "
+ Moving^^^^                       Slurp & Barf^^   Wrapping^^            Sexp juggling^^^^               Destructive
+------------------------------------------------------------------------------------------------------------------------
+ [_a_] beginning  [_n_] down      [_h_] bw slurp   [_R_]   rewrap        [_S_] split   [_t_] transpose   [_c_] change inner  [_w_] copy
+ [_e_] end        [_N_] bw down   [_H_] bw barf    [_u_]   unwrap        [_s_] splice  [_A_] absorb      [_C_] change outer
+ [_f_] forward    [_p_] up        [_l_] slurp      [_U_]   bw unwrap     [_r_] raise   [_E_] emit        [_k_] kill          [_g_] quit
+ [_b_] backward   [_P_] bw up     [_L_] barf       [_(__{__[_] wrap (){}[]   [_j_] join    [_o_] convolute   [_K_] bw kill       [_q_] quit"
+    ;; Moving
+    ("a" sp-beginning-of-sexp)
+    ("e" sp-end-of-sexp)
+    ("f" sp-forward-sexp)
+    ("b" sp-backward-sexp)
+    ("n" sp-down-sexp)
+    ("N" sp-backward-down-sexp)
+    ("p" sp-up-sexp)
+    ("P" sp-backward-up-sexp)
+
+    ;; Slurping & barfing
+    ("h" sp-backward-slurp-sexp)
+    ("H" sp-backward-barf-sexp)
+    ("l" sp-forward-slurp-sexp)
+    ("L" sp-forward-barf-sexp)
+
+    ;; Wrapping
+    ("R" sp-rewrap-sexp)
+    ("u" sp-unwrap-sexp)
+    ("U" sp-backward-unwrap-sexp)
+    ("(" sp-wrap-round)
+    ("{" sp-wrap-curly)
+    ("[" sp-wrap-square)
+
+    ;; Sexp juggling
+    ("S" sp-split-sexp)
+    ("s" sp-splice-sexp)
+    ("r" sp-raise-sexp)
+    ("j" sp-join-sexp)
+    ("t" sp-transpose-sexp)
+    ("A" sp-absorb-sexp)
+    ("E" sp-emit-sexp)
+    ("o" sp-convolute-sexp)
+
+    ;; Destructive editing
+    ("c" sp-change-inner :exit t)
+    ("C" sp-change-enclosing :exit t)
+    ("k" sp-kill-sexp)
+    ("K" sp-backward-kill-sexp)
+    ("w" sp-copy-sexp)
+
+    ("q" nil)
+    ("g" nil))
+
   :config
   (require 'smartparens-config)
   (--each '(css-mode-hook
@@ -2232,9 +2301,14 @@ buffer, otherwise just change the current paragraph."
                          (eshell/alias "d" "dired $1")
                          (eshell/alias "ll" "ls -l")
                          (eshell/alias "la" "ls -al")
-                         (eshell/alias "gw" "cd ~/Git-work")
-                         (eshell/alias "gp" "cd ~/Git-personal")
-                         (eshell/alias "gf" "cd ~/Git-fhi")
+                         (eshell/alias "gitw" "cd ~/Git-work && cd $1")
+                         (eshell/alias "gitp" "cd ~/Git-personal && cd $1")
+                         (eshell/alias "gitf" "cd ~/Git-fhi && cd $1")
+                         (eshell/alias "gc" "git checkout $1")
+                         (eshell/alias "gf" "git fetch $1")
+                         (eshell/alias "gm" "git merge $1")
+                         (eshell/alias "gb" "git branch")
+                         (eshell/alias "gw" "git worktree list")
                          ;; blog
                          (eshell/alias "cdb" "cd ~/Git-personal/yusbk.github.io/org")
                          ;; encrypted folder
