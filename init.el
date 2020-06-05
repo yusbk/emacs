@@ -703,6 +703,8 @@ Otherwise, call `delete-blank-lines'."
   )
 
 
+;; (bind-key "C-x u " #'undo)
+
 (use-package undo-tree
   :straight t
   :diminish undo-tree-mode
@@ -1204,7 +1206,8 @@ command was called, go to its unstaged changes section."
         nil nil 'center)
       (define-fringe-bitmap 'git-gutter-fr:deleted
         [0 0 0 0 0 0 0 0 0 0 0 0 0 128 192 224 240 248]
-        nil nil 'center))))
+        nil nil 'center)))
+  )
 
 
 (use-package git-timemachine
@@ -2614,25 +2617,31 @@ buffer, otherwise just change the current paragraph."
 ;;               ("C-c h" . hs-toggle-hiding)))
 
 (use-package hideshow
-  :bind (("C-c TAB" . hs-toggle-hiding)
-         ("C-c h" . eos/hs-fold-show-only-methods)
-         ("M-+" . hs-show-all))
+  :straight nil
+  :bind (("C-c h" . hs-toggle-hiding)
+         ("C-c H" . eos/hs-fold-show-only-methods)
+         ("C-c B" . hs-hide-block)
+         ("M-+" . hs-show-all)
+         :map my-assist-map
+         ("s" . hs-toggle-hiding)
+         ("A" . hs-show-all)
+         )
   :init (add-hook #'prog-mode-hook #'hs-minor-mode)
+  :hook ((ess-r-mode ess-mode js-mode emacs-lisp-mode) . hs-minor-mode)
   :diminish hs-minor-mode
   :config
   ;; Automatically open a block if you search for something where it matches
   (setq hs-isearch-open t)
 
-  ;; Add `json-mode' and `javascript-mode' to the list
-  (setq hs-special-modes-alist
-        (mapcar 'purecopy
-                '((c-mode "{" "}" "/[*/]" nil nil)
-                  (ess-mode "{" "}" "/(*/)" nil nil)
-                  (c++-mode "{" "}" "/[*/]" nil nil)
-                  (java-mode "{" "}" "/[*/]" nil nil)
-                  (js-mode "{" "}" "/[*/]" nil)
-                  (json-mode "{" "}" "/[*/]" nil)
-                  (javascript-mode  "{" "}" "/[*/]" nil))))
+  ;; Add ess-mode to the standard list
+  (defvar hs-special-modes-alist
+    (mapcar 'purecopy
+            '((ess-mode "{" "}" "/[*/]" nil nil)
+              (c-mode "{" "}" "/[*/]" nil nil)
+              (c++-mode "{" "}" "/[*/]" nil nil)
+              (bibtex-mode ("@\\S(*\\(\\s(\\)" 1))
+              (java-mode "{" "}" "/[*/]" nil nil)
+              (js-mode "{" "}" "/[*/]" nil))))
 
   ;; only show method names and signatures, hiding the bodies
   (defvar eos/hs-level 2
