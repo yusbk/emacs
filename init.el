@@ -115,7 +115,7 @@
          :map my-personal-map
          ("y" . my-init-file)
          ("0" . save-buffers-kill-emacs)
-         ("q" . delete-frame) ;C-x 5 0
+         ("Q" . delete-frame) ;C-x 5 0
          )
   :init
   (defun my-init-file ()
@@ -430,13 +430,15 @@ Version 2019-11-24"
   ;; A handful of useful functions
   :defer 1
   :bind (
-         ("C-x t"         . 'crux-swap-windows)
-         ("C-c b"         . 'crux-create-scratch-buffer)
-         ("C-x o"         . 'crux-open-with)
+         ("C-x t"   . 'crux-swap-windows)
+         ("C-c b"   . 'crux-create-scratch-buffer)
+         ("C-x o"   . 'crux-open-with)
          ;; ("C-x f"         . 'crux-recentf-find-file) ;C-s f counsel-recent-file
          ;; ("C-x 4 t"       . 'crux-transpose-windows)
-         ("C-x C-k"       . 'crux-delete-buffer-and-file)
-         ("C-c n"         . 'crux-cleanup-buffer-or-region)
+         ("C-c r"   . crux-rename-file-and-buffer) ;rename current buffer
+         ("C-c k"   . crux-kill-other-buffers) ;kill all open buffers but
+         ("C-x C-k" . 'crux-delete-buffer-and-file)
+         ("C-c n"   . 'crux-cleanup-buffer-or-region)
          (:map my-assist-map
                ("<backspace>" . crux-kill-line-backwards) ;C-S-backspace sp-kill-whole-line
                ("k" . crux-kill-other-buffers) ;except this
@@ -700,8 +702,6 @@ Otherwise, call `delete-blank-lines'."
 
   )
 
-
-;; (bind-key "C-x u " #'undo)
 
 (use-package undo-tree
   :straight t
@@ -1043,14 +1043,6 @@ In that case, insert the number."
     (global-diff-hl-mode)
     )
 
-  ;; Provides stage hunk at buffer, more useful
-  (use-package git-gutter
-    :defer 3
-    :commands (git-gutter:stage-hunk)
-    :bind (:map vc-prefix-map
-                ("s" . 'git-gutter:stage-hunk))
-    )
-
   ;; Someone says this will make magit on Windows faster.
   (setq w32-pipe-read-delay 0)
 
@@ -1171,6 +1163,57 @@ command was called, go to its unstaged changes section."
   (my-magit-log-date-headers-mode 1)
 
   )
+
+
+;; ;; Provides stage hunk at buffer, more useful
+;; (use-package git-gutter
+;;   :defer 3
+;;   :commands (git-gutter:stage-hunk)
+;;   :bind (:map vc-prefix-map
+;;               ("s" . 'git-gutter:stage-hunk))
+;;   )
+
+(use-package git-gutter
+  :straight t
+  ;; :when window-system
+  :defer t
+  :bind (("C-x P" . git-gutter:popup-hunk)
+         ("C-x p" . git-gutter:previous-hunk)
+         ("C-x n" . git-gutter:next-hunk)
+         ("C-c G" . git-gutter:popup-hunk)
+         :map vc-prefix-map
+         ("s" . git-gutter:stage-hunk)
+         )
+  :diminish ""
+  :init
+  (add-hook 'prog-mode-hook #'git-gutter-mode)
+  (add-hook 'text-mode-hook #'git-gutter-mode)
+  :config
+  (use-package git-gutter-fringe
+    :ensure t
+    :init
+    (require 'git-gutter-fringe)
+    (when (fboundp 'define-fringe-bitmap)
+      (define-fringe-bitmap 'git-gutter-fr:added
+        [224 224 224 224 224 224 224 224 224 224 224 224 224
+             224 224 224 224 224 224 224 224 224 224 224 224]
+        nil nil 'center)
+      (define-fringe-bitmap 'git-gutter-fr:modified
+        [224 224 224 224 224 224 224 224 224 224 224 224 224
+             224 224 224 224 224 224 224 224 224 224 224 224]
+        nil nil 'center)
+      (define-fringe-bitmap 'git-gutter-fr:deleted
+        [0 0 0 0 0 0 0 0 0 0 0 0 0 128 192 224 240 248]
+        nil nil 'center))))
+
+
+(use-package git-timemachine
+  ;; see file history
+  ;; w copy short hash or W for full hash
+  :straight t
+  :bind (:map my-personal-map
+              ("G" . git-timemachine)))
+
 
 (use-package with-editor
   :straight t
@@ -1954,22 +1997,25 @@ Version 2017-09-01"
 ;; And this tutorial: https://ebzzry.io/en/emacs-pairs/
 (use-package smartparens
   :defer 5
-  :bind (
+  :bind (([f8] . hydra-smartparens/body)
          :map my-assist-map
          ("p" . hydra-smartparens/body)
+         ;; exp1 ((exp2 (exp3)) exp4)
          :map smartparens-mode-map
          ("M-("           . sp-wrap-round)
          ("M-["           . sp-wrap-square)
          ("M-{"           . sp-wrap-curly)
-         ("M-<backspace>" . sp-backward-unwrap-sexp)
-         ("M-<del>"       . sp-unwrap-sexp)
-         ("C-<right>"     . sp-forward-slurp-sexp)
-         ("C-<left>"      . sp-backward-slurp-sexp)
-         ("C-M-<right>"   . sp-forward-barf-sexp)
-         ("C-M-<left>"    . sp-backward-barf-sexp)
+         ("M-<backspace>" . sp-backward-unwrap-sexp) ;unwrap outside exp2 when in exp3
+         ("M-<del>"       . sp-unwrap-sexp) ;unwrap exp3 when in exp3
+         ("C-S-<right>"     . sp-forward-slurp-sexp) ;include exp4 when in exp3
+         ("C-S-<left>"      . sp-backward-slurp-sexp) ;include exp1 when in exp2
+         ("C-M-<right>"   . sp-forward-barf-sexp) ;remove exp4 from ()
+         ("C-M-<left>"    . sp-backward-barf-sexp) ;remove exp2 from ()
          ("C-M-a"         . sp-beginning-of-sexp)
          ("C-M-z"         . sp-end-of-sexp)
          ("C-M-k"         . sp-kill-sexp)
+         ("C-M-f"         . sp-forward-sexp)
+         ("C-M-b"         . sp-backward-sexp)
          :map my-personal-map
          ("a" . sp-beginning-of-sexp)
          ("e" . sp-end-of-sexp)
@@ -2563,9 +2609,55 @@ buffer, otherwise just change the current paragraph."
 
 ;;; Code folding
 
+;; (use-package hideshow
+;;   :bind (:map prog-mode-map
+;;               ("C-c h" . hs-toggle-hiding)))
+
 (use-package hideshow
-  :bind (:map prog-mode-map
-              ("C-c h" . hs-toggle-hiding)))
+  :bind (("C-c TAB" . hs-toggle-hiding)
+         ("C-c h" . eos/hs-fold-show-only-methods)
+         ("M-+" . hs-show-all))
+  :init (add-hook #'prog-mode-hook #'hs-minor-mode)
+  :diminish hs-minor-mode
+  :config
+  ;; Automatically open a block if you search for something where it matches
+  (setq hs-isearch-open t)
+
+  ;; Add `json-mode' and `javascript-mode' to the list
+  (setq hs-special-modes-alist
+        (mapcar 'purecopy
+                '((c-mode "{" "}" "/[*/]" nil nil)
+                  (ess-mode "{" "}" "/(*/)" nil nil)
+                  (c++-mode "{" "}" "/[*/]" nil nil)
+                  (java-mode "{" "}" "/[*/]" nil nil)
+                  (js-mode "{" "}" "/[*/]" nil)
+                  (json-mode "{" "}" "/[*/]" nil)
+                  (javascript-mode  "{" "}" "/[*/]" nil))))
+
+  ;; only show method names and signatures, hiding the bodies
+  (defvar eos/hs-level 2
+    "Default level to hide at when calling
+    `eos/fold-show-only-methods'. This is buffers may set this to
+    be buffer-local.")
+
+  (setq eos/hs-fold-show-only-methods-active-p nil)
+  (defun eos/hs-fold-show-only-methods ()
+    "Toggle between hiding all methods using `eos/hs-level' or
+showing them."
+    (interactive)
+    (save-excursion
+      (if eos/hs-fold-show-only-methods-active-p
+          (progn
+            (hs-show-all)
+            (setq-local eos/hs-fold-show-only-methods-active-p nil))
+        (progn
+          (goto-char (point-min))
+          (hs-hide-level eos/hs-level)
+          (setq-local eos/hs-fold-show-only-methods-active-p t)))))
+
+  ;; (global-set-key (kbd "C-c h") 'eos/hs-fold-show-only-methods)
+  )
+
 
 (use-package origami
   ;; Code folding
@@ -2697,6 +2789,20 @@ buffer, otherwise just change the current paragraph."
      ("r"          . neotree-rename-node)
      ("h"          . neotree-hidden-file-toggle)
      ("f"          . neotree-refresh))))
+
+(use-package ztree
+  ;;Had diff mode with M-x ztree-diff or ordinary tree with ztree-dir
+  ;; https://github.com/fourier/ztree
+  :straight t
+  :bind (
+         :map my-personal-map
+         ("z" . ztree-dir)
+         ("Z" . ztree-diff)
+         )
+  :config
+  ;; ignore case and whitespace differences
+  (setq ztree-diff-additional-options '("-w" "-i"))
+  )
 
 
 ;;; ESS
@@ -4122,6 +4228,40 @@ See `org-agenda-todo' for more details."
 
 
 ;;; Blogs
+;;;; Hugo
+(use-package ox-hugo
+  ;; Use Hugo to build site https://ox-hugo.scripter.co/
+  :straight t
+  :after ox
+  :config
+  ;; Populates only the EXPORT_FILE_NAME property in the inserted headline.
+  (with-eval-after-load 'org-capture
+    (defun org-hugo-new-subtree-post-capture-template ()
+      "Returns `org-capture' template string for new Hugo post.
+See `org-capture-templates' for more information."
+      (let* ((title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
+             (fname (org-hugo-slug title)))
+        (mapconcat #'identity
+                   `(
+                     ,(concat "* TODO " title)
+                     ":PROPERTIES:"
+                     ,(concat ":EXPORT_FILE_NAME: " fname)
+                     ":END:"
+                     "%?\n")          ;Place the cursor here finally
+                   "\n")))
+
+    (add-to-list 'org-capture-templates
+                 '("h"                ;`org-capture' binding + h
+                   "Hugo post"
+                   entry
+                   ;; It is assumed that below file is present in `org-directory'
+                   ;; and that it has a "Blog Ideas" heading. It can even be a
+                   ;; symlink pointing to the actual location of all-posts.org!
+                   (file+olp "all-posts.org" "Blog Ideas")
+                   (function org-hugo-new-subtree-post-capture-template))))
+  )
+
+;;;; Jekyll setting
 ;; Required packages from org-contrib for export to html
 (require 'ox-html)
 (require 'ox-publish)
