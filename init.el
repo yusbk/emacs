@@ -266,42 +266,6 @@
 
 
 ;;; General function
-;;;; Toggle letter-case
-;; Instead of using M-u/l/c
-(defun xah-toggle-letter-case ()
-  "Toggle the letter case of current word or text selection.
-Always cycle in this order: Init Caps, ALL CAPS, all lower.
-
-URL `http://ergoemacs.org/emacs/modernization_upcase-word.html'
-Version 2019-11-24"
-  (interactive)
-  (let (
-        (deactivate-mark nil)
-        $p1 $p2)
-    (if (use-region-p)
-        (setq $p1 (region-beginning) $p2 (region-end))
-      (save-excursion
-        (skip-chars-backward "0-9A-Za-z")
-        (setq $p1 (point))
-        (skip-chars-forward "0-9A-Za-z")
-        (setq $p2 (point))))
-    (when (not (eq last-command this-command))
-      (put this-command 'state 0))
-    (cond
-     ((equal 0 (get this-command 'state))
-      (upcase-initials-region $p1 $p2)
-      (put this-command 'state 1))
-     ((equal 1 (get this-command 'state))
-      (upcase-region $p1 $p2)
-      (put this-command 'state 2))
-     ((equal 2 (get this-command 'state))
-      (downcase-region $p1 $p2)
-      (put this-command 'state 0)))))
-
-(bind-key "C-8" 'xah-toggle-letter-case)
-
-
-
 
 ;;; General purpose packages
 ;; Keep .emacs.d folder clean and save things in etc and var folders
@@ -463,8 +427,8 @@ Version 2019-11-24"
   :hook ((prog-mode) . auto-fill-mode)
   ;; resize buffer accordingly
   :bind
-  ("<f8>" . (lambda () (interactive) (progn (visual-line-mode)
-                                       (follow-mode))))
+  ("<f12> v" . (lambda () (interactive) (progn (visual-line-mode)
+                                          (follow-mode))))
   ;; M-backspace to backward-delete-word
   ;; C-S-backspace is used by sp-kill-whole-line
   ("M-S-<backspace>" . backward-kill-sentence)
@@ -477,6 +441,7 @@ Version 2019-11-24"
   ("M-l" . downcase-dwim)
   ("M-c" . capitalize-dwim)
   ("M-u" . upcase-dwim)
+  ("C-8" . xah-toggle-letter-case)
   ;; Super useful for "merging" lines together, overrides the much less
   ;; useful tab-to-tab-stop:
   ("M-i" . delete-indentation)
@@ -537,10 +502,40 @@ Otherwise, call `delete-blank-lines'."
   (setq-default visual-fill-column-width 119
                 visual-fill-column-center-text nil)
   :config
+  ;; Toggle letter-case
+  ;; Instead of using M-u/l/c
+  (defun xah-toggle-letter-case ()
+    "Toggle the letter case of current word or text selection.
+Always cycle in this order: Init Caps, ALL CAPS, all lower.
 
+URL `http://ergoemacs.org/emacs/modernization_upcase-word.html'
+Version 2019-11-24"
+    (interactive)
+    (let (
+          (deactivate-mark nil)
+          $p1 $p2)
+      (if (use-region-p)
+          (setq $p1 (region-beginning) $p2 (region-end))
+        (save-excursion
+          (skip-chars-backward "0-9A-Za-z")
+          (setq $p1 (point))
+          (skip-chars-forward "0-9A-Za-z")
+          (setq $p2 (point))))
+      (when (not (eq last-command this-command))
+        (put this-command 'state 0))
+      (cond
+       ((equal 0 (get this-command 'state))
+        (upcase-initials-region $p1 $p2)
+        (put this-command 'state 1))
+       ((equal 1 (get this-command 'state))
+        (upcase-region $p1 $p2)
+        (put this-command 'state 2))
+       ((equal 2 (get this-command 'state))
+        (downcase-region $p1 $p2)
+        (put this-command 'state 0)))))
+
+  ;; (bind-key "C-8" 'xah-toggle-letter-case)
   )
-
-
 
 (use-package expand-region
   ;; Incrementally select a region
@@ -2350,9 +2345,11 @@ buffer, otherwise just change the current paragraph."
                          (eshell/alias "d" "dired $1")
                          (eshell/alias "ll" "ls -l")
                          (eshell/alias "la" "ls -al")
-                         (eshell/alias "gitw" "cd ~/Git-work && cd $1")
-                         (eshell/alias "gitp" "cd ~/Git-personal && cd $1")
-                         (eshell/alias "gitf" "cd ~/Git-fhi && cd $1")
+                         (eshell/alias "gitw" "cd ~/Git-work/$1 && ls -l")
+                         (eshell/alias "gitpp" "cd ~/Git-personal && la")
+                         (eshell/alias "gitp" "cd ~/Git-personal && cd $1 && ls -l")
+                         (eshell/alias "gitff" "cd ~/Git-fhi/ && ls -la")
+                         (eshell/alias "gitf" "cd ~/Git-fhi/$1 && ls -l")
                          (eshell/alias "gc" "git checkout $1")
                          (eshell/alias "gf" "git fetch $1")
                          (eshell/alias "gm" "git merge $1")
